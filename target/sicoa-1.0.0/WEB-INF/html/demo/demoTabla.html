@@ -1,0 +1,387 @@
+		<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="templates/mainTemplate">
+	
+	
+	<body>
+		<th:block layout:fragment="content"  th:remove="tag">
+	
+	        <h1>Tablas</h1>
+	        <hr/>
+	        
+	        <div class="col-md-12 ">
+		       	<div class="panel panel-default">
+	           		<div class="panel-heading"><h4>Plugin tablas paginadas</h4></div>
+	   				<div class="panel-body">
+	              		<div class="clearfix"></div>
+	              		<p class="text-justify">
+	              			El proyecto contiene un plugin para hacer uso de tablas paginadas, este plugin se llama <b><i>Datatable For Jquery</i></b> (ubicada en <em>"/recursos/assets/datatables/*"</em>) 
+	              		</p>
+	              		<p class="text-justify">
+	              			Para hacer uso de este plugin ya se encuentra una implementaci�n con las configuraciones necesarias para el consumo remoto mediante 
+	              			servicios REST o para la inicializaci&oacute;n local, la librer&iacute;a se llama <b><i>moduloDatatable.js</i></b> 
+	              			(Ubicada en <em>"/recursos/script/comun/</em>).
+	              		</p>
+	              		<p class="text-justify">
+	              			<code>Nota :</code> La configuraci&oacute;n que se encuentra en la librer&iacute;a <em>moduloDatatable.js</em>, ya considera el envio del token de seguridad a los servicios REST, 
+	              			en caso de no utilizar la libreria deben considerar el envio del token en cada petici&oacute;n para la fuente de informaci&oacute;n remota (servicios REST restringidos).  
+	              		</p>
+						<hr/>
+              			<ul class="list-unstyled">
+              				<li><a href="https://datatables.net/">Consultar plugin Datatable</a></li>
+              			</ul>
+              		<hr/>
+	              		
+					<div class="bs-callout bs-callout-info">
+						<h4>Ejemplo fuente de informaci&oacute;n remota (Ajax-RESTApi)</h4>
+						
+						<ul class="nav nav-tabs">
+						  <li class="active"><a data-toggle="tab" href="#html">HTML</a></li>
+						  <li><a data-toggle="tab" href="#javascript">Inicializaci&oacute;n javascript</a></li>
+						  <li><a data-toggle="tab" href="#json">JSON Esperado</a></li>
+						  <li><a data-toggle="tab" href="#restendpoint">Endpoint (Recurso API)</a></li>
+						</ul>
+						
+						<div class="tab-content">
+<div id="html" class="tab-pane fade in active">
+<pre class="code">
+&lt;table class=&quot;table table-bordered table-striped table-responsive&quot; 
+		style=&quot;width:100%&quot; 
+		id=&quot;datatable_demo&quot;&gt;
+	&lt;thead&gt;
+		&lt;tr&gt;
+			&lt;th&gt;Nombre&lt;/th&gt;
+			&lt;th&gt;Departamento&lt;/th&gt;
+			&lt;th&gt;Acci&oacute;n&lt;/th&gt;			            
+		&lt;/tr&gt;		            
+	&lt;/thead&gt;
+	&lt;tbody&gt;		            
+	&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+&lt;!--Importacion de CSS --&gt;
+&lt;th:block th:inline=&quot;text&quot; layout:fragment=&quot;includeCSS&quot;&gt;
+	&lt;link rel=&quot;stylesheet&quot; th:href=&quot;@{/recursos/assets/datatables/dataTables-1.10.12/css/dataTables.bootstrap.min.css}&quot; /&gt;
+	&lt;link rel=&quot;stylesheet&quot; th:href=&quot;@{/recursos/assets/datatables/responsive-2.1.0/css/responsive.bootstrap.min.css}&quot;/&gt;
+&lt;/th:block&gt;
+
+&lt;!--Importacion de libreria JS --&gt;
+&lt;th:block th:inline=&quot;text&quot; layout:fragment=&quot;includeScript&quot;&gt;
+&lt;script charset=&quot;utf-8&quot; th:src=&quot;@{/recursos/assets/datatables/dataTables-1.10.12/js/jquery.dataTables.min.js}&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; th:src=&quot;@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; th:src=&quot;@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; th:src=&quot;@{/recursos/script/comun/moduloDatatable.js}&quot;&gt;&lt;/script&gt;
+&lt;/th:block&gt;
+</pre>
+</div>
+<div id="javascript" class="tab-pane fade">
+<pre class="code">
+var inicializaDatatable = function(){		
+		var columnas=[ {    &quot;data&quot;:&quot;usuario&quot;,
+				            &quot;sDefaultContent&quot;:&quot;&quot;,
+				            &quot;class&quot;:&quot;&quot;
+				       },{  &quot;data&quot;:&quot;departamento&quot;,
+				            &quot;sDefaultContent&quot;:&quot;&quot;,
+				            &quot;class&quot;:&quot;&quot;
+				       },{
+				    	   &quot;render&quot;: function ( data, type, full, meta ) {
+				                var btnVerDetalle = '&lt;button class=&quot;ver btn btn-warning btn-xs ctooltip&quot; title=&quot;Ver&quot;&gt;&lt;span class=&quot;fa fa-eye&quot;&gt;&lt;/span&gt;&lt;/button&gt;';
+				                label = &quot;&lt;div class=\&quot;accion\&quot;&gt;&quot;+btnVerDetalle+&quot;&lt;/div&gt;&quot;;
+				                return label;
+			                },
+			                &quot;class&quot;:&quot;text-center&quot;
+				       }];
+						
+		
+		moduloDatatableJS(&quot;#datatable_demo&quot;).inicializaDataTableServer(
+				columnas,
+				commonFunctionsJS.obtenerUrlServicios(&quot;/demo/datatable/restringido&quot;),
+				{
+					callback : function(){
+						commonFunctionsJS.inicializatooltip(&quot;.ctooltip&quot;);						
+					}
+				}
+			);
+			
+		$(&quot;#datatable_demo&quot;).on('click','td .ver',function(event){
+			  	var  renglon =  $(this).closest(&quot;tr&quot;);
+		   		var dato = moduloDatatableJS(&quot;#datatable_demo&quot;).obtenerDatosRowSeleccionado(renglon);
+		   		alert(JSON.stringify(dato));
+	    });
+			
+		moduloDatatableJS("#datatable_demo").buscar();
+	};
+</pre> 
+</div>
+<div id="json" class="tab-pane fade">
+<pre class="code">
+{
+    &quot;metadata&quot;: {
+        &quot;response&quot;: &quot;EXITO&quot;
+    },
+    &quot;data&quot;: [
+        {
+            &quot;usuario&quot;: &quot;usuario1&quot;,
+            &quot;departamento&quot;: &quot;Economia&quot;
+        },
+...
+        {
+            &quot;usuario&quot;: &quot;usuario10&quot;,
+            &quot;departamento&quot;: &quot;Sistemas&quot;
+        }
+    ],
+    &quot;pagination&quot;: {
+        &quot;total&quot;: 12,
+        &quot;page&quot;: 1,
+        &quot;numberElementsPage&quot;: 10
+    }
+}
+</pre> 
+</div>
+<div id="restendpoint" class="tab-pane fade">
+<pre class="code">
+ 	@GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(&quot;datatable&quot;)
+    public Response datatable(  @QueryParam(&quot;start&quot;) Integer registroInicial,
+					            @QueryParam(&quot;length&quot;) Integer numeroRegistros) {
+        ArrayList&lt;TablaDemo&gt; tablaDemo = new ArrayList&lt;&gt;(0);
+        PaginationDto dto = new PaginationDto();
+//.... Implementacion para obtener informacion
+ 	return ResponseJSONGenericoUtil.getRespuestaExitoPaginado(StatusResponse.OK, tablaDemo, dto);
+}
+</pre>
+</div>
+						</div>
+						<hr/>
+						<h3>Demostraci&oacute;n</h3>
+				        <table class="table table-bordered table-striped table-responsive" style="width:100%" id="datatable_demo">
+				            <thead>
+				            	<tr>
+					            	<th>Nombre</th>
+						            <th>Departamento</th>
+						            <th>Acci&oacute;n</th>						            			            
+				            	</tr>		            
+				            </thead>
+				            <tbody>		            
+				            </tbody>
+				        </table>
+				        <div class="text-center">
+				        	<button id="btn-buscar" class="btn btn-default">Buscar</button>
+				        </div>
+					</div>
+					<div class="bs-callout bs-callout-warning">
+						<h4>Ejemplo fuente de informaci&oacute;n cliente</h4>
+						
+						<ul class="nav nav-tabs">
+						  <li class="active"><a data-toggle="tab" href="#htmlcliente">HTML</a></li>
+						  <li><a data-toggle="tab" href="#javascriptcliente">Uso javascript</a></li>						  						  
+						</ul>
+						<div class="tab-content">
+<div id="htmlcliente" class="tab-pane fade in active">
+<pre class="code">
+&lt;table class=&quot;table table-bordered table-striped table-responsive&quot; 
+		style=&quot;width:100%&quot; 
+		id=&quot;datatable_democliente&quot;&gt;
+	&lt;thead&gt;
+		&lt;tr&gt;
+			&lt;th&gt;Nombre&lt;/th&gt;
+			&lt;th&gt;Departamento&lt;/th&gt;
+			&lt;th&gt;Acci&oacute;n&lt;/th&gt;			            
+		&lt;/tr&gt;		            
+	&lt;/thead&gt;
+	&lt;tbody&gt;		            
+	&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+&lt;!--Importacion de CSS --&gt;
+&lt;th:block th:inline=&quot;text&quot; layout:fragment=&quot;includeCSS&quot;&gt;
+	&lt;link rel=&quot;stylesheet&quot; th:href=&quot;@{/recursos/assets/datatables/dataTables-1.10.12/css/dataTables.bootstrap.min.css}&quot; /&gt;
+	&lt;link rel=&quot;stylesheet&quot; th:href=&quot;@{/recursos/assets/datatables/responsive-2.1.0/css/responsive.bootstrap.min.css}&quot;/&gt;
+&lt;/th:block&gt;
+
+&lt;!--Importacion de libreria JS --&gt;
+&lt;th:block th:inline=&quot;text&quot; layout:fragment=&quot;includeScript&quot;&gt;
+&lt;script charset=&quot;utf-8&quot; th:src=&quot;@{/recursos/assets/datatables/dataTables-1.10.12/js/jquery.dataTables.min.js}&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; th:src=&quot;@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; th:src=&quot;@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; th:src=&quot;@{/recursos/script/comun/moduloDatatable.js}&quot;&gt;&lt;/script&gt;
+&lt;/th:block&gt;
+</pre>
+</div>
+<div id="javascriptcliente" class="tab-pane fade">
+<pre class="code">
+var inicializaDatatableCliente = function(){
+		var columnas=[ {    &quot;data&quot;:&quot;usuario&quot;,
+					            &quot;sDefaultContent&quot;:&quot;&quot;,
+					            &quot;class&quot;:&quot;&quot;
+					       },{  &quot;data&quot;:&quot;departamento&quot;,
+					            &quot;sDefaultContent&quot;:&quot;&quot;,
+					            &quot;class&quot;:&quot;&quot;
+					       },{
+					    	   &quot;render&quot;: function ( data, type, full, meta ) {
+					                var btnVerDetalle = '&lt;button class=&quot;ver btn btn-warning btn-xs ctooltip&quot; title=&quot;Ver&quot;&gt;&lt;span class=&quot;fa fa-eye&quot;&gt;&lt;/span&gt;&lt;/button&gt;';
+					                label = &quot;&lt;div class=\&quot;accion\&quot;&gt;&quot;+btnVerDetalle+&quot;&lt;/div&gt;&quot;;
+					                return label;
+					            },
+					            &quot;class&quot;:&quot;text-center&quot;
+					       }];
+		
+		 moduloDatatableJS(&quot;#datatable_democliente&quot;).inicializaDataTableClienteJson(columnas);
+		 
+		 $(&quot;#datatable_democliente&quot;).on('click','td .ver',function(event){
+	  		var  renglon =  $(this).closest(&quot;tr&quot;);
+			var dato = moduloDatatableJS(&quot;#datatable_democliente&quot;).obtenerDatosRowSeleccionado(renglon);
+			alert(JSON.stringify(dato));
+	 	});
+}
+
+function .... (){
+	//Se genera o se obtiene desde el cliente sin paginado remoto la lista en formato JSON para llenar la informaci&oacute;n.
+	var jsonList = [];
+	var usuario = null;
+	usuario = {&quot;usuario&quot;:&quot;cliente 1&quot;, &quot;departamento&quot;:&quot;depto 1&quot;};
+	jsonList.push(usuario);
+	//... 
+	usuario = {&quot;usuario&quot;:&quot;cliente 6&quot;, &quot;departamento&quot;:&quot;depto 1&quot;};
+	jsonList.push(usuario);
+			
+	moduloDatatableJS(&quot;#datatable_democliente&quot;).updateDataJsonClient(jsonList,
+    	               function(){
+                         	commonFunctionsJS.inicializatooltip(&quot;.ctooltip&quot;);
+            			});
+	}
+}
+</pre>
+</div>
+						</div>
+						
+						<hr/>
+						<h3>Demostraci&oacute;n</h3>
+				        <table class="table table-bordered table-striped table-responsive" style="width:100%" id="datatable_democliente">
+				            <thead>
+				            	<tr>
+					            	<th>Nombre</th>
+						            <th>Departamento</th>
+						            <th>Acci&oacute;n</th>						            			            
+				            	</tr>		            
+				            </thead>
+				            <tbody>		            
+				            </tbody>
+				        </table>
+				        <div class="text-center">
+				        	<button id="btn-buscar-cliente" class="btn btn-default">Generar</button>
+				        </div>
+					</div>
+					<div class="bs-callout bs-callout-info">
+				    	<h3>Demostraci&oacute;n con envio de formulario</h3>
+					 		<form class="form-horizontal" role="form" id="formBusqueda">
+									            <div class="form-group">
+									                <label class="col-sm-3 control-label" for="parametroUno">Parametro Uno :</label>
+					        						<div class="col-sm-9">
+									                    <input class="form-control" id="parametroUno" name="parametroUno" placeholder="Parametro 1" type="text"/>
+									                </div>
+									            </div>
+									            <div class="form-group">
+									                <label class="col-sm-3 control-label" for="parametroDos">Parametro Dos :</label>
+									                <div class="col-sm-9">
+									                    <input class="form-control" id="parametroDos" name="parametroDos" placeholder="Parametro 2" type="text"/>
+									                </div>
+									            </div>
+									            <div class="text-center">
+										        	<button id="btn-buscar-cliente_form" class="btn btn-default" type="button">Generar</button>
+										        </div>
+							</form>
+					        <table class="table table-bordered table-striped table-responsive" style="width:100%" id="datatable_democliente_form">
+					            <thead>
+					            	<tr>
+						            	<th>Nombre</th>
+							            <th>Departamento</th>
+							            <th>Parametros</th>
+							            <th>Acci&oacute;n</th>						            			            
+					            	</tr>		            
+					            </thead>
+					            <tbody>		            
+					            </tbody>
+					        </table>
+					</div>
+            	</div>
+         	</div> 
+	         	
+	         	
+	         	
+	         	
+	         		
+	      </div>
+	      
+	      <div>
+
+	      
+				
+		</div>
+	                
+		</th:block>
+		
+		
+		<th:block th:inline="text" layout:fragment="includeCSS">
+	        <link rel="stylesheet" th:href="@{/recursos/assets/datatables/dataTables-1.10.12/css/dataTables.bootstrap.min.css}" />
+	        <link rel="stylesheet" th:href="@{/recursos/assets/datatables/responsive-2.1.0/css/responsive.bootstrap.min.css}"/>
+	        <style>
+	        
+	        
+			.bs-callout h4 {
+			    margin-top: 0;
+			    margin-bottom: 5px;
+			}
+			.bs-callout-info h3 {
+			    color: #aa6708;
+			}
+			.bs-callout-info h4 {
+			    color: #1b809e;
+			}
+			.bs-callout {
+			    padding: 20px;
+			    margin: 20px 0;
+			    border: 1px solid #eee;
+			    border-left-width: 5px;
+			    border-radius: 3px;
+			}
+	        .bs-callout-info {
+			    border-left-color: #1b809e; !
+			}
+			
+			.bs-callout-warning h3 {
+			    color: #1b809e;
+			}
+			.bs-callout-warning h4 {
+			    color: #aa6708;
+			}
+			.bs-callout-warning {
+			    border-left-color: #aa6708; !
+			}
+			.code {
+				font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+				font-size: 90%;
+    			color: #c7254e;
+			}
+			
+	        </style>
+    	</th:block>
+    	
+    	<th:block th:inline="text" layout:fragment="includeScript">
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/jquery.dataTables.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
+	        
+	        <script charset="utf-8" th:src="@{/recursos/script/demo/demoTabla.js}"></script>
+	
+	        <script  charset="utf-8" th:inline="text">
+	        	demoTablaJS.init();
+			</script>	
+	    </th:block>
+	</body>
+</html>

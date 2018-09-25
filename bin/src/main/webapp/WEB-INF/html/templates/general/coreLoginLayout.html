@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head>
+		<title th:text="#{TITULO_MAIN_PAGE}"></title>
+		
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		
+		<meta name="_token" th:content="${session._token}"></meta>
+		<meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"></meta> 
+	   	<meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"></meta>   	
+	 
+	 	<link rel="icon"  th:href="@{/recursos/image/ico/favicon.ico}" type="image/x-icon" />
+		<link rel="shortcut icon"  th:href="@{/recursos/image/ico/favicon.ico}" type="image/x-icon"/>  	
+		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_3.3.7/css/bootstrap.min.css}" />
+		<link rel="stylesheet" th:href="@{/recursos/assets/font-awesome-4.7.0/css/font-awesome.min.css}" />
+		
+		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+	</head>
+	<body>
+		<main class="page">
+			  <div class="container">
+			    <div class="row">
+			        <div layout:fragment="content" th:remove="tag"></div>					
+				</div>
+			</div>			
+		</main>
+			
+		<script charset="utf-8" th:src="@{/recursos/assets/jquery_1.11.3/js/jquery.min.js}"></script>
+		<script charset="utf-8"	th:src="@{/recursos/assets/bootstrap_3.3.7/js/bootstrap.min.js}"></script>
+		<script charset="utf-8"	th:src="@{/recursos/assets/jquery-validator/js/jquery.validation.js}"></script>
+		
+		<th:block th:inline="text" layout:fragment="includeScript"></th:block>
+	</body>
+</html>

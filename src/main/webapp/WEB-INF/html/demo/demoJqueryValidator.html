@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="templates/mainTemplate">
+	
+	<body>
+		<th:block layout:fragment="content"  th:remove="tag">
+			<!-- Demo de campos remover para imple -->
+			 <h1>Jquery validator</h1>
+	         <hr/>	         
+	         <div class="col-md-12 ">
+		       	<div class="panel panel-default">
+	           		<div class="panel-heading"><h4>Plugin validaci&oacute;n de formularios</h4></div>
+	   				<div class="panel-body">
+	              		<div class="clearfix"></div>
+	              		<p class="text-justify">
+	              			El proyecto contiene un plugin para realizar validaciones de captura de informaci&oacute;n desde el cliente, la librer&iacute;a se llama 
+	              			<b><i>Jquery Validator</i></b> (ubicada en <em>"/recursos/assets/jquery-validator/*"</em>) 
+	              		</p>
+	                    <p class="text-justify">
+	                    	Ya existe una librer&iacute;a que integra validaciones personalizadas e inicializa el control a etiquetas en espa�ol, por default ya se inicializa
+	                    	en el coreLayout.html, el nombre del archivo se llama "moduloValidador.js". 
+	              			(Ubicada en <em>"/recursos/script/comun/moduloValidador.js</em>).
+	              		</p>
+	              		<p>
+	              			Las validaciones personalizadas adicionales a las que ofrece el plugin.
+	              			<ul>
+	              				<li>soloNumeros        </li>
+                                <li>soloDecimales      </li>
+                                <li>soloCaracteres     </li>
+                                <li>formatoFechas      </li>
+                                <li>noVacio            </li>
+                                <li>validaExtensionJpg </li>
+                                <li>fechaActualMaximo  </li>
+	              			</ul>
+	              		</p>
+	              		<hr/>
+              			<ul class="list-unstyled">
+              				<li><a href="https://jqueryvalidation.org/">Consultar plugin Jquery Validator</a></li>
+              			</ul>
+              			<hr/>
+              			<div class="bs-callout bs-callout-info">
+							<h4>Ejemplo de uso</h4>
+						
+							<ul class="nav nav-tabs">
+							  <li class="active"><a data-toggle="tab" href="#html">HTML</a></li>
+							  <li><a data-toggle="tab" href="#javascript">Configuraci&oacute;n validaci&oacute;n formulario</a></li>							  
+							</ul>
+							 
+							<div class="tab-content">
+							
+<div id="html" class="tab-pane fade in active">
+<pre class="code">
+
+// Inclusi&oacute;n de librerias. 
+// En el proyecto ya se agregaron por medio de la plantilla &quot;coreLayout.html&quot;, &quot;coreGraficaLayout.html&quot; 
+// <kbd>no es necesario importarlo nuevamente</kbd>	
+//
+	
+&lt;script charset=&quot;utf-8&quot;	th:src=&quot;@{/recursos/assets/jquery-validator/js/jquery.validation.js}&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot;	th:src=&quot;@{/recursos/script/comun/moduloValidador.js}&quot;&gt;&lt;/script&gt;
+
+// Inicializaci&oacute;n de componentes personalizados.  
+// En el proyecto ya se inicializa por medio de la plantilla &quot;coreLayout.html&quot;,&quot;coreGraficaLayout.html&quot;  
+// <kbd>no es necesario inicializarlo nuevamente</kbd>
+//	
+
+moduloValidadorJS.inicializaValidator();
+
+
+//Formulario a validar
+
+&lt;form role=&quot;form&quot; id=&quot;formulario-validado&quot;&gt;
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label class=&quot;control-label&quot; for=&quot;email&quot;&gt;Correo electr&oacute;nico (pattern email integrado):&lt;/label&gt;
+		&lt;input class=&quot;form-control&quot; id=&quot;email&quot; name=&quot;email&quot; placeholder=&quot;Correo electr&oacute;nico&quot; type=&quot;text&quot;/&gt;
+	&lt;/div&gt;
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label for=&quot;select&quot; class=&quot;control-label&quot;&gt;Select (requerido)&lt;/label&gt;
+		&lt;select class=&quot;form-control&quot; name=&quot;select&quot;&gt;
+			&lt;option value=&quot;&quot;&gt;Seleccione&lt;/option&gt;
+			&lt;option value=&quot;2&quot;&gt;2&lt;/option&gt;
+			&lt;option value=&quot;3&quot;&gt;3&lt;/option&gt;
+			&lt;option value=&quot;4&quot;&gt;4&lt;/option&gt;
+			&lt;option value=&quot;5&quot;&gt;5&lt;/option&gt;
+		&lt;/select&gt;
+	&lt;/div&gt; 
+
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label class=&quot;control-label&quot; for=&quot;contrasenia&quot;&gt;Contrase&ntilde;a (requerido, tama&amp;ntilde;o m&iacute;nimo 3 caracteres)&lt;/label&gt;
+		&lt;input class=&quot;form-control&quot; id=&quot;contrasenia&quot; name=&quot;contrasenia&quot; placeholder=&quot;Contrase&ntilde;a&quot; type=&quot;password&quot;/&gt;
+	&lt;/div&gt;
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label class=&quot;control-label&quot; for=&quot;nombre&quot;&gt;Nombre (solo alfanum&eacute;rico) :&lt;/label&gt;
+		&lt;div class=&quot;input-group&quot;&gt;
+			&lt;span class=&quot;input-group-addon&quot; id=&quot;user-icon&quot;&gt;&lt;i class=&quot;fa fa-user&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+			&lt;input type=&quot;text&quot; class=&quot;form-control&quot; 
+					th:placeholder=&quot;nombre&quot; 
+					aria-describedby=&quot;user-icon&quot; 
+					name=&quot;nombre&quot;
+					id=&quot;nombre&quot;/&gt;
+		&lt;/div&gt;					                
+	&lt;/div&gt;
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label class=&quot;control-label&quot; for=&quot;numeros&quot;&gt;Numeros (num&eacute;rico) :&lt;/label&gt;
+		&lt;input id=&quot;numeros&quot; name=&quot;numeros&quot; class=&quot;form-control&quot; type=&quot;text&quot;/&gt;
+	&lt;/div&gt;
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label class=&quot;control-label&quot; for=&quot;archivo&quot;&gt;Cargar archivo (requerido, mensaje personalizado):&lt;/label&gt;
+		&lt;label&gt;
+			&lt;input id=&quot;archivo&quot; name=&quot;archivo&quot; type=&quot;file&quot; /&gt;
+		&lt;/label&gt;			 			                
+	&lt;/div&gt;
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label class=&quot;control-label&quot; for=&quot;texto&quot;&gt;Texto  (Tama&ntilde;o m&aacute;ximo 20 caracteres):&lt;/label&gt;
+		&lt;textarea  class=&quot;form-control&quot; id=&quot;texto&quot; name=&quot;texto&quot;&gt;&lt;/textarea&gt;						                
+	&lt;/div&gt;
+	&lt;div class=&quot;text-center form-group&quot;&gt;
+		&lt;button id=&quot;btn-validar&quot; type=&quot;button&quot; class=&quot;btn btn-default&quot;&gt;Validar&lt;/button&gt;
+	&lt;/div&gt;
+&lt;/form&gt;
+</pre>
+</div>
+
+<div id="javascript" class="tab-pane fade">
+<pre class="code">
+///Inicializacion del formulario a validar
+function ..... (){
+	$("#formulario-validado").validate({
+		rules: {
+			"email": {
+				"email": true
+			},"select":{
+				"required":true
+			},"contrasenia":{
+				"required":true,
+				"minlength" : 3                	
+			},"nombre":{
+				"soloCaracteres":true          	
+			},"numeros":{
+				"soloNumeros": true
+			},"archivo":{
+				"required": true
+			},"texto" : {
+				"maxlength" : 20 
+			}
+		},
+		messages: {
+			"archivo" : {
+				"required" : "Debe adjuntar un archivo..."
+			}
+		}
+	});
+};
+	
+	
+///Ejecuci&oacute;n de evento para validar formulario previamente configurado
+function ... (){
+	$("#btn-validar").click(function(){
+		var capturaValida = $("#formulario-validado").valid();
+		if(capturaValida){
+			alert("La captura es valida");
+		}		
+	});		
+};
+</pre>
+</div>
+
+							</div>					
+							
+							
+							<hr/>
+							<h3>Demostraci&oacute;n</h3>
+							<div class="col-md-6 col-md-offset-3">
+								<form role="form" id="formulario-validado">
+						            <div class="form-group">
+						                <label class="control-label" for="email">Correo electr�nico (pattern : email integrado en plugin):</label>
+						                <input class="form-control" id="email" name="email" placeholder="Correo electr�nico" type="text"/>
+						            </div>
+						            <div class="form-group">
+						                <label for="select" class="control-label">Select (requerido)</label>
+						                <select class="form-control" name="select">
+						                    <option value="">Seleccione</option>
+						                    <option value="2">2</option>
+						                    <option value="3">3</option>
+						                    <option value="4">4</option>
+						                    <option value="5">5</option>
+						                </select>
+						            </div> 
+						
+						            <div class="form-group">
+						                <label class="control-label" for="contrasenia">Contrase�a (requerido, tama&ntilde;o m&iacute;nimo 3 caracteres)</label>
+						                <input class="form-control" id="contrasenia" name="contrasenia" placeholder="Contrase�a" type="password"/>
+						            </div>
+						            <div class="form-group">
+						                <label class="control-label" for="nombre">Nombre (solo alfanum&eacute;rico) :</label>
+						                <div class="input-group">
+										  	<span class="input-group-addon" id="user-icon"><i class="fa fa-user"></i></span>
+										  	<input type="text" class="form-control" 
+										  			th:placeholder="nombre" 
+										  			aria-describedby="user-icon" 
+										  			name="nombre"
+										  			id="nombre"/>
+										</div>					                
+						            </div>
+						            <div class="form-group">
+						                <label class="control-label" for="numeros">Numeros (num&eacute;rico) :</label>
+						                <input id="numeros" name="numeros" class="form-control" type="text"/>
+						            </div>
+						            <div class="form-group">
+						                <label class="control-label" for="archivo">Cargar archivo (requerido, mensaje personalizado):</label>
+						                <label>
+						                	<input id="archivo" name="archivo" type="file" />
+						                </label>			 			                
+						            </div>
+						            <div class="form-group">
+						                <label class="control-label" for="texto">Texto  (Tama�o m&aacute;ximo 20 caracteres):</label>
+						                <textarea  class="form-control" id="texto" name="texto"></textarea>						                
+						            </div>
+						            <div class="text-center form-group">
+							        	<button id="btn-validar" type="button" class="btn btn-default">Validar</button>
+							        </div>
+						        </form>
+							</div>
+					        
+						</div>
+	              	</div>
+	             </div>
+	         </div>		
+		</th:block>
+		
+		<th:block th:inline="text" layout:fragment="includeCSS">
+	        
+	        <style>
+				.bs-callout h4 {
+				    margin-top: 0;
+				    margin-bottom: 5px;
+				}
+				.bs-callout-info h3 {
+				    color: #aa6708;
+				}
+				.bs-callout-info h4 {
+				    color: #1b809e;
+				}
+				.bs-callout {
+				    padding: 20px;
+				    margin: 20px 0;
+				    border: 1px solid #eee;
+				    border-left-width: 5px;
+				    border-radius: 3px;
+				}
+		        .bs-callout-info {
+				    border-left-color: #1b809e; !
+				}
+				
+				.code {
+					font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+					font-size: 90%;
+	    			color: #c7254e;
+				}			
+	        </style>
+    	</th:block>
+    	
+    	<th:block th:inline="text" layout:fragment="includeScript">			
+			<script charset="utf-8"	th:src="@{/recursos/script/demo/demoJqueryValidator.js}"></script>
+	        <script  charset="utf-8" type="text/javascript" >
+		    	demoJqueryValidatorJS.init();		        
+			</script>
+				
+	    </th:block>
+	</body>
+</html>

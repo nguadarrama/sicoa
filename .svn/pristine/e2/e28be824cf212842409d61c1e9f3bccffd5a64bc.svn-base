@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="templates/loginTemplate">
+<body>	
+	<th:block th:inline="text" layout:fragment="includeCSS">
+		<link rel="stylesheet" th:href="@{/recursos/css/styles.css}" />
+    </th:block>
+
+	<th:block th:inline="text" layout:fragment="includeScript">
+		<script charset="utf-8" th:src="@{/recursos/script/comun/moduloValidador.js}"></script>
+		<script charset="utf-8" th:src="@{/recursos/script/login/login.js}"></script>
+		<script>
+			loginJS.init();
+		</script>
+	</th:block>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head>
+		<title th:text="#{TITULO_MAIN_PAGE}"></title>
+		
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		
+		<meta name="_token" th:content="${session._token}"></meta>
+		<meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"></meta> 
+	   	<meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"></meta>   	
+	 
+	 	<link rel="icon"  th:href="@{/recursos/image/ico/favicon.ico}" type="image/x-icon" />
+		<link rel="shortcut icon"  th:href="@{/recursos/image/ico/favicon.ico}" type="image/x-icon"/>  	
+		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_3.3.7/css/bootstrap.min.css}" />
+		<link rel="stylesheet" th:href="@{/recursos/assets/font-awesome-4.7.0/css/font-awesome.min.css}" />
+		
+		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="logos">
+							<div class="logo-segob"></div>
+							<div class="logo-control"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		
+		<div class="page-login">
+			<div class="form-group" th:if="${MENSAJE_EXCEPCION_LOGIN != null}">
+				<div class="alert alert-danger">
+					<span class="fa fa-exclamation-triangle"></span>
+	      			<span th:text="${MENSAJE_EXCEPCION_LOGIN}"></span>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+	          	</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 col-md-offset-4">
+						<form th:action="@{/logincheck}" method="post" id="formLogin" autocomplete="off">
+							<div class="box-login">
+								<h1 th:text="#{LOGIN_INICIAR_SESION}"></h1>
+								<p th:text="#{LOGIN_TITLE}"></p>
+								<div class="divider">
+									<div class="span"></div>
+								</div>
+	
+								<label>
+									<p th:text="#{LOGIN_USUARIO}"></p>
+									<input type="text" name="accesoUsuario" class="form-control input-user" />
+								</label>
+								<label>
+									<p th:text="#{LOGIN_CONTRASENIA}"></p>
+									<input type="password" name="accesoClave" autocomplete="off" class="form-control input-pass" />
+									<button type="button" class="btn-view" onclick="change_input_pass('.input-pass');"></button>
+								</label>
+								<p class="text-right">
+									<button id="btnLogin" th:text="#{LOGIN_INGRESO}" class="btn btn-info"></button>
+								</p>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<footer>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p>Sistema de Control de Asistenca &copy; 2018</p>
+						<p>Todos los Derechos Reservados</p>
+					</div>
+				</div>
+			</div>
+		</footer>
+			
+		<script charset="utf-8" th:src="@{/recursos/assets/jquery_1.11.3/js/jquery.min.js}"></script>
+		<script charset="utf-8"	th:src="@{/recursos/assets/bootstrap_3.3.7/js/bootstrap.min.js}"></script>
+		<script charset="utf-8"	th:src="@{/recursos/assets/jquery-validator/js/jquery.validation.js}"></script>
+		<script charset="utf-8" th:src="@{/recursos/script/login/main.js}"></script>
+		
+		<th:block th:inline="text" layout:fragment="includeScript"></th:block>
+	</body>
+</html>

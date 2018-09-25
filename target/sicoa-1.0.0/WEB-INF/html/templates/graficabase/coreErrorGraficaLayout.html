@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head>
+		<title th:text="#{TITULO_MAIN_PAGE}"></title>
+		
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		
+		<meta name="_token" th:content="${session._token}"></meta>
+		<meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"></meta> 
+	   	<meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"></meta>   	
+	   	
+	   	<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="icon"  type="image/x-icon" />
+		<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="shortcut icon"  type="image/x-icon"/>	
+		<link href="https://framework-gb.cdn.gob.mx/assets/styles/main.css" rel="stylesheet"/>
+	    <!-- Respond.js soporte de media queries para Internet Explorer 8 -->
+	    <!-- ie8.js EventTarget para cada nodo en Internet Explorer 8 -->
+	    <!--[if lt IE 9]>
+	    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/ie8/0.2.2/ie8.js"></script>
+	    <![endif]-->
+		<link rel="stylesheet" th:href="@{/recursos/css/estilos.css}" />		
+	</head>
+	<body>
+		<br/>
+		<main class="page">
+			<nav class="navbar navbar-inverse sub-navbar navbar-fixed-top">
+		        <div class="container">
+		            <div class="navbar-header">
+		                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subenlaces">
+		                    <span class="sr-only" th:text="#{MENU.TITULO}"></span>
+		                    <span class="icon-bar"></span>
+		                    <span class="icon-bar"></span>
+		                    <span class="icon-bar"></span>
+		                </button>
+		                <a class="navbar-brand" href="/" th:text="#{MENU.TITULO}"></a>
+		            </div>
+		            <div class="collapse navbar-collapse" id="subenlaces"></div>
+		        </div>
+		    </nav>	
+		    <div class="container" style="min-height: 495px;">
+				<div layout:fragment="content" th:remove="tag"></div>							
+			</div>
+		</main>
+		<footer class="footer">
+			<div layout:replace="templates/seccion/footerTemplate :: footer" th:remove="tag"></div>	    
+		</footer>	
+		<script src="https://framework-gb.cdn.gob.mx/gobmx.js"></script>
+	</body>
+</html>

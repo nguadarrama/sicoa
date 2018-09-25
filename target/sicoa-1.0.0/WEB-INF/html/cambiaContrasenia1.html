@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="templates/cambioPassword1">
+<body>	
+	<th:block th:inline="text" layout:fragment="includeCSS">
+		<link rel="stylesheet" th:href="@{/recursos/css/login/login.css}" />
+    </th:block>
+
+	<th:block th:inline="text" layout:fragment="includeScript">
+		<script charset="utf-8" th:src="@{/recursos/script/comun/moduloValidador.js}"></script>
+		<script charset="utf-8" th:src="@{/recursos/script/login/cambioContrasenia1.js}"></script>
+		<script>
+		CambioContrasenia1JS.init();
+		</script>
+	</th:block>
+</body>
+</html>

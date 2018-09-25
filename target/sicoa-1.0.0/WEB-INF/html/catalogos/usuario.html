@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="templates/mainTemplate">
+	
+	<head>
+		<title th:text="#{TITULO_MAIN_PAGE}" layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE"></title>
+	
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+		<meta name="_token" th:content="${session._token}"></meta>
+		<meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"></meta> 
+	   	<meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"></meta>   	
+	   	
+	   	<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="icon"  type="image/x-icon" />
+		<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="shortcut icon"  type="image/x-icon"/>
+		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_3.3.7/css/bootstrap.min.css}" />	
+		<link rel="stylesheet" th:href="@{/recursos/assets/font-awesome-4.7.0/css/font-awesome.min.css}" />	
+		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_dialog/css/bootstrap-dialog.min.css}" />
+		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+		<link rel="stylesheet" th:href="@{/recursos/css/styles.css}" />	
+		<link rel="stylesheet" th:href="@{/recursos/css/estilos.css}" />	
+	</head>
+	
+	<body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="logos">
+							<div class="logo-segob"></div>
+							<div class="logo-control"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<th:block layout:fragment="content"  th:remove="tag">
+			<div class="container">
+				<div class="filterable">
+           			<h1 class="ico-solicitudes"><span class="input-clock"></span> Usuarios 
+           				<button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button>
+           			</h1>
+           			<hr/>
+					<table id="tableUsuarios" class="table table-striped table-text-center">
+						<thead>
+							<tr class="filters">
+								<th><input type="text" class="form-control" placeholder="Clave Empleado" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="Nombre" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="Apellido Paterno" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="Apellido Materno" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="Puesto" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="Perfil" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="Activo" th:disabled="true"/></th>
+								<td th:text="#{COMUN.ACCIONES}"></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="usuario : ${listaUsuarios}">
+								<td th:text="${usuario.claveUsuario}"></td>
+								<td th:text="${usuario.nombre}"></td>
+								<td th:text="${usuario.apellidoPaterno}"></td>
+								<td th:text="${usuario.apellidoMaterno}"></td>
+								<td th:text="${usuario.activo}"></td>
+								<td th:text="${usuario.idPuesto}"></td>
+								<td th:text="${usuario.clavePerfil}"></td>
+								<td class="col-md-3"> 
+									<div>
+										<a th:href="@{/catalogos/usuario/busca/(id=${usuario.claveUsuario})}"   class="btn btn-xs btn-default eBtn"><span class="glyphicon glyphicon-pencil"></span></a>
+										<a th:href="@{/catalogos/usuario/elimina/(id=${usuario.claveUsuario})}" class="btn btn-xs btn-default eliminaBtn"><span class="glyphicon glyphicon-trash"></span></a>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<div class="usuarioForm">      <!-- Modal para editar -->
+		      		<form th:action="@{/catalogos/usuario/modifica}" method="post">
+						<div class="modal fade" id="usuarioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+							    	<div class="modal-header">
+							      		<h3 class="modal-title" id="exampleModalLabel" th:text="#{COMUN.MODIFICAR}"></h3>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										 </button>
+								    </div>
+							    	<div class="modal-body">
+								        <div class="form-group">
+								        	<label for="claveUsuario" class="col-form-label" th:text="#{CLAVE_USUARIO}"></label>
+								            <input type="text" class="form-control" id="claveUsuario" name="claveUsuario" th:readonly="true" />
+								        </div>
+								        <div class="form-group">
+							          		<label for="nombre" class="col-form-label" th:text="#{NOMBRE}"></label>
+							          		<input type="text" class="form-control" id="nombre" name="nombre" />
+								        </div>
+								        <div class="form-group">
+											<label for="apellidoPaterno" class="col-form-label" th:text="#{APELLIDO_PATERNO}"></label>
+									    	<input type="text" class="form-control" id="apellidoPaterno" name="apellidoPaterno" />
+										</div>
+								        <div class="form-group">
+								        	<label for="apellidoMaterno" class="col-form-label" th:text="#{APELLIDO_MATERNO}"></label>
+								        	<input type="text" class="form-control" id="apellidoMaterno" name="apellidoMaterno" />
+								        </div>
+								        <div class="form-group">
+								        	<label for="activo" class="col-form-label" th:text="#{ESTADO}"></label>
+								        	<input type="text" class="form-control" id="activo" name="activo" />
+								        </div>
+								        <div class="form-group">
+								        	<label for="clavePerfil" class="col-form-label" th:text="#{PERFIL}"></label>
+								        	<select  class="form-control" required="required" 
+										       th:value="clavePerfil" name="clavePerfil" id="clavePerfil">
+										      <option disabled="disabled" selected="selected" > Elige un perfil
+										      </option>
+										      <option th:each="perfil : ${listaPerfiles}" th:value="${perfil.clavePerfil}" 
+										       th:text="${perfil.descripcion}" >
+										      </option>
+										    </select>
+								        </div>
+								        <div class="form-group">
+								        	<!-- <input type="text" class="form-control" id="idHorario" name="idHorario" /> -->
+								        	<label for="horario" class="col-form-label" th:text="#{HORARIO}"></label>
+								        	<select  class="form-control" required="required" 
+										       th:value="Horario" name="idHorario" id="idHorario">
+										      <option disabled="disabled" selected="selected" > Elige un horario
+										      </option>
+										      <option th:each="horario : ${listaHorarios}" th:value="${horario.idHorario}" 
+										       th:text="'De '+ ${horario.horaEntrada} + ' a ' + ${horario.horaSalida}">
+										      </option>
+										    </select>
+								        </div>
+								        <div class="form-group">
+								        	<label for="bloqueado" class="col-form-label" th:text="#{BLOQUEADO}"></label>
+								        	<input type="text" class="form-control" id="bloqueado" name="bloqueado" />
+								        </div>
+							    	</div>
+								    <div class="modal-footer">
+					    				<button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
+								    	<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+								    </div>
+							  	</div>
+							</div>
+						</div>
+	      			</form>
+      			</div>
+      										   <!-- Modal para eliminar -->
+				<div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h3 class="modal-title" id="exampleModalLongTitle" th:text="#{COMUN.ELIMINA}"></h3>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        <p th:text="#{COMUN.ELIMINA.CONFIRMACION}"></p>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
+				        <a href="" class="btn btn-danger" id="delRef" th:text="#{COMUN.ELIMINA}"></a>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+			</div>			
+		</th:block>
+		
+		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+	
+		<th:block th:inline="text" layout:fragment="includeScript">
+			<script charset="utf-8" th:src="@{/recursos/assets/bootstrap_dialog/js/bootstrap-dialog.min.js}"></script>
+			<script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/jquery.dataTables.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/script/catalogos/usuario.js}"></script>	 
+		</th:block>
+	</body>
+</html>

@@ -1,0 +1,9 @@
+/**
+* Estilos unicamente para uso de la vista de login.
+*
+*/
+
+.error{
+	color: red;
+	font-size: 11pt;
+}

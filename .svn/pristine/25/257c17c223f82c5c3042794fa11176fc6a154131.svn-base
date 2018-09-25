@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	lang="es">
+<head>
+	<title th:text="#{TITULO_MAIN_PAGE}" layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE"></title>
+	
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="-1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+	<meta name="_token" th:content="${session._token}"></meta>
+	<meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"></meta> 
+   	<meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"></meta>   	
+   	
+   	<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="icon"  type="image/x-icon" />
+	<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="shortcut icon"  type="image/x-icon"/>
+	<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_3.3.7/css/bootstrap.min.css}" />	
+	<link rel="stylesheet" th:href="@{/recursos/assets/font-awesome-4.7.0/css/font-awesome.min.css}" />	
+	<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_dialog/css/bootstrap-dialog.min.css}" />
+	
+	<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+	<link rel="stylesheet" th:href="@{/recursos/css/estilos.css}" />	
+</head>
+<body>	
+	<main class="page">
+		<div layout:replace="templates/seccion/headerTemplate :: header" th:remove="tag"></div>
+		<div class="container" style="min-height: 500px;margin-bottom: 10px;">
+			<div layout:fragment="content" th:remove="tag"></div>
+		</div>		
+	</main>
+	<footer class="footer">
+		<div layout:replace="templates/seccion/footerTemplate :: footer" th:remove="tag"></div>	    
+	</footer> 
+	
+	<script charset="utf-8" th:src="@{/recursos/assets/jquery_1.11.3/js/jquery.min.js}"></script>
+	<script charset="utf-8"	th:src="@{/recursos/assets/bootstrap_3.3.7/js/bootstrap.min.js}"></script>
+	<script charset="utf-8"	th:src="@{/recursos/assets/jquery-validator/js/jquery.validation.js}"></script>
+	<script charset="utf-8"	th:src="@{/recursos/assets/bootstrap_dialog/js/bootstrap-dialog.min.js}"></script>
+	<script charset="utf-8"	th:src="@{/recursos/script/comun/commonFunctions.js}"></script>
+	<script charset="utf-8"	th:src="@{/recursos/script/comun/moduloValidador.js}"></script>
+	<script charset="utf-8"	th:src="@{/recursos/script/comun/security.js}"></script>
+	
+	<script charset="utf-8"  th:inline="javascript">
+		commonFunctionsJS.initFuncionesGenerales();		 
+	</script>
+	
+	<th:block th:inline="javascript" layout:fragment="includeScript"></th:block>
+</body>
+</html>

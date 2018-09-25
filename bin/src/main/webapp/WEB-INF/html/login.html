@@ -1,0 +1,60 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="templates/loginTemplate">
+<body>
+	<th:block layout:fragment="content"  th:remove="tag">
+		<div class="row">
+	        <div class="col-md-offset-4 col-md-4">
+	        	<form th:action="@{/logincheck}" method="post" id="formLogin" autocomplete="off">
+		            <div class="form-login">
+		            	<h4 th:text="#{LOGIN_TITLE}"></h4>
+		            	<div class="form-group">
+			            	<div class="input-group">
+							  	<span class="input-group-addon" id="user-icon"><i class="fa fa-user"></i></span>
+							  	<input type="text" class="form-control" 
+							  			th:placeholder="#{LOGIN_USUARIO}" 
+							  			aria-describedby="user-icon" 
+							  			name="accesoUsuario"/>
+							</div>
+		            	</div>
+		            	<div class="form-group">
+			            	<div class="input-group"> 
+								<span class="input-group-addon" id="unlock-user"><i class="fa fa-unlock"></i></span>					
+								<input type="password" 
+										class="form-control" 
+										th:placeholder="#{LOGIN_CONTRASENIA}" 
+										aria-describedby="unlock-user" 
+										name="accesoClave" autocomplete="off"/>
+				            </div>
+		            	</div>
+		            	<div class="form-group text-center" th:if="${MENSAJE_EXCEPCION_LOGIN != null}">
+			            	<div class="error text-center">
+			        			<span class="fa fa-exclamation-triangle"></span>
+			        			<span th:text="${MENSAJE_EXCEPCION_LOGIN}"></span>
+			        		</div>        				        		      		
+		            	</div>
+		            	<div class="form-group text-center">
+	            			<button class="btn btn-primary btn-md" 
+		                			id="btnLogin" 
+		                			type="button">
+		                		<span th:text="#{LOGIN_INGRESO}"></span> <i class="fa fa-sign-in"></i></button>			            	
+		            	</div>
+		            </div>
+		        </form>	        	
+	        </div>
+	    </div>
+	</th:block>
+	
+	<th:block th:inline="text" layout:fragment="includeCSS">
+		<link rel="stylesheet" th:href="@{/recursos/css/login/login.css}" />
+    </th:block>
+
+	<th:block th:inline="text" layout:fragment="includeScript">
+		<script charset="utf-8" th:src="@{/recursos/script/comun/moduloValidador.js}"></script>
+		<script charset="utf-8" th:src="@{/recursos/script/login/login.js}"></script>
+		<script>
+			loginJS.init();
+		</script>
+	</th:block>
+</body>
+</html>

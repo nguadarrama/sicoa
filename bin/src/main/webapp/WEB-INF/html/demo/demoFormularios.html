@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="templates/mainTemplate">
+	<body>
+		<th:block layout:fragment="content"  th:remove="tag">
+			<!-- Demo de campos remover para imple -->
+			<h1 class="text-center">Formularios</h1>
+	        <hr/>
+	        <div class="col-md-12 ">
+		       	<div class="panel panel-default">
+	           		<div class="panel-heading"><h4>Componentes y modos de uso de un formulario</h4></div>
+	   				<div class="panel-body">
+	              		<div class="clearfix"></div>
+	              		<p class="text-justify">
+	              			 Se utiliza bootstrap v3 para los controles html y la distribuci&oacute;n de componentes
+	              		</p>
+	                    <div class="bs-callout bs-callout-info">
+							<h4>Ejemplo de Formulario Estandar</h4>
+	         
+					         <form role="form">
+					            <div class="form-group">
+					                <label class="control-label" for="email-01">Correo electr�nico:</label>
+					                <input class="form-control" id="email-01" placeholder="Correo electr�nico" type="text"/>
+					            </div>
+					            <div class="form-group">
+					                <label for="select" class="control-label">Select</label>
+					                <select class="form-control" name="select">
+					                    <option>1</option>
+					                    <option>2</option>
+					                    <option>3</option>
+					                    <option>4</option>
+					                    <option>5</option>
+					                </select>
+					            </div> 
+					
+					            <div class="form-group">
+					                <label class="control-label" for="password-01">Contrase�a</label>
+					                <input class="form-control" id="password-01" placeholder="Contrase�a" type="password"/>
+					            </div>
+					            <div class="form-group">
+					                <label class="control-label" for="file-01">Cargar archivo:</label>
+					                <input id="file-01" type="file"/>
+					            </div>
+					            <div class="checkbox">
+					                <label>
+					                    <input type="checkbox"/>
+					                    Acepto los t�rminos
+					                </label>
+					            </div>
+					            <div class="form-group">
+					                <textarea class="form-control" rows="3"></textarea>
+					            </div>
+					            <button class="btn btn-primary pull-right" type="submit">Enviar</button>
+					        </form>					
+						</div>
+						<p>&nbsp;</p>
+					    <p>&nbsp;</p>
+						<div class="bs-callout bs-callout-warning">
+							
+					        <h4>Ejemplo de Fomulario Lineal</h4>
+					        
+					        <form class="form-inline" role="form">
+					            <div class="form-group">
+					                <label class="sr-only" for="email-02">Correo electr�nico:</label>
+					                <input class="form-control" id="email-02" placeholder="Ingrese su email" type="text"/>
+					            </div>
+					            <div class="form-group">
+					                <label class="sr-only" for="password-02">Contrase�a</label>
+					                <input class="form-control" id="password-02" placeholder="Ingrese su contrase�a" type="password"/>
+					            </div>
+					            <div class="checkbox">
+					                <label>
+					                    <input type="checkbox"/>
+					                    Recordarme
+					                </label>
+					            </div>
+					            <button class="btn btn-primary" type="submit">Ingresar</button>
+					        </form>
+						</div>
+						<p>&nbsp;</p>
+					    <p>&nbsp;</p>	
+						<div class="bs-callout bs-callout-info">							
+					        <h4>Ejemplo de Formulario Horizontal</h4>
+					        <form class="form-horizontal" role="form">
+					            <div class="form-group">
+					                <label class="col-sm-3 control-label" for="email-03">Correo electr�nico:</label>
+					                <div class="col-sm-9">
+					                    <input class="form-control" id="email-03" placeholder="Correo electr�nico" type="text"/>
+					                </div>
+					            </div>
+					            <div class="form-group">
+					                <label class="col-sm-3 control-label" for="password-03">Contrase�a:</label>
+					                <div class="col-sm-9">
+					                    <input class="form-control" id="password-03" placeholder="Contrase�a" type="password"/>
+					                </div>
+					            </div>
+					            <div class="form-group">
+					                <div class="col-sm-offset-3 col-sm-9">
+					                    <div class="checkbox">
+					                        <label>
+					                            <input type="checkbox"/>
+					                            Recordarme
+					                        </label>
+					                    </div>
+					                </div>
+					            </div>
+					            <div class="form-group">
+					                <div class="col-sm-offset-3 col-sm-9">
+					                    <button class="btn btn-primary pull-right" type="submit">Enviar</button>
+					                </div>
+					            </div>
+					        </form>
+					    </div>
+						<p>&nbsp;</p>
+					    <p>&nbsp;</p>	
+						<div class="bs-callout bs-callout-warning">	
+					        <h4>Tipos de botones</h4>
+					        <!-- Bot�n b�sico -->
+					        <button type="button" class="btn btn-default">B�sico</button>	
+					        <!-- Bot�n de error -->
+					        <button type="button" class="btn btn-danger">Error</button>	
+					        <!-- Bot�n primario -->
+					        <button type="button" class="btn btn-primary">Primario</button>	
+					        <!-- Bot�n tipo hiperv�nculo -->
+					        <button type="button" class="btn btn-link">Hiperv�nculo</button>
+						</div>
+						<p>&nbsp;</p>
+					    <p>&nbsp;</p>	
+						<div class="bs-callout bs-callout-info">	
+					        <h4>Muestra de modal</h4>
+					        <!-- Bot�n b�sico -->
+					        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modalEjemplo">Mostrar modal </button>
+						</div>
+						 <div class="modal fade" id="modalEjemplo">
+							  <div class="modal-dialog">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <h4 class="modal-title">Titulo : Ejemplo de ventana modal</h4>
+							      </div>
+							      <div class="modal-body">
+							        <p>Ejemplo de texto interno.</p>
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+							        <button type="button" class="btn btn-primary">Accion</button>
+							      </div>
+							    </div><!-- /.modal-content -->
+							  </div><!-- /.modal-dialog -->
+							</div><!-- /.modal -->
+					</div>
+				</div>
+			</div> 
+		</th:block>
+		
+		<th:block th:inline="text" layout:fragment="includeCSS">
+	        <link rel="stylesheet" th:href="@{/recursos/assets/datatables/dataTables-1.10.12/css/dataTables.bootstrap.min.css}" />
+	        <link rel="stylesheet" th:href="@{/recursos/assets/datatables/responsive-2.1.0/css/responsive.bootstrap.min.css}"/>
+	        <style>
+	        
+	        
+	        
+			.bs-callout h4 {
+			    margin-top: 0;
+			    margin-bottom: 5px;
+			}
+			.bs-callout-info h3 {
+			    color: #aa6708;
+			}
+			.bs-callout-info h4 {
+			    color: #1b809e;
+			}
+			.bs-callout {
+			    padding: 20px;
+			    margin: 20px 0;
+			    border: 1px solid #eee;
+			    border-left-width: 5px;
+			    border-radius: 3px;
+			}
+	        .bs-callout-info {
+			    border-left-color: #1b809e; !
+			}
+			
+			.bs-callout-warning h3 {
+			    color: #1b809e;
+			}
+			.bs-callout-warning h4 {
+			    color: #aa6708;
+			}
+			.bs-callout-warning {
+			    border-left-color: #aa6708; !
+			}
+			.code {
+				font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+				font-size: 90%;
+    			color: #c7254e;
+			}
+			
+	        </style>
+    	</th:block>
+    	
+    	    	
+    	<th:block th:inline="text" layout:fragment="includeScript">				
+	    </th:block>
+	</body>
+</html>
