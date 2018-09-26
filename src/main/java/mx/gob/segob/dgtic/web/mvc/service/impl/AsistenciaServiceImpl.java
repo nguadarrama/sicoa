@@ -13,14 +13,18 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.AsistenciaEndPointConstants;
+import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
+import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
@@ -30,14 +34,16 @@ import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
 public class AsistenciaServiceImpl implements AsistenciaService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
-
+	
 	@Override
-	public List<Asistencia> obtieneAsistencia() {
+	public List<Asistencia> buscaAsistenciaEmpleado(String claveEmpleado) {
 		List<Asistencia> listaAsistencia = new ArrayList<>();
 		HttpResponse response;
 		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA);
+			response = ClienteRestUtil.getCliente().get(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO + "?claveEmpleado=" + claveEmpleado);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -50,6 +56,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			if(dataJson != null){
 				listaAsistencia = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Asistencia>>(){}.getType());
 			}
+			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			
 			String mensaje = obtenerMensajeError(response);					 
@@ -60,7 +67,8 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 		return listaAsistencia;
 	}
-	
+
+
 	private String obtenerMensajeError(HttpResponse response){
 		JsonObject respuesta = (JsonObject) HttpResponseUtil.getJsonContent(response);
 		JsonObject metadata = (JsonObject)respuesta.get(AutorizacionConstants.ATTR_META_DATA_JSON_NAME);			
@@ -69,4 +77,5 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
 
+	
 }

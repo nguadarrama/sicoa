@@ -11,4 +11,5 @@ public interface UsuarioService {
 	public Usuario buscaUsuario(String claveUsuario);
 	public void eliminaUsuario(String claveUsuario);
 	public void modificaUsuario(Usuario usuario);
+	public void reiniciaContrasenia(String claveUsuario);
 	}

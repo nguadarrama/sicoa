@@ -6,8 +6,8 @@ public class Usuario {
 	
 	private Integer idUsuario;
 	private Integer idArea;
-	private String clavePerfil;
-	private Integer idHorario;
+	private Perfil clavePerfil;
+	private Horario idHorario;
 	private String idPuesto;
 	private String claveUsuario;
 	private String nombre;
@@ -28,7 +28,7 @@ public class Usuario {
 	public Usuario (){
 		
 	}
-	public Usuario (String clavePerfil, Integer idHorario, String claveUsuario, String nombre,
+	public Usuario (Perfil clavePerfil, Horario idHorario, String claveUsuario, String nombre,
 			String apellidoPaterno, String apellidoMaterno, String bloqueado){
 		super();
 		this.clavePerfil=clavePerfil;
@@ -55,19 +55,19 @@ public class Usuario {
 		this.idArea = idArea;
 	}
 	
-	public String getClavePerfil() {
+	public Perfil getClavePerfil() {
 		return clavePerfil;
 	}
 	
-	public void setClavePerfil(String clavePerfil) {
+	public void setClavePerfil(Perfil clavePerfil) {
 		this.clavePerfil = clavePerfil;
 	}
 	
-	public Integer getIdHorario() {
+	public Horario getIdHorario() {
 		return idHorario;
 	}
 	
-	public void setIdHorario(Integer idHorario) {
+	public void setIdHorario(Horario idHorario) {
 		this.idHorario = idHorario;
 	}
 	

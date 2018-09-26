@@ -31,6 +31,7 @@ public final class CatalogoEndPointConstants {
 	public static final String WEB_SERVICE_MODIFICA_USUARIO = "/catalogo/modificaUsuario";
 	public static final String WEB_SERVICE_AGREGA_USUARIO = "/catalogo/agregaUsuario";
 	public static final String WEB_SERVICE_ELIMINA_USUARIO = "/catalogo/eliminaUsuario";
+	public static final String WEB_SERVICE_REINICIA_CONTRASENIA = "/catalogo/reiniciaContrasenia";
 	
 	//
 	public static final String WEB_SERVICE_INFO_PERFIL =  "/catalogo/obtienePerfiles";

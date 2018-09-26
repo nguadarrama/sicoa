@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import mx.gob.segob.dgtic.web.config.security.service.AutenticacionService;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
+import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
@@ -172,15 +173,21 @@ public class CatalogoController {
 
 
     
-       @PostMapping("usuario/modifica")
-       public String modificaUsuario(String clavePerfil, Integer idHorario, String claveUsuario, String nombre,
-    		   String apellidoPaterno, String apellidoMaterno, String bloqueado) {
-      
-        usuarioService.modificaUsuario(new Usuario(clavePerfil, idHorario, claveUsuario, nombre,
-       	apellidoPaterno, apellidoMaterno, bloqueado));
-       	
-       	return "redirect:/catalogos/usuario";
-       }
+	    @PostMapping("/usuario/modifica")
+	    public String modificaUsuario(Perfil clavePerfil, Horario idHorario, String claveUsuario, String nombre,
+				String apellidoPaterno, String apellidoMaterno, String bloqueado, String reiniciarPassword) {
+	    	System.out.println("valor bloqueado "+bloqueado);
+	    	usuarioService.modificaUsuario(new Usuario(clavePerfil, idHorario, claveUsuario, nombre,
+	    			apellidoPaterno, apellidoMaterno, bloqueado));
+	    	char dato=reiniciarPassword.charAt(0);
+	    	
+	    	if( ((int)dato)==83){
+	    		System.out.println("valor reiniciarPassword1 "+reiniciarPassword);
+	    		usuarioService.reiniciaContrasenia(claveUsuario);
+	    	}
+	    	
+	    	return "redirect:/catalogos/usuario";
+	    }
        
        @GetMapping("usuario/busca")
        @ResponseBody

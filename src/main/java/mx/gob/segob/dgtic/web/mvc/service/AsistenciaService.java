@@ -5,5 +5,5 @@ import java.util.List;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
 
 public interface AsistenciaService {
-	public List<Asistencia> obtieneAsistencia();
+	public List<Asistencia> buscaAsistenciaEmpleado(String claveEmpleado);
 }

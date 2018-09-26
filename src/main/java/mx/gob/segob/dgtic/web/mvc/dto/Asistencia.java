@@ -3,19 +3,20 @@ package mx.gob.segob.dgtic.web.mvc.dto;
 import java.sql.Timestamp;
 
 public class Asistencia {
-	private UsuarioSesion usuarioDto;
+	private Usuario usuarioDto;
 	private Timestamp entrada;
 	private Timestamp salida;
+	private TipoDia idTipoDia;
 	
 	public Asistencia() {
 		
 	}
 
-	public UsuarioSesion getUsuarioDto() {
+	public Usuario getUsuario() {
 		return usuarioDto;
 	}
 
-	public void setUsuarioDto(UsuarioSesion usuarioDto) {
+	public void setUsuario(Usuario usuarioDto) {
 		this.usuarioDto = usuarioDto;
 	}
 
@@ -34,5 +35,22 @@ public class Asistencia {
 	public void setSalida(Timestamp salida) {
 		this.salida = salida;
 	}
+
+	public Usuario getUsuarioDto() {
+		return usuarioDto;
+	}
+
+	public void setUsuarioDto(Usuario usuarioDto) {
+		this.usuarioDto = usuarioDto;
+	}
+
+	public TipoDia getIdTipoDia() {
+		return idTipoDia;
+	}
+
+	public void setIdTipoDia(TipoDia idTipoDia) {
+		this.idTipoDia = idTipoDia;
+	}
+	
 	
 }
