@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="templates/mainTemplate">
+	
+	<head>
+		<title th:text="#{TITULO_MAIN_PAGE}" layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE"></title>
+	
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+		<meta name="_token" th:content="${session._token}"></meta>
+		<meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"></meta> 
+	   	<meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"></meta>   	
+	   	
+	   	<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="icon"  type="image/x-icon" />
+		<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="shortcut icon"  type="image/x-icon"/>
+		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_3.3.7/css/bootstrap.min.css}" />	
+		<link rel="stylesheet" th:href="@{/recursos/assets/font-awesome-4.7.0/css/font-awesome.min.css}" />	
+		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_dialog/css/bootstrap-dialog.min.css}" />
+		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+		<link rel="stylesheet" th:href="@{/recursos/css/styles.css}" />	
+	</head>
+	
+	<body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="logos">
+							<div class="logo-segob"></div>
+							<div class="logo-control"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<th:block layout:fragment="content"  th:remove="tag">
+			<div class="container">
+				<div class="filterable">
+           			<h1 class="ico-solicitudes"><span class="input-clock"></span> Justificaciones
+           				<button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button>
+           				<button class="btn btn-xs btn-default nBtn glyphicon glyphicon-plus-sign"></button>
+           			</h1>
+           			<hr/>
+					<table id="tableJustificacion" class="table table-striped table-text-center">
+						<thead>
+							<tr class="filters">
+								<th><input type="text" class="form-control" placeholder="ID" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="JUSTIFICACI&Oacute;N" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="ESTATUS" th:disabled="true"/></th>
+								<td th:text="#{COMUN.ACCIONES}"></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="justificacion : ${listaJustificaciones}">
+								<td th:text="${justificacion.idJustificacion}"></td>
+								<td th:text="${justificacion.justificacion}"></td>
+								<td>
+									<span th:if="${justificacion.activo} == true" th:text="ACTIVO"></span>
+									<span th:if="${justificacion.activo} == false" th:text="INACTIVO"></span>
+								</td>
+								<td class="col-md-3"> 
+									<div>
+										<a th:href="@{/catalogos/justificacion/busca/(id=${justificacion.idJustificacion})}"   class="btn btn-xs btn-default eBtn"><span class="glyphicon glyphicon-pencil"></span></a>
+										<a th:href="@{/catalogos/justificacion/elimina/(id=${justificacion.idJustificacion})}" class="btn btn-xs btn-default eliminaBtn"><span class="glyphicon glyphicon-trash"></span></a>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<div class="justificacionForm">      <!-- Modal para editar -->
+		      		<form th:action="@{/catalogos/justificacion/modifica}" method="post">
+						<div class="modal fade" id="justificacionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+							    	<div class="modal-header">
+							      		<h3 class="modal-title" id="exampleModalLabel" th:text="#{COMUN.MODIFICAR}"></h3>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										 </button>
+								    </div>
+							    	<div class="modal-body">
+								        <div class="form-group">
+								        	<label for="id" class="col-form-label" th:text="#{ID}"></label>
+								            <input type="text" class="form-control" id="id" name="id" th:readonly="true" />
+								        </div>
+								        <div class="form-group">
+							          		<label for="justificacion" class="col-form-label" th:text="JUSTIFICACI&Oacute;N"></label>
+							          		<input type="text" class="form-control" id="justificacion" name="justificacion" th:size="40" required="required" />
+								        </div>								        
+								        <div class="form-group">
+								        	<label for="activo" class="col-form-label" th:text="ESTATUS"></label>
+								        	<div class="form-group">
+									        	<input type="radio" id="activo" name="activo" th:value="true"/>                                
+	        									<label  th:text="Activo" ></label>  
+	        									<input type="radio"  id="activo" name="activo" th:value="false"/>                                
+	        									<label  th:text="Inactivo" ></label> 
+	        								</div> 
+								        </div>
+							    	</div>
+								    <div class="modal-footer">
+					    				<button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
+								    	<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+								    </div>
+							  	</div>
+							</div>
+						</div>
+	      			</form>
+      			</div>
+      			
+      			<div class="nuevaJustificacionForm"> <!-- Modal para agregar -->
+		      		<form th:action="@{/catalogos/justificacion/agrega}" method="post">
+						<div class="modal fade" id="nuevaJustificacionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+							    	<div class="modal-header">
+							      		<h3 class="modal-title" id="exampleModalLabel" th:text="#{COMUN.AGREGAR}"></h3>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										 </button>
+								    </div>
+							    	<div class="modal-body">
+								        <div class="form-group">
+							          		<label for="justificacion" class="col-form-label" th:text="JUSTIFICACI&Oacute;N"></label>
+							          		<input type="text" class="form-control" id="justificacion" name="justificacion" th:size="40" required="required" />
+								        </div>					
+								        <div class="form-group">
+								        	<label for="activo" class="col-form-label" th:text="ESTATUS"></label>
+								        	<div class="form-group">
+									        	<input type="radio" id="activo" name="activo" th:value="true"/>                                
+	        									<label  th:text="Activo" ></label>  
+	        									<input type="radio"  name="activo" th:value="false"/>                                
+	        									<label  th:text="Inactivo" ></label> 
+	        								</div> 
+								        </div>
+							    	</div>
+								    <div class="modal-footer">
+					    				<button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
+								    	<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+								    </div>
+							  	</div>
+							</div>
+						</div>
+	      			</form>
+      			</div>
+      			
+      										   <!-- Modal para eliminar -->
+				<div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h3 class="modal-title" id="exampleModalLongTitle" th:text="#{COMUN.ELIMINA}"></h3>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        <p th:text="#{COMUN.ELIMINA.CONFIRMACION}"></p>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
+				        <a href="" class="btn btn-danger" id="delRef" th:text="#{COMUN.ELIMINA}"></a>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+			</div>			
+		</th:block>
+		
+		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+	
+		<th:block th:inline="text" layout:fragment="includeScript">
+			<script charset="utf-8" th:src="@{/recursos/assets/bootstrap_dialog/js/bootstrap-dialog.min.js}"></script>
+			<script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/jquery.dataTables.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/script/catalogos/justificacion.js}"></script>	 
+		</th:block>
+	</body>
+</html>

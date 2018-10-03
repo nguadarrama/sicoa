@@ -11,20 +11,29 @@ public final class CatalogoEndPointConstants {
 	}
 	
 	/**
-	 * Constante que representa el atributo WEB_SERVICE_INFO_HORARIO, path del WebService para obtener la informaci&oacute;n del catálogo horario. 
+	 * Constante que representa el atributo WEB_SERVICE_INFO_HORARIO, path del WebService para obtener la información del catálogo horario. 
 	 */	
 	public static final String WEB_SERVICE_INFO_HORARIO =  "/catalogo/obtieneHorarios";
 	public static final String WEB_SERVICE_BUSCA_HORARIO = "/catalogo/buscaHorario";
 	public static final String WEB_SERVICE_MODIFICA_HORARIO = "/catalogo/modificaHorario";
 	public static final String WEB_SERVICE_AGREGA_HORARIO = "/catalogo/agregaHorario";
 	public static final String WEB_SERVICE_ELIMINA_HORARIO = "/catalogo/eliminaHorario";
-	
+	/**
+	 * Constante que representa el atributo WEB_SERVICE_INFO_TIPO_DIA, path del WebService para obtener la información del catálogo tipo Día. 
+	 */	
 	public static final String WEB_SERVICE_INFO_TIPODIA =  "/catalogo/obtieneTipoDias";
 	public static final String WEB_SERVICE_BUSCA_TIPODIA = "/catalogo/buscaTipoDia";
 	public static final String WEB_SERVICE_MODIFICA_TIPODIA = "/catalogo/modificaTipoDia";
 	public static final String WEB_SERVICE_AGREGA_TIPODIA = "/catalogo/agregaTipoDia";
 	public static final String WEB_SERVICE_ELIMINA_TIPODIA = "/catalogo/eliminaTipoDia";
-
+	/**
+	 * Constante que representa el atributo WEB_SERVICE_INFO_JUSTIFICACION, path del WebService para obtener la información del catálogo justificacion. 
+	 */	
+	public static final String WEB_SERVICE_INFO_JUSTIFICACION =  "/catalogo/obtieneJustificaciones";
+	public static final String WEB_SERVICE_BUSCA_JUSTIFICACION = "/catalogo/buscaJustificacion";
+	public static final String WEB_SERVICE_MODIFICA_JUSTIFICACION = "/catalogo/modificaJustificacion";
+	public static final String WEB_SERVICE_AGREGA_JUSTIFICACION = "/catalogo/agregaJustificacion";
+	public static final String WEB_SERVICE_ELIMINA_JUSTIFICACION = "/catalogo/eliminaJustificacion";
 	//Usuario
 	public static final String WEB_SERVICE_INFO_USUARIO =  "/catalogo/obtieneUsuarios";
 	public static final String WEB_SERVICE_BUSCA_USUARIO = "/catalogo/buscaUsuario";

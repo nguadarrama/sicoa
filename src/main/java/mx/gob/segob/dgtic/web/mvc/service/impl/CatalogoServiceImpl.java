@@ -13,7 +13,6 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
@@ -24,9 +23,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
-import mx.gob.segob.dgtic.web.config.security.service.AutenticacionService;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
+import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
@@ -42,8 +41,6 @@ public class CatalogoServiceImpl implements CatalogoService {
      */
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
-	@Autowired
-	AutenticacionService autenticacionSerivce; 
 
 	@Override
 	public List<Horario> obtieneHorarios() {
@@ -339,6 +336,139 @@ public class CatalogoServiceImpl implements CatalogoService {
 		}
 				
 		return listaPerfil;
+	}
+
+	@Override
+	public List<Justificacion> obtieneJustificaciones() {
+		List<Justificacion> listaJustificacion = new ArrayList<>();
+		HttpResponse response;
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_JUSTIFICACION);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaJustificacion = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Justificacion>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener catalogo de justificaciones: "+response.getStatusLine().getReasonPhrase());
+		}
+				
+		return listaJustificacion;
+	}
+
+	
+	@Override
+	@SuppressWarnings("unused")
+	public void modificaJustificacion(Justificacion justificacion) {
+		try{
+			
+			Header header = new BasicHeader("Authorization", "Bearer %s");
+			HttpEntity httpEntity = new BasicHttpEntity();
+			//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
+			Map<String, Object> content = new HashMap<String, Object>();
+			content.put("justificacion", justificacion);
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+			//se consume recurso rest
+			HttpResponse response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_JUSTIFICACION, httpEntity, header);
+			
+		}catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}catch (Exception i){
+			logger.error(i.getMessage(), i);
+		}
+	}
+
+	@Override
+	public void agregaJustificacion(Justificacion justificacion) {
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("justificacion", justificacion);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try { //se consume recurso rest
+			ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_JUSTIFICACION, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void guardaJustificacion(Justificacion justificacion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void borraJustificacion(Justificacion justificacion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Justificacion buscaJustificacion(Integer id) {
+		Justificacion justificacion = new Justificacion();
+		HttpResponse response;
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_JUSTIFICACION + "?id=" + id);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			justificacion = gson.fromJson(dataJson, Justificacion.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener la justificaicon : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return justificacion;
+	}
+
+	@Override
+	@SuppressWarnings("unused")
+	public void eliminaJustificacion(Integer id) {
+		
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_ELIMINA_JUSTIFICACION + "?id=" + id);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
 	}
 
 }
