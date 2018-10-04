@@ -9,5 +9,7 @@ public final class AsistenciaEndPointConstants {
 		throw new IllegalStateException("Constants class");
 	}
 	
-	public static final String WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO =  "/asistencia/obtieneAsistenciasEmpleado";
+	public static final String WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO =  "/asistencia/obtieneAsistenciasEmpleadoMes";
+	public static final String WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_RANGO =  "/asistencia/obtieneAsistenciasEmpleadoRango";
+	public static final String WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_ID =  "/asistencia/obtieneAsistenciaPorId";
 }

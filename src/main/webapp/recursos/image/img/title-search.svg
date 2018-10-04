@@ -1,0 +1,21 @@
+
+<svg width="27px" height="28px" viewBox="0 0 27 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M17.1485731,20.1224748 C15.3932821,21.3078695 13.2774689,22 11,22 C4.92486775,22 0,17.0751322 0,11 C0,4.92486775 4.92486775,0 11,0 C17.0751322,0 22,4.92486775 22,11 C22,13.1734166 21.3696684,15.1996115 20.2818408,16.9057489 C20.4510267,17.0131095 20.6068227,17.1479223 20.742484,17.3095972 L26.4007796,24.0528914 C27.1107832,24.8990407 27.0004153,26.1605519 26.154266,26.8705555 L25.719826,27.2350939 C24.8736767,27.9450975 23.6121655,27.8347296 22.9021619,26.9885802 L17.2438663,20.2452861 C17.2102678,20.205245 17.1785064,20.1642737 17.1485731,20.1224748 Z M11,20 C15.9705627,20 20,15.9705627 20,11 C20,6.02943725 15.9705627,2 11,2 C6.02943725,2 2,6.02943725 2,11 C2,15.9705627 6.02943725,20 11,20 Z" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ico_buscar" transform="translate(-2.000000, -1.000000)">
+            <g id="hex" transform="translate(2.000000, 1.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Mask" fill="#4E92DF" xlink:href="#path-1"></use>
+                <g mask="url(#mask-2)">
+                    <g transform="translate(-2.000000, -1.000000)"></g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

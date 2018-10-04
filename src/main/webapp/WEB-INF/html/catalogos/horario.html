@@ -21,6 +21,7 @@
 		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_3.3.7/css/bootstrap.min.css}" />	
 		<link rel="stylesheet" th:href="@{/recursos/assets/font-awesome-4.7.0/css/font-awesome.min.css}" />	
 		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_dialog/css/bootstrap-dialog.min.css}" />
+		<link rel="stylesheet" th:href="@{/recursos/assets/timepicker-1.3.5/jquery.timepicker.min.css}" />
 		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
 		<link rel="stylesheet" th:href="@{/recursos/css/styles.css}" />	
 	</head>
@@ -50,10 +51,10 @@
 						<thead>
 							<tr class="filters">
 								<th><input type="text" class="form-control" placeholder="ID" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="Hora Entrada" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="Hora Salida" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="Activo" th:disabled="true"/></th>
-								<td th:text="#{COMUN.ACCIONES}"></td>
+								<th><input type="text" class="form-control" placeholder="HORA ENTRADA" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="HORA SALIDA" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="ESTADO" th:disabled="true"/></th>
+								<td th:text="ACCIONES"></td>
 							</tr>
 						</thead>
 						<tbody>
@@ -61,7 +62,7 @@
 								<td th:text="${horario.idHorario}"></td>
 								<td th:text="${horario.horaEntrada}"></td>
 								<td th:text="${horario.horaSalida}"></td>
-								<td th:text="${horario.activo}"></td>
+								<td th:text="${horario.activo} ? 'Activo' : 'Inactivo'"></td>
 								<td class="col-md-3"> 
 									<div>
 										<a th:href="@{/catalogos/horario/busca/(id=${horario.idHorario})}"   class="btn btn-xs btn-default eBtn"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -90,16 +91,32 @@
 								            <input type="text" class="form-control" id="id" name="id" th:readonly="true" />
 								        </div>
 								        <div class="form-group">
-							          		<label for="horaEntrada" class="col-form-label" th:text="#{HORA_ENTRADA}"></label>
-							          		<input type="text" class="form-control" id="horaEntrada" name="horaEntrada" th:size="5" />
-								        </div>
+							                <div class='input-group date'>
+							                	<label for="horaEntrada" class="col-form-label" th:text="#{HORA_ENTRADA}"></label>
+							                    <input type='text' class="form-control input-small" id="timepickerEntradaEditar" name="horaEntrada" autocomplete="off" th:required="required"/>
+							                    <span class="input-group-addon">
+							                        <span class="glyphicon glyphicon-time"></span>
+							                    </span>
+							                </div>
+							            </div>
+									    <div class="form-group">
+							                <div class='input-group date'>
+							                	<label for="horaSalida" class="col-form-label" th:text="#{HORA_SALIDA}"></label>
+							                    <input type='text' class="form-control input-small" id="timepickerSalidaEditar" name="horaSalida" autocomplete="off" th:required="required"/>
+							                    <span class="input-group-addon">
+							                        <span class="glyphicon glyphicon-time"></span>
+							                    </span>
+							                </div>
+							            </div>
 								        <div class="form-group">
-											<label for="horaSalida" class="col-form-label" th:text="#{HORA_SALIDA}"></label>
-									    	<input type="text" class="form-control" id="horaSalida" name="horaSalida" size="5" />
-										</div>
-								        <div class="form-group">
-								        	<label for="activo" class="col-form-label" th:text="#{ACTIVO}"></label>
-								        	<input type="text" class="form-control" id="activo" name="activo" />
+								        	<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="activo" id="activado" value="true" />
+											  	<label class="form-check-label" for="activado" th:text="Activo"></label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="activo" id="desactivado" value="false"/>
+												<label class="form-check-label" for="desactivado" th:text="Inactivo"></label>
+											</div>
 								        </div>
 							    	</div>
 								    <div class="modal-footer">
@@ -124,17 +141,33 @@
 										 </button>
 								    </div>
 							    	<div class="modal-body">
+							    		<div class="form-group">
+							                <div class='input-group date'>
+							                	<label for="horaEntrada" class="col-form-label" th:text="#{HORA_ENTRADA}"></label>
+							                    <input type='text' class="form-control input-small" id="timepickerEntrada" name="horaEntrada" autocomplete="off" th:required="required"/>
+							                    <span class="input-group-addon">
+							                        <span class="glyphicon glyphicon-time"></span>
+							                    </span>
+							                </div>
+							            </div>
+									    <div class="form-group">
+							                <div class='input-group date'>
+							                	<label for="horaSalida" class="col-form-label" th:text="#{HORA_SALIDA}"></label>
+							                    <input type='text' class="form-control input-small" id="timepickerSalida" name="horaSalida" autocomplete="off" th:required="required"/>
+							                    <span class="input-group-addon">
+							                        <span class="glyphicon glyphicon-time"></span>
+							                    </span>
+							                </div>
+							            </div>
 								        <div class="form-group">
-							          		<label for="horaEntrada" class="col-form-label" th:text="#{HORA_ENTRADA}"></label>
-							          		<input type="text" class="form-control" id="horaEntrada" name="horaEntrada" th:size="5" />
-								        </div>
-								        <div class="form-group">
-											<label for="horaSalida" class="col-form-label" th:text="#{HORA_SALIDA}"></label>
-									    	<input type="text" class="form-control" id="horaSalida" name="horaSalida" size="5" />
-										</div>
-								        <div class="form-group">
-								        	<label for="activo" class="col-form-label" th:text="#{ACTIVO}"></label>
-								        	<input type="text" class="form-control" id="activo" name="activo" />
+								        	<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="activo" id="activado" value="true" checked="checked" />
+											  	<label class="form-check-label" for="activado" th:text="Activo"></label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="activo" id="desactivado" value="false"/>
+												<label class="form-check-label" for="desactivado" th:text="Inactivo"></label>
+											</div>
 								        </div>
 							    	</div>
 								    <div class="modal-footer">
@@ -167,18 +200,19 @@
 				    </div>
 				  </div>
 				</div>
-			</div>			
+			</div>
 		</th:block>
 		
 		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
 	
 		<th:block th:inline="text" layout:fragment="includeScript">
+			<script charset="utf-8" th:src="@{/recursos/assets/timepicker-1.3.5/jquery.timepicker.min.js}"></script>
 			<script charset="utf-8" th:src="@{/recursos/assets/bootstrap_dialog/js/bootstrap-dialog.min.js}"></script>
 			<script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/jquery.dataTables.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
-	        <script charset="utf-8" th:src="@{/recursos/script/catalogos/horario.js}"></script>	 
+	        <script charset="utf-8" th:src="@{/recursos/script/catalogos/horario.js}"></script>
 		</th:block>
 	</body>
 </html>

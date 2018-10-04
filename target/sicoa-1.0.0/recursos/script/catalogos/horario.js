@@ -6,9 +6,17 @@ $(document).ready(function() {
 		var text = $(this).text();
 		
 			$.get(href, function(horario, status) {
-				$('.horarioForm #id').val(horario.idHorario);
-				$('.horarioForm #horaEntrada').val(horario.horaEntrada);
-				$('.horarioForm #horaSalida').val(horario.horaSalida);
+				$('#id').val(horario.idHorario);
+								
+				$('#timepickerEntradaEditar').val(convierte24horas(horario.horaEntrada));
+				$('#timepickerSalidaEditar').val(convierte24horas(horario.horaSalida));
+				
+				if (horario.activo) {
+					$('#activado').prop("checked", true);
+				} else {
+					$('#desactivado').prop("checked", true);
+				}
+				
 				$('.horarioForm #activo').val(horario.activo);
 			});
 			
@@ -74,5 +82,63 @@ $(document).ready(function() {
             $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No encontrado</td></tr>'));
         }
     });
+    
+    $('#timepickerEntradaEditar').timepicker({
+    	timeFormat: 'HH:mm:ss',
+        interval: 05,
+        minTime: '06:00',
+        maxTime: '18:00',
+        startTime: '00:00',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true
+    });
 	
+    $('#timepickerSalidaEditar').timepicker({
+    	timeFormat: 'HH:mm:ss',
+        interval: 05,
+        minTime: '12:00',
+        maxTime: '22:00',
+        startTime: '00:00',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true
+    });
+    
+    $('#timepickerEntrada').timepicker({
+    	timeFormat: 'HH:mm:ss',
+        interval: 05,
+        minTime: '06:00',
+        maxTime: '18:00',
+        startTime: '00:00',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true
+    });
+	
+    $('#timepickerSalida').timepicker({
+    	timeFormat: 'HH:mm:ss',
+        interval: 05,
+        minTime: '12:00',
+        maxTime: '22:00',
+        startTime: '00:00',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true
+    });
 }); 
+
+function convierte24horas(horaInicial) {
+	var time = horaInicial;
+	var hours = Number(time.match(/^(\d+)/)[1]);
+	var minutes = Number(time.match(/:(\d+)/)[1]);
+	var AMPM = time.match(/\s(.*)$/)[1];
+	if(AMPM == "PM" && hours<12) hours = hours+12;
+	if(AMPM == "AM" && hours==12) hours = hours-12;
+	var sHours = hours.toString();
+	var sMinutes = minutes.toString();
+	if(hours<10) sHours = "0" + sHours;
+	if(minutes<10) sMinutes = "0" + sMinutes;
+	
+	return sHours + ":" + sMinutes + ":00";
+}

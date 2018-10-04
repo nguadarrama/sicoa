@@ -1,0 +1,27 @@
+
+<svg width="8px" height="10px" viewBox="0 0 8 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polyline id="path-1" points="3.36565486 10 1.33333333 7.97639123 4.30972456 5 1.33333333 2.02360877 3.36565486 0 8.18830804 4.81450253 8.36537381 5 8.35722316 5.0084317 8.35722316 5.01686341 3.36565486 10"></polyline>
+    </defs>
+    <g id="03-Inicio" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="00-Empleado-00" transform="translate(-291.000000, -370.000000)">
+            <g id="dashboard" transform="translate(110.000000, 180.000000)">
+                <g id="asistencia">
+                    <g id="periodo_actual" transform="translate(20.000000, 150.000000)">
+                        <g id="ico_siguiente" transform="translate(160.000000, 40.000000)">
+                            <mask id="mask-2" fill="white">
+                                <use xlink:href="#path-1"></use>
+                            </mask>
+                            <use id="Mask" fill="#231F20" fill-rule="evenodd" xlink:href="#path-1"></use>
+                            <g id="hex_verde" mask="url(#mask-2)" fill="#9CD06D" fill-rule="evenodd">
+                                <rect id="Rectangle-Copy-2" x="0" y="0" width="10" height="10"></rect>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

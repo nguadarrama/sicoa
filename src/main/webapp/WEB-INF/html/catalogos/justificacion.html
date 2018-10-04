@@ -51,7 +51,7 @@
 							<tr class="filters">
 								<th><input type="text" class="form-control" placeholder="ID" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="JUSTIFICACI&Oacute;N" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="ESTATUS" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="ESTADO" th:disabled="true"/></th>
 								<td th:text="#{COMUN.ACCIONES}"></td>
 							</tr>
 						</thead>
@@ -60,8 +60,8 @@
 								<td th:text="${justificacion.idJustificacion}"></td>
 								<td th:text="${justificacion.justificacion}"></td>
 								<td>
-									<span th:if="${justificacion.activo} == true" th:text="ACTIVO"></span>
-									<span th:if="${justificacion.activo} == false" th:text="INACTIVO"></span>
+									<span th:if="${justificacion.activo} == true" th:text="Activo"></span>
+									<span th:if="${justificacion.activo} == false" th:text="Inactivo"></span>
 								</td>
 								<td class="col-md-3"> 
 									<div>

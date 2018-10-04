@@ -3,6 +3,7 @@ package mx.gob.segob.dgtic.web.mvc.dto;
 import java.sql.Timestamp;
 
 public class Asistencia {
+	private Integer idAsistencia;
 	private Usuario usuarioDto;
 	private Timestamp entrada;
 	private Timestamp salida;
@@ -10,6 +11,14 @@ public class Asistencia {
 	
 	public Asistencia() {
 		
+	}
+	
+	public Integer getIdAsistencia() {
+		return idAsistencia;
+	}
+
+	public void setIdAsistencia(Integer idAsistencia) {
+		this.idAsistencia = idAsistencia;
 	}
 
 	public Usuario getUsuario() {

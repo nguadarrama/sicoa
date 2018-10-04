@@ -101,8 +101,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
-			if(dataJson != null)
-				usuario = gson.fromJson(dataJson, Usuario.class);		
+			usuario = gson.fromJson(dataJson, Usuario.class);		
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			
