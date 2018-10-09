@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" 
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorator="templates/mainTemplate">
+	layout:decorator="templates/mainTemplate"
+	xmlns:sec="http://www.thymeleaf.org">
 	
 	<head>
 		<title th:text="#{TITULO_MAIN_PAGE}" layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE"></title>
@@ -43,17 +44,19 @@
 		<div class="main-page">
 			<div class="container">
 				<div class="row">
-				
-					<ul class="nav nav-tabs" id="tabs" role="tablist">
-						<li class="nav-item active">
-							<a class="nav-link" id="asistencias-tab" data-toggle="tab" href="#asistencias" role="tab" aria-controls="asistencias" aria-selected="true">Asistencias</a>
-						</li>
-						
-<!-- 						<li class="nav-item"> -->
-<!-- 					  	   <a class="nav-link"         id="buscar-tab" data-toggle="tab" href="#buscar" role="tab" aria-controls="buscar" aria-selected="false">Buscar</a> -->
-<!-- 					    </li> -->
-					</ul>
-					
+					<div>
+						<ul class="nav nav-tabs" id="tabs" role="tablist">
+							<li class="nav-item active">
+								<a class="nav-link" id="asistencias-tab" data-toggle="tab" href="#asistencias" role="tab" aria-controls="asistencias" aria-selected="true">Buscar</a>
+							</li>
+							
+	<!-- 						<li class="nav-item"> -->
+	<!-- 					  	   <a class="nav-link"         id="buscar-tab" data-toggle="tab" href="#buscar" role="tab" aria-controls="buscar" aria-selected="false">Buscar</a> -->
+	<!-- 					    </li> -->
+						</ul>
+					</div>
+				</div>
+				<div class="row">
 					<!-- Tab panes -->
 					<div class="tab-content">
 						
@@ -62,19 +65,24 @@
 							<div class="card">
 							
 								<div class="asistenciaForm form-group">
-									<form th:action="@{/asistencia/busca}" method="get">
+									<form id="buscarRango" th:action="@{/asistencia/busca}" method="get">
 										<div class="row">	
 											<div class="col-md-12">
-												<div class="form-group">
+											<span sec:authorize="isAuthenticated()">
+								                | Logged user: <span sec:authentication="name"></span> |
+								                Roles: <span sec:authentication="principal.authorities"></span> |
+								                <a th:href="@{/logout}">Sign Out</a>
+								            </span>
+												<div class="form-group col-md-3">
 									                <div class='input-group date'>
 									                	<p>Fecha Inicial</p>
-									                    <input type='text' class="form-control input-small input-calendar" id="validBeforeDatepicker" name="fechaInicial" autocomplete="off" th:required="required"/>
+									                    <input th:value="${fechaInicial}" type='text' class="form-control input-calendar" id="validBeforeDatepicker" name="fechaInicial" autocomplete="off" size="100%" />
 									                </div>
 									            </div>
-									            <div class="form-group">
+									            <div class="form-group col-md-3">
 									                <div class='input-group date'>
 									                	<p>Fecha Final</p>
-									                    <input type='text' class="form-control input-small input-calendar" id="validAfterDatepicker" name="fechaFinal" autocomplete="off" th:required="required"/>
+									                    <input th:value="${fechaFinal}" type='text' class="form-control input-calendar" id="validAfterDatepicker" name="fechaFinal" autocomplete="off" size="100%" />
 									                </div>
 									            </div>
 								            </div>
@@ -90,41 +98,46 @@
 					            </div>
 					            
 					        	<hr/>
-
-								<div class="filterable">
-									<h1 class="ico-incidencias"><span class="input-clock"></span> Asistencias 
-					       				<button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button>
-					       			</h1>
-									<table id="tableAsistencias" class="table table-striped table-text-center">
-										<thead>
-											<tr class="filters">
-												<th><input type="text" class="form-control" placeholder="Asistencia" th:disabled="true"/></th>
-												<th><input type="text" class="form-control" placeholder="No. de empleado" th:disabled="true"/></th>
-												<th><input type="text" class="form-control" placeholder="Nombre" th:disabled="true"/></th>
-												<th><input type="text" class="form-control" placeholder="Nivel" th:disabled="true"/></th>
-												<th><input type="text" class="form-control" placeholder="U. A." th:disabled="true"/></th>
-												<th><input type="text" class="form-control" placeholder="Fecha" th:disabled="true"/></th>
-												<th><input type="text" class="form-control" placeholder="Tipo" th:disabled="true"/></th>
-												<th><input type="text" class="form-control" placeholder="Estado" th:disabled="true"/></th>
-												<th><input type="text" class="form-control" placeholder="Detalle" th:disabled="true"/></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr th:each="asistencia : ${listaAsistencia}">
-												<td id="idAsistencia" th:text="${asistencia.idAsistencia}"></td>
-												<td th:text="${asistencia.usuario.claveUsuario}"></td>
-												<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
-												<td th:text="${asistencia.usuario.clavePerfil.descripcion}"></td>
-												<td th:text="Mapear"></td>
-												<td th:text="${asistencia.entrada}"></td>
-												<td th:text="${asistencia.idTipoDia.nombre}"></td>
-												<td th:text="what"></td>
-												<td> 
-													<a th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="nBtn">Justifica</a>
-												</td>
-											</tr>
-										</tbody>
-									</table>
+					        	<h2 th:hidden="${inicio}">
+					        		<span th:text="${#arrays.length(listaAsistencia)} > 1 ? 'Se encontraron' : 'Se encontr&oacute;'"></span>
+				        			<b>
+				        				<span th:text="${#arrays.length(listaAsistencia)}"></span>
+				        				<span th:text="${#arrays.length(listaAsistencia)} > 1 ? 'resultados ' : 'resultado '"></span>de b&uacute;squeda:
+				        			</b>
+					        	</h2>
+					        	<div class="buscador" th:hidden="${#arrays.length(listaAsistencia)} == 0 ? 'true' : 'false'">
+									<div class="filterable">
+										<table id="tableAsistencias" class="table table-striped table-text-center">
+											<thead>
+												<tr class="filters">
+													<th><input type="text" class="form-control" placeholder="ID ASISTENCIA" th:disabled="true"/></th>
+													<th><input type="text" class="form-control" placeholder=" EMPLEADO" th:disabled="true"/></th>
+													<th><input type="text" class="form-control" placeholder="NOMBRE" th:disabled="true"/></th>
+													<th><input type="text" class="form-control" placeholder="PUESTO" th:disabled="true"/></th>
+													<th><input type="text" class="form-control" placeholder="UNIDAD ADMINISTRATIVA" th:disabled="true"/></th>
+													<th><input type="text" class="form-control" placeholder="FECHA" th:disabled="true"/></th>
+													<th><input type="text" class="form-control" placeholder="TIPO" th:disabled="true"/></th>
+													<th><input type="text" class="form-control" placeholder="ESTADO" th:disabled="true"/></th>
+													<th><input type="text" class="form-control" placeholder="DETALLE" th:disabled="true"/></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="asistencia : ${listaAsistencia}">
+													<td id="idAsistencia" th:text="${asistencia.idAsistencia}"></td>
+													<td th:text="${asistencia.usuario.claveUsuario}"></td>
+													<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
+													<td th:text="${asistencia.usuario.clavePerfil.descripcion}"></td>
+													<td th:text="Mapear"></td>
+													<td th:text="${asistencia.entrada}"></td>
+													<td th:text="${asistencia.idTipoDia.nombre}"></td>
+													<td th:text="${asistencia.idEstatus.estatus}"></td>
+													<td> 
+														<a th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="nBtn">Justifica</a>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -149,7 +162,7 @@
 		
 		<!-- modal para agregar justificación -->
 		<div class="justificaForm">
-      		<form>
+      		<form th:action="@{/asistencia/creaIncidencia}" method="post">
 				<div class="modal fade" id="justificaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
@@ -170,12 +183,19 @@
 						        </div>
 						        <div class="form-group">
 						        	<label for="tipo" class="col-form-label" th:text="Tipo"></label>
+						        	<input type="hidden" class="form-control" id="idTipoDia" name="idTipoDia"/>
 						            <input type="text" class="form-control" id="tipoDia" name="tipoDia" th:readonly="true"/>
 						        </div>
 						        <div class="form-group">
-						        	<label for="observacion" class="col-form-label" th:text="Comentario"></label>
-						            <textarea class="form-control" rows="5" id="observacion" name="observacion"></textarea>
+						        	<label for="selectJustificacion" class="col-form-label" th:text="Justificaci&oacute;n"></label>
+						            <select class="form-control" id="selectJustificacion" name="idJustificacion" th:required="required">
+						            	<!-- los option se generan a través de jquery en asistencias.js -->
+						            </select>
 						        </div>
+						        
+						        <input type="hidden" class="form-control" id="fechaInicial" name="fechaInicial"/>
+						        <input type="hidden" class="form-control" id="fechaFinal" name="fechaFinal"/>
+						        
 					    	</div>
 						    <div class="modal-footer">
 			    				<button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
@@ -197,6 +217,7 @@
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery.ui.datepicker.validation.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/asistencia/asistencia.js}"></script>	 
 		</th:block>

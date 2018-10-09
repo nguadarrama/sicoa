@@ -8,5 +8,5 @@ public interface AsistenciaService {
 	public List<Asistencia> buscaAsistenciaEmpleadoMes(String claveEmpleado);
 	public List<Asistencia> buscaAsistenciaEmpleadoRango (String claveEmpleado, String fechaInicio, String fechaFin);
 	public Asistencia buscaAsistenciaPorId(Integer id);
-	public void creaJustificacion(String observacion);
+	public void creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion);
 }

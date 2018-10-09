@@ -1,15 +1,47 @@
 $(document).ready(function() {
 
+	//pobla los campos del modal de justificación
 	$('.nBtn').on('click', function(event) { 					//botón justifica
 		event.preventDefault();
 		var href = $(this).attr('href');
 		var text = $(this).text();
+		$('#selectJustificacion').empty();
+		var option = '<option>-- Selecciona --</option>';
 		
-			$.get(href, function(asistencia, status) {
-				$('.justificaForm #id').val(asistencia.idAsistencia);
-				$('.justificaForm #fecha').val(asistencia.entrada);
-				$('.justificaForm #tipoDia').val(asistencia.idTipoDia.nombre);
-			});
+		$('#fechaInicial').val($('#validBeforeDatepicker').val());
+		$('#fechaFinal').val($('#validAfterDatepicker').val());
+		
+		$.get(href, function(asistenciaJustificacion, status) {
+			$('.justificaForm #id').val(asistenciaJustificacion.asistencia.idAsistencia);
+			$('.justificaForm #fecha').val(asistenciaJustificacion.asistencia.entrada);
+			$('.justificaForm #tipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
+			$('.justificaForm #idTipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
+			
+			//select justificación
+			for (var i=0; i < asistenciaJustificacion.listaJustificacion.length; i++) {
+				var estatus = false;
+				
+				//calculando el estatus para colocarlo seleccionado en el select
+				if (asistenciaJustificacion.asistencia.incidencia.justificacion.idJustificacion != null) {
+					if (asistenciaJustificacion.asistencia.incidencia.justificacion.idJustificacion == asistenciaJustificacion.listaJustificacion[i].idJustificacion) {
+						estatus = true;
+					}
+				} 
+				
+				option += '<option ';																	//apertura
+				option += 'value="' + asistenciaJustificacion.listaJustificacion[i].idJustificacion + '" ';	//atributo value
+				
+				if (estatus) {
+					option += 'selected="selected" ';
+				}
+				
+				option += '">';																			//cierre apertura
+				option += asistenciaJustificacion.listaJustificacion[i].justificacion;					//nombre a mostrar
+				option += '</option>';																	//cierre option
+			}			
+			
+			$('#selectJustificacion').append(option);
+		});
 		
 		$('.justificaForm #justificaModal').modal();
 	});
@@ -90,6 +122,28 @@ $(document).ready(function() {
         }
     });
     
-    $('#validBeforeDatepicker,#validAfterDatepicker').datepicker();
+    //fechas datepicker
+    $('#validBeforeDatepicker,#validAfterDatepicker, #fecha').datepicker({
+    	beforeShowDay: $.datepicker.noWeekends //desactiva sábado y domingo del calendario
+    });
+    
+    //validaciones para datepicker
+    $('#buscarRango').validate({ 
+        rules: { 
+            fechaInicial: { 
+                required: true, 
+                dpCompareDate: "notAfter #validAfterDatepicker"
+            },
+		    fechaFinal: { 
+		        required: true, 
+		        dpCompareDate: "notBefore #validBeforeDatepicker"
+		    } 
+        },
+    	messages: {
+    		fechaInicial: 'Debe ser menor que la "Fecha Final"',
+    		fechaFinal: 'Debe ser mayor que la "Fecha Inicial"'
+    	}
+    			
+    });
 	
 }); 

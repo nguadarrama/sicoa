@@ -4,12 +4,12 @@ public class Incidencia {
 	 
 	private Integer idIncidencia;
 	private Asistencia idAsistencia;
-	private Integer idTipoIncidencia;
-//	private EstatusDto idEstatus;
+	private TipoDia tipoDia;
+	private Estatus estatus;
 //	private ArchivoDto idArchivo;
 	private Integer idResponsable;
 	private Boolean descuento;
-	private String observaciones;
+	private Justificacion justificacion;
 	
 	public Incidencia () {
 		
@@ -27,18 +27,18 @@ public class Incidencia {
 	public void setIdAsistencia(Asistencia idAsistencia) {
 		this.idAsistencia = idAsistencia;
 	}
-	public Integer getIdTipoIncidencia() {
-		return idTipoIncidencia;
+	public TipoDia getTipoDia() {
+		return tipoDia;
 	}
-	public void setIdTipoIncidencia(Integer idTipoIncidencia) {
-		this.idTipoIncidencia = idTipoIncidencia;
+	public void setTipoDia(TipoDia tipoDia) {
+		this.tipoDia = tipoDia;
 	}
-//	public EstatusDto getIdEstatus() {
-//		return idEstatus;
-//	}
-//	public void setIdEstatus(EstatusDto idEstatus) {
-//		this.idEstatus = idEstatus;
-//	}
+	public Estatus getEstatus() {
+		return estatus;
+	}
+	public void setEstatus(Estatus estatus) {
+		this.estatus = estatus;
+	}
 //	public ArchivoDto getIdArchivo() {
 //		return idArchivo;
 //	}
@@ -57,12 +57,12 @@ public class Incidencia {
 	public void setDescuento(Boolean descuento) {
 		this.descuento = descuento;
 	}
-	public String getObservaciones() {
-		return observaciones;
+
+	public Justificacion getJustificacion() {
+		return justificacion;
 	}
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
+	public void setJustificacion(Justificacion justificacion) {
+		this.justificacion = justificacion;
 	}
-	
 	
 }

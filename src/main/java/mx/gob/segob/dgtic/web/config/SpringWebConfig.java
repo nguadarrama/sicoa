@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -45,6 +46,7 @@ import org.thymeleaf.templateresolver.TemplateResolver;
  */
 @EnableWebMvc
 @Configuration
+@EnableWebSecurity
 @ComponentScan({"mx.gob.segob.dgtic.web.mvc"})
 public class SpringWebConfig extends WebMvcConfigurerAdapter {
 

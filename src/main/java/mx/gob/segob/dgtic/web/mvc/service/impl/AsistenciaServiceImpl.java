@@ -1,12 +1,18 @@
 package mx.gob.segob.dgtic.web.mvc.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ContentType;
+import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -24,8 +30,11 @@ import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.AsistenciaEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
+import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Incidencia;
+import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
@@ -134,9 +143,53 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
-	public void creaJustificacion(String observacion) {
+	public void creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion) {
+		
+		//creación de la justificación para una incidencia
+		
+		//motivo de justificación
+		Justificacion justificacion = new Justificacion();
+		justificacion.setIdJustificacion(idJustificacion);
+		
+		//motivo de incidencia
+		TipoDia tipoDia = new TipoDia();
+		tipoDia.setIdTipoDia(idTipoDia);
+		
+		//la asistencia con incidencia que se quiere justificar
+		Asistencia asistencia = new Asistencia();
+		asistencia.setIdAsistencia(idAsistencia);
+		
+		//la justificación se crea con estatus "pendiente"
+		Estatus estatus = new Estatus();
+		estatus.setIdEstatus(1);
+				
+		//se crea la incidencia con la información 
 		Incidencia incidencia = new Incidencia();
-		incidencia.setObservaciones(observacion);
+		incidencia.setJustificacion(justificacion);
+		incidencia.setTipoDia((tipoDia));
+		incidencia.setIdAsistencia(asistencia);
+		incidencia.setEstatus(estatus);
+		
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("incidencia", incidencia);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try { //se consume recurso rest
+			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_JUSTIFICA, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
 	}
 
 
