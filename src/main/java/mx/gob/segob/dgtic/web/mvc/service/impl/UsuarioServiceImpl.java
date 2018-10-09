@@ -50,7 +50,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public List<Usuario> obtieneUsuarios() { 
 		List<Usuario> listaUsuario = new ArrayList<>();
 		HttpResponse response;
-		logger.debug("viene bien");
 		try{
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_USUARIO);
 		} catch (ClienteException e) {

@@ -41,8 +41,27 @@ public final class CatalogoEndPointConstants {
 	public static final String WEB_SERVICE_AGREGA_USUARIO = "/catalogo/agregaUsuario";
 	public static final String WEB_SERVICE_ELIMINA_USUARIO = "/catalogo/eliminaUsuario";
 	public static final String WEB_SERVICE_REINICIA_CONTRASENIA = "/catalogo/reiniciaContrasenia";
-	
+	public static final String WEB_SERVICE_INFO_RESPONSABLES =  "/catalogo/obtieneResponsables";
+	public static final String WEB_SERVICE_ACEPTAORECHAZA_VACACIONES = "/catalogo/aceptaORechazaDetalleVacacion";
+
+	//Archivo
+			public static final String WEB_SERVICE_GUARDA_ARCHIVO="/catalogo/agregaArchivo";
 	//
 	public static final String WEB_SERVICE_INFO_PERFIL =  "/catalogo/obtienePerfiles";
+	
+	//Vacaciones
+		public static final String WEB_SERVICE_INFO_VACACONES = "/catalogo/obtieneDetalleVacaciones";
+		public static final String WEB_SERVICE_BUSCA_VACACIONES = "/catalogo/buscaDetalleVacacion";
+		public static final String WEB_SERVICE_MODIFICA_VACACIONES = "/catalogo/modificaDetalleVacacion";
+		public static final String WEB_SERVICE_AGREGA_VACACIONES = "/catalogo/agregaDetalleVacacion";
+		public static final String WEB_SERVICE_ELIMINA_VACACIONES = "/catalogo/eliminaDetalleVacacion";
+		public static final String WEB_SERVICE_CONSULTA_VACACION="/catalogo/buscaVacacionPeriodoPorClaveUsuarioYPeriodo";
+		
+		//Periodo
+		public static final String WEB_SERVICE_BUSCA_PERFIL_POR_CLAVE_USUARIO="/catalogo/buscaPeriodoPorClaveUsuario";
+		
+		//Unidad Administrativa
+		public static final String WEB_SERVICE_INFO_UNIDAD_ADMINISTRATIVA =  "/catalogo/obtieneUnidadesAdministrativas";
+		public static final String WEB_SERVICE_GUARDA_USUARIO_UNIDAD_ADMINISTRATIVA =  "/catalogo/consultaRegistraUsuarioUnidadAdministrativa";
 }
 

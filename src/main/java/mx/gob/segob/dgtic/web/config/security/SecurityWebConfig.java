@@ -89,7 +89,8 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().addLogoutHandler(logoutCustomHandler())
                 .and()
-                .csrf();
+                .csrf()
+                .disable();
         
         		http.exceptionHandling().authenticationEntryPoint(ajaxAwareLoginUrlAuthenticationEntryPoint()).accessDeniedHandler(accesoDenegadoHandler());
               

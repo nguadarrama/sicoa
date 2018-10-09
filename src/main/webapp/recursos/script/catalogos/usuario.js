@@ -1,4 +1,11 @@
 $(document).ready(function() {
+	
+		  $('#tableUsuarios').DataTable({
+		    "scrollY": "500px",
+		    "scrollCollapse": true
+		    
+		   
+		  });
 
 	$('.eBtn').on('click', function(event) { 					//botón edita
 		event.preventDefault();
@@ -9,6 +16,7 @@ $(document).ready(function() {
 				$('.usuarioForm #claveUsuario').val(usuario.claveUsuario);
 				$('.usuarioForm #nombre').val(usuario.nombre);
 				$('.usuarioForm #apellidoPaterno').val(usuario.apellidoPaterno);
+				$('.usuarioForm #apellidoMaterno').val(usuario.apellidoMaterno);
 				$('.usuarioForm #activo').val(usuario.activo);
 				$('.usuarioForm #bloqueado').val(usuario.bloqueado);
 				$('.usuarioForm #idHorario').val(usuario.idHorario);

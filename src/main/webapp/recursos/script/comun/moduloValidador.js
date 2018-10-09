@@ -40,7 +40,8 @@ var moduloValidadorJS = (function() {
         texto: "El texto contiene caracteres no validos",
         datoVacio: "Dato requerido",
         jpg: "Solo se admiten Imagenes de formato .jpg",
-        maximo_fecha_actual : "No debe ser mayor a la fecha actual" 
+        maximo_fecha_actual : "No debe ser mayor a la fecha actual",
+        pattern : jQuery.validator.format("Por favor, cumple con el patron especificado")
         	  
     };
 	

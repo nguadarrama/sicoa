@@ -40,23 +40,24 @@
 			</div>
 		</header>
 		<th:block layout:fragment="content"  th:remove="tag">
-			<div class="container">
+			<div class="container col-md-12">
 				<div class="filterable">
            			<h1 class="ico-solicitudes"><span class="input-clock"></span> Usuarios 
            				<button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button>
            			</h1>
            			<hr/>
-					<table id="tableUsuarios" class="table table-striped table-text-center">
+					<table id="tableUsuarios" class="table table-hover table-striped table-text-center">
 						<thead>
 							<tr class="filters">
-								<th><input type="text" class="form-control" placeholder="Clave Empleado" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="Nombre" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="Apellido Paterno" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="Apellido Materno" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="Puesto" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="Perfil" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="Activo" th:disabled="true"/></th>
-								<td th:text="#{COMUN.ACCIONES}"></td>
+								<th><input type="text" class="form-control" placeholder="NO. DE EMPLEADO" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="NOMBRE" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="APELLIDO PATERNO" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="APELLIDO MATERNO" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="NIVEL" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="UNIDAD ADMINISTRATIVA" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="ESTATUS" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="ACCIÓN" th:disabled="true"/></th>
+								<td></td>
 							</tr>
 						</thead>
 						<tbody>
@@ -65,13 +66,13 @@
 								<td th:text="${usuario.nombre}"></td>
 								<td th:text="${usuario.apellidoPaterno}"></td>
 								<td th:text="${usuario.apellidoMaterno}"></td>
-								<td th:text="${usuario.idPuesto}"></td>
+								<td th:text="${usuario.clavePerfil}"></td>
 								<td th:text="${usuario.clavePerfil}"></td>
 								<td th:text="${usuario.activo}"></td>
 								<td class="col-md-3"> 
 									<div>
-										<a th:href="@{/catalogos/usuario/busca/(id=${usuario.claveUsuario})}"   class="btn btn-xs btn-default eBtn"><span class="glyphicon glyphicon-pencil"></span></a>
-										<a th:href="@{/catalogos/usuario/elimina/(id=${usuario.claveUsuario})}" class="btn btn-xs btn-default eliminaBtn"><span class="glyphicon glyphicon-trash"></span></a>
+										<a th:href="@{/catalogos/usuario/busca/(id=${usuario.claveUsuario})}" class="eBtn"> Ver Detalle <span class="glyphicon glyphicon-pencil"></span></a>
+<!-- 										<a th:href="@{/catalogos/usuario/elimina/(id=${usuario.claveUsuario})}" class="btn btn-xs btn-default eliminaBtn"><span class="glyphicon glyphicon-trash"></span></a> -->
 									</div>
 								</td>
 							</tr>
@@ -97,19 +98,15 @@
 								        </div>
 								        <div class="form-group">
 							          		<label for="nombre" class="col-form-label" th:text="#{NOMBRE}"></label>
-							          		<input type="text" class="form-control" id="nombre" name="nombre" />
+							          		<input type="text" class="form-control" id="nombre" name="nombre" th:readonly="true" />
 								        </div>
 								        <div class="form-group">
 											<label for="apellidoPaterno" class="col-form-label" th:text="#{APELLIDO_PATERNO}"></label>
-									    	<input type="text" class="form-control" id="apellidoPaterno" name="apellidoPaterno" />
+									    	<input type="text" class="form-control" id="apellidoPaterno" name="apellidoPaterno" th:readonly="true"/>
 										</div>
 								        <div class="form-group">
 								        	<label for="apellidoMaterno" class="col-form-label" th:text="#{APELLIDO_MATERNO}"></label>
-								        	<input type="text" class="form-control" id="apellidoMaterno" name="apellidoMaterno" />
-								        </div>
-								        <div class="form-group">
-								        	<label for="activo" class="col-form-label" th:text="#{ESTADO}"></label>
-								        	<input type="text" class="form-control" id="activo" name="activo" />
+								        	<input type="text" class="form-control" id="apellidoMaterno" name="apellidoMaterno" th:readonly="true" />
 								        </div>
 								        <div class="form-group">
 								        	<label for="clavePerfil" class="col-form-label" th:text="#{PERFIL}"></label>
@@ -123,26 +120,75 @@
 										    </select>
 								        </div>
 								        <div class="form-group">
-								        	<!-- <input type="text" class="form-control" id="idHorario" name="idHorario" /> -->
-								        	<label for="horario" class="col-form-label" th:text="#{HORARIO}"></label>
+								        	<label for="unidadAdministrativa" class="col-form-label" ></label>
 								        	<select  class="form-control" required="required" 
-										       th:value="Horario" name="idHorario" id="idHorario">
-										      <option disabled="disabled" selected="selected" > Elige un horario
-										      </option>
-										      <option th:each="horario : ${listaHorarios}" th:value="${horario.idHorario}" 
-										       th:text="'De '+ ${horario.horaEntrada} + ' a ' + ${horario.horaSalida}">
-										      </option>
-										    </select>
+											        name="unidadAdministrativa" id="unidadAdministrativa">
+											      <option disabled="disabled" selected="selected" > Elige una unidad administrativa
+											      </option>
+											      <option th:each="unidad : ${listaUnidadAdministrativa}" th:value="${unidad.idUnidad.idUnidad}" 
+											       th:text="${unidad.idUnidad.nombre}">
+											      </option>
+											      
+											    </select>
 								        </div>
-								        <div class="form-group">
-       										<label for="bloqueado" class="col-form-label" th:text="#{BLOQUEADO}"></label>
-       										<!-- <input type="text" class="form-control" id="bloqueado" name="bloqueado" /> -->
-       										<select  class="form-control" required="required" 
-      											th:value="Bloqueado" name="bloqueado" id="bloqueado">
-     											<option th:value="N" th:text="Activo"></option>
-    											 <option th:value="S" th:text="Inactivo"></option>
-   											</select>
-       									</div>
+								        
+									        <div class="form-group">
+									        	<!-- <input type="text" class="form-control" id="idHorario" name="idHorario" /> -->
+									        	<label for="horario" class="col-form-label" th:text="#{HORARIO}"></label>
+									        	<select  class="form-control" required="required" 
+											       th:value="Horario" name="idHorario" id="idHorario">
+											      <option disabled="disabled" selected="selected" > Elige un horario
+											      </option>
+											      <option th:each="horario : ${listaHorarios}" th:value="${horario.idHorario}" 
+											       th:text="'De '+ ${horario.horaEntrada} + ' a ' + ${horario.horaSalida}">
+											      </option>
+											    </select>
+									        </div>
+									   	
+								         
+   
+									        <!-- <div class="form-group">
+									        	<label for="bloqueado" class="col-form-label" th:text="#{BLOQUEADO}"></label>
+									        	<input type="text" class="form-control" id="bloqueado" name="bloqueado" />
+									        	<select  class="form-control" required="required" 
+											       th:value="Bloqueado" name="bloqueado" id="bloqueado">
+											      <option th:value="N" th:text="Activo"></option>
+											      <option th:value="S" th:text="Inactivo"></option>
+											    </select>
+											    
+									        </div> -->
+									        <div class="form-group">
+										        <div class="col-md-6">
+										        	<div class="row">
+										        		<label for="bloqueado" class="col-form-label" th:text="#{BLOQUEADO}"></label>
+										        	</div>
+										        	<div class="row">
+										        		<!-- <input type="checkbox" name="bloqueado" id="bloqueado" value="S"/> -->
+										        			<input type="radio" name="bloqueado" id="bloqueado" value="S" />
+										        			<label for="bloqueado" class="col-form-label" th:text="Si"></label>
+										    				<input type="radio" name="bloqueado" id="bloqueado" value="N" />
+										    				<label for="bloqueado" class="col-form-label" th:text="No"></label>
+										        	</div>
+										        </div>
+										        <div class="col-md-6">
+										        	<div class="form-group">
+										        		<div class="row">
+										        			<label for="bloqueado" class="col-form-label" th:text="#{REINICIAR_PASSWORD}"></label>
+										        		</div>
+										        	</div>
+										        	<div class="form-group">
+										        		<div class="row">
+										        			<input type="radio" name="reiniciarPassword" id="reiniciarPassword" value="S" />
+										        			<label for="reiniciarPassword" class="col-form-label" th:text="Si"></label>
+										    				<input type="radio" name="reiniciarPassword" id="reiniciarPassword" value="N" th:checked="true"  />
+										    				<label for="reiniciarPassword" class="col-form-label" th:text="No" ></label>
+	 													 
+										   				</div> 
+										   				 
+										   			</div>
+										   			
+										   		</div>
+									   		</div>
 							    	</div>
 								    <div class="modal-footer">
 					    				<button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>

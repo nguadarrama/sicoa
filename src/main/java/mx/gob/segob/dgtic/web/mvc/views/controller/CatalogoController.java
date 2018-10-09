@@ -22,6 +22,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
+import mx.gob.segob.dgtic.web.mvc.service.UnidadAdministrativaService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import java.sql.Time;
 import java.text.ParseException;
@@ -44,6 +45,8 @@ public class CatalogoController {
 
 	@Autowired
 	AutenticacionService autenticacionService;
+	
+	@Autowired UnidadAdministrativaService unidadAdministrativaService;
 
 	/**
 	 * Vista donde se ubica el catálogo de horarios. Path :
@@ -169,16 +172,19 @@ public class CatalogoController {
 		model.addAttribute("listaPerfiles", catalogoService.obtienePerfiles());
 		model.addAttribute("listaHorarios", catalogoService.obtieneHorarios());
 		model.addAttribute("listaUsuarios", usuarioService.obtieneUsuarios());
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerListaUnidadAdministrativa());
 
 		return "/catalogos/usuario";
 	}
 
 	@PostMapping("/usuario/modifica")
 	public String modificaUsuario(Perfil clavePerfil, Horario idHorario, String claveUsuario, String nombre,
-			String apellidoPaterno, String apellidoMaterno, String bloqueado, String reiniciarPassword) {
+			String apellidoPaterno, String apellidoMaterno, String bloqueado, String reiniciarPassword, Integer unidadAdministrativa) {
+		System.out.println("unidadAdministrativa "+unidadAdministrativa);
 		System.out.println("valor bloqueado " + bloqueado);
 		usuarioService.modificaUsuario(
 				new Usuario(clavePerfil, idHorario, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, bloqueado));
+		unidadAdministrativaService.consultaRegistraUsuarioUnidadAdministrativa(unidadAdministrativa, claveUsuario);
 		char dato = reiniciarPassword.charAt(0);
 
 		if (((int) dato) == 83) {
