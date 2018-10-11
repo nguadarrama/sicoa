@@ -80,7 +80,6 @@ public class CatalogoController {
 			milisegundosHoraEntrada = sdf.parse(horaEntrada).getTime();
 			milisegundosHoraSalida = sdf.parse(horaSalida).getTime();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Time SQLhoraEntrada = new Time(milisegundosHoraEntrada);

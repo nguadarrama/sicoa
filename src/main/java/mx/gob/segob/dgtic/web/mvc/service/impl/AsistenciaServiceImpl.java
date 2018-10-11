@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,6 +30,7 @@ import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.AsistenciaEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
+import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
 import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
@@ -143,7 +145,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
-	public void creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion) {
+	public void creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo) {
 		
 		//creación de la justificación para una incidencia
 		
@@ -162,6 +164,64 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//la justificación se crea con estatus "pendiente"
 		Estatus estatus = new Estatus();
 		estatus.setIdEstatus(1);
+		
+		Archivo archivo = new Archivo();
+		archivo.setIdArchivo(idArchivo);
+				
+		//se crea la incidencia con la información 
+		Incidencia incidencia = new Incidencia();
+		incidencia.setJustificacion(justificacion);
+		incidencia.setTipoDia((tipoDia));
+		incidencia.setIdAsistencia(asistencia);
+		incidencia.setEstatus(estatus);
+		incidencia.setIdArchivo(archivo);
+		
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("incidencia", incidencia);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try { //se consume recurso rest
+			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_JUSTIFICA, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public void dictaminaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, String dictaminacion) {
+		//acepta justificación
+
+		//motivo de justificación
+		Justificacion justificacion = new Justificacion();
+		justificacion.setIdJustificacion(idJustificacion);
+		
+		//motivo de incidencia
+		TipoDia tipoDia = new TipoDia();
+		tipoDia.setIdTipoDia(idTipoDia);
+		
+		//la asistencia con incidencia que se quiere justificar
+		Asistencia asistencia = new Asistencia();
+		asistencia.setIdAsistencia(idAsistencia);
+		
+		//se dictamina
+		Estatus estatus = new Estatus();
+		
+		if (dictaminacion.equals("Aceptar")) {
+			estatus.setIdEstatus(2); //validada
+		} else if (dictaminacion.equals("Rechazar")) {
+			estatus.setIdEstatus(3); //rechazada
+		}
 				
 		//se crea la incidencia con la información 
 		Incidencia incidencia = new Incidencia();
@@ -185,13 +245,13 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		}
 		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_JUSTIFICA, httpEntity, header);
+			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_DICTAMINA, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		
 	}
-
 
 	private String obtenerMensajeError(HttpResponse response){
 		JsonObject respuesta = (JsonObject) HttpResponseUtil.getJsonContent(response);

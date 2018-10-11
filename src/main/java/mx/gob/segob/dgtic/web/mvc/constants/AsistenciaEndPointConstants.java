@@ -13,4 +13,5 @@ public final class AsistenciaEndPointConstants {
 	public static final String WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_RANGO =  "/asistencia/obtieneAsistenciasEmpleadoRango";
 	public static final String WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_ID =  "/asistencia/obtieneAsistenciaPorId";
 	public static final String WEB_SERVICE_INFO_ASISTENCIA_JUSTIFICA =  "/asistencia/creaIncidencia";
+	public static final String WEB_SERVICE_INFO_ASISTENCIA_DICTAMINA =  "/asistencia/dictaminaIncidencia";
 }

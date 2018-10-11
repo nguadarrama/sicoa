@@ -6,7 +6,7 @@ public class Incidencia {
 	private Asistencia idAsistencia;
 	private TipoDia tipoDia;
 	private Estatus estatus;
-//	private ArchivoDto idArchivo;
+	private Archivo idArchivo;
 	private Integer idResponsable;
 	private Boolean descuento;
 	private Justificacion justificacion;
@@ -39,12 +39,12 @@ public class Incidencia {
 	public void setEstatus(Estatus estatus) {
 		this.estatus = estatus;
 	}
-//	public ArchivoDto getIdArchivo() {
-//		return idArchivo;
-//	}
-//	public void setIdArchivo(ArchivoDto idArchivo) {
-//		this.idArchivo = idArchivo;
-//	}
+	public Archivo getIdArchivo() {
+		return idArchivo;
+	}
+	public void setIdArchivo(Archivo idArchivo) {
+		this.idArchivo = idArchivo;
+	}
 	public Integer getIdResponsable() {
 		return idResponsable;
 	}

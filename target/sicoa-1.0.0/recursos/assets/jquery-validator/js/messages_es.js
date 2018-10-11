@@ -5,7 +5,7 @@
 $.extend($.validator.messages, {
 	required: "Seleccione una opción.",
 	remote: "Por favor, rellena este campo.",
-	email: "Por favor, escribe una direcci�n de correo válida.",
+	email: "Por favor, escribe una direcci�n de correo válida.",
 	url: "Por favor, escribe una URL válida.",
 	date: "Por favor, escribe una fecha válida.",
 	dateISO: "Por favor, escribe una fecha (ISO) válida.",
@@ -22,5 +22,6 @@ $.extend($.validator.messages, {
 	min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}."),
 	nifES: "Por favor, escribe un NIF válido.",
 	nieES: "Por favor, escribe un NIE válido.",
-	cifES: "Por favor, escribe un CIF válido."
+	cifES: "Por favor, escribe un CIF válido.",
+	pattern :$.validator.format("Por favor, respete el patron especificado.")
 });

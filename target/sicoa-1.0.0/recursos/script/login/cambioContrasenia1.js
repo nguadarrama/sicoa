@@ -15,7 +15,54 @@ var CambioContrasenia1JS =  (function() {
 		var btnCambioContrasenia="#btnCambioContrasenia";
 		var accesoClave1= "#accesoClave1";
 		var accesoClave2= "#accesoClave2";
-	
+		$("#regla1").css("display","none");
+		$("#regla2").css("display","none");
+		$("#regla3").css("display","none");
+		$("#contraseniaCambiada").css("display","none");
+		$("#btnCambioContrasenia").click(function(){
+			event.preventDefault();
+			$("#formLogin").css("display","none","disabled","true");
+			$("#contraseniaCambiada").css("display","inline");
+		});
+		$("#accesoClave1").keyup(function(){
+			var valor=$('#accesoClave1').val();
+			var regla2=/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])/;
+			var regla3=/\s+/;
+			
+			
+			 var resRegla2=regla2.test(valor);
+			 var resRegla3=regla3.test(valor);
+			 
+			 if(valor.length==8){
+				 $("#regla1").css("display","inline"); 
+				 
+				 if(resRegla3==false){
+					 $("#regla3").css("display","inline"); 
+				 }else{
+					 $("#regla3").css("display","none");
+				 }
+			 }else{
+				 $("#regla1").css("display","none");
+			 }
+			if(resRegla2==true){
+		    	$("#regla2").css("display","inline");
+		    }else{
+		    	$("#regla2").css("display","none");
+		    }
+		});
+		
+		$("#accesoClave1").blur(function(){
+			 	var valor=$('#accesoClave1').val();
+			    var re = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,8}$/;
+			    var res= re.test(valor);
+			  //alert("vriable "+valor+" resultado "+res);
+			  if(res==false){
+				  document.getElementById("btnCambioContrasenia").disabled = true;
+			  }else{
+				  document.getElementById("btnCambioContrasenia").disabled = false; 
+			  }
+		});
+
 		/**
 		 * Funcion que inicializa componentes y configuraciones genericas
 		 */
@@ -63,12 +110,14 @@ var CambioContrasenia1JS =  (function() {
 					"accesoClave1": {
 						"soloCaracteres": true,
 						"required":true,
-						"maxlength":30
+						"maxlength":30,
+						"minlength":8
 					},
 					"accesoClave2":{
 						"soloCaracteres": true,
 						"required":true,
-						"maxlength":30
+						"maxlength":30,
+						"minlength":8
 					}
 			    }
 			});		

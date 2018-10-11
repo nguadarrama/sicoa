@@ -101,7 +101,7 @@ public class VacacionesController {
     	 String string=""+ session.getAttribute("usuario");
      	String[] parts = string.split(": ");
      	String claveUsuario = parts[1];
-     	archivoService.guardaArchivo(archivo, claveUsuario);
+     	archivoService.guardaArchivo(archivo, claveUsuario, new String("vacaciones"));
      	vacacionesService.agregaVacaciones(new Vacaciones(null, null, null, null, fechaInicial, fechaFinal, diasPorPedir), claveUsuario);
     	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
     	System.out.println("Archivo "+archivo);

@@ -126,6 +126,12 @@ $(document).ready(function() {
         dropdown: true,
         scrollbar: true
     });
+    
+    $("#timepickerEntrada, #timepickerSalida, #timepickerEntradaEditar, #timepickerSalidaEditar").keydown(function (e) {
+        // no permite la entrada de texto
+        e.preventDefault();
+    });
+    
 }); 
 
 function convierte24horas(horaInicial) {

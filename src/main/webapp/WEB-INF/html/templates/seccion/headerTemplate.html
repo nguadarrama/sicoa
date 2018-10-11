@@ -44,7 +44,11 @@
 	                    </li>
 	                </ul>		              
 	                <ul class="nav navbar-nav navbar-right">	                	
-	                    <li><a th:href="@{/asistencia/inicio}" th:text="#{ELEMENTO1}"></a></li>
+	                    <li>
+	                    	<a sec:authorize="hasAuthority('1')" th:href="@{/asistencia/direccion}" th:text="#{ELEMENTO1}"></a>
+	                    	<a sec:authorize="hasAuthority('2')" th:href="@{/asistencia/coordinador}" th:text="#{ELEMENTO1}"></a>
+	                    	<a sec:authorize="hasAuthority('3')" th:href="@{/asistencia/empleado}" th:text="#{ELEMENTO1}"></a>
+	                    </li>
 	                    <li><a th:href="@{/vacaciones/inicio}" th:text="#{ELEMENTO2}"></a></li>
 	                    <li><a href="#" th:text="#{ELEMENTO3}"></a></li>
 	                    <li><a href="#" th:text="#{ELEMENTO4}"></a></li>	                    

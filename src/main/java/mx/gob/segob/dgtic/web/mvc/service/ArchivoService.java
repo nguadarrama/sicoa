@@ -4,5 +4,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 public interface ArchivoService {
-	public void guardaArchivo(MultipartFile archivo, String claveUsuario);
+	public Integer guardaArchivo(MultipartFile archivo, String claveUsuario, String accion);
 }
