@@ -123,6 +123,7 @@
 											<th>Fecha de inicio</th>
 											<th>Fecha de fin</th>
 											<th>Dias</th>
+											<th>estatus</th>
 											<th>Acciones</th>
 											
 										</tr>
@@ -134,10 +135,11 @@
 											<td th:text="${vacaciones.fechaInicio}"></td>
 											<td th:text="${vacaciones.fechaFin}"></td>
 											<td th:text="${vacaciones.dias}"></td>
-											<td class="col-md-3">
-												<a th:href="@{/vacaciones/vacacion/acepta/(id=${vacaciones.idDetalle},fechaInicio=${vacaciones.fechaInicio},fechaFinal=${vacaciones.fechaFin})}" class="btn btn-xs btn-default aceptaBtn"><span class="glyphicon glyphicon-ok"></span></a>
+											<td th:text="${vacaciones.idEstatus.descripcion}"></td>
+											<td class="col-md-3" th:if="${vacaciones.idEstatus.idEstatus==1}">
+												<a th:href="@{/vacaciones/vacacion/acepta/(id=${vacaciones.idDetalle},fechaInicio=${vacaciones.fechaInicio},fechaFinal=${vacaciones.fechaFin},idUsuario=${vacaciones.idUsuario.idUsuario})}" class="btn btn-xs btn-default aceptaBtn"><span class="glyphicon glyphicon-ok"></span></a>
 											
-												<a th:href="@{/vacaciones/vacacion/rechaza/(id=${vacaciones.idDetalle})}" class="btn btn-xs btn-default rechazaBtn"><span class="glyphicon glyphicon-remove"></span></a>
+												<a th:href="@{/vacaciones/vacacion/rechaza/(id=${vacaciones.idDetalle},idUsuario=${vacaciones.idUsuario.idUsuario},idVacacion=${vacaciones.idVacacion.idVacacion},dias=${vacaciones.dias})}" class="btn btn-xs btn-default rechazaBtn"><span class="glyphicon glyphicon-remove"></span></a>
 											</td>
 										</tr>
 									</tbody>
@@ -183,7 +185,7 @@
 											<label>
 												<p>Dias por pedir</p>
 												<input type="number" name="diasPorPedir" id="diasPorPedir" class="form-control" th:readonly="true" />
-												<input type="number" name="numeroVacacion" id="numeroVacacion" class="form-control" th:readonly="true" th:field="*{vacacion.idVacacion}" style="display: none;" />
+												<input type="text" name="idVacacion" id="idVacacion" class="form-control" th:readonly="true" th:field="*{vacacion.idVacacion}" />
 											</label>
 										</div>
 										<div class="col-md-3">

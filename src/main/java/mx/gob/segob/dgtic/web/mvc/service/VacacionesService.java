@@ -12,5 +12,5 @@ public interface VacacionesService {
 	public void agregaVacaciones(Vacaciones vacaciones, String claveUsuario);
 	public void modificaVacaciones(Vacaciones vacaciones);
 	public VacacionPeriodo buscaVacacionPeriodoPorClaveUsuarioYPeriodo(String claveUsuario, Integer idPeriodo);
-	public void aceptaORechazaVacaciones(Vacaciones vacaciones);
+	public void aceptaORechazaVacaciones(Vacaciones vacaciones, Integer idDetalle);
 }

@@ -71,28 +71,32 @@ $(document).ready(function() {
 			
 		});
 		$('.aceptaBtn').on('click', function(event) {					//botón nuevo
-			$('#aceptarModal').modal(); 
-		});
-		
-		$('.rechazaBtn').on('click', function(event) {					//botón nuevo
-			$('#rechazarModal').modal(); 
-		});
-		
-		$('.rechazaModal').on('click', function(event) {			    //botón elimina
-			event.preventDefault();
-			var href = $(this).attr('href');
-			
-			$('#rechazarModal #rechazaModal').attr('href', href);
-			$('#rechazarModal').modal();
-		});
-		
-		$('.aceptaModal').on('click', function(event) {			    //botón elimina
 			event.preventDefault();
 			var href = $(this).attr('href');
 			
 			$('#aceptarModal #aceptaModal').attr('href', href);
-			$('#aceptarModal').modal();
+			$('#aceptarModal').modal(); 
 		});
+		
+//		$('.rechazaBtn').on('click', function(event) {					//botón nuevo
+//			$('#rechazarModal').modal();
+//			
+//		});
+		
+		$('.rechazaBtn').on('click', function(event) {			    //botón elimina
+			event.preventDefault();
+			var href = $(this).attr('href');
+			$('#rechazarModal #rechazaModal').attr('href', href);
+			$('#rechazarModal').modal();
+		});
+		
+//		$('.aceptaModal').on('click', function(event) {			    //botón elimina
+//			event.preventDefault();
+//			var href = $(this).attr('href');
+//			
+//			$('#aceptarModal #aceptaModal').attr('href', href);
+//			$('#aceptarModal').modal();
+//		});
 		
 	/*$('.eBtn').on('click', function(event) { 					//botón edita
 		event.preventDefault();

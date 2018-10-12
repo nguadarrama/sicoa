@@ -126,7 +126,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		Usuario usuario= new Usuario();
-		usuario.setClaveUsuario(claveUsuario);
+		usuario=usuarioService.buscaUsuario(claveUsuario);
 		vacaciones.setIdUsuario(usuario);
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("detalleVacacion", vacaciones);
@@ -228,10 +228,10 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 	
 	@Override
-	public void aceptaORechazaVacaciones(Vacaciones vacaciones) {
+	public void aceptaORechazaVacaciones(Vacaciones vacaciones,Integer idDetalle) {
 		HttpResponse response;
 		
-		
+		vacaciones.setIdDetalle(idDetalle);
 		
 		
 		Header header = new BasicHeader("Authorization", "Bearer %s");

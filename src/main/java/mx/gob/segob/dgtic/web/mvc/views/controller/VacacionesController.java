@@ -30,11 +30,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
+import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
+import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Vaca;
+import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
+import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.PeriodoService;
+import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import mx.gob.segob.dgtic.web.mvc.service.VacacionesService;
 
 @Controller
@@ -50,9 +55,13 @@ public class VacacionesController {
 	@Autowired 
 	private ArchivoService archivoService;
 	
+//	@Autowired 
+//	private UsuarioService usuarioService;
+	
 	
     @RequestMapping(value={"inicio"}, method = RequestMethod.GET)
     public String obtieneAsistencias(Model model, HttpSession session) {
+    	System.out.print("Peticion de vacaciones");
 	    
 	    model.addAttribute("listaVacaciones", vacacionesService.obtieneVacaciones());
 	    String string=""+ session.getAttribute("usuario");
@@ -79,7 +88,7 @@ public class VacacionesController {
     }
     
     @PostMapping("/vacacion/modifica")
-    public String registraVacacioness(@RequestParam MultipartFile archivo, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer diasPorPedir, @RequestParam Integer idPeriodo, HttpSession session ) {
+    public String registraVacacioness(@RequestParam MultipartFile archivo, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer diasPorPedir, @RequestParam Integer idPeriodo, @RequestParam String idVacacion, HttpSession session ) {
     	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     	Date fechaInicial = new Date();
     	Date fechaFinal = new Date();
@@ -91,7 +100,7 @@ public class VacacionesController {
 			e1.printStackTrace();
 		}
     	System.out.println("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo);
-    	System.out.println("Archivo "+archivo);
+    	System.out.println("Archivo "+archivo+" idVacacion "+idVacacion);
     	
     	try {
     		fechaInicial = df.parse(fechaInicio);
@@ -104,60 +113,54 @@ public class VacacionesController {
     	 String string=""+ session.getAttribute("usuario");
      	String[] parts = string.split(": ");
      	String claveUsuario = parts[1];
-     	archivoService.guardaArchivo(archivo, claveUsuario, new String("vacaciones"));
-     	vacacionesService.agregaVacaciones(new Vacaciones(null, null, null, null, fechaInicial, fechaFinal, diasPorPedir), claveUsuario);
+     	VacacionPeriodo vacacion=new  VacacionPeriodo();
+     	Archivo archivoDto = new Archivo();
+     	vacacion.setIdVacacion(Integer.parseInt(idVacacion));
+//     	usuarioService.buscaUsuario(claveUsuario);
+//     	Integer idArchivo=archivoService.guardaArchivo(archivo, claveUsuario, new String("vacaciones"));
+     	//archivoDto.setIdArchivo(idArchivo);
+     	Estatus estatus=new Estatus();
+     	estatus.setIdEstatus(1);
+     	vacacionesService.agregaVacaciones(new Vacaciones(null,vacacion,archivoDto, null, estatus, fechaInicial, fechaFinal, diasPorPedir), claveUsuario);
     	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
     	System.out.println("Archivo "+archivo);
     	return "redirect:/vacaciones/inicio";
     }
     
-   /* @RequestMapping("/vacacion/modifica")
-    public String uploadResources( HttpServletRequest servletRequest,
-                                 @ModelAttribute Vaca vacaciones,
-                                 Model model)
-    {
-    	System.out.println("fech Ini "+vacaciones.getFechaInicio()+ " fech Fin "+vacaciones.getFechaFin());
-        //Get the uploaded files and store them
-        List<MultipartFile> files = vacaciones.getArchivo();
-        List<String> fileNames = new ArrayList<String>();
-        if (null != files && files.size() > 0)
-        {
-        	System.out.println("archivo "+vacaciones.getArchivo());
-            for (MultipartFile multipartFile : files) {
- 
-                String fileName = multipartFile.getOriginalFilename();
-                fileNames.add(fileName);
- 
-                File imageFile = new File(servletRequest.getServletContext().getRealPath("/image"), fileName);
-                try
-                {
-                    multipartFile.transferTo(imageFile);
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
- 
-        // Here, you can save the product details in database
-         
-        model.addAttribute("product", vacaciones);
-        System.out.println("arvchivo "+vacaciones.getArchivo());
-        return "redirect:/vacaciones/inicio";
-    }*/
-    
     @GetMapping("vacacion/acepta")
-    public String aceptaVacaciones(Integer id, String fechaInicio, String fechaFinal) {
-    	System.out.println("idVacacion "+id+" fechaInicio "+fechaInicio+" fechaFinal "+fechaFinal);
+    public String aceptaVacaciones(Integer id, String fechaInicio, String fechaFin,Integer idUsuario) {
+    	System.out.println("idVacacion "+id+" fechaInicio "+fechaInicio+" fechaFinal "+fechaFin+" idUsuario "+idUsuario);
+    	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    	Date fechaInicial = new Date();
+    	Date fechaFinal = new Date();
+    	Usuario usuario=new Usuario();
+    	usuario.setIdUsuario(idUsuario);
+    	Estatus estatus= new Estatus();
+        estatus.setIdEstatus(2);
+        try {
+    		fechaInicial = df.parse(fechaInicio);
+    		fechaFinal=df.parse(fechaFin);
+			System.out.println("fechaInicio "+fechaInicial);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,null,null,null,estatus,fechaInicial,fechaFinal,null), id);
     	//catalogoService.eliminaHorario(id);
     	
     	return "redirect:/vacaciones/inicio";
     }
     
     @GetMapping("vacacion/rechaza")
-    public String rechazaVacaciones(Integer id) {
-    	System.out.println("idVacacion "+id);
-    	//catalogoService.eliminaHorario(id);
+    public String rechazaVacaciones(Integer id,String idUsuario,Integer idVacacion,Integer dias) {
+    	System.out.println("idVacacion "+id+" idUsuario "+idUsuario+" idVacacion "+idVacacion+" dias"+dias);
+    	VacacionPeriodo vacacion=new  VacacionPeriodo();
+    	vacacion.setIdVacacion(idVacacion);
+    	Usuario usuario=new Usuario();
+    	usuario.setIdUsuario(Integer.parseInt(idUsuario));
+    	Estatus estatus= new Estatus();
+        estatus.setIdEstatus(3);
+    	vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), id);
     	return "redirect:/vacaciones/inicio";
     }
     

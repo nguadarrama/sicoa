@@ -24,8 +24,9 @@ public class Vacaciones {
 	public Vacaciones(){
 		
 	}
-	public Vacaciones(VacacionPeriodo idVacacion,  Archivo idArchivo, Integer idResponsable, Estatus idEstatus, Date fechaInicio, Date fechaFin, Integer dias){
+	public Vacaciones(Usuario idUsuario, VacacionPeriodo idVacacion,  Archivo idArchivo, Integer idResponsable, Estatus idEstatus, Date fechaInicio, Date fechaFin, Integer dias){
 		super();
+		this.idUsuario=idUsuario;
 		this.idVacacion=idVacacion;
 		this.idArchivo=idArchivo;
 		this.idResponsable=idResponsable;
