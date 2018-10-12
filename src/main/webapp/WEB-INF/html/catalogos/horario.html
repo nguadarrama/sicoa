@@ -43,7 +43,7 @@
 			<div class="container">
 				<div class="filterable">
            			<h1 class="ico-solicitudes"><span class="input-clock"></span> Horarios 
-           				<button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button>
+<!--            				<button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button> -->
            				<button class="btn btn-xs btn-default nBtn glyphicon glyphicon-plus-sign"></button>
            			</h1>
            			<hr/>
@@ -54,7 +54,7 @@
 								<th><input type="text" class="form-control" placeholder="HORA ENTRADA" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="HORA SALIDA" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="ESTADO" th:disabled="true"/></th>
-								<td th:text="ACCIONES"></td>
+<!-- 								<td th:text="ACCIONES"></td> -->
 							</tr>
 						</thead>
 						<tbody>
@@ -63,12 +63,12 @@
 								<td th:text="${horario.horaEntrada}"></td>
 								<td th:text="${horario.horaSalida}"></td>
 								<td th:text="${horario.activo} ? 'Activo' : 'Inactivo'"></td>
-								<td class="col-md-3"> 
+								<!-- <td class="col-md-3"> 
 									<div>
 										<a th:href="@{/catalogos/horario/busca/(id=${horario.idHorario})}"   class="btn btn-xs btn-default eBtn"><span class="glyphicon glyphicon-pencil"></span></a>
 										<a th:href="@{/catalogos/horario/elimina/(id=${horario.idHorario})}" class="btn btn-xs btn-default eliminaBtn"><span class="glyphicon glyphicon-trash"></span></a>
 									</div>
-								</td>
+								</td> -->
 							</tr>
 						</tbody>
 					</table>

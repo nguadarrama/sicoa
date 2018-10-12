@@ -63,5 +63,9 @@ public final class CatalogoEndPointConstants {
 		//Unidad Administrativa
 		public static final String WEB_SERVICE_INFO_UNIDAD_ADMINISTRATIVA =  "/catalogo/obtieneUnidadesAdministrativas";
 		public static final String WEB_SERVICE_GUARDA_USUARIO_UNIDAD_ADMINISTRATIVA =  "/catalogo/consultaRegistraUsuarioUnidadAdministrativa";
+		
+		//Perfiles
+		public static final String WEB_SERVICE_BUSCA_PERFILES_USUARIO = "/catalogo/consultaPerfilesUsuario";
+		public static final String WEB_SERVICE_AGREGA_PERFILES_USUARIO = "/catalogo/agregaEliminaPerfilesUsuario";
 }
 

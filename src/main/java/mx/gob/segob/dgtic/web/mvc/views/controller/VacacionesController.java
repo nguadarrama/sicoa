@@ -1,6 +1,7 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -156,5 +159,23 @@ public class VacacionesController {
     	System.out.println("idVacacion "+id);
     	//catalogoService.eliminaHorario(id);
     	return "redirect:/vacaciones/inicio";
+    }
+    
+    @RequestMapping(value = "/archivo", method = RequestMethod.GET)
+    public void getFile(
+        @PathVariable("C:/Users/Anzen Digital/Pictures/tigre.jpg") String fileName, 
+        HttpServletResponse response) {
+        try {
+          // get your file as InputStream
+        	FileInputStream archi= new FileInputStream("C:/Users/Anzen Digital/Desktop");
+          InputStream is = archi;
+          // copy it to response's OutputStream
+          org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+          response.flushBuffer();
+        } catch (IOException ex) {
+          System.out.println("Error writing file to output stream. Filename was '{}'"+ fileName+" "+ex);
+          throw new RuntimeException("IOError writing file to output stream");
+        }
+
     }
 }

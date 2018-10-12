@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import java.util.regex.*;
+import org.springframework.ui.Model;
 
 import mx.gob.segob.dgtic.web.config.security.service.AutenticacionService;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
+import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 
 
 /**
@@ -35,6 +36,9 @@ public class VistasController {
     AutenticacionService autenticacionService;
     
     @Autowired 
+    UsuarioService usuarioService;
+    
+    @Autowired 
     CatalogoController catalogoController;
 	
 	 /**
@@ -43,14 +47,14 @@ public class VistasController {
      * @return La vista de home
      */
     @RequestMapping(value={"","home"}, method = RequestMethod.GET)
-    public String index(HttpSession session){ 
+    public String index(HttpSession session, Model model){ 
 
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
-   	
+    	//model.addAttribute("bandera", false);
     	Usuario usuario=null;
-    	usuario=catalogoController.buscaUsuario(claveUsuario);
+    	usuario=usuarioService.buscaUsuario(claveUsuario);
     	if(usuario.getPrimeraVez().equals("Y") || usuario.getPrimeraVez().equals("S")){
     		return "/cambiaContrasenia";
     	}else{
@@ -60,24 +64,20 @@ public class VistasController {
 
 
     @PostMapping("/cambiaContrasenia")
-    public void cambiaContrasenia(HttpSession session,String accesoClave, String accesoClave1, String accesoClave2){
-    	Pattern patron = Pattern.compile("[a-z]+[A-Z]+[0-9]+");
-    	//patron.matcher(accesoClave1);
-    	Matcher m = patron.matcher(accesoClave1);
-    	if(m.find()){
-    		System.out.println("Si cumple");
-    	}
+    public String cambiaContrasenia(HttpSession session,String accesoClave, String aC1, String accesoClave2, Model model){
+    	
+    	
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
-    	Boolean response=autenticacionService.cambiaContrasenia(claveUsuario, accesoClave1);
-    	System.out.println("clave antigua "+accesoClave +" nueva1 "+accesoClave1 +" accesoClave2 "+accesoClave2);
+    	Boolean response=autenticacionService.cambiaContrasenia(claveUsuario, aC1);
+    	System.out.println("clave antigua "+accesoClave +" nueva1 "+aC1 +" accesoClave2 "+accesoClave2);
     	
-    	/*if(response==true){
-        	return "home";
+    	if(response==true){
+    		return"redirect:/login";
         	}else{
-        	return "mensajeConfirmacion";
-        	}*/
+        	return"redirect:/cambiaContrasenia1";
+        	}
     }
     @GetMapping("/cambiaContrasenia")
     public String cambiaNuevaContrasenia() {
@@ -86,8 +86,6 @@ public class VistasController {
     }
     @GetMapping("/cambiaContrasenia1")
     public String cambiaNuevaContrasenia1() {
-    	
-    	
     	return "cambiaContrasenia1";
     }
     @GetMapping("/home")
@@ -99,24 +97,18 @@ public class VistasController {
     	return "mensajeConfirmacion";
     }
     @PostMapping("/cambiaContrasenia1")
-    public void cambiaContrasenia1(HttpSession session, String accesoClave1, String accesoClave2){
+    public String cambiaContrasenia1(HttpSession session, String aC1, String accesoClave2, Model model){
     	String string=""+ session.getAttribute("usuario");
-    	Pattern patron = Pattern.compile("[a-z][A-Z][0-9]+");
-    	//patron.matcher(accesoClave1);
-    	Matcher m = patron.matcher(accesoClave1);
-    	if(!m.find()){
-    		System.out.println("No cumple");
-    	}
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
     	
-    	Boolean response=autenticacionService.cambiaContrasenia(claveUsuario, accesoClave1);
-    	System.out.println("cambia contraseña 1 "+response );
-    	/*if(response==true){
-    	return "/mensajeConfirmacion";
-    	}else{
-    	return "cambiaContrasenia1";
-    	}*/
+    	Boolean response=autenticacionService.cambiaContrasenia(claveUsuario, aC1);
+    	System.out.println("cambia contraseña 1 "+aC1 );
+    	if(response==true){
+    		return"redirect:/login";
+        	}else{
+        	return"redirect:/cambiaContrasenia1";
+        	}
     }
     
     ///

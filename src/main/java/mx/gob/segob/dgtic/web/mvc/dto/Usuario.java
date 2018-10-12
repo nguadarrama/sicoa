@@ -24,6 +24,10 @@ public class Usuario {
 	private Date fechaBloqueo;
 	private String primeraVez;
 	private String estatus;
+	private String rfc;
+	private String nivel;
+	private String nombreUnidad;
+	private Integer idUnidad;
 	
 	public Usuario (){
 		
@@ -197,5 +201,29 @@ public class Usuario {
 	
 	public void setEstatus(String estatus) {
 		this.estatus = estatus;
+	}
+	public String getRfc() {
+		return rfc;
+	}
+	public void setRfc(String rfc) {
+		this.rfc = rfc;
+	}
+	public String getNivel() {
+		return nivel;
+	}
+	public void setNivel(String nivel) {
+		this.nivel = nivel;
+	}
+	public String getNombreUnidad() {
+		return nombreUnidad;
+	}
+	public void setNombre_unidad(String nombreUnidad) {
+		this.nombreUnidad = nombreUnidad;
+	}
+	public Integer getIdUnidad() {
+		return idUnidad;
+	}
+	public void setIdUnidad(Integer idUnidad) {
+		this.idUnidad = idUnidad;
 	}
 }

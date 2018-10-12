@@ -8,6 +8,7 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +23,13 @@ import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
+import mx.gob.segob.dgtic.web.mvc.service.PerfilUsuarioService;
 import mx.gob.segob.dgtic.web.mvc.service.UnidadAdministrativaService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 /**
  * Controller donde se registran las vistas del aplicativo
@@ -44,9 +47,13 @@ public class CatalogoController {
 	private UsuarioService usuarioService;
 
 	@Autowired
-	AutenticacionService autenticacionService;
+	private AutenticacionService autenticacionService;
 	
-	@Autowired UnidadAdministrativaService unidadAdministrativaService;
+	@Autowired 
+	private UnidadAdministrativaService unidadAdministrativaService;
+	
+	@Autowired 
+	private PerfilUsuarioService perfilUsuarioService;
 
 	/**
 	 * Vista donde se ubica el catálogo de horarios. Path :
@@ -80,6 +87,7 @@ public class CatalogoController {
 			milisegundosHoraEntrada = sdf.parse(horaEntrada).getTime();
 			milisegundosHoraSalida = sdf.parse(horaSalida).getTime();
 		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Time SQLhoraEntrada = new Time(milisegundosHoraEntrada);
@@ -177,12 +185,14 @@ public class CatalogoController {
 	}
 
 	@PostMapping("/usuario/modifica")
-	public String modificaUsuario(Perfil clavePerfil, Horario idHorario, String claveUsuario, String nombre,
+	public String modificaUsuario(Integer[] clavePerfil, Horario idHorario, String claveUsuario, String nombre,
 			String apellidoPaterno, String apellidoMaterno, String bloqueado, String reiniciarPassword, Integer unidadAdministrativa) {
 		System.out.println("unidadAdministrativa "+unidadAdministrativa);
-		System.out.println("valor bloqueado " + bloqueado);
+		System.out.println("valor clavePerfil " + clavePerfil.length);
+		perfilUsuarioService.guardaEliminaPerfilesUsuario(clavePerfil, claveUsuario);
+		
 		usuarioService.modificaUsuario(
-				new Usuario(clavePerfil, idHorario, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, bloqueado));
+				new Usuario(null, idHorario, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, bloqueado));
 		unidadAdministrativaService.consultaRegistraUsuarioUnidadAdministrativa(unidadAdministrativa, claveUsuario);
 		char dato = reiniciarPassword.charAt(0);
 
@@ -196,10 +206,15 @@ public class CatalogoController {
 
 	@GetMapping("usuario/busca")
 	@ResponseBody
-	public Usuario buscaUsuario(String id) {
-
-		return usuarioService.buscaUsuario(id);
+	public HashMap<String, Object> buscaUsuario(String id) {
+		//cargaUsuarioPerfil(id, model);
+		HashMap<String, Object> hmap = new HashMap<String, Object>();
+		hmap.put("usuario", usuarioService.buscaUsuario(id));
+		hmap.put("listaUsuarioPerfiles", perfilUsuarioService.recuperaPerfilesUsuario(id));
+		//hmap.put("listaPerfiles", catalogoService.obtienePerfiles());
+		return hmap;
 	}
+	
 
 	@GetMapping("usuario/elimina")
 	public String eliminaUsuario(String id) {

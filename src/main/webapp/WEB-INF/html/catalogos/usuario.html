@@ -21,6 +21,8 @@
 		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_3.3.7/css/bootstrap.min.css}" />	
 		<link rel="stylesheet" th:href="@{/recursos/assets/font-awesome-4.7.0/css/font-awesome.min.css}" />	
 		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_dialog/css/bootstrap-dialog.min.css}" />
+<!-- 		<link rel="stylesheet" th:href="@{/recursos/assets/multi-select/css/bootstrap-multiselect.css}" /> -->
+		<link rel="stylesheet" th:href="@{/recursos/assets/multiselect/css/multi-select.css}" />
 		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
 		<link rel="stylesheet" th:href="@{/recursos/css/styles.css}" />	
 		<link rel="stylesheet" th:href="@{/recursos/css/estilos.css}" />	
@@ -42,21 +44,22 @@
 		<th:block layout:fragment="content"  th:remove="tag">
 			<div class="container col-md-12">
 				<div class="filterable">
-           			<h1 class="ico-solicitudes"><span class="input-clock"></span> Usuarios 
-           				<button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button>
+           			<h1 class="ico-solicitudes"><span class="input-clock"></span> Administraci&oacute;n de usuarios 
+           				<!-- <button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button> -->
            			</h1>
            			<hr/>
 					<table id="tableUsuarios" class="table table-hover table-striped table-text-center">
 						<thead>
 							<tr class="filters">
-								<th><input type="text" class="form-control" placeholder="NO. DE EMPLEADO" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="EMPLEADO" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="NOMBRE" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="APELLIDO PATERNO" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="APELLIDO MATERNO" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="NIVEL" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="UNIDAD ADMINISTRATIVA" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="UNIDAD" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="ESTATUS" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="ACCIÓN" th:disabled="true"/></th>
+								
+<!-- 								<th><input type="text" class="form-control" placeholder="ESTADO" th:disabled="true"/></th> -->
 								<td></td>
 							</tr>
 						</thead>
@@ -66,12 +69,13 @@
 								<td th:text="${usuario.nombre}"></td>
 								<td th:text="${usuario.apellidoPaterno}"></td>
 								<td th:text="${usuario.apellidoMaterno}"></td>
-								<td th:text="${usuario.clavePerfil}"></td>
-								<td th:text="${usuario.clavePerfil}"></td>
-								<td th:text="${usuario.activo}"></td>
-								<td class="col-md-3"> 
+								<td th:text="${usuario.nivel}"></td>
+								<td th:text="${usuario.nombreUnidad}"></td>
+								<td th:text="${usuario.estatus}"></td>
+<!-- 								<td th:text="${usuario.activo}"></td> -->
+								<td class="col-md-2"> 
 									<div>
-										<a th:href="@{/catalogos/usuario/busca/(id=${usuario.claveUsuario})}" class="eBtn"> Ver Detalle <span class="glyphicon glyphicon-pencil"></span></a>
+										<a th:href="@{/catalogos/usuario/busca/(id=${usuario.claveUsuario})}"  class="eBtn" id="botonLlamar" name="botonLlamar"> Ver Detalle </a>
 <!-- 										<a th:href="@{/catalogos/usuario/elimina/(id=${usuario.claveUsuario})}" class="btn btn-xs btn-default eliminaBtn"><span class="glyphicon glyphicon-trash"></span></a> -->
 									</div>
 								</td>
@@ -109,24 +113,53 @@
 								        	<input type="text" class="form-control" id="apellidoMaterno" name="apellidoMaterno" th:readonly="true" />
 								        </div>
 								        <div class="form-group">
-								        	<label for="clavePerfil" class="col-form-label" th:text="#{PERFIL}"></label>
+								        	<label for="nivel" class="col-form-label" th:text="Nivel"></label>
+								        	<input type="text" class="form-control" id="nivel" name="nivel" th:readonly="true" />
+								        </div>
+								        <div class="form-group">
+								        	<label for="rfc" class="col-form-label" th:text="RFC"></label>
+								        	<input type="text" class="form-control" id="rfc" name="rfc" th:readonly="true" />
+								        </div>
+								        <div class="form-group">
+								        	<label for="puesto" class="col-form-label" th:text="Puesto"></label>
+								        	<input type="text" class="form-control" id="puesto" name="puesto" th:readonly="true" />
+								        </div>
+								        <div class="form-group">
+								        	<label for="fechaIngreso" class="col-form-label" th:text="#{FECHA_INGRESO}"></label>
+								        	<input type="text" class="form-control" id="fechaIngreso" name="fechaIngreso" th:readonly="true" />
+								        </div>
+								        <div class="form-group">
+								        	<label for="clavePerfil" class="col-form-label" th:text="Perfil"></label>
 								        	<select  class="form-control" required="required" 
-										       th:value="clavePerfil" name="clavePerfil" id="clavePerfil">
-										      <option disabled="disabled" selected="selected" > Elige un perfil
-										      </option>
+										       th:value="clavePerfil" name="clavePerfil" id="clavePerfil" multiple="multiple">
+										       
 										      <option th:each="perfil : ${listaPerfiles}" th:value="${perfil.clavePerfil}" 
-										       th:text="${perfil.descripcion}" >
+										       th:text="${perfil.descripcion}">
 										      </option>
 										    </select>
 								        </div>
 								        <div class="form-group">
-								        	<label for="unidadAdministrativa" class="col-form-label" ></label>
+								        	<div>
+									        	<label for="responsable" class="col-form-label" th:text="#{PERFILES_ASIGNADOS}"></label>
+									        	<select  class="form-control" required="required" 
+												       th:value="Responsable" name="perfiles" id="perfiles" multiple="multiple" disabled="disabled" th:readonly="true" >
+												      <option th:each="responsable : ${responsables}" th:value="${responsable.claveUsuario}" 
+												       th:text="' '+ ${responsable.nombre} + ' ' + ${responsable.apellidoPaterno} + ' '+ ${responsable.apellidoMaterno}">
+												      </option>
+												      
+												    </select>
+											   </div>
+								        </div>
+								        <div class="form-group">
+								        	<label for="unidadAdministrativa" class="col-form-label" th:text="#{UNIDAD_ADMINISTRATIVA}"></label>
 								        	<select  class="form-control" required="required" 
-											        name="unidadAdministrativa" id="unidadAdministrativa">
+											        name="unidadAdministrativa" id="unidadAdministrativa" >
 											      <option disabled="disabled" selected="selected" > Elige una unidad administrativa
 											      </option>
+											      
 											      <option th:each="unidad : ${listaUnidadAdministrativa}" th:value="${unidad.idUnidad.idUnidad}" 
 											       th:text="${unidad.idUnidad.nombre}">
+											       
 											      </option>
 											      
 											    </select>
@@ -231,6 +264,8 @@
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/catalogos/usuario.js}"></script>	 
+<!-- 	        <script charset="utf-8" th:src="@{/recursos/assets/multi-select/js/bootstrap-multiselect.js}"></script>	  -->
+	        <script charset="utf-8" th:src="@{/recursos/assets/multiselect/js/jquery.multi-select.js}"></script>	
 		</th:block>
 	</body>
 </html>

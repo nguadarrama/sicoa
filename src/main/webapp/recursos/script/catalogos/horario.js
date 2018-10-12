@@ -1,5 +1,10 @@
 $(document).ready(function() {
-
+	
+	$('#tableHorarios').DataTable({
+        "scrollY": "500px",
+        "scrollCollapse": true
+      });
+	
 	$('.eBtn').on('click', function(event) { 					//botón edita
 		event.preventDefault();
 		var href = $(this).attr('href');
