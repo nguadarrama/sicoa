@@ -195,33 +195,57 @@
 		<div class="justificaForm">
       		<form th:action="@{/asistencia/direccion/dictaminaIncidencia}" method="post">
 				<div class="modal fade" id="justificaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
+					<div class="modal-dialog" role="document" style="width: 80%">
 						<div class="modal-content">
 					    	<div class="modal-header">
-					      		<h3 class="modal-title" id="exampleModalLabel" th:text="Justifica"></h3>
+					      		<h3 class="modal-title" id="exampleModalLabel">Dictamina Incidencia</h3>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 								 </button>
 						    </div>
-					    	<div class="modal-body">
-					    		<div class="form-group">
-						        	<label for="id" class="col-form-label" th:text="Id"></label>
-						            <input type="text" class="form-control" id="id" name="id" th:readonly="true"/>
+					    	<div class="modal-body col-md-12">
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">Puesto</label>
+						            <input type="text" class="form-control" id="puesto" name="puesto" autocomplete="off"/>
 						        </div>
-						        <div class="form-group">
-						        	<label for="fecha" class="col-form-label" th:text="Fecha"></label>
-						            <input type="text" class="form-control" id="fecha" name="fecha" th:readonly="true"/>
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">Unidad Administrativa</label>
+						            <input type="text" class="form-control" id="unidad" name="unidad" autocomplete="off"/>
 						        </div>
-						        <div class="form-group">
-						        	<label for="tipo" class="col-form-label" th:text="Tipo"></label>
-						        	<input type="hidden" class="form-control" id="idTipoDia" name="idTipoDia"/>
-						            <input type="text" class="form-control" id="tipoDia" name="tipoDia" th:readonly="true"/>
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">N&uacute;mero de Empleado</label>
+						            <input type="text" class="form-control" id="cve_m_usuario" name="cve_m_usuario" autocomplete="off"/>
 						        </div>
-						        <div class="form-group">
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">Nombre</label>
+						            <input type="text" class="form-control" id="nombre" name="nombre" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">Fecha Ingreso</label>
+						            <input type="text" class="form-control" id="fechaIngreso" name="fechaIngreso" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">RFC</label>
+						            <input type="text" class="form-control" id="RFC" name="RFC" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="fecha" class="col-form-label">Fecha Incidencia</label>
+						            <input type="text" class="form-control" id="fecha" name="fecha" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="tipo" class="col-form-label">Tipo de Incidencia</label>
+						            <input type="text" class="form-control" id="tipoDia" name="tipoDia" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="tipo" class="col-form-label">Estado</label>
+						            <input type="text" class="form-control" id="estado" name="estado" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
 						        	<label for="selectJustificacion" class="col-form-label" th:text="Justificaci&oacute;n"></label>
-						            <input type="text" class="form-control" id="justificacion" name="justificacion" th:readonly="true"/>
+						            <input type="text" class="form-control" id="justificacion" name="justificacion" autocomplete="off" />
 						        </div>
 						        
+						        <input type="hidden" class="form-control" id="idAsistenciaHidden" name="idAsistenciaHidden" />
 						        <input type="hidden" class="form-control" id="idTipoDia" name="idTipoDia"/>
 						        <input type="hidden" class="form-control" id="numeroEmpleadoHidden" name="cve_m_usuario_hidden"/>
 						        <input type="hidden" class="form-control" id="fechaInicial" name="fechaInicial"/>
@@ -232,7 +256,7 @@
 						    <div class="modal-footer">
 			    				<button type="button" class="btn btn-default" data-dismiss="modal" th:text="Regresar"></button>
 			    				<input type="submit" class="btn btn-danger" name="dictaminacion" th:value="Rechazar" />
-						    	<input type="submit" class="btn btn-success" name="dictaminacion" th:value="Aceptar" />
+						    	<input type="submit" class="btn btn-success" name="dictaminacion" th:value="Autorizar" />
 						    </div>
 					  	</div>
 					</div>

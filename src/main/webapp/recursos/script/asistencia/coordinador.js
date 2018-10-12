@@ -18,11 +18,12 @@ $(document).ready(function() {
 						asistenciaJustificacion.asistencia.usuarioDto.apellidoMaterno;
 			
 			$('.justificaForm #puesto').val(asistenciaJustificacion.asistencia.usuarioDto.clavePerfil.descripcion);
-			$('.justificaForm #unidad').val("Mapear");
+			$('.justificaForm #puesto').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
+			$('.justificaForm #unidad').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
 			$('.justificaForm #cve_m_usuario').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
 			$('.justificaForm #nombre').val(nombre);
 			$('.justificaForm #fechaIngreso').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
-			$('.justificaForm #RFC').val("Mapear");
+			$('.justificaForm #RFC').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
 			$('.justificaForm #fecha').val(asistenciaJustificacion.asistencia.entrada);
 			$('.justificaForm #tipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
 			$('.justificaForm #idTipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
@@ -135,7 +136,7 @@ $(document).ready(function() {
     });
     
     //fechas datepicker
-    $('#validBeforeDatepicker,#validAfterDatepicker, #fecha').datepicker({
+    $('#validBeforeDatepicker,#validAfterDatepicker').datepicker({
     	beforeShowDay: $.datepicker.noWeekends //desactiva sábado y domingo del calendario
     });
     

@@ -47,7 +47,7 @@ public class AsistenciaController  {
 	
 	//EMPLEADO
 	@RequestMapping(value={"empleado"}, method = RequestMethod.GET)
-    public String buscaListaAsistenciaEmpleado(Model model, Authentication authentication) {
+    public String buscaListaAsistenciaEmpleado(Model model) {
     	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
@@ -78,10 +78,10 @@ public class AsistenciaController  {
     }
     
     @RequestMapping(value={"coordinador/busca"}, method = RequestMethod.GET, params="accion=busca")
-    public String buscaListaAsistenciaCoordinadorRango(Model model, String cve_m_usuario, String fechaInicial, String fechaFinal) {
+    public String buscaListaAsistenciaCoordinadorRango(Model model, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
 
     	if (!cve_m_usuario.isEmpty() && !fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
-	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRango(cve_m_usuario, fechaInicial, fechaFinal);
+	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, fechaInicial, fechaFinal, authentication.getName());
 	    	model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("fechaInicial", fechaInicial);
 	    	model.addAttribute("fechaFinal", fechaFinal);
@@ -99,7 +99,7 @@ public class AsistenciaController  {
     
   //DIRECCIÓN
     @RequestMapping(value={"direccion"}, method = RequestMethod.GET)
-    public String buscaListaAsistenciaDireccion(Model model, Authentication authentication) {
+    public String buscaListaAsistenciaDireccion(Model model) {
     	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
@@ -128,9 +128,9 @@ public class AsistenciaController  {
     }
     
     @RequestMapping(value={"direccion/dictaminaIncidencia"}, method = RequestMethod.POST)
-    public String dictaminaIncidencia(Model model, String cve_m_usuario_hidden, Integer id, Integer idTipoDia, Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
+    public String dictaminaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
 
-    	asistenciaService.dictaminaIncidencia(id, idTipoDia, idJustificacion, dictaminacion);
+    	asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRango(cve_m_usuario_hidden, fechaInicial, fechaFinal);
     	
     	model.addAttribute("listaAsistencia", asistencia);
@@ -181,10 +181,10 @@ public class AsistenciaController  {
     }
     
     @RequestMapping(value="coordinador/busca", method=RequestMethod.GET, params="accion=exporta")
-    public ModelAndView exportaExcel(HttpServletRequest request, HttpServletResponse response, String cve_m_usuario, String fechaInicial, String fechaFinal) {
+    public ModelAndView exportaExcel(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
         
     	if (!cve_m_usuario.isEmpty() && !fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
-	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRango(cve_m_usuario, fechaInicial, fechaFinal);
+	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, fechaInicial, fechaFinal, authentication.getName());
 	    	
 	    	Map<String, Object> model = new HashMap<String, Object>();
 	        
@@ -216,17 +216,6 @@ public class AsistenciaController  {
 	        	asistencias.add(elementos);
 	        }
 	        
-	        
-//	        List<String> l1 = new ArrayList<String>();
-//	        l1.add("A1");
-//	        l1.add("B1");
-//	        l1.add("C1");
-//	        registros.add(l1);
-//	        List<String> l2 = new ArrayList<String>();
-//	        l2.add("A2");
-//	        l2.add("B2");
-//	        l2.add("C2");
-//	        registros.add(l2);
 	        model.put("registros", asistencias);
 	        
 	        response.setContentType( "application/ms-excel" );

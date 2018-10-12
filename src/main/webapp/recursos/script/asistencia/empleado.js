@@ -10,10 +10,21 @@ $(document).ready(function() {
 		$('#fechaFinal').val($('#validAfterDatepicker').val());
 		
 		$.get(href, function(asistenciaJustificacion, status) {
+			var nombre = asistenciaJustificacion.asistencia.usuarioDto.nombre + ' ' + 
+			asistenciaJustificacion.asistencia.usuarioDto.apellidoPaterno + ' ' + 
+			asistenciaJustificacion.asistencia.usuarioDto.apellidoMaterno;
+			
 			$('.justificaForm #id').val(asistenciaJustificacion.asistencia.idAsistencia);
+			$('.justificaForm #puesto').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
+			$('.justificaForm #unidad').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
+			$('.justificaForm #cve_m_usuario').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
+			$('.justificaForm #nombre').val(nombre);
+			$('.justificaForm #fechaIngreso').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
+			$('.justificaForm #RFC').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
 			$('.justificaForm #fecha').val(asistenciaJustificacion.asistencia.entrada);
 			$('.justificaForm #tipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
 			$('.justificaForm #idTipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
+			$('.justificaForm #estado').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('#justificacion').val(asistenciaJustificacion.asistencia.incidencia.justificacion.justificacion);
 		});
 		
@@ -118,6 +129,11 @@ $(document).ready(function() {
     		fechaFinal: 'Debe ser mayor que la "Fecha Inicial"'
     	}
     			
+    });
+    
+    $("#puesto, #unidad, #cve_m_usuario, #nombre, #fechaIngreso, #RFC, #fecha, #tipoDia, #estado, #justificacion").keydown(function (e) {
+        // no permite la entrada de texto
+        e.preventDefault();
     });
 	
 }); 

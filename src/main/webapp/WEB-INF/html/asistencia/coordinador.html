@@ -119,15 +119,21 @@
 								            </div>
 										</div>
 								        <div class="row">
-											<div class="form-group col-md-3">
-												<p class="text-right">
-													<button class="btn btn-default" name="accion" value="busca">Buscar</button>
-												</p>
-											</div>
-											<div class="form-group col-md-3">
-												<p class="text-right">
-													<button class="btn btn-default" name="accion" value="exporta">Exportar Excel</button>
-												</p>
+								        	<div class="col-md-12">
+								        		<div class="form-group col-md-2"></div>
+								        		<div class="form-group col-md-2"></div>
+								        		<div class="form-group col-md-2"></div>
+								        		<div class="form-group col-md-2"></div>
+												<div class="form-group col-md-2">
+													<p class="text-right">
+														<button class="btn btn-default" name="accion" value="exporta">Exportar Excel</button>
+													</p>
+												</div>
+												<div class="form-group col-md-2">
+													<p class="text-right">
+														<button class="btn btn-default" name="accion" value="busca">Buscar</button>
+													</p>
+												</div>
 											</div>
 										</div>
 										
@@ -204,7 +210,7 @@
 					<div class="modal-dialog" role="document" style="width: 80%">
 						<div class="modal-content">
 					    	<div class="modal-header">
-					      		<h3 class="modal-title" id="exampleModalLabel" th:text="Justifica"></h3>
+					      		<h3 class="modal-title" id="exampleModalLabel">informaci&oacute;n Incidencia</h3>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 								 </button>
@@ -212,43 +218,43 @@
 					    	<div class="modal-body col-md-12">
 					    		<div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">Puesto</label>
-						            <input type="text" class="form-control" id="puesto" name="puesto" />
+						            <input type="text" class="form-control" id="puesto" name="puesto" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">Unidad Administrativa</label>
-						            <input type="text" class="form-control" id="unidad" name="unidad" />
+						            <input type="text" class="form-control" id="unidad" name="unidad" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">N&uacute;mero de Empleado</label>
-						            <input type="text" class="form-control" id="cve_m_usuario" name="cve_m_usuario" />
+						            <input type="text" class="form-control" id="cve_m_usuario" name="cve_m_usuario" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">Nombre</label>
-						            <input type="text" class="form-control" id="nombre" name="nombre" />
+						            <input type="text" class="form-control" id="nombre" name="nombre" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">Fecha Ingreso</label>
-						            <input type="text" class="form-control" id="fechaIngreso" name="fechaIngreso" />
+						            <input type="text" class="form-control" id="fechaIngreso" name="fechaIngreso" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">RFC</label>
-						            <input type="text" class="form-control" id="RFC" name="RFC" />
+						            <input type="text" class="form-control" id="RFC" name="RFC" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="fecha" class="col-form-label">Fecha Incidencia</label>
-						            <input type="text" class="form-control" id="fecha" name="fecha" />
+						            <input type="text" class="form-control" id="fecha" name="fecha" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="tipo" class="col-form-label">Tipo de Incidencia</label>
-						            <input type="text" class="form-control" id="tipoDia" name="tipoDia" />
+						            <input type="text" class="form-control" id="tipoDia" name="tipoDia" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="tipo" class="col-form-label">Estado</label>
-						            <input type="text" class="form-control" id="estado" name="estado" />
+						            <input type="text" class="form-control" id="estado" name="estado" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="selectJustificacion" class="col-form-label" th:text="Motivo"></label>
-						            <select class="form-control" id="selectJustificacion" name="idJustificacion" th:required="required">
+						            <select class="form-control" id="selectJustificacion" name="idJustificacion" th:required="required" autocomplete="off">
 						            	<!-- los option se generan a través de jquery en asistencias.js -->
 						            </select>
 						        </div>

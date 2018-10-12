@@ -11,10 +11,22 @@ $(document).ready(function() {
 		$('#numeroEmpleadoHidden').val($('#numeroEmpleado').val());
 		
 		$.get(href, function(asistenciaJustificacion, status) {
-			$('.justificaForm #id').val(asistenciaJustificacion.asistencia.idAsistencia);
+			var nombre = asistenciaJustificacion.asistencia.usuarioDto.nombre + ' ' + 
+			asistenciaJustificacion.asistencia.usuarioDto.apellidoPaterno + ' ' + 
+			asistenciaJustificacion.asistencia.usuarioDto.apellidoMaterno;
+
+			$('.justificaForm #puesto').val(asistenciaJustificacion.asistencia.usuarioDto.clavePerfil.descripcion);
+			$('.justificaForm #puesto').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
+			$('.justificaForm #unidad').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
+			$('.justificaForm #cve_m_usuario').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
+			$('.justificaForm #nombre').val(nombre);
+			$('.justificaForm #fechaIngreso').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
+			$('.justificaForm #RFC').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
 			$('.justificaForm #fecha').val(asistenciaJustificacion.asistencia.entrada);
 			$('.justificaForm #tipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
 			$('.justificaForm #idTipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
+			$('.justificaForm #estado').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
+			$('.justificaForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
 			$('#justificacion').val(asistenciaJustificacion.asistencia.incidencia.justificacion.justificacion);
 			$('#idJustificacionHidden').val(asistenciaJustificacion.asistencia.incidencia.justificacion.idJustificacion);
 		});
@@ -99,7 +111,7 @@ $(document).ready(function() {
     });
     
     //fechas datepicker
-    $('#validBeforeDatepicker,#validAfterDatepicker, #fecha').datepicker({
+    $('#validBeforeDatepicker,#validAfterDatepicker').datepicker({
     	beforeShowDay: $.datepicker.noWeekends //desactiva sábado y domingo del calendario
     });
     
@@ -120,6 +132,11 @@ $(document).ready(function() {
     		fechaFinal: 'Debe ser mayor que la "Fecha Inicial"'
     	}
     			
+    });
+    
+    $("#puesto, #unidad, #cve_m_usuario, #nombre, #fechaIngreso, #RFC, #fecha, #tipoDia, #estado").keydown(function (e) {
+        // no permite la entrada de texto
+        e.preventDefault();
     });
 	
 }); 
