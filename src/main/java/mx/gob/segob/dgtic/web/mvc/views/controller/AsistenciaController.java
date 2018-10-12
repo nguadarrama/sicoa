@@ -2,12 +2,15 @@ package mx.gob.segob.dgtic.web.mvc.views.controller;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
-import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.util.AsistenciaJustificacion;
+import mx.gob.segob.dgtic.web.mvc.util.Excel;
 
 /**
  * Controller donde se registran las vistas de asistencia
@@ -73,7 +77,7 @@ public class AsistenciaController  {
     	return "/asistencia/coordinador";
     }
     
-    @RequestMapping(value={"coordinador/busca"}, method = RequestMethod.GET)
+    @RequestMapping(value={"coordinador/busca"}, method = RequestMethod.GET, params="accion=busca")
     public String buscaListaAsistenciaCoordinadorRango(Model model, String cve_m_usuario, String fechaInicial, String fechaFinal) {
 
     	if (!cve_m_usuario.isEmpty() && !fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
@@ -174,5 +178,64 @@ public class AsistenciaController  {
     	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
     	
     	return "/asistencia/coordinador";
-    }    
+    }
+    
+    @RequestMapping(value="coordinador/busca", method=RequestMethod.GET, params="accion=exporta")
+    public ModelAndView exportaExcel(HttpServletRequest request, HttpServletResponse response, String cve_m_usuario, String fechaInicial, String fechaFinal) {
+        
+    	if (!cve_m_usuario.isEmpty() && !fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
+	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRango(cve_m_usuario, fechaInicial, fechaFinal);
+	    	
+	    	Map<String, Object> model = new HashMap<String, Object>();
+	        
+	    	//nombre de la hoja
+	        model.put("nombreHoja", "asistencia");
+	        
+	        //nombres columnas
+	        List<String> cabeceras = new ArrayList<String>();
+	        cabeceras.add("Id Asistencia");
+	        cabeceras.add("Entrada");
+	        cabeceras.add("Id Status");
+	        cabeceras.add("Id Tipo");
+	        cabeceras.add("Salida");
+	        cabeceras.add("Usuario");
+	        model.put("cabeceras", cabeceras);
+	        
+	        //Información registros (List<Object[]>)
+	        List<List<String>> asistencias = new ArrayList<List<String>>();
+	        
+	        for (Asistencia a : listaAsistencia) {
+	        	
+	        	List<String> elementos = new ArrayList<>();
+	        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : new String(""));
+	        	elementos.add(a.getEntrada().toString());
+	        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : new String(""));
+	        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : new String(""));
+	        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : new String(""));
+	        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() : new String(""));
+	        	asistencias.add(elementos);
+	        }
+	        
+	        
+//	        List<String> l1 = new ArrayList<String>();
+//	        l1.add("A1");
+//	        l1.add("B1");
+//	        l1.add("C1");
+//	        registros.add(l1);
+//	        List<String> l2 = new ArrayList<String>();
+//	        l2.add("A2");
+//	        l2.add("B2");
+//	        l2.add("C2");
+//	        registros.add(l2);
+	        model.put("registros", asistencias);
+	        
+	        response.setContentType( "application/ms-excel" );
+	        response.setHeader( "Content-disposition", "attachment; filename=SESNSP.xls" );         
+	        
+	        return new ModelAndView(new Excel(), model);
+    	}
+    	
+    	return new ModelAndView();
+    	
+    }
 }
