@@ -43,7 +43,7 @@
         </repository>
     </repositories-->
     
-    <dependencies>
+    <dependencies>    
         <!-- Definicion de servlet -->        
     	<dependency>
 			<groupId>javax</groupId>
@@ -133,6 +133,12 @@
 	      	<artifactId>commons-io</artifactId>
 	      	<version>2.5</version>
 	    </dependency>
+	    <!-- Excel -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.6</version>
+		</dependency>
     </dependencies>
     <build>
         <plugins>
