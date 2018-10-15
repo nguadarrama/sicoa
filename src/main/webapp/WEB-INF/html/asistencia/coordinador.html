@@ -175,7 +175,7 @@
 													<td th:text="${asistencia.idTipoDia.nombre}"></td>
 													<td th:text="${asistencia.idEstatus.estatus}"></td>
 													<td> 
-														<a th:if="${asistencia.idTipoDia.idTipoDia != 1}" th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="nBtn">Justificar</a>
+														<a th:if="${asistencia.idTipoDia.idTipoDia != 1 and asistencia.idTipoDia.idTipoDia != 5}" th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="nBtn">Justificar</a>
 													</td>
 												</tr>
 											</tbody>
