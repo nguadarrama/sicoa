@@ -109,7 +109,8 @@ $(document).ready(function() {
     
     //fechas datepicker
     $('#validBeforeDatepicker,#validAfterDatepicker, #fecha').datepicker({
-    	beforeShowDay: $.datepicker.noWeekends //desactiva sábado y domingo del calendario
+    	beforeShowDay: $.datepicker.noWeekends, //desactiva sábado y domingo del calendario
+    	dateFormat: 'yy-mm-dd'
     });
     
     //validaciones para datepicker
