@@ -20,6 +20,7 @@ import mx.gob.segob.dgtic.web.config.security.service.AutenticacionService;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
+import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
@@ -266,5 +267,18 @@ public class CatalogoController {
 
 		return "redirect:/catalogos/justificacion";
 	}
+	
+	       /**
+	+        * Vista donde se ubica el catálogo de periodo vacacional. Path :^M
+	+        * {contextoAplicacion}/catalogos/periodoVacacional^M
+	+        * ^M
+	+        * @return La vista del menú de catálogos^M
+	+        */
+	       @RequestMapping(value = { "periodo/agrega" }, method = RequestMethod.GET)
+	       public String agregaPeriodoVacacional(Periodo periodo) {
+	
+	              catalogoService.agregaPeriodoVacacional(periodo);
+	              return "/catalogos/periodoVacacional";
+	       }
 	
 }

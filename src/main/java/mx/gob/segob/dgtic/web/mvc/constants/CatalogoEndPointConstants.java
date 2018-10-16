@@ -59,6 +59,9 @@ public final class CatalogoEndPointConstants {
 		
 		//Periodo
 		public static final String WEB_SERVICE_BUSCA_PERFIL_POR_CLAVE_USUARIO="/catalogo/buscaPeriodoPorClaveUsuario";
+		public static final String WEB_SERVICE_OBTIENE_PERIODOS = "/catalogo/obtienePeriodos";
+		public static final String WEB_SERVICE_AGREGA_PERIODO = "/catalogo/agregaPeriodoVacacional";
+		public static final String WEB_SERVICE_MODIFICA_PERIODO = "/catalogo/modificaPeriodoVacacional";
 		
 		//Unidad Administrativa
 		public static final String WEB_SERVICE_INFO_UNIDAD_ADMINISTRATIVA =  "/catalogo/obtieneUnidadesAdministrativas";
