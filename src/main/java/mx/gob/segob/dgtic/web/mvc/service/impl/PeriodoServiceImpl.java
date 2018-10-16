@@ -3,8 +3,10 @@ package mx.gob.segob.dgtic.web.mvc.service.impl;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -20,10 +22,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
+import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.service.PeriodoService;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
@@ -58,15 +62,12 @@ public class PeriodoServiceImpl implements PeriodoService{
 			periodo = gson.fromJson(dataJson, Periodo.class);
 			fechaInicial = formatoFecha.format(periodo.getFechaInicio());
 			fechaFinal=formatoFecha.format(periodo.getFechaFin());
-			try {
-				System.out.println("fechaInicial "+fechaInicial);
-				periodo.setFechaIni(fechaInicial+" a "+fechaFinal);
-				periodo.setFechaFi(fechaFinal);
-				periodo.setFechaFin(formatoFecha.parse(fechaFinal));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			System.out.println("fechaInicial "+fechaInicial);
+			periodo.setFechaInicio(fechaInicial+ " a "+fechaFinal);
+//				periodo.setFechaIni(fechaInicial+" a "+fechaFinal);
+			periodo.setFechaFin(fechaFinal);
+//				periodo.setFechaFi(fechaFinal);
+//				periodo.setFechaFin(formatoFecha.parse(fechaFinal));
 			
 	
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
@@ -86,6 +87,34 @@ public class PeriodoServiceImpl implements PeriodoService{
 		JsonArray jsonArray = metadata.get(AutorizacionConstants.ATTR_META_DATA_ERRORES_JSON_NAME).getAsJsonArray();
 		
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
+	}
+
+	@Override
+	public List<Periodo> periodos() {
+		List<Periodo> listaPeriodo = new ArrayList<>();
+		HttpResponse response;
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_PERIODOS);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaPeriodo = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Periodo>>(){}.getType());
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener catalogo de periodos vacacionales: "+response.getStatusLine().getReasonPhrase());
+		}
+				Gson gson = new GsonBuilder().setPrettyPrinting().create();
+				System.out.println("ListaService: "+gson.toJson(listaPeriodo));
+		return listaPeriodo;
 	}
 
 }
