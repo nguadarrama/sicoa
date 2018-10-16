@@ -54,7 +54,7 @@
 	                    <span class="caret"></span></a>
 	                     <ul class="dropdown-menu" role="menu">
 	                    	<li><a th:href="@{/vacaciones/vacacionesPropias}" th:text="#{VACACIONES_PROPIAS}"></a></li>
-	                    	<li><a th:href="@{/vacaciones/vacacionesEmpleados}" th:text="#{VACACIONES_EMPLEADOS}"></a></li>
+	                    	<li><a sec:authorize="!hasAuthority('3')"  th:href="@{/vacaciones/vacacionesEmpleados}" th:text="#{VACACIONES_EMPLEADOS}"></a></li>
 	                    	<li><a th:href="@{/vacaciones/solicitudVacaciones}" th:text="#{SOLICITUD_VACACIONES}"></a></li>
 	                    	</ul>
 	                    </li>

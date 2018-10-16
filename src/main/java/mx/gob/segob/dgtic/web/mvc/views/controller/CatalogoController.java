@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import mx.gob.segob.dgtic.web.config.security.service.AutenticacionService;
+import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
@@ -30,6 +31,7 @@ import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -280,5 +282,58 @@ public class CatalogoController {
 	              catalogoService.agregaPeriodoVacacional(periodo);
 	              return "/catalogos/periodoVacacional";
 	       }
+	       
+	       /**
+	   	 * Vista donde se ubica el catálogo de dias Festivos. Path :
+	   	 * {contextoAplicacion}/catalogos/diaFestivo
+	   	 * 
+	   	 * @return La vista del menú de catálogos
+	   	 */
+	   	@RequestMapping(value = {"diaFestivo"}, method = RequestMethod.GET)
+	   	public String obtieneDiaFestivo(Model model) {
+
+	   		model.addAttribute("listaDiasFestivos", catalogoService.obtieneDiaFestivo());
+
+	   		return "/catalogos/diaFestivo";
+	   	}
+
+	   	@GetMapping("diaFestivo/busca")
+	   	@ResponseBody
+	   	public DiaFestivo buscaDiaFestivo(Integer id) {
+	   		System.out.println("Hey");
+	   		return catalogoService.buscaDiaFestivo(id);
+	   	}
+
+	   	@PostMapping("diaFestivo/modifica")
+	   	public String modificaDiaFestivo(Integer id, String nombre, String fecha,  Boolean activo) {
+	   		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	   		Date dia = new Date();
+	   		try {
+	   			dia = sdf.parse(fecha);
+	   		} catch (ParseException e) {
+	   			// TODO Auto-generated catch block
+	   			e.printStackTrace();
+	   		}
+	   		catalogoService.modificaDiaFestivo(new DiaFestivo(id, nombre, sdf.format(dia), activo));
+
+	   		return "redirect:/catalogos/diaFestivo";
+	   	}
+
+	   	@PostMapping("diaFestivo/agrega")
+	   	public String agregaDiaFestivo( String nombre, String fecha,  Boolean activo) {
+
+	   		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	   		Date dia = new Date();
+	   		try {
+	   			dia = sdf.parse(fecha);
+	   		} catch (ParseException e) {
+	   			// TODO Auto-generated catch block
+	   			e.printStackTrace();
+	   		}
+	   		
+	   		catalogoService.agregaDiaFestivo(new DiaFestivo(null,  nombre, sdf.format(dia), activo));
+
+	   		return "redirect:/catalogos/diaFestivo";
+	   	}
 	
 }

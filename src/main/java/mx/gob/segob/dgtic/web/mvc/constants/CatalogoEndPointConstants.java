@@ -78,5 +78,15 @@ public final class CatalogoEndPointConstants {
 				
 		//Estatus
 		public static final String WEB_SERVICE_INFO_ESTATUS = "/catalogo/obtieneEstatus";
+		
+		/**
+		 * Constante que representa el atributo WEB_SERVICE_INFO_DIA_FESTIVO, path del WebService para obtener la información del catálogo día festivo. 
+		 */	
+		public static final String WEB_SERVICE_INFO_DIA_FESTIVO =  "/diaFestivo/obtiene";
+		public static final String WEB_SERVICE_BUSCA_DIA_FESTIVO = "/diaFestivo/busca";
+		public static final String WEB_SERVICE_MODIFICA_DIA_FESTIVO = "/diaFestivo/modifica";
+		public static final String WEB_SERVICE_AGREGA_DIA_FESTIVO = "/diaFestivo/agrega";
+		public static final String WEB_SERVICE_ELIMINA_DIA_FESTIVO = "/diaFestivo/elimina";
+		
 }
 

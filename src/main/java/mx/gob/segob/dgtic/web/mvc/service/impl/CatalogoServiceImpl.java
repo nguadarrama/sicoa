@@ -24,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
+import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
@@ -524,6 +525,120 @@ HttpResponse response;
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+	}
+	
+	@Override
+	public List<DiaFestivo> obtieneDiaFestivo() {
+		List<DiaFestivo> lista = new ArrayList<>();
+		HttpResponse response;
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_DIA_FESTIVO);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			lista = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<DiaFestivo>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener los días festivos : "+response.getStatusLine().getReasonPhrase());
+		}
+				
+		return lista;
+	}
+	
+	@SuppressWarnings("unused")
+	@Override
+	public void modificaDiaFestivo(DiaFestivo dia) {
+		HttpResponse response;
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("diaFestivo", dia);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_DIA_FESTIVO, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+				
+	}
+	
+	@Override
+	public void agregaDiaFestivo(DiaFestivo dia) {
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("diaFestivo", dia);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try { //se consume recurso rest
+			ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_DIA_FESTIVO, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public DiaFestivo buscaDiaFestivo(Integer id) {
+		DiaFestivo dia = new DiaFestivo();
+		HttpResponse response;
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_DIA_FESTIVO + "?id=" + id);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			dia = gson.fromJson(dataJson, DiaFestivo.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el día Festivp : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return dia;
 	}
 
 }

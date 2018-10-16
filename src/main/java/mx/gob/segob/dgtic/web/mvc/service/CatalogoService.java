@@ -3,6 +3,7 @@ package mx.gob.segob.dgtic.web.mvc.service;
 import java.util.List;
 import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
+import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
@@ -39,4 +40,10 @@ public interface CatalogoService {
 	// Catálogo de periodo vacacional
 	public void agregaPeriodoVacacional (Periodo periodo);
 	public void modificaPeriodoVacacional (Periodo periodo);
+	
+	//Catálogo Día Festivo
+		public void agregaDiaFestivo(DiaFestivo dia);
+		public void modificaDiaFestivo(DiaFestivo dia);
+		public List<DiaFestivo> obtieneDiaFestivo();
+		public DiaFestivo buscaDiaFestivo(Integer id);
 }
