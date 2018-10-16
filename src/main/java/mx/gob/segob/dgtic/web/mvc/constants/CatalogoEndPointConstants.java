@@ -56,6 +56,9 @@ public final class CatalogoEndPointConstants {
 		public static final String WEB_SERVICE_AGREGA_VACACIONES = "/catalogo/agregaDetalleVacacion";
 		public static final String WEB_SERVICE_ELIMINA_VACACIONES = "/catalogo/eliminaDetalleVacacion";
 		public static final String WEB_SERVICE_CONSULTA_VACACION="/catalogo/buscaVacacionPeriodoPorClaveUsuarioYPeriodo";
+		public static final String WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS = "/catalogo/consultaVacacionesPropiasPorFiltros";
+		public static final String WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS = "/catalogo/obtenerVacacionesPorFiltros";
+		
 		
 		//Periodo
 		public static final String WEB_SERVICE_BUSCA_PERFIL_POR_CLAVE_USUARIO="/catalogo/buscaPeriodoPorClaveUsuario";
@@ -66,9 +69,14 @@ public final class CatalogoEndPointConstants {
 		//Unidad Administrativa
 		public static final String WEB_SERVICE_INFO_UNIDAD_ADMINISTRATIVA =  "/catalogo/obtieneUnidadesAdministrativas";
 		public static final String WEB_SERVICE_GUARDA_USUARIO_UNIDAD_ADMINISTRATIVA =  "/catalogo/consultaRegistraUsuarioUnidadAdministrativa";
+		public static final String WEB_SERVICE_CONSULTA_RESPONSABLE =  "/catalogo/consultaResponsable";
+		public static final String WEB_SERVICE_INFO_UNIDADES_ADMINISTRATIVAS =  "/catalogo/obtieneUnidadesAdministrativasCompletas";
 		
 		//Perfiles
 		public static final String WEB_SERVICE_BUSCA_PERFILES_USUARIO = "/catalogo/consultaPerfilesUsuario";
 		public static final String WEB_SERVICE_AGREGA_PERFILES_USUARIO = "/catalogo/agregaEliminaPerfilesUsuario";
+				
+		//Estatus
+		public static final String WEB_SERVICE_INFO_ESTATUS = "/catalogo/obtieneEstatus";
 }
 

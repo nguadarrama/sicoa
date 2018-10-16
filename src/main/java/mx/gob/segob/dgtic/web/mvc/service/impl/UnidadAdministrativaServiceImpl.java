@@ -27,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
+import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.UnidadAdministrativa;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.UsuarioUnidadAdministrativa;
@@ -111,6 +112,64 @@ HttpResponse response;
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
 		
+	}
+
+	@Override
+	public List<UsuarioUnidadAdministrativa> consultaResponsable(String claveUsuario) {
+		List<UsuarioUnidadAdministrativa> listaUsuarioUnidadAdministrativa = new ArrayList<>();
+		HttpResponse response;
+		try{
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_CONSULTA_RESPONSABLE+ "?id=" + claveUsuario);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaUsuarioUnidadAdministrativa = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<UsuarioUnidadAdministrativa>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener los perfiles : "+response.getStatusLine().getReasonPhrase());
+		}
+		return listaUsuarioUnidadAdministrativa;
+	}
+
+	@Override
+	public List<UsuarioUnidadAdministrativa> obtenerUnidadesAdministrativas() {
+		List<UsuarioUnidadAdministrativa> listaUnidadAdministrativa = new ArrayList<>();
+		HttpResponse response;
+		try{
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_UNIDADES_ADMINISTRATIVAS);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaUnidadAdministrativa = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<UsuarioUnidadAdministrativa>>(){}.getType());
+			for(UsuarioUnidadAdministrativa usuarioUnidadAdministrativa: listaUnidadAdministrativa){
+				System.out.println("nombre "+usuarioUnidadAdministrativa.getIdUnidad().getNombre());
+				System.out.println("nombre "+usuarioUnidadAdministrativa.getIdUnidad().getIdUnidad());
+			}
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener unidades administrativas : "+response.getStatusLine().getReasonPhrase());
+		}
+		return listaUnidadAdministrativa;
 	}
 
 }

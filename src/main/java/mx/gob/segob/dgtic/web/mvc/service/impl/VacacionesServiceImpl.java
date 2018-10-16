@@ -1,6 +1,7 @@
 package mx.gob.segob.dgtic.web.mvc.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
+import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
@@ -49,7 +51,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 	
 	@Override
 	public List<Vacaciones> obtieneVacaciones() {
-		List<Vacaciones> listaVacaciones = new ArrayList<>();
+		List<Vacaciones> listaVacaciones = new ArrayList<Vacaciones>();
 		HttpResponse response;
 		try{
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_VACACONES);
@@ -62,6 +64,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonArray dataJson = json.getAsJsonArray("data");
+			if(dataJson!=null)
 			listaVacaciones = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Vacaciones>>(){}.getType());
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
@@ -213,8 +216,13 @@ public class VacacionesServiceImpl implements VacacionesService{
 		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			try{
 			JsonElement dataJson = json.get("data").getAsJsonObject();
-			vacaciones = gson.fromJson(dataJson, VacacionPeriodo.class);		
+			vacaciones = gson.fromJson(dataJson, VacacionPeriodo.class);	
+			}catch(Exception e){
+				e.printStackTrace();
+				//vacaciones.setDias(0);
+			}		
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			
@@ -256,5 +264,62 @@ public class VacacionesServiceImpl implements VacacionesService{
 		}
 		
 	}
+
+	@Override
+	public List<Vacaciones> obtenerVacacionesPorFiltros(String claveUsuario, String nombre, String apellidoPaterno,
+			String apellidoMaterno, String idUnidad, String idEstatus) {
+		List<Vacaciones> listaVacaciones = new ArrayList<>();
+		HttpResponse response;
+		try{
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS+ "?claveUsuario="+claveUsuario+"&nombre="+nombre+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad+"&idEstatus="+idEstatus);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaVacaciones = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Vacaciones>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
+		}
+		return listaVacaciones;
+	}
+
+	@Override
+	public List<Vacaciones> consultaVacacionesPropiasPorFiltros(String claveUsuario, String idPeriodo,
+			String idEstatus, String pfechaInicio, String pfechaFin) {
+		List<Vacaciones> listaVacaciones = new ArrayList<>();
+		HttpResponse response;
+		try{
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaVacaciones = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Vacaciones>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
+		}
+		return listaVacaciones;
+	}
+	
 
 }

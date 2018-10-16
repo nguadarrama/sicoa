@@ -1,11 +1,29 @@
 $(document).ready(function() {
+	
+	$('.collapse').collapse();
+//	$('#collapseOne').collapse({
+//		  toggle: false
+//		})
 		
-		$("#fechaInicioBusqueda").datepicker({
+		
+		$("#btnVacacionesPropias").on('click', function(event){
+			
+		
+			
+		});
+		$("#btnVacacionesEmpleados").on('click', function(event){
+			
+			
+		});
+		
+		$("#fechaInicioBusca1").datepicker({
 				minDate: 1,
+				dateFormat: 'yy-mm-dd',
 		       beforeShowDay: $.datepicker.noWeekends 
 		   });
-		$("#fechaFinBusqueda").datepicker({ 
+		$("#fechaFinBusca1").datepicker({ 
 			minDate: 1,
+			dateFormat: 'yy-mm-dd',
 		       beforeShowDay: $.datepicker.noWeekends 
 		   });
 		$("#fechaInicio").datepicker({ 

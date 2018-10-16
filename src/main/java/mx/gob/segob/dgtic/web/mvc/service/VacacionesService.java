@@ -1,5 +1,6 @@
 package mx.gob.segob.dgtic.web.mvc.service;
 
+import java.util.Date;
 import java.util.List;
 
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
@@ -13,4 +14,6 @@ public interface VacacionesService {
 	public void modificaVacaciones(Vacaciones vacaciones);
 	public VacacionPeriodo buscaVacacionPeriodoPorClaveUsuarioYPeriodo(String claveUsuario, Integer idPeriodo);
 	public void aceptaORechazaVacaciones(Vacaciones vacaciones, Integer idDetalle);
+	public List<Vacaciones> obtenerVacacionesPorFiltros(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, String idUnidad, String idEstatus);
+	public List<Vacaciones> consultaVacacionesPropiasPorFiltros(String claveUsuario, String idPeriodo, String idEstatus, String pfechaInicio, String pfechaFin );
 }

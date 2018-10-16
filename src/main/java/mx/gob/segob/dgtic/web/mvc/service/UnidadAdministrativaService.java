@@ -8,4 +8,6 @@ public interface UnidadAdministrativaService {
 
 	public List<UsuarioUnidadAdministrativa> obtenerListaUnidadAdministrativa();
 	public void consultaRegistraUsuarioUnidadAdministrativa(Integer idUnidad, String claveUsuario);
+	public List<UsuarioUnidadAdministrativa> consultaResponsable(String claveUsuario);
+	public List<UsuarioUnidadAdministrativa> obtenerUnidadesAdministrativas();
 }
