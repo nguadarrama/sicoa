@@ -194,16 +194,9 @@ public class AsistenciaController  {
         return new ModelAndView(new Excel(), model);
     	
     }
-    
-    @RequestMapping(value="coordinador/busca", method=RequestMethod.GET, params="imprime")
-    public ModelAndView imprimeCoordinador(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
-        
-    	return new ModelAndView();
-    	
-    }
     //TERMINA COORDINADOR
     
-  //DIRECCIÓN
+    //DIRECCIÓN
     @RequestMapping(value={"direccion"}, method = RequestMethod.GET)
     public String buscaListaAsistenciaDireccion(Model model) {
     	
@@ -285,13 +278,6 @@ public class AsistenciaController  {
     	
     }
     
-    @RequestMapping(value="direccion/busca", method=RequestMethod.GET, params="imprime")
-    public ModelAndView imprimeDireccion(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
-        
-    	return new ModelAndView();
-    	
-    }
-    
     @RequestMapping(value={"direccion/dictaminaIncidencia"}, method = RequestMethod.POST)
     public String dictaminaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
 
@@ -306,6 +292,7 @@ public class AsistenciaController  {
     	
     	return "/asistencia/direccion";
     }
+    //TERMINA DIRECCION
     
     @GetMapping("buscaId")
     @ResponseBody

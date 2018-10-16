@@ -139,5 +139,15 @@ $(document).ready(function() {
         // no permite la entrada de texto
         e.preventDefault();
     });
+    
+    $('#imprimir').click(function() {
+		var imprime = document.getElementById('tableAsistencias');
+		var wme = window.open("", "", "width=900, height=700");
+		wme.document.write(imprime.outerHTML);
+		wme.document.close();
+		wme.focus();
+		wme.print();
+		wme.close();
+	});
 	
 }); 
