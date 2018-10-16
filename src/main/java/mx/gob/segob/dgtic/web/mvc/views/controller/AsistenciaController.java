@@ -55,7 +55,7 @@ public class AsistenciaController  {
     	return "/asistencia/empleado";
     }
 	
-	@RequestMapping(value={"empleado/busca"}, method = RequestMethod.GET)
+	@RequestMapping(value={"empleado/busca"}, method = RequestMethod.GET, params="busca")
     public String buscaListaAsistenciaEmpleadoRango(Model model, Authentication authentication, String fechaInicial, String fechaFinal) {
 
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRango(authentication.getName(), fechaInicial, fechaFinal);
@@ -64,6 +64,56 @@ public class AsistenciaController  {
     	model.addAttribute("fechaFinal", fechaFinal);
     	
     	return "/asistencia/empleado";
+    }
+	
+	@RequestMapping(value="empleado/busca", method=RequestMethod.GET, params="exporta")
+    public ModelAndView exportaExcelEmpleado(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String fechaInicial, String fechaFinal) {
+        
+	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRango(authentication.getName(), fechaInicial, fechaFinal);
+	    	
+	    	Map<String, Object> model = new HashMap<String, Object>();
+	        
+	    	//nombre de la hoja
+	        model.put("nombreHoja", "asistencia");
+	        
+	        //nombres columnas
+	        List<String> cabeceras = new ArrayList<String>();
+	        cabeceras.add("Id Asistencia");
+	        cabeceras.add("Entrada");
+	        cabeceras.add("Id Status");
+	        cabeceras.add("Id Tipo");
+	        cabeceras.add("Salida");
+	        cabeceras.add("Usuario");
+	        model.put("cabeceras", cabeceras);
+	        
+	        //Información registros (List<Object[]>)
+	        List<List<String>> asistencias = new ArrayList<List<String>>();
+	        
+	        for (Asistencia a : listaAsistencia) {
+	        	
+	        	List<String> elementos = new ArrayList<>();
+	        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : new String(""));
+	        	elementos.add(a.getEntrada().toString());
+	        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : new String(""));
+	        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : new String(""));
+	        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : new String(""));
+	        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() : new String(""));
+	        	asistencias.add(elementos);
+	        }
+	        
+	        model.put("registros", asistencias);
+	        
+	        response.setContentType( "application/ms-excel" );
+	        response.setHeader( "Content-disposition", "attachment; filename=SESNSP.xls" );         
+	        
+	        return new ModelAndView(new Excel(), model);
+    }
+    
+    @RequestMapping(value="empleado/busca", method=RequestMethod.GET, params="imprime")
+    public ModelAndView imprimeEmpleado(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
+        
+    	return new ModelAndView();
+    	
     }
 	//TERMINA EMPLEADO
     
@@ -77,25 +127,81 @@ public class AsistenciaController  {
     	return "/asistencia/coordinador";
     }
     
-    @RequestMapping(value={"coordinador/busca"}, method = RequestMethod.GET, params="accion=busca")
-    public String buscaListaAsistenciaCoordinadorRango(Model model, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
+    @RequestMapping(value={"coordinador/busca"}, method = RequestMethod.GET, params="busca")
+    public String buscaListaAsistenciaCoordinadorRango(Model model, Authentication authentication, String cve_m_usuario, String nombre, String paterno, 
+    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
 
-    	if (!cve_m_usuario.isEmpty() && !fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
-	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, fechaInicial, fechaFinal, authentication.getName());
+	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
+	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName());
+	    	
 	    	model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("fechaInicial", fechaInicial);
 	    	model.addAttribute("fechaFinal", fechaFinal);
 	    	model.addAttribute("cve_m_usuario", cve_m_usuario);
+	    	model.addAttribute("nombre", nombre);
+	    	model.addAttribute("paterno", paterno);
+	    	model.addAttribute("materno", materno);
+	    	model.addAttribute("nivel", nivel);
+	    	model.addAttribute("tipo", tipo);
+	    	model.addAttribute("estado", estado);
+	    	model.addAttribute("unidadAdministrativa", unidadAdministrativa);
 	    	
 	    	return "/asistencia/coordinador";
-    	} else {
-    		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
-	    	model.addAttribute("fechaInicial", fechaInicial);
-	    	model.addAttribute("fechaFinal", fechaFinal);
-    		
-    		return "/asistencia/coordinador";
-    	}
     }
+    
+    @RequestMapping(value="coordinador/busca", method=RequestMethod.GET, params="exporta")
+    public ModelAndView exportaExcelCoordinador(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String nombre, String paterno, 
+    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
+        
+    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
+    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName());
+    	
+    	Map<String, Object> model = new HashMap<String, Object>();
+        
+    	//nombre de la hoja
+        model.put("nombreHoja", "asistencia");
+        
+        //nombres columnas
+        List<String> cabeceras = new ArrayList<String>();
+        cabeceras.add("Id Asistencia");
+        cabeceras.add("Entrada");
+        cabeceras.add("Id Status");
+        cabeceras.add("Id Tipo");
+        cabeceras.add("Salida");
+        cabeceras.add("Usuario");
+        model.put("cabeceras", cabeceras);
+        
+        //Información registros (List<Object[]>)
+        List<List<String>> asistencias = new ArrayList<List<String>>();
+        
+        for (Asistencia a : listaAsistencia) {
+        	
+        	List<String> elementos = new ArrayList<>();
+        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : new String(""));
+        	elementos.add(a.getEntrada().toString());
+        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : new String(""));
+        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : new String(""));
+        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : new String(""));
+        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() : new String(""));
+        	asistencias.add(elementos);
+        }
+        
+        model.put("registros", asistencias);
+        
+        response.setContentType( "application/ms-excel" );
+        response.setHeader( "Content-disposition", "attachment; filename=SESNSP.xls" );         
+        
+        return new ModelAndView(new Excel(), model);
+    	
+    }
+    
+    @RequestMapping(value="coordinador/busca", method=RequestMethod.GET, params="imprime")
+    public ModelAndView imprimeCoordinador(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
+        
+    	return new ModelAndView();
+    	
+    }
+    //TERMINA COORDINADOR
     
   //DIRECCIÓN
     @RequestMapping(value={"direccion"}, method = RequestMethod.GET)
@@ -107,24 +213,83 @@ public class AsistenciaController  {
     	return "/asistencia/direccion";
     }
     
-    @RequestMapping(value={"direccion/busca"}, method = RequestMethod.GET)
-    public String buscaListaAsistenciaDireccionRango(Model model, String cve_m_usuario, String fechaInicial, String fechaFinal) {
+    @RequestMapping(value={"direccion/busca"}, method = RequestMethod.GET, params="busca")
+    public String buscaListaAsistenciaDireccionRango(Model model, Authentication authentication, String cve_m_usuario, String nombre, String paterno, 
+    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
 
-    	if (!cve_m_usuario.isEmpty() && !fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
-	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRango(cve_m_usuario, fechaInicial, fechaFinal);
+	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombre, paterno, materno, nivel, 
+	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa);
+	    	
 	    	model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("fechaInicial", fechaInicial);
 	    	model.addAttribute("fechaFinal", fechaFinal);
 	    	model.addAttribute("cve_m_usuario", cve_m_usuario);
+	    	model.addAttribute("nombre", nombre);
+	    	model.addAttribute("paterno", paterno);
+	    	model.addAttribute("materno", materno);
+	    	model.addAttribute("nivel", nivel);
+	    	model.addAttribute("tipo", tipo);
+	    	model.addAttribute("estado", estado);
+	    	model.addAttribute("unidadAdministrativa", unidadAdministrativa);
 	    	
 	    	return "/asistencia/direccion";
-    	} else {
-    		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
-	    	model.addAttribute("fechaInicial", fechaInicial);
-	    	model.addAttribute("fechaFinal", fechaFinal);
-    		
-    		return "/asistencia/direccion";
+    }
+    
+    @RequestMapping(value="direccion/busca", method=RequestMethod.GET, params="exporta")
+    public ModelAndView exportaExcelDireccion(HttpServletRequest request, HttpServletResponse response, Authentication authentication, 
+    		String cve_m_usuario, String nombre, String paterno, String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
+        
+    	if (!cve_m_usuario.isEmpty() && !fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
+	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombre, paterno, materno, nivel, 
+	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa);
+	    	
+	    	Map<String, Object> model = new HashMap<String, Object>();
+	        
+	    	//nombre de la hoja
+	        model.put("nombreHoja", "asistencia");
+	        
+	        //nombres columnas
+	        List<String> cabeceras = new ArrayList<String>();
+	        cabeceras.add("Id Asistencia");
+	        cabeceras.add("Entrada");
+	        cabeceras.add("Id Status");
+	        cabeceras.add("Id Tipo");
+	        cabeceras.add("Salida");
+	        cabeceras.add("Usuario");
+	        model.put("cabeceras", cabeceras);
+	        
+	        //Información registros (List<Object[]>)
+	        List<List<String>> asistencias = new ArrayList<List<String>>();
+	        
+	        for (Asistencia a : listaAsistencia) {
+	        	
+	        	List<String> elementos = new ArrayList<>();
+	        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : new String(""));
+	        	elementos.add(a.getEntrada().toString());
+	        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : new String(""));
+	        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : new String(""));
+	        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : new String(""));
+	        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() : new String(""));
+	        	asistencias.add(elementos);
+	        }
+	        
+	        model.put("registros", asistencias);
+	        
+	        response.setContentType( "application/ms-excel" );
+	        response.setHeader( "Content-disposition", "attachment; filename=SESNSP.xls" );         
+	        
+	        return new ModelAndView(new Excel(), model);
     	}
+    	
+    	return new ModelAndView();
+    	
+    }
+    
+    @RequestMapping(value="direccion/busca", method=RequestMethod.GET, params="imprime")
+    public ModelAndView imprimeDireccion(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
+        
+    	return new ModelAndView();
+    	
     }
     
     @RequestMapping(value={"direccion/dictaminaIncidencia"}, method = RequestMethod.POST)
@@ -180,51 +345,4 @@ public class AsistenciaController  {
     	return "/asistencia/coordinador";
     }
     
-    @RequestMapping(value="coordinador/busca", method=RequestMethod.GET, params="accion=exporta")
-    public ModelAndView exportaExcel(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
-        
-    	if (!cve_m_usuario.isEmpty() && !fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
-	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, fechaInicial, fechaFinal, authentication.getName());
-	    	
-	    	Map<String, Object> model = new HashMap<String, Object>();
-	        
-	    	//nombre de la hoja
-	        model.put("nombreHoja", "asistencia");
-	        
-	        //nombres columnas
-	        List<String> cabeceras = new ArrayList<String>();
-	        cabeceras.add("Id Asistencia");
-	        cabeceras.add("Entrada");
-	        cabeceras.add("Id Status");
-	        cabeceras.add("Id Tipo");
-	        cabeceras.add("Salida");
-	        cabeceras.add("Usuario");
-	        model.put("cabeceras", cabeceras);
-	        
-	        //Información registros (List<Object[]>)
-	        List<List<String>> asistencias = new ArrayList<List<String>>();
-	        
-	        for (Asistencia a : listaAsistencia) {
-	        	
-	        	List<String> elementos = new ArrayList<>();
-	        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : new String(""));
-	        	elementos.add(a.getEntrada().toString());
-	        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : new String(""));
-	        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : new String(""));
-	        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : new String(""));
-	        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() : new String(""));
-	        	asistencias.add(elementos);
-	        }
-	        
-	        model.put("registros", asistencias);
-	        
-	        response.setContentType( "application/ms-excel" );
-	        response.setHeader( "Content-disposition", "attachment; filename=SESNSP.xls" );         
-	        
-	        return new ModelAndView(new Excel(), model);
-    	}
-    	
-    	return new ModelAndView();
-    	
-    }
 }

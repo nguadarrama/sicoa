@@ -115,7 +115,10 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
-	public List<Asistencia> buscaAsistenciaEmpleadoRangoCoordinador(String claveEmpleado, String inicio, String fin, String cveCoordinador) {
+	public List<Asistencia> buscaAsistenciaEmpleadoRangoCoordinador(String cve_m_usuario, String nombre, String paterno,
+			String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal,
+			String unidadAdministrativa, String cveCoordinador) {
+
 		List<Asistencia> listaAsistencia = new ArrayList<>();
 		HttpResponse response;
 		
@@ -123,7 +126,10 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(
-					AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_RANGO_COORDINADOR + "?claveEmpleado=" + claveEmpleado + "&inicio=" + inicio + "&fin=" + fin + "&cveCoordinador=" + cveCoordinador);
+					AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_RANGO_COORDINADOR 
+					+ "?claveEmpleado=" + cve_m_usuario + "&nombre=" + nombre + "&paterno=" + paterno + "&materno=" + materno + "&nivel=" + nivel
+					+ "&tipo=" + tipo + "&estado=" + estado + "&inicio=" + fechaInicial + "&fin=" + fechaFinal + "&unidad=" + unidadAdministrativa
+					+ "&cveCoordinador=" + cveCoordinador);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -146,6 +152,47 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		}
 		
 		return listaAsistencia;
+		
+	}
+	
+	@Override
+	public List<Asistencia> buscaAsistenciaEmpleadoRangoDireccion(String cve_m_usuario, String nombre, String paterno,
+			String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal,
+			String unidadAdministrativa) {
+
+		List<Asistencia> listaAsistencia = new ArrayList<>();
+		HttpResponse response;
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(
+					AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_RANGO_DIRECCION 
+					+ "?claveEmpleado=" + cve_m_usuario + "&nombre=" + nombre + "&paterno=" + paterno + "&materno=" + materno + "&nivel=" + nivel
+					+ "&tipo=" + tipo + "&estado=" + estado + "&inicio=" + fechaInicial + "&fin=" + fechaFinal + "&unidad=" + unidadAdministrativa);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			if(dataJson != null){
+				listaAsistencia = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Asistencia>>(){}.getType());
+			}
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return listaAsistencia;
+		
 	}
 	
 	@Override
