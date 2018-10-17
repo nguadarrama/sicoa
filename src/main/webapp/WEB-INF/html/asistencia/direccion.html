@@ -74,19 +74,19 @@
 								            <div class="col-md-3">
 												<label>
 													<p>Nombre</p>
-													<input th:value="${nombre}" type="text" class="form-control input-user" name="nombre" />
+													<input th:value="${nombre}" type="text" class="form-control input-user" id="nombre" name="nombre" />
 												</label>
 											</div>
 											<div class="col-md-3">
 												<label>
 													<p>Apellido Paterno</p>
-													<input th:value="${paterno}" type="text" class="form-control" name="paterno" />
+													<input th:value="${paterno}" type="text" class="form-control" id="paterno" name="paterno" />
 												</label>
 											</div>
 											<div class="col-md-3">
 												<label>
 													<p>Apellido Materno</p>
-													<input th:value="${materno}" type="text" class="form-control" name="materno" />
+													<input th:value="${materno}" type="text" class="form-control" id="materno" name="materno" />
 												</label>
 											</div>
 								        </div>
@@ -94,19 +94,19 @@
 											<div class="col-md-2">
 												<label>
 													<p>Nivel</p>
-													<input th:value="${nivel}" type="text" class="form-control input-flag" name="nivel" />
+													<input th:value="${nivel}" type="text" class="form-control input-flag" id="nivel" name="nivel" />
 												</label>
 											</div>
 											<div class="col-md-4">
 												<label>
 													<p>Tipo</p>
-													<input th:value="${tipo}" type="text" class="form-control input-flag" name="tipo" />
+													<input th:value="${tipo}" type="text" class="form-control input-flag" id="tipo" name="tipo" />
 												</label>
 											</div>
 											<div class="col-md-2">
 												<label>
 													<p>Estado</p>
-													<input th:value="${estado}" type="text" class="form-control input-flag" name="estado"/>
+													<input th:value="${estado}" type="text" class="form-control input-flag" id="estado" name="estado"/>
 												</label>
 											</div>
 											<div class="col-md-2">
@@ -121,7 +121,7 @@
 										<div class="row">
 											<div class="col-md-4">
 							                	<p>Unidad Administrativa</p>
-							                    <input th:value="${unidadAdministrativa}" type="text" class="form-control input-flag" name="unidadAdministrativa"/>
+							                    <input th:value="${unidadAdministrativa}" type="text" class="form-control input-flag" id="unidadAdministrativa" name="unidadAdministrativa"/>
 								            </div>
 										</div>										
 								        <div class="row">
@@ -225,39 +225,39 @@
 					    	<div class="modal-body col-md-12">
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">Puesto</label>
-						            <input type="text" class="form-control" id="puesto" name="puesto" autocomplete="off"/>
+						            <input type="text" class="form-control" id="puestoModal" name="puesto" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">Unidad Administrativa</label>
-						            <input type="text" class="form-control" id="unidad" name="unidad" autocomplete="off"/>
+						            <input type="text" class="form-control" id="unidadModal" name="unidad" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">N&uacute;mero de Empleado</label>
-						            <input type="text" class="form-control" id="cve_m_usuario" name="cve_m_usuario" autocomplete="off"/>
+						            <input type="text" class="form-control" id="cve_m_usuarioModal" name="cve_m_usuario" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">Nombre</label>
-						            <input type="text" class="form-control" id="nombre" name="nombre" autocomplete="off"/>
+						            <input type="text" class="form-control" id="nombreModal" name="nombre" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">Fecha Ingreso</label>
-						            <input type="text" class="form-control" id="fechaIngreso" name="fechaIngreso" autocomplete="off"/>
+						            <input type="text" class="form-control" id="fechaIngresoModal" name="fechaIngreso" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="id" class="col-form-label">RFC</label>
-						            <input type="text" class="form-control" id="RFC" name="RFC" autocomplete="off"/>
+						            <input type="text" class="form-control" id="RFCModal" name="RFC" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="fecha" class="col-form-label">Fecha Incidencia</label>
-						            <input type="text" class="form-control" id="fecha" name="fecha" autocomplete="off"/>
+						            <input type="text" class="form-control" id="fechaModal" name="fecha" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="tipo" class="col-form-label">Tipo de Incidencia</label>
-						            <input type="text" class="form-control" id="tipoDia" name="tipoDia" autocomplete="off"/>
+						            <input type="text" class="form-control" id="tipoDiaModal" name="tipoDia" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="tipo" class="col-form-label">Estado</label>
-						            <input type="text" class="form-control" id="estado" name="estado" autocomplete="off"/>
+						            <input type="text" class="form-control" id="estadoModal" name="estado" autocomplete="off"/>
 						        </div>
 						        <div class="form-group col-md-4">
 						        	<label for="selectJustificacion" class="col-form-label" th:text="Justificaci&oacute;n"></label>
@@ -270,6 +270,13 @@
 						        <input type="hidden" class="form-control" id="fechaInicial" name="fechaInicial"/>
 						        <input type="hidden" class="form-control" id="fechaFinal" name="fechaFinal"/>
 						        <input type="hidden" class="form-control" id="idJustificacionHidden" name="idJustificacion"/>
+						        <input type="hidden" class="form-control" id="nombreHidden" name="nombreHidden"/>
+						        <input type="hidden" class="form-control" id="paternoHidden" name="paternoHidden"/>
+						        <input type="hidden" class="form-control" id="maternoHidden" name="maternoHidden"/>
+						        <input type="hidden" class="form-control" id="nivelHidden" name="nivelHidden"/>
+						        <input type="hidden" class="form-control" id="tipoHidden" name="tipoHidden"/>
+						        <input type="hidden" class="form-control" id="estadoHidden" name="estadoHidden"/>
+						        <input type="hidden" class="form-control" id="unidadAdministrativaHidden" name="unidadAdministrativaHidden"/>
 						        
 					    	</div>
 						    <div class="modal-footer">

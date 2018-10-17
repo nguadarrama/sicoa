@@ -9,23 +9,29 @@ $(document).ready(function() {
 		$('#fechaInicial').val($('#validBeforeDatepicker').val());
 		$('#fechaFinal').val($('#validAfterDatepicker').val());
 		$('#numeroEmpleadoHidden').val($('#numeroEmpleado').val());
+		$('#nombreHidden').val($('#nombre').val());
+		$('#paternoHidden').val($('#paterno').val());
+		$('#maternoHidden').val($('#materno').val());
+		$('#nivelHidden').val($('#nivel').val());
+		$('#tipoHidden').val($('#tipo').val());
+		$('#estadoHidden').val($('#estado').val());
+		$('#unidadAdministrativaHidden').val($('#unidadAdministrativa').val());
 		
 		$.get(href, function(asistenciaJustificacion, status) {
 			var nombre = asistenciaJustificacion.asistencia.usuarioDto.nombre + ' ' + 
 			asistenciaJustificacion.asistencia.usuarioDto.apellidoPaterno + ' ' + 
 			asistenciaJustificacion.asistencia.usuarioDto.apellidoMaterno;
 
-			$('.justificaForm #puesto').val(asistenciaJustificacion.asistencia.usuarioDto.clavePerfil.descripcion);
-			$('.justificaForm #puesto').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
-			$('.justificaForm #unidad').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
-			$('.justificaForm #cve_m_usuario').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
-			$('.justificaForm #nombre').val(nombre);
-			$('.justificaForm #fechaIngreso').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
-			$('.justificaForm #RFC').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
-			$('.justificaForm #fecha').val(asistenciaJustificacion.asistencia.entrada);
-			$('.justificaForm #tipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
-			$('.justificaForm #idTipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
-			$('.justificaForm #estado').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
+			$('.justificaForm #puestoModal').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
+			$('.justificaForm #unidadModal').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
+			$('.justificaForm #cve_m_usuarioModal').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
+			$('.justificaForm #nombreModal').val(nombre);
+			$('.justificaForm #fechaIngresoModal').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
+			$('.justificaForm #RFCModal').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
+			$('.justificaForm #fechaModal').val(asistenciaJustificacion.asistencia.entrada);
+			$('.justificaForm #tipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
+			$('.justificaForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
+			$('.justificaForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('.justificaForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
 			$('#justificacion').val(asistenciaJustificacion.asistencia.incidencia.justificacion.justificacion);
 			$('#idJustificacionHidden').val(asistenciaJustificacion.asistencia.incidencia.justificacion.idJustificacion);
@@ -135,7 +141,7 @@ $(document).ready(function() {
     			
     });
     
-    $("#puesto, #unidad, #cve_m_usuario, #nombre, #fechaIngreso, #RFC, #fecha, #tipoDia, #estado").keydown(function (e) {
+    $("#puestoModal, #unidadModal, #cve_m_usuarioModal, #nombreModal, #fechaIngresoModal, #RFCModal, #fechaModal, #tipoDiaModal, #estadoModal").keydown(function (e) {
         // no permite la entrada de texto
         e.preventDefault();
     });

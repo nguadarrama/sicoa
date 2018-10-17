@@ -1,6 +1,10 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +13,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -279,16 +284,26 @@ public class AsistenciaController  {
     }
     
     @RequestMapping(value={"direccion/dictaminaIncidencia"}, method = RequestMethod.POST)
-    public String dictaminaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
+    public String dictaminaIncidencia(Model model, String cve_m_usuario, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
+    		String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
+    		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
 
     	asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRango(cve_m_usuario_hidden, fechaInicial, fechaFinal);
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombreHidden, paternoHidden, maternoHidden,
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden);
     	
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario);
+    	model.addAttribute("nombre", nombreHidden);
+    	model.addAttribute("paterno", paternoHidden);
+    	model.addAttribute("materno", maternoHidden);
+    	model.addAttribute("nivel", nivelHidden);
+    	model.addAttribute("tipo", tipoHidden);
+    	model.addAttribute("estado", estadoHidden);
+    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
     	
     	return "/asistencia/direccion";
     }
@@ -306,7 +321,10 @@ public class AsistenciaController  {
     }
     
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST)
-    public String creaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, String fechaInicial, String fechaFinal, MultipartFile archivo) {
+    public String creaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
+    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo) {
+    	
     	Integer idArchivo = null;
     	
     	try {
@@ -321,15 +339,47 @@ public class AsistenciaController  {
     	} catch(Exception e) {
     		new Exception("No se logró crear la incidencia " + e.getMessage());
     	}
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRango(cve_m_usuario_hidden, fechaInicial, fechaFinal);
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
     	
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
     	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
+    	model.addAttribute("nombre", nombreHidden);
+    	model.addAttribute("paterno", paternoHidden);
+    	model.addAttribute("materno", maternoHidden);
+    	model.addAttribute("nivel", nivelHidden);
+    	model.addAttribute("tipo", tipoHidden);
+    	model.addAttribute("estado", estadoHidden);
+    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
     	
     	return "/asistencia/coordinador";
+    }
+    
+    @RequestMapping(value={"archivo"}, method = RequestMethod.GET)
+    public void download(HttpServletResponse response, Integer id) {
+    	
+    	AsistenciaJustificacion asistenciaJustificacion = new AsistenciaJustificacion(); 
+    	asistenciaJustificacion.setAsistencia(asistenciaService.buscaAsistenciaPorId(id));
+    	
+    	String rutaArchivo = 
+    			asistenciaJustificacion.getAsistencia().getIncidencia().getIdArchivo().getUrl() 
+    			+ "/" + 
+    			asistenciaJustificacion.getAsistencia().getIncidencia().getIdArchivo().getNombre();
+    	
+    	InputStream inputStream;
+		try {
+			inputStream = new FileInputStream(new File(rutaArchivo));
+			IOUtils.copy(inputStream, response.getOutputStream());
+	        response.flushBuffer();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //load the file
+        
+        
     }
     
 }
