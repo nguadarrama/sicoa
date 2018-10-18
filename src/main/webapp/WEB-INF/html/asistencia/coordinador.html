@@ -183,7 +183,12 @@
 													<td th:text="${asistencia.idTipoDia.nombre}"></td>
 													<td th:text="${asistencia.idEstatus.estatus}"></td>
 													<td> 
-														<a th:if="${asistencia.idTipoDia.idTipoDia != 1 and asistencia.idTipoDia.idTipoDia != 5}" th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="nBtn">Ver Detalle</a>
+														<span th:if="${(asistencia.idTipoDia.idTipoDia != 1 and asistencia.idTipoDia.idTipoDia != 5) and asistencia.idEstatus.idEstatus != 3}">
+															<a th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="detalleBtn">Ver Detalle</a>
+														</span>
+														<span th:if="${asistencia.idEstatus.idEstatus == 3}">
+															<a th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="descuentoBtn">Aplicar Descuento</a>
+														</span>
 													</td>
 												</tr>
 											</tbody>
@@ -270,7 +275,7 @@
 						        <div class="form-group col-md-4">
 							        <label>
 										<p>Adjuntar Archivo</p>
-										 <input type="file" name="archivo" id="archivo" multiple="multiple" />
+										 <input type="file" name="archivo" id="archivo" multiple="multiple" th:required="required" />
 									</label>
 							    </div>
 							    
@@ -295,6 +300,96 @@
 						    <div class="modal-footer">
 			    				<button type="button" class="btn btn-default" data-dismiss="modal" th:text="Regresar"></button>
 						    	<input type="submit" class="btn btn-success" th:value="Justificar" />
+						    </div>
+					  	</div>
+					</div>
+				</div>
+     		</form>
+    	</div>
+    	
+    	<!-- modal para descuento -->
+		<div class="descuentoForm">
+      		<form th:action="@{/asistencia/aplicaDescuento}" method="post" enctype="multipart/form-data">
+				<div class="modal fade" id="justificaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document" style="width: 80%">
+						<div class="modal-content">
+					    	<div class="modal-header">
+					      		<h3 class="modal-title" id="exampleModalLabel">Incidencia de empleado</h3>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								 </button>
+						    </div>
+					    	<div class="modal-body col-md-12">
+					    		<div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">Puesto</label>
+						            <input type="text" class="form-control" id="puestoModal" name="puesto" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">Unidad Administrativa</label>
+						            <input type="text" class="form-control" id="unidadModal" name="unidad" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">N&uacute;mero de Empleado</label>
+						            <input type="text" class="form-control" id="cve_m_usuarioModal" name="cve_m_usuario" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">Nombre</label>
+						            <input type="text" class="form-control" id="nombreModal" name="nombre" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">Fecha Ingreso</label>
+						            <input type="text" class="form-control" id="fechaIngresoModal" name="fechaIngreso" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="id" class="col-form-label">RFC</label>
+						            <input type="text" class="form-control" id="RFCModal" name="RFC" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="fecha" class="col-form-label">Fecha Incidencia</label>
+						            <input type="text" class="form-control" id="fechaModal" name="fecha" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="tipo" class="col-form-label">Tipo de Incidencia</label>
+						            <input type="text" class="form-control" id="tipoDiaModal" name="tipoDia" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="tipo" class="col-form-label">Estado</label>
+						            <input type="text" class="form-control" id="estadoModal" name="estado" autocomplete="off"/>
+						        </div>
+						        <div class="form-group col-md-4">
+						        	<label for="selectJustificacion" class="col-form-label" th:text="Motivo"></label>
+						            <input type="text" class="form-control" id="justificacion" name="justificacion" autocomplete="off" />
+						        </div>
+						        
+						        <div class="form-group col-md-4">
+							        <label>
+										<p>Adjuntar Archivo</p>
+										 <input type="file" name="archivo" id="archivo" multiple="multiple" th:required="required" />
+									</label>
+							    </div>
+							    
+							    <div class="form-group col-md-4">
+									<a id="linkArchivo">Ver Archivo</a>
+						        </div>
+						        
+						        <input type="hidden" class="form-control" id="idAsistenciaHidden" name="idAsistenciaHidden" />
+						        <input type="hidden" class="form-control" id="idTipoDia" name="idTipoDia"/>
+						        <input type="hidden" class="form-control" id="numeroEmpleadoHidden" name="cve_m_usuario_hidden"/>
+						        <input type="hidden" class="form-control" id="fechaInicial" name="fechaInicial"/>
+						        <input type="hidden" class="form-control" id="fechaFinal" name="fechaFinal"/>
+						        <input type="hidden" class="form-control" id="nombreHidden" name="nombreHidden"/>
+						        <input type="hidden" class="form-control" id="paternoHidden" name="paternoHidden"/>
+						        <input type="hidden" class="form-control" id="maternoHidden" name="maternoHidden"/>
+						        <input type="hidden" class="form-control" id="nivelHidden" name="nivelHidden"/>
+						        <input type="hidden" class="form-control" id="tipoHidden" name="tipoHidden"/>
+						        <input type="hidden" class="form-control" id="estadoHidden" name="estadoHidden"/>
+						        <input type="hidden" class="form-control" id="unidadAdministrativaHidden" name="unidadAdministrativaHidden"/>
+						        
+					    	</div>
+						    <div class="modal-footer">
+			    				<button type="button" class="btn btn-default" data-dismiss="modal" th:text="Regresar"></button>
+			    				<button type="button" class="btn btn-default" data-dismiss="modal">Imprimir Formato</button>
+						    	<input type="submit" class="btn btn-danger" th:value="Descontar" />
 						    </div>
 					  	</div>
 					</div>

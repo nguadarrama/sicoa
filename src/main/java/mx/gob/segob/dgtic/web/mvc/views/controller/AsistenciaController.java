@@ -199,6 +199,82 @@ public class AsistenciaController  {
         return new ModelAndView(new Excel(), model);
     	
     }
+    
+    @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST)
+    public String creaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
+    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo) {
+    	
+    	Integer idArchivo = null;
+    	
+    	try {
+    		//guarda el archivo
+    		if (archivo.getSize() > 0) {
+    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, new String("asistencia"));
+    		}
+    		
+    		//crea la incidencia y asocia el archivo
+    		asistenciaService.creaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo);
+
+    	} catch(Exception e) {
+    		new Exception("No se logró crear la incidencia " + e.getMessage());
+    	}
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
+    	
+    	model.addAttribute("listaAsistencia", asistencia);
+    	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
+    	model.addAttribute("fechaInicial", fechaInicial);
+    	model.addAttribute("fechaFinal", fechaFinal);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
+    	model.addAttribute("nombre", nombreHidden);
+    	model.addAttribute("paterno", paternoHidden);
+    	model.addAttribute("materno", maternoHidden);
+    	model.addAttribute("nivel", nivelHidden);
+    	model.addAttribute("tipo", tipoHidden);
+    	model.addAttribute("estado", estadoHidden);
+    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	
+    	return "/asistencia/coordinador";
+    }
+    
+    @RequestMapping(value={"aplicaDescuento"}, method = RequestMethod.POST)
+    public String aplicaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
+    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String cve_m_usuario) {
+    	
+    	Integer idArchivo = null;
+    	
+    	try {
+    		//guarda el archivo
+    		if (archivo.getSize() > 0) {
+    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario, new String("asistenciaDescuento"));
+    		}
+    		
+    		//aplica el descuento y asocia el archivo
+    		asistenciaService.aplicaDescuento(idAsistenciaHidden, idArchivo);
+
+    	} catch(Exception e) {
+    		new Exception("No se logró crear la incidencia " + e.getMessage());
+    	}
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
+    	
+    	model.addAttribute("listaAsistencia", asistencia);
+    	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
+    	model.addAttribute("fechaInicial", fechaInicial);
+    	model.addAttribute("fechaFinal", fechaFinal);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
+    	model.addAttribute("nombre", nombreHidden);
+    	model.addAttribute("paterno", paternoHidden);
+    	model.addAttribute("materno", maternoHidden);
+    	model.addAttribute("nivel", nivelHidden);
+    	model.addAttribute("tipo", tipoHidden);
+    	model.addAttribute("estado", estadoHidden);
+    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	
+    	return "/asistencia/coordinador";
+    }
     //TERMINA COORDINADOR
     
     //DIRECCIÓN
@@ -318,44 +394,6 @@ public class AsistenciaController  {
     	asistenciaJustificacion.setListaJustificacion(catalogoService.obtieneJustificaciones());
     	
     	return asistenciaJustificacion;
-    }
-    
-    @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST)
-    public String creaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
-    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo) {
-    	
-    	Integer idArchivo = null;
-    	
-    	try {
-    		//guarda el archivo
-    		if (archivo.getSize() > 0) {
-    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, new String("asistencia"));
-    		}
-    		
-    		//crea la incidencia y asocia el archivo
-    		asistenciaService.creaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo);
-
-    	} catch(Exception e) {
-    		new Exception("No se logró crear la incidencia " + e.getMessage());
-    	}
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
-    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
-    	
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
-    	model.addAttribute("nombre", nombreHidden);
-    	model.addAttribute("paterno", paternoHidden);
-    	model.addAttribute("materno", maternoHidden);
-    	model.addAttribute("nivel", nivelHidden);
-    	model.addAttribute("tipo", tipoHidden);
-    	model.addAttribute("estado", estadoHidden);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
-    	
-    	return "/asistencia/coordinador";
     }
     
     @RequestMapping(value={"archivo"}, method = RequestMethod.GET)

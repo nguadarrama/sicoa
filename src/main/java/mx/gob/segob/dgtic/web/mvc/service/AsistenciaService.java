@@ -16,5 +16,6 @@ public interface AsistenciaService {
 	
 	public Asistencia buscaAsistenciaPorId(Integer id);
 	public void creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo);
+	public void aplicaDescuento(Integer idAsistencia, Integer idArchivo);
 	public void dictaminaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, String dictaminacion);
 }

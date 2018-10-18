@@ -3,7 +3,7 @@ $(document).ready(function() {
 	var idAsistencia = "";
 
 	//pobla los campos del modal de justificación
-	$('.nBtn').on('click', function(event) { 					//botón justifica
+	$('.detalleBtn').on('click', function(event) { 					//botón justifica
 		event.preventDefault();
 		var href = $(this).attr('href');
 		var text = $(this).text();
@@ -38,7 +38,6 @@ $(document).ready(function() {
 			$('.justificaForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('.justificaForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
 			idAsistencia = asistenciaJustificacion.asistencia.idAsistencia;
-//			$('#linkArchivo').attr("th:href", "@{/asistencia/download/(id=${" + asistenciaJustificacion.asistencia.idAsistencia + "})}");
 			
 			//select justificación
 			for (var i=0; i < asistenciaJustificacion.listaJustificacion.length; i++) {
@@ -67,6 +66,47 @@ $(document).ready(function() {
 		});
 		
 		$('.justificaForm #justificaModal').modal();
+	});
+	
+	//pobla los campos del modal de descuento
+	$('.descuentoBtn').on('click', function(event) { 					//botón descuento
+		event.preventDefault();
+		var href = $(this).attr('href');
+		var text = $(this).text();
+		
+		$('.descuentoForm #fechaInicial').val($('#validBeforeDatepicker').val());
+		$('.descuentoForm #fechaFinal').val($('#validAfterDatepicker').val());
+		$('.descuentoForm #numeroEmpleadoHidden').val($('#numeroEmpleado').val());
+		$('.descuentoForm #nombreHidden').val($('#nombre').val());
+		$('.descuentoForm #paternoHidden').val($('#paterno').val());
+		$('.descuentoForm #maternoHidden').val($('#materno').val());
+		$('.descuentoForm #nivelHidden').val($('#nivel').val());
+		$('.descuentoForm #tipoHidden').val($('#tipo').val());
+		$('.descuentoForm #estadoHidden').val($('#estado').val());
+		$('.descuentoForm #unidadAdministrativaHidden').val($('#unidadAdministrativa').val());
+		
+		$.get(href, function(asistenciaJustificacion, status) {
+			var nombre = asistenciaJustificacion.asistencia.usuarioDto.nombre + ' ' + 
+						asistenciaJustificacion.asistencia.usuarioDto.apellidoPaterno + ' ' + 
+						asistenciaJustificacion.asistencia.usuarioDto.apellidoMaterno;
+			
+			$('.descuentoForm #puestoModal').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
+			$('.descuentoForm #unidadModal').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
+			$('.descuentoForm #cve_m_usuarioModal').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
+			$('.descuentoForm #nombreModal').val(nombre);
+			$('.descuentoForm #fechaIngresoModal').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
+			$('.descuentoForm #RFCModal').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
+			$('.descuentoForm #fechaModal').val(asistenciaJustificacion.asistencia.entrada);
+			$('.descuentoForm #tipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
+			$('.descuentoForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
+			$('.descuentoForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
+			$('.descuentoForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
+			$('.descuentoForm #justificacion').val(asistenciaJustificacion.asistencia.incidencia.justificacion.justificacion);
+			idAsistencia = asistenciaJustificacion.asistencia.idAsistencia;
+			
+		});
+		
+		$('.descuentoForm #justificaModal').modal();
 	});
 	
 	$("#buscarText").on("keyup", function() {
@@ -170,7 +210,7 @@ $(document).ready(function() {
     			
     });
     
-    $("#puestoModal, #unidadModal, #cve_m_usuarioModal, #nombreModal, #fechaIngresoModal, #RFCModal, #fechaModal, #tipoDiaModal, #estadoModal").keydown(function (e) {
+    $("#puestoModal, #unidadModal, #cve_m_usuarioModal, #nombreModal, #fechaIngresoModal, #RFCModal, #fechaModal, #tipoDiaModal, #estadoModal, #justificacion").keydown(function (e) {
         // no permite la entrada de texto
         e.preventDefault();
     });

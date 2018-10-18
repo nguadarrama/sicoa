@@ -280,6 +280,43 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
+	public void aplicaDescuento(Integer idAsistencia, Integer idArchivo) {
+		
+		//la asistencia con incidencia que se quiere justificar
+		Asistencia asistencia = new Asistencia();
+		asistencia.setIdAsistencia(idAsistencia);
+		
+		Archivo archivo = new Archivo();
+		archivo.setIdArchivo(idArchivo);
+				
+		//se crea la incidencia con la información 
+		Incidencia incidencia = new Incidencia();
+		incidencia.setIdAsistencia(asistencia);
+		incidencia.setIdArchivo(archivo);
+		
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("incidencia", incidencia);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try { //se consume recurso rest
+			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_DESCUENTA, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+	}
+	
+	@Override
 	public void dictaminaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, String dictaminacion) {
 		//acepta justificación
 
