@@ -44,6 +44,7 @@ public final class CatalogoEndPointConstants {
 	public static final String WEB_SERVICE_INFO_RESPONSABLES =  "/catalogo/obtieneResponsables";
 	public static final String WEB_SERVICE_ACEPTAORECHAZA_VACACIONES = "/catalogo/aceptaORechazaDetalleVacacion";
 	public static final String WEB_SERVICE_BUSCA_USUARIO_POR_ID = "/catalogo/buscaUsuarioPorId";
+	public static final String WEB_SERVICE_INFO_JEFES =  "/catalogo/obtieneJefes";
 
 	//Archivo
 			public static final String WEB_SERVICE_GUARDA_ARCHIVO="/catalogo/agregaArchivo";

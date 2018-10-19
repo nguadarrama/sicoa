@@ -226,7 +226,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
-	public void creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo) {
+	public void creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador) {
 		
 		//creación de la justificación para una incidencia
 		
@@ -256,6 +256,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		incidencia.setIdAsistencia(asistencia);
 		incidencia.setEstatus(estatus);
 		incidencia.setIdArchivo(archivo);
+		incidencia.setNombreAutorizador(nombreAutorizador);
 		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();

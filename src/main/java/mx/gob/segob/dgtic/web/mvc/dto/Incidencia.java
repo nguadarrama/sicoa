@@ -10,6 +10,7 @@ public class Incidencia {
 	private Integer idResponsable;
 	private Boolean descuento;
 	private Justificacion justificacion;
+	private String nombreAutorizador;
 	
 	public Incidencia () {
 		
@@ -63,6 +64,14 @@ public class Incidencia {
 	}
 	public void setJustificacion(Justificacion justificacion) {
 		this.justificacion = justificacion;
+	}
+
+	public String getNombreAutorizador() {
+		return nombreAutorizador;
+	}
+
+	public void setNombreAutorizador(String nombreAutorizador) {
+		this.nombreAutorizador = nombreAutorizador;
 	}
 	
 }

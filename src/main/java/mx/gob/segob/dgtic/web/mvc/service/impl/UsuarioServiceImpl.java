@@ -229,4 +229,33 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return usuario;
 	}
 	
+	@Override
+	public List<Usuario> obtieneListaJefes() { 
+		List<Usuario> listaUsuarios = new ArrayList<>();
+		HttpResponse response;
+		
+		try{
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_JEFES);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaUsuarios = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Usuario>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+		}
+		return listaUsuarios;
+		
+	}
+	
 }

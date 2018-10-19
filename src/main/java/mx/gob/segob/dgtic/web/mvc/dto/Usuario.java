@@ -28,6 +28,7 @@ public class Usuario {
 	private String nivel;
 	private String nombreUnidad;
 	private Integer idUnidad;
+	private String nombreJefe;
 	
 	public Usuario (){
 		
@@ -225,5 +226,11 @@ public class Usuario {
 	}
 	public void setIdUnidad(Integer idUnidad) {
 		this.idUnidad = idUnidad;
+	}
+	public String getNombreJefe() {
+		return nombreJefe;
+	}
+	public void setNombreJefe(String nombreJefe) {
+		this.nombreJefe = nombreJefe;
 	}
 }

@@ -4,10 +4,12 @@ import java.util.List;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 
 public class AsistenciaJustificacion {
 	private Asistencia asistencia;
 	private List<Justificacion> listaJustificacion;
+	private List<Usuario> listaAutorizador;
 	
 	public AsistenciaJustificacion() {
 		
@@ -28,6 +30,15 @@ public class AsistenciaJustificacion {
 	public void setListaJustificacion(List<Justificacion> listaJustificacion) {
 		this.listaJustificacion = listaJustificacion;
 	}
+
+	public List<Usuario> getListaAutorizador() {
+		return listaAutorizador;
+	}
+
+	public void setListaAutorizador(List<Usuario> listaAutorizador) {
+		this.listaAutorizador = listaAutorizador;
+	}
+	
 	
 	
 }

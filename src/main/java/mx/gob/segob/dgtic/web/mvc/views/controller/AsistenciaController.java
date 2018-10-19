@@ -26,9 +26,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
+import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
+import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import mx.gob.segob.dgtic.web.mvc.util.AsistenciaJustificacion;
 import mx.gob.segob.dgtic.web.mvc.util.Excel;
 
@@ -50,12 +53,14 @@ public class AsistenciaController  {
 	@Autowired
 	private ArchivoService archivoService;
 	
+	@Autowired
+	private UsuarioService usuarioService;
+	
 	//EMPLEADO
 	@RequestMapping(value={"empleado"}, method = RequestMethod.GET)
     public String buscaListaAsistenciaEmpleado(Model model) {
     	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
-    	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
     	
     	return "/asistencia/empleado";
     }
@@ -127,7 +132,7 @@ public class AsistenciaController  {
     public String buscaListaAsistenciaCoordinador(Model model, Authentication authentication) {
     	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
-    	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
+    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	
     	return "/asistencia/coordinador";
     }
@@ -140,6 +145,7 @@ public class AsistenciaController  {
 	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName());
 	    	
 	    	model.addAttribute("listaAsistencia", asistencia);
+	    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
 	    	model.addAttribute("fechaInicial", fechaInicial);
 	    	model.addAttribute("fechaFinal", fechaFinal);
 	    	model.addAttribute("cve_m_usuario", cve_m_usuario);
@@ -150,6 +156,11 @@ public class AsistenciaController  {
 	    	model.addAttribute("tipo", tipo);
 	    	model.addAttribute("estado", estado);
 	    	model.addAttribute("unidadAdministrativa", unidadAdministrativa);
+	    	
+	    	//se realizó búsqueda por usuario
+	    	if (!cve_m_usuario.isEmpty()) {
+	    		model.addAttribute("activaCheckbox", true);
+	    	}
 	    	
 	    	return "/asistencia/coordinador";
     }
@@ -203,18 +214,18 @@ public class AsistenciaController  {
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST)
     public String creaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo) {
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String nombreAutorizador) {
     	
     	Integer idArchivo = null;
     	
     	try {
     		//guarda el archivo
     		if (archivo.getSize() > 0) {
-    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, new String("asistencia"));
+    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, new String("asistencia_justificacion"));
     		}
     		
     		//crea la incidencia y asocia el archivo
-    		asistenciaService.creaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo);
+    		asistenciaService.creaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
 
     	} catch(Exception e) {
     		new Exception("No se logró crear la incidencia " + e.getMessage());
@@ -223,7 +234,7 @@ public class AsistenciaController  {
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
     	
     	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
+    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
     	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
@@ -234,6 +245,77 @@ public class AsistenciaController  {
     	model.addAttribute("tipo", tipoHidden);
     	model.addAttribute("estado", estadoHidden);
     	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	
+    	return "/asistencia/coordinador";
+    }
+    
+    @RequestMapping(value={"coordinador/buscaAsistenciasPorId"}, method = RequestMethod.POST)
+    public String buscaAsistenciasPorId(Model model, Integer[] checkboxes, String cve_m_usuario, String nombre, String paterno, 
+    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, Authentication authentication) {
+    	
+    	List<Asistencia> listaAsistenciaJustificar = new ArrayList<>();
+    	String nombreJefe = "";
+    	
+    	for (Integer idAsistencia : checkboxes) {
+    		Asistencia asistenciaJustificar = asistenciaService.buscaAsistenciaPorId(idAsistencia);
+    		listaAsistenciaJustificar.add(asistenciaJustificar);
+    		
+    		//se obtiene el jefe del usuario
+    		if (nombreJefe.isEmpty()) {
+    			nombreJefe = asistenciaJustificar.getUsuarioDto().getNombreJefe();
+    		}
+    	}
+    	
+    	List<Justificacion> listaJustificaciones = catalogoService.obtieneJustificaciones();
+    	List<Usuario> listaJefes = usuarioService.obtieneListaJefes();
+    	
+    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+    	model.addAttribute("listaAsistenciaJustificar", listaAsistenciaJustificar);
+    	model.addAttribute("listaJustificaciones", listaJustificaciones);
+    	model.addAttribute("listaAutorizadores", listaJefes);
+    	model.addAttribute("nombreJefe", nombreJefe);
+    	model.addAttribute("fechaInicial", fechaInicial);
+    	model.addAttribute("fechaFinal", fechaFinal);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario);
+    	model.addAttribute("nombre", nombre);
+    	model.addAttribute("paterno", paterno);
+    	model.addAttribute("materno", materno);
+    	model.addAttribute("nivel", nivel);
+    	model.addAttribute("tipo", tipo);
+    	model.addAttribute("estado", estado);
+    	model.addAttribute("unidadAdministrativa", unidadAdministrativa);
+    	
+    	return "/asistencia/coordinador";
+    }
+    
+    @RequestMapping(value={"coordinador/justificaMultiple"}, method = RequestMethod.POST)
+    public String creaIncidencias(Model model, Integer[] listaIdAsistencias, MultipartFile archivo, Integer selectJustificacion, String nombreAutorizador) {
+    	
+    	Integer idArchivo = null;
+    	Integer idJustificacion = selectJustificacion;
+    	
+    	for (Integer idAsistencia : listaIdAsistencias) {
+    		Asistencia asistencia = asistenciaService.buscaAsistenciaPorId(idAsistencia);
+    		Integer idTipoDia = asistencia.getIdTipoDia().getIdTipoDia();
+    		String cve_m_usuario = asistencia.getUsuarioDto().getClaveUsuario();
+    		
+    		try {
+        		//guarda el archivo
+        		if (archivo.getSize() > 0) {
+        			if (idArchivo == null) {
+        				idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario, new String("asistencia_justificacion"));
+        			}
+        			//crea la incidencia y asocia el archivo
+            		asistenciaService.creaIncidencia(idAsistencia, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
+        		}
+        	} catch(Exception e) {
+        		new Exception("No se logró crear la incidencia " + e.getMessage());
+        	}
+    	}
+    	   	
+    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<>());
+    	
     	
     	return "/asistencia/coordinador";
     }
@@ -261,7 +343,6 @@ public class AsistenciaController  {
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
     	
     	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
     	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
@@ -282,7 +363,6 @@ public class AsistenciaController  {
     public String buscaListaAsistenciaDireccion(Model model) {
     	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
-    	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
     	
     	return "/asistencia/direccion";
     }
@@ -369,7 +449,6 @@ public class AsistenciaController  {
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden);
     	
     	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("inicio", true); //permite controlar en el front que una etiqueta se va a esconder cuando es el "inicio"
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
     	model.addAttribute("cve_m_usuario", cve_m_usuario);
@@ -392,6 +471,7 @@ public class AsistenciaController  {
     	AsistenciaJustificacion asistenciaJustificacion = new AsistenciaJustificacion(); 
     	asistenciaJustificacion.setAsistencia(asistenciaService.buscaAsistenciaPorId(id));
     	asistenciaJustificacion.setListaJustificacion(catalogoService.obtieneJustificaciones());
+    	asistenciaJustificacion.setListaAutorizador(usuarioService.obtieneListaJefes());
     	
     	return asistenciaJustificacion;
     }

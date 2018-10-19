@@ -8,7 +8,8 @@ $(document).ready(function() {
 		var href = $(this).attr('href');
 		var text = $(this).text();
 		$('#selectJustificacion').empty();
-		var option = '<option>-- Selecciona Motivo --</option>';
+		var optionJustificacion = '<option>-- Selecciona --</option>';
+		var optionAutorizador = '<option>-- Selecciona --</option>';
 		
 		$('#fechaInicial').val($('#validBeforeDatepicker').val());
 		$('#fechaFinal').val($('#validAfterDatepicker').val());
@@ -50,19 +51,45 @@ $(document).ready(function() {
 					}
 				} 
 				
-				option += '<option ';																	//apertura
-				option += 'value="' + asistenciaJustificacion.listaJustificacion[i].idJustificacion + '" ';	//atributo value
+				optionJustificacion += '<option ';																			//apertura
+				optionJustificacion += 'value="' + asistenciaJustificacion.listaJustificacion[i].idJustificacion + '" ';	//atributo value
 				
 				if (estatus) {
-					option += 'selected="selected" ';
+					optionJustificacion += 'selected="selected" ';
 				}
 				
-				option += '">';																			//cierre apertura
-				option += asistenciaJustificacion.listaJustificacion[i].justificacion;					//nombre a mostrar
-				option += '</option>';																	//cierre option
+				optionJustificacion += '">';																		//cierre apertura
+				optionJustificacion += asistenciaJustificacion.listaJustificacion[i].justificacion;					//nombre a mostrar
+				optionJustificacion += '</option>';																	//cierre option
 			}			
 			
-			$('#selectJustificacion').append(option);
+			$('#selectJustificacion').append(optionJustificacion);
+			//termina select justificación
+			
+			//select autorizadores
+			for (var i=0; i < asistenciaJustificacion.listaAutorizador.length; i++) {
+				var jefe = false;
+				
+				//calculando el jefe para colocarlo seleccionado en el select
+				if (asistenciaJustificacion.asistencia.usuarioDto.nombreJefe != null) {
+					if (asistenciaJustificacion.asistencia.usuarioDto.nombreJefe == asistenciaJustificacion.listaAutorizador[i].nombre) {
+						jefe = true;
+					}
+				} 
+				
+				optionAutorizador += '<option ';																		//apertura
+				optionAutorizador += 'value="' + asistenciaJustificacion.listaAutorizador[i].nombre + '" ';		//atributo value
+				
+				if (jefe) {
+					optionAutorizador += 'selected="selected" ';
+				}
+				
+				optionAutorizador += '">';																			//cierre apertura
+				optionAutorizador += asistenciaJustificacion.listaAutorizador[i].nombre;							//nombre a mostrar
+				optionAutorizador += '</option>';																	//cierre option
+			}			
+			
+			$('#selectAutorizador').append(optionAutorizador);
 		});
 		
 		$('.justificaForm #justificaModal').modal();
@@ -75,6 +102,51 @@ $(document).ready(function() {
 		var text = $(this).text();
 		
 		$('.descuentoForm #fechaInicial').val($('#validBeforeDatepicker').val());
+		$('.descuentoForm #fechaFinal').val($('#validAfterDatepicker').val());
+		$('.descuentoForm #numeroEmpleadoHidden').val($('#numeroEmpleado').val());
+		$('.descuentoForm #nombreHidden').val($('#nombre').val());
+		$('.descuentoForm #paternoHidden').val($('#paterno').val());
+		$('.descuentoForm #maternoHidden').val($('#materno').val());
+		$('.descuentoForm #nivelHidden').val($('#nivel').val());
+		$('.descuentoForm #tipoHidden').val($('#tipo').val());
+		$('.descuentoForm #estadoHidden').val($('#estado').val());
+		$('.descuentoForm #unidadAdministrativaHidden').val($('#unidadAdministrativa').val());
+		
+		$.get(href, function(asistenciaJustificacion, status) {
+			var nombre = asistenciaJustificacion.asistencia.usuarioDto.nombre + ' ' + 
+						asistenciaJustificacion.asistencia.usuarioDto.apellidoPaterno + ' ' + 
+						asistenciaJustificacion.asistencia.usuarioDto.apellidoMaterno;
+			
+			$('.descuentoForm #puestoModal').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
+			$('.descuentoForm #unidadModal').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
+			$('.descuentoForm #cve_m_usuarioModal').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
+			$('.descuentoForm #nombreModal').val(nombre);
+			$('.descuentoForm #fechaIngresoModal').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
+			$('.descuentoForm #RFCModal').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
+			$('.descuentoForm #fechaModal').val(asistenciaJustificacion.asistencia.entrada);
+			$('.descuentoForm #tipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
+			$('.descuentoForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
+			$('.descuentoForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
+			$('.descuentoForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
+			$('.descuentoForm #justificacion').val(asistenciaJustificacion.asistencia.incidencia.justificacion.justificacion);
+			idAsistencia = asistenciaJustificacion.asistencia.idAsistencia;
+			
+		});
+		
+		$('.descuentoForm #justificaModal').modal();
+	});
+	
+	//pobla los campos del modal de justifación múltiple
+	$('.justificaMultipleBtn').on('click', function(event) { 					//botón justifica múltiple
+		event.preventDefault();
+		var href = $(this).attr('href');
+		
+		var val = [];
+        $(':checkbox:checked').each(function(i){
+          val[i] = $(this).val();
+        });
+		
+		$('.justificaMultipleForm #fechaInicial').val($('#validBeforeDatepicker').val());
 		$('.descuentoForm #fechaFinal').val($('#validAfterDatepicker').val());
 		$('.descuentoForm #numeroEmpleadoHidden').val($('#numeroEmpleado').val());
 		$('.descuentoForm #nombreHidden').val($('#nombre').val());

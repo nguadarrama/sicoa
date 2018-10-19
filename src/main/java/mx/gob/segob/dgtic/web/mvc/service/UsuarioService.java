@@ -13,4 +13,5 @@ public interface UsuarioService {
 	public void modificaUsuario(Usuario usuario);
 	public void reiniciaContrasenia(String claveUsuario);
 	public Usuario buscaUsuarioPorId(String idUsuario);
-	}
+	public List<Usuario> obtieneListaJefes();
+}
