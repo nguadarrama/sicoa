@@ -92,4 +92,55 @@ public class ArchivoServiceImpl implements ArchivoService{
 		
 		return archivoResponse.getIdArchivo();
 	}
+
+	@Override
+	public void actualizaArchivo(MultipartFile archivo, String claveUsuario, String accion, Integer idArchivo) {
+		HttpResponse response;
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		Archivo archivoDto = new Archivo();
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		String ruta="C:/Sicoa/"+claveUsuario+"/"+accion+"/";
+		try {
+			System.out.println("Antes del error");
+			archivoDto.setArchivo(IOUtils.toByteArray(archivo.getInputStream()));
+			
+			
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		archivoDto.setIdArchivo(idArchivo);
+		archivoDto.setUrl(ruta);
+		archivoDto.setSize((int) (long) archivo.getSize());
+		archivoDto.setActivo(true);
+		System.out.println("nombre compelto "+archivo.getOriginalFilename()+" nombre"+archivo.getName());
+		archivoDto.setNombre(archivo.getOriginalFilename());
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("archivo", archivoDto);
+		System.out.println("Despues del error1");
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+			System.out.println("Despues del error2");
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_ACTUALIZA_ARCHIVO, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {		
+			
+		} 
+		
+	}
 }

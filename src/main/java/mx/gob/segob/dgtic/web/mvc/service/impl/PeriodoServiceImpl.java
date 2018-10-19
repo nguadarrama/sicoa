@@ -60,10 +60,10 @@ public class PeriodoServiceImpl implements PeriodoService{
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
 			periodo = gson.fromJson(dataJson, Periodo.class);
-			fechaInicial = formatoFecha.format(periodo.getFechaInicio());
-			fechaFinal=formatoFecha.format(periodo.getFechaFin());
-			System.out.println("fechaInicial "+fechaInicial);
-			periodo.setFechaInicio(fechaInicial+ " a "+fechaFinal);
+			//fechaInicial = formatoFecha.format(periodo.getFechaInicio());
+			//fechaFinal=formatoFecha.format(periodo.getFechaFin());
+			//System.out.println("fechaInicial "+fechaInicial);
+			//periodo.setFechaInicio(fechaInicial+ " a "+fechaFinal);
 //				periodo.setFechaIni(fechaInicial+" a "+fechaFinal);
 			periodo.setFechaFin(fechaFinal);
 //				periodo.setFechaFi(fechaFinal);

@@ -42,11 +42,29 @@
 		<th:block layout:fragment="content"  th:remove="tag">
 			<div class="container">
 				<div class="filterable">
-           			<h1 class="ico-solicitudes"><span class="input-clock"></span> D&Iacute;A FESTIVO
+           			<h1 class="ico-solicitudes"><span class="input-clock"></span> D&Iacute;A INH&Aacute;BIL
 <!--            				<button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button> -->
            				<button class="btn btn-xs btn-default nBtn glyphicon glyphicon-plus-sign"></button>
            			</h1>
            			<hr/>
+           			<div class="form-group" th:if="${MENSAJE_EXCEPCION}">
+						<div class="alert alert-danger">
+							<span class="fa fa-exclamation-triangle"></span>
+			      			<span th:text="${MENSAJE_EXCEPCION}"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div>
+					<div class="form-group" th:if="${MENSAJE}">
+						<div class="alert alert-success">
+							<span class="fa fa-check"></span>
+			      			<span th:text="${MENSAJE}"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div>
 					<table id="tableDiaFestivo" class="table table-striped table-text-center">
 						<thead>
 							<tr class="filters">
@@ -61,7 +79,7 @@
 							<tr th:each="diaFestivo : ${listaDiasFestivos}">
 								<td th:text="${diaFestivo.idDiaFestivo}"></td>
 								<td th:text="${diaFestivo.nombre}"></td>
-								<td th:text="${#dates.format(diaFestivo.fecha, 'dd-MM-yyyy')}"></td>
+								<td th:text="${diaFestivo.fecha}"></td>
 								<td th:text="${diaFestivo.activo} ? 'Activo' : 'Inactivo'"></td>
 								<td class="col-md-3"> 
 									<div>

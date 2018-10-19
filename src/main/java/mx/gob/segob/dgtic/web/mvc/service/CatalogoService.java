@@ -12,38 +12,31 @@ public interface CatalogoService {
 	
 	//Catálogo horario
 	public List<Horario> obtieneHorarios();
-	public void modificaHorario(Horario horario);
-	public void agregaHorario(Horario horario);
-	public void guardaHorario(Horario horario);
+	public Horario modificaHorario(Horario horario);
+	public Horario agregaHorario(Horario horario);
+	public Horario guardaHorario(Horario horario);
 	public void borraHorario(Horario horario);
 	public Horario buscaHorario(Integer id);
 	public void eliminaHorario(Integer id);
 	public List<Perfil> obtienePerfiles();
 	//Catálogo tipoDia
 	public List<TipoDia> obtieneTipoDias();
-	public void modificaTipoDia(TipoDia horario);
-	public void agregaTipoDia(TipoDia horario);
-	public void guardaTipoDia(TipoDia horario);
-	public void borraTipoDia(TipoDia horario);
 	public TipoDia buscaTipoDia(Integer id);
-	public void eliminaTipoDia(Integer id);
 	//Catálogo justificacion
 	public List<Justificacion> obtieneJustificaciones();
-	public void modificaJustificacion(Justificacion justificacion);
-	public void agregaJustificacion(Justificacion justificacion);
-	public void guardaJustificacion(Justificacion justificacion);
-	public void borraJustificacion(Justificacion justificacion);
+	public Justificacion modificaJustificacion(Justificacion justificacion);
+	public Justificacion agregaJustificacion(Justificacion justificacion);
 	public Justificacion buscaJustificacion(Integer id);
 	public void eliminaJustificacion(Integer id);
 	//demás catálogos
 	
 	// Catálogo de periodo vacacional
-	public void agregaPeriodoVacacional (Periodo periodo);
-	public void modificaPeriodoVacacional (Periodo periodo);
+	public Periodo agregaPeriodoVacacional (Periodo periodo);
+	public Periodo modificaPeriodoVacacional (Periodo periodo);
 	
 	//Catálogo Día Festivo
-		public void agregaDiaFestivo(DiaFestivo dia);
-		public void modificaDiaFestivo(DiaFestivo dia);
-		public List<DiaFestivo> obtieneDiaFestivo();
-		public DiaFestivo buscaDiaFestivo(Integer id);
+	public DiaFestivo agregaDiaFestivo(DiaFestivo dia);
+	public DiaFestivo modificaDiaFestivo(DiaFestivo dia);
+	public List<DiaFestivo> obtieneDiaFestivo();
+	public DiaFestivo buscaDiaFestivo(Integer id);
 }

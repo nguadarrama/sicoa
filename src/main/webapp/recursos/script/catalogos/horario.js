@@ -12,7 +12,7 @@ $(document).ready(function() {
 		
 			$.get(href, function(horario, status) {
 				$('#id').val(horario.idHorario);
-								
+				$('#nombre').val(horario.nombre);
 				$('#timepickerEntradaEditar').val(convierte24horas(horario.horaEntrada));
 				$('#timepickerSalidaEditar').val(convierte24horas(horario.horaSalida));
 				

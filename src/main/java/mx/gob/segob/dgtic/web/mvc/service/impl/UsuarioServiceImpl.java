@@ -161,31 +161,72 @@ public class UsuarioServiceImpl implements UsuarioService {
 	
 	@Override
 	public void reiniciaContrasenia(String claveUsuario) {
+//		HttpResponse response;
+//		
+//		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+//		
+//		
+//		Header header = new BasicHeader("Authorization", "Bearer %s");
+//		HttpEntity httpEntity = new BasicHttpEntity();
+//		
+//		Map<String, Object> content = new HashMap<String, Object>();
+//		content.put("id", claveUsuario);
+//
+//		try {
+//			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+//		} catch (ClienteException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		try { //se consume recurso rest
+//			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_REINICIA_CONTRASENIA, httpEntity, header);
+//		} catch (ClienteException e) {
+//			logger.error(e.getMessage(), e);
+//			throw new AuthenticationServiceException(e.getMessage(), e);
+//		}
 		HttpResponse response;
-		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
-		
-		Header header = new BasicHeader("Authorization", "Bearer %s");
-		HttpEntity httpEntity = new BasicHttpEntity();
-		
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("id", claveUsuario);
-
-		try {
-			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_REINICIA_CONTRASENIA, httpEntity, header);
+			System.out.println("clave para reiniciar "+claveUsuario);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_REINICIA_CONTRASENIA + "?claveUsuario=" + claveUsuario);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
 		
+	}
+
+	@Override
+	public Usuario buscaUsuarioPorId(String idUsuario) {
+		Usuario usuario = new Usuario();
+		HttpResponse response;
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_USUARIO_POR_ID + "?id=" + idUsuario);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			usuario = gson.fromJson(dataJson, Usuario.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return usuario;
 	}
 	
 }

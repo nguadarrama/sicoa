@@ -73,17 +73,12 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return listaHorario;
 	}
 	
-	@SuppressWarnings("unused")
 	@Override
-	public void modificaHorario(Horario horario) {
+	public Horario modificaHorario(Horario horario) {
 		HttpResponse response;
-		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		
-		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("horario", horario);
@@ -101,18 +96,33 @@ public class CatalogoServiceImpl implements CatalogoService {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			horario = gson.fromJson(dataJson, Horario.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return horario;
 				
 	}
 	
 	@Override
-	public void agregaHorario(Horario horario) {
+	public Horario agregaHorario(Horario horario) {
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("horario", horario);
-
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
@@ -121,11 +131,26 @@ public class CatalogoServiceImpl implements CatalogoService {
 		}
 		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_HORARIO, httpEntity, header);
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_HORARIO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			horario = gson.fromJson(dataJson, Horario.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return horario;
 	}
 	
 	@Override
@@ -135,9 +160,8 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 
 	@Override
-	public void guardaHorario(Horario horario) {
-		// TODO Auto-generated method stub
-		
+	public Horario guardaHorario(Horario horario) {
+		return null;
 	}
 
 	@Override
@@ -165,7 +189,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException("Error al obtener el horario : "+response.getStatusLine().getReasonPhrase());
 		}
 		
 		return horario;
@@ -177,7 +201,6 @@ public class CatalogoServiceImpl implements CatalogoService {
 	@SuppressWarnings("unused")
 	public void eliminaHorario(Integer id) {
 		HttpResponse response;
-		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		try { //se consume recurso rest
@@ -193,7 +216,6 @@ public class CatalogoServiceImpl implements CatalogoService {
 		JsonObject respuesta = (JsonObject) HttpResponseUtil.getJsonContent(response);
 		JsonObject metadata = (JsonObject)respuesta.get(AutorizacionConstants.ATTR_META_DATA_JSON_NAME);			
 		JsonArray jsonArray = metadata.get(AutorizacionConstants.ATTR_META_DATA_ERRORES_JSON_NAME).getAsJsonArray();
-		
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
 
@@ -226,47 +248,6 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return listaTipoDia;
 	}
 
-	@Override
-	@SuppressWarnings("unused")
-	public void modificaTipoDia(TipoDia horario) {
-		try{
-		
-			Header header = new BasicHeader("Authorization", "Bearer %s");
-			HttpEntity httpEntity = new BasicHttpEntity();
-			//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
-			Map<String, Object> content = new HashMap<String, Object>();
-			content.put("horario", horario);
-			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-			//se consume recurso rest
-			HttpResponse response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_HORARIO, httpEntity, header);
-			
-		}catch (ClienteException e) {
-			logger.error(e.getMessage(), e);
-			throw new AuthenticationServiceException(e.getMessage(), e);
-		}catch (Exception i){
-			logger.error(i.getMessage(), i);
-		}
-				
-	}
-
-	@Override
-	public void agregaTipoDia(TipoDia horario) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void guardaTipoDia(TipoDia horario) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void borraTipoDia(TipoDia horario) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public TipoDia buscaTipoDia(Integer id) {
@@ -298,24 +279,11 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return tipo;
 	}
 
-	@SuppressWarnings("unused")
-	@Override
-	public void eliminaTipoDia(Integer id) {
-		
-		try { //se consume recurso rest
-			HttpResponse response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_ELIMINA_TIPODIA + "?id=" + id);
-		} catch (ClienteException e) {
-			logger.error(e.getMessage(), e);
-			throw new AuthenticationServiceException(e.getMessage(), e);
-		}
-		
-	}
 
 	@Override
 	public List<Perfil> obtienePerfiles() {
 		List<Perfil> listaPerfil = new ArrayList<>();
-		HttpResponse response;
-		
+		HttpResponse response;	
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_PERFIL);
 		} catch (ClienteException e) {
@@ -370,76 +338,24 @@ public class CatalogoServiceImpl implements CatalogoService {
 
 	
 	@Override
-	@SuppressWarnings("unused")
-	public void modificaJustificacion(Justificacion justificacion) {
+	public Justificacion modificaJustificacion(Justificacion justificacion) {
+		HttpResponse response = null;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		try{
-			
 			Header header = new BasicHeader("Authorization", "Bearer %s");
 			HttpEntity httpEntity = new BasicHttpEntity();
 			//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
 			Map<String, Object> content = new HashMap<String, Object>();
 			content.put("justificacion", justificacion);
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 			//se consume recurso rest
-			HttpResponse response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_JUSTIFICACION, httpEntity, header);
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_JUSTIFICACION, httpEntity, header);
 			
 		}catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}catch (Exception i){
 			logger.error(i.getMessage(), i);
-		}
-	}
-
-	@Override
-	public void agregaJustificacion(Justificacion justificacion) {
-		Header header = new BasicHeader("Authorization", "Bearer %s");
-		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("justificacion", justificacion);
-
-		try {
-			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_JUSTIFICACION, httpEntity, header);
-		} catch (ClienteException e) {
-			logger.error(e.getMessage(), e);
-			throw new AuthenticationServiceException(e.getMessage(), e);
-		}
-	}
-
-	@Override
-	public void guardaJustificacion(Justificacion justificacion) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void borraJustificacion(Justificacion justificacion) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Justificacion buscaJustificacion(Integer id) {
-		Justificacion justificacion = new Justificacion();
-		HttpResponse response;
-		
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		
-		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_JUSTIFICACION + "?id=" + id);
-		} catch (ClienteException e) {
-			logger.error(e.getMessage(), e);
-			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
 		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
 			
@@ -459,6 +375,68 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 
 	@Override
+	public Justificacion agregaJustificacion(Justificacion justificacion) {
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("justificacion", justificacion);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_JUSTIFICACION, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			justificacion = gson.fromJson(dataJson, Justificacion.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener la justificaicon : "+response.getStatusLine().getReasonPhrase());
+		}
+		return justificacion;
+	}
+
+
+	@Override
+	public Justificacion buscaJustificacion(Integer id) {
+		Justificacion justificacion = new Justificacion();
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_JUSTIFICACION + "?id=" + id);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			justificacion = gson.fromJson(dataJson, Justificacion.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener la justificaicon : "+response.getStatusLine().getReasonPhrase());
+		}
+		return justificacion;
+	}
+
+	@Override
 	@SuppressWarnings("unused")
 	public void eliminaJustificacion(Integer id) {
 		
@@ -474,37 +452,51 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 
 	@Override
-	public void agregaPeriodoVacacional(Periodo periodo) {
+	public Periodo agregaPeriodoVacacional(Periodo periodo) {
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("periodo", periodo);
-
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_PERIODO, httpEntity, header);
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_PERIODO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
 		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			periodo = gson.fromJson(dataJson, Periodo.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener periodo : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return periodo;
+			
+		
 	}
 
+	@SuppressWarnings("unused")
 	@Override
-	public void modificaPeriodoVacacional(Periodo periodo) {
-HttpResponse response;
-		
+	public Periodo modificaPeriodoVacacional(Periodo periodo) {
+		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		
-		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
@@ -518,13 +510,27 @@ HttpResponse response;
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_PERIODO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			periodo = gson.fromJson(dataJson, Periodo.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el periodo : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return periodo;
 	}
 	
 	@Override
@@ -558,19 +564,15 @@ HttpResponse response;
 	
 	@SuppressWarnings("unused")
 	@Override
-	public void modificaDiaFestivo(DiaFestivo dia) {
+	public DiaFestivo modificaDiaFestivo(DiaFestivo dia) {
 		HttpResponse response;
-		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		
 		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("diaFestivo", dia);
-
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
@@ -584,11 +586,27 @@ HttpResponse response;
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			dia = gson.fromJson(dataJson, DiaFestivo.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+		}
+				
+		return dia;
 				
 	}
 	
 	@Override
-	public void agregaDiaFestivo(DiaFestivo dia) {
+	public DiaFestivo agregaDiaFestivo(DiaFestivo dia) {
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
@@ -604,11 +622,24 @@ HttpResponse response;
 		}
 		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_DIA_FESTIVO, httpEntity, header);
+			response =  ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_DIA_FESTIVO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			dia = gson.fromJson(dataJson, DiaFestivo.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+		}
+				
+		return dia;
 	}
 	
 	@Override
@@ -640,5 +671,6 @@ HttpResponse response;
 		
 		return dia;
 	}
+
 
 }

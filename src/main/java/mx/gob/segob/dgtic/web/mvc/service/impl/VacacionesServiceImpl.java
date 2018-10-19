@@ -1,5 +1,7 @@
 package mx.gob.segob.dgtic.web.mvc.service.impl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,14 +29,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import groovyjarjarcommonscli.ParseException;
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
+import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
+import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
+import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
+import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import mx.gob.segob.dgtic.web.mvc.service.VacacionesService;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
@@ -318,8 +325,72 @@ public class VacacionesServiceImpl implements VacacionesService{
 		} else {
 			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
 		}
+		for(Vacaciones vacaciones: listaVacaciones){
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+	    	String fechaInicial =null;
+	    	String fechaFinal = null;
+	    	Estatus estatus= new Estatus();
+	    	Date nuevaFecha = new Date();
+	    	Date nuevaFecha1 = new Date();
+	        estatus.setIdEstatus(2);
+	        fechaInicial = df.format(vacaciones.getFechaInicio());
+    		fechaFinal=df.format(vacaciones.getFechaFin());
+	        try {
+	    		
+	    		nuevaFecha=df.parse(fechaInicial);
+	    		nuevaFecha1=df.parse(fechaFinal);
+	    		vacaciones.setFechaInicio(nuevaFecha);
+	    		vacaciones.setFechaFin(nuevaFecha1);
+				System.out.println("fechaInicio "+fechaInicial);
+			} catch (java.text.ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return listaVacaciones;
 	}
+	
+	@Override
+	public reporte generaReporte(GeneraReporteArchivo generaReporteArchivo) {
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		reporte respuesta=new reporte();
+		
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("generaReporteArchivo", generaReporteArchivo);
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_GENERA_REPORTE);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			try{
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			respuesta = gson.fromJson(dataJson, reporte.class);	
+			}catch(Exception e){
+				e.printStackTrace();
+				//vacaciones.setDias(0);
+			}		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener vacaciones : "+response.getStatusLine().getReasonPhrase());
+		}
+		return respuesta;
+	}
+	
 	
 
 }

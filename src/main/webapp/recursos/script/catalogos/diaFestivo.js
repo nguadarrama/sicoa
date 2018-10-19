@@ -1,4 +1,9 @@
 $(document).ready(function() {
+	$("#fecha").datepicker({
+		format: 'dd-MM-yyyy',
+		minDate: 1,
+		beforeShowDay: $.datepicker.noWeekends
+   });
 	
 	$('#tableDiaFestivo').DataTable({
         "scrollY": "500px",
@@ -31,11 +36,7 @@ $(document).ready(function() {
 			$('.diaFestivoForm #diaFestivoModal').modal();
 	});
 	
-	$("#fecha").datepicker({
-		format: 'dd-MM-yyyy',
-		minDate: 1,
-		beforeShowDay: $.datepicker.noWeekends 
-   });
+	
 	
 	$('.nBtn').on('click', function(event) {					//botón nuevo
 		$('.nuevodiaFestivoForm #nuevodiaFestivoModal').modal(); 

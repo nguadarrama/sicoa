@@ -5,7 +5,7 @@ $(document).ready(function() {
 //		  toggle: false
 //		})
 		
-	$("#actualizamosVacacion").css("display","none");
+	$("#regitsraVacacionEmpleado").css("display","none");
 		$("#btnVacacionesPropias").on('click', function(event){
 			
 		
@@ -15,15 +15,6 @@ $(document).ready(function() {
 			
 			
 		});
-		
-		$("#fechaInicioBusca1").datepicker({
-				dateFormat: 'yy-mm-dd',
-		       beforeShowDay: $.datepicker.noWeekends 
-		   });
-		$("#fechaFinBusca1").datepicker({ 
-			dateFormat: 'yy-mm-dd',
-		       beforeShowDay: $.datepicker.noWeekends 
-		   });
 		$("#fechaInicio").datepicker({ 
 			minDate: 1,
 		       beforeShowDay: $.datepicker.noWeekends,
@@ -43,52 +34,17 @@ $(document).ready(function() {
 		        alert("File Seleccionado : ", input.files[0]);
 		    
 		}
-		$('#vacacionesPropias').on('click','.eBtn' , function(event) { 					//botón edita
-			
+		$('#registraVacacionesEmpleados').on('click','.eBtn' , function(event) { 					//botón edita
+			alert("Datos");
 			 event.preventDefault();
 			var href = $(this).attr('href');
 			var text = $(this).text();
 				$.get(href, function(hmap, status) {
 					
-					$('.actualizaVacacion #numeroEmpleado').val(hmap.vacacion.idUsuario.claveUsuario);
-					
-					$('.actualizaVacacion #nombre').val(hmap.vacacion.idUsuario.nombre);
-					$('.actualizaVacacion #apellidoPaterno').val(hmap.vacacion.idUsuario.apellidoPaterno);
-					$('.actualizaVacacion #apellidoMaterno').val(hmap.vacacion.idUsuario.apellidoMaterno);
-					$('.actualizaVacacion #idSolicitud').val(hmap.vacacion.idDetalle);
-					$('.actualizaVacacion #idEstatus').val(hmap.vacacion.idEstatus.estatus);
-					$('.actualizaVacacion #idPuesto').val(hmap.vacacion.idUsuario.idPuesto);
-					$('.actualizaVacacion #idUnidadAdministrativa').val(hmap.responsable.nombreUnidad);
-					$('.actualizaVacacion #fechaIngreso').val(hmap.vacacion.idUsuario.fechaIngreso);
-					$('.actualizaVacacion #rfc').val(hmap.vacacion.idUsuario.rfc);
-					$('.actualizaVacacion #fechaInicio1').val(hmap.vacacion.fechaInicio);
-					$('.actualizaVacacion #fechaSolicitud').val(hmap.vacacion.fechaRegistro);
-					$('.actualizaVacacion #fechaFin1').val(hmap.vacacion.fechaFin);
-					$('.actualizaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
-					$('.actualizaArchivo #claveUsuario').val(hmap.vacacion.idUsuario.claveUsuario);
-					if(hmap.vacacion.idEstatus.idEstatus=='2' || hmap.vacacion.idEstatus.idEstatus=='3'){
-						$('.rechazaVacacion #rechazaVacacion').css("display","none");
-						$('.aceptaVacacion #aceptaVacacion').css("display","none");
-					}else{
-						
-					}
-					$('.actualizaVacacion #dias').val(hmap.vacacion.dias);
-					$('.aceptaVacacion #idSolicitud').val(hmap.vacacion.idDetalle);
-					$('.aceptaVacacion #fechaInicio').val(hmap.vacacion.fechaInicio);
-					$('.aceptaVacacion #fechaFin').val(hmap.vacacion.fechaFin);
-					$('#id').val(hmap.vacacion.idUsuario.idUsuario);
-					$('#idUsuario').val(hmap.vacacion.idUsuario.idUsuario);
-					$('.rechazaVacacion #idSolicitud').val(hmap.vacacion.idDetalle);
-					$('.rechazaVacacion #idVacacion').val(hmap.vacacion.idVacacion.idVacacion);
-					$('.rechazaVacacion #dias').val(hmap.vacacion.dias);
-					$('.actualizaVacacion #responsable').val(hmap.responsable.nombre+" "+hmap.responsable.apellidoPaterno+" "+hmap.responsable.apellidoMaterno);
-					
-					$("#actualizamosVacacion").css("display","inline");
-					$(".misPropiasVacaciones").css("display","none");
 					
 				});
-				
-				//$('.usuarioForm #usuarioModal').modal().slideUp(300).delay(400).fadeIn(400);
+				$("#regitsraVacacionEmpleado").css("display","inline");
+				$("#tablaVacacionesEmpleado").css("display","none");
 		});
 		
 		function diasLibres(dateFrom, dateTo) {

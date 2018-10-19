@@ -8,7 +8,6 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import mx.gob.segob.dgtic.web.config.security.service.AutenticacionService;
 import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
-import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
@@ -48,15 +45,14 @@ public class CatalogoController {
 
 	@Autowired
 	private UsuarioService usuarioService;
-
-	@Autowired
-	private AutenticacionService autenticacionService;
 	
 	@Autowired 
 	private UnidadAdministrativaService unidadAdministrativaService;
 	
 	@Autowired 
 	private PerfilUsuarioService perfilUsuarioService;
+	
+	private String mensaje = "";
 
 	/**
 	 * Vista donde se ubica el catálogo de horarios. Path :
@@ -66,23 +62,26 @@ public class CatalogoController {
 	 */
 	@RequestMapping(value = { "horario" }, method = RequestMethod.GET)
 	public String obtieneHorarios(Model model) {
-
 		model.addAttribute("listaHorarios", catalogoService.obtieneHorarios());
-
+		if(!this.mensaje.equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
 		return "/catalogos/horario";
 	}
 
 	@GetMapping("horario/busca")
 	@ResponseBody
 	public Horario buscaHorario(Integer id) {
-
 		return catalogoService.buscaHorario(id);
 	}
 
 	@PostMapping("horario/modifica")
-	public String modificaHorario(Integer id, String horaEntrada, String horaSalida, boolean activo) {
+	public String modificaHorario(String nombre, Integer id, String horaEntrada, String horaSalida, Boolean activo) {
 		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-
 		long milisegundosHoraEntrada = 0;
 		long milisegundosHoraSalida = 0;
 
@@ -95,16 +94,15 @@ public class CatalogoController {
 		}
 		Time SQLhoraEntrada = new Time(milisegundosHoraEntrada);
 		Time SQLhoraSalida = new Time(milisegundosHoraSalida);
-
-		catalogoService.modificaHorario(new Horario(id, SQLhoraEntrada, SQLhoraSalida, activo));
-
+		Horario horario = new Horario(id, nombre, SQLhoraEntrada, SQLhoraSalida, activo, "");
+		horario = catalogoService.modificaHorario(horario);
+		this.mensaje  = horario.getMensaje();
 		return "redirect:/catalogos/horario";
 	}
 
 	@PostMapping("horario/agrega")
-	public String agregaHorario(Integer id, String horaEntrada, String horaSalida, boolean activo) {
+	public String agregaHorario(Integer id, String nombre, String horaEntrada, String horaSalida, boolean activo) {
 		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-
 		long milisegundosHoraEntrada = 0;
 		long milisegundosHoraSalida = 0;
 
@@ -117,9 +115,9 @@ public class CatalogoController {
 		}
 		Time SQLhoraEntrada = new Time(milisegundosHoraEntrada);
 		Time SQLhoraSalida = new Time(milisegundosHoraSalida);
-
-		catalogoService.agregaHorario(new Horario(id, SQLhoraEntrada, SQLhoraSalida, activo));
-
+		Horario horario = new Horario(id, nombre, SQLhoraEntrada, SQLhoraSalida, activo, "");
+		horario = catalogoService.agregaHorario(horario);
+		this.mensaje  = horario.getMensaje();
 		return "redirect:/catalogos/horario";
 	}
 
@@ -139,9 +137,8 @@ public class CatalogoController {
 	 */
 	@RequestMapping(value = { "tipoDia" }, method = RequestMethod.GET)
 	public String obtieneTipoDias(Model model) {
-
 		model.addAttribute("listaTipoDias", catalogoService.obtieneTipoDias());
-
+		this.mensaje = "";
 		return "/catalogos/tipoDia";
 	}
 
@@ -152,30 +149,7 @@ public class CatalogoController {
 		return catalogoService.buscaTipoDia(id);
 	}
 
-	@PostMapping("tipoDia/modifica")
-	public String modificaTipoDia(Integer id, String nombre, String observaciones, boolean incidencia) {
-
-		catalogoService.modificaTipoDia(new TipoDia(id, nombre, observaciones, incidencia));
-
-		return "redirect:/catalogos/tipoDia";
-	}
-
-	@PostMapping("tipoDia/agrega")
-	public String agregaTipoDia(Integer id, String nombre, String observaciones, boolean incidencia) {
-
-		catalogoService.agregaTipoDia(new TipoDia(id, nombre, observaciones, incidencia));
-
-		return "redirect:/catalogos/tipoDia";
-	}
-
-	@GetMapping("tipoDia/elimina")
-	public String eliminaTipoDia(Integer id) {
-
-		catalogoService.eliminaTipoDia(id);
-
-		return "redirect:/catalogos/tipoDia";
-	}
-
+	
 	@RequestMapping(value = { "usuario" }, method = RequestMethod.GET)
 	public String obtieneUsuarios(Model model) {
 
@@ -235,30 +209,34 @@ public class CatalogoController {
 	public String obtieneJustificacion(Model model) {
 
 		model.addAttribute("listaJustificaciones", catalogoService.obtieneJustificaciones());
-
+		if(!this.mensaje.equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
 		return "/catalogos/justificacion";
 	}
 
 	@GetMapping("justificacion/busca")
 	@ResponseBody
 	public Justificacion buscaJustificacion(Integer id) {
-
 		return catalogoService.buscaJustificacion(id);
 	}
 
 	@PostMapping("justificacion/modifica")
-	public String modificaJustificacion(Integer id, String justificacion, Boolean activo) {
-
-		catalogoService.modificaJustificacion(new Justificacion(id, justificacion, activo));
-
+	public String modificaJustificacion(Integer id, String clave, String justificacion, Boolean activo) {
+		Justificacion  justi  = new Justificacion(id, clave,justificacion, activo, "");
+		justi = catalogoService.modificaJustificacion(justi);
+		this.mensaje = justi.getMensaje();
 		return "redirect:/catalogos/justificacion";
 	}
 
 	@PostMapping("justificacion/agrega")
-	public String agregaJustificacion(Integer id, String justificacion, boolean activo) {
-
-		catalogoService.agregaJustificacion(new Justificacion(id, justificacion, activo));
-
+	public String agregaJustificacion(Integer id, String clave, String justificacion, boolean activo) {
+		Justificacion  justi  = new Justificacion(id, clave,justificacion, activo, "");
+		justi = catalogoService.agregaJustificacion(justi);
 		return "redirect:/catalogos/justificacion";
 	}
 
@@ -291,9 +269,14 @@ public class CatalogoController {
 	   	 */
 	   	@RequestMapping(value = {"diaFestivo"}, method = RequestMethod.GET)
 	   	public String obtieneDiaFestivo(Model model) {
-
 	   		model.addAttribute("listaDiasFestivos", catalogoService.obtieneDiaFestivo());
-
+	   		if(!this.mensaje.equals("")){
+				if(this.mensaje.contains("correctamente"))
+					model.addAttribute("MENSAJE", this.mensaje);
+				else
+					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+			}
+	   		this.mensaje = ""; 
 	   		return "/catalogos/diaFestivo";
 	   	}
 
@@ -314,14 +297,15 @@ public class CatalogoController {
 	   			// TODO Auto-generated catch block
 	   			e.printStackTrace();
 	   		}
-	   		catalogoService.modificaDiaFestivo(new DiaFestivo(id, nombre, sdf.format(dia), activo));
-
+	   		DiaFestivo diaFest = new DiaFestivo(id, nombre, sdf.format(dia), activo, "");
+	   		diaFest = catalogoService.modificaDiaFestivo(diaFest);
+	   		this.mensaje = diaFest.getMensaje();
 	   		return "redirect:/catalogos/diaFestivo";
 	   	}
 
 	   	@PostMapping("diaFestivo/agrega")
 	   	public String agregaDiaFestivo( String nombre, String fecha,  Boolean activo) {
-
+	   		System.out.println("Datos nombre "+nombre+" fecha "+fecha+" activo "+activo);
 	   		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	   		Date dia = new Date();
 	   		try {
@@ -331,8 +315,10 @@ public class CatalogoController {
 	   			e.printStackTrace();
 	   		}
 	   		
-	   		catalogoService.agregaDiaFestivo(new DiaFestivo(null,  nombre, sdf.format(dia), activo));
-
+	   		DiaFestivo diaFest = new DiaFestivo(null, nombre, sdf.format(dia), activo, "");
+	   		diaFest = catalogoService.agregaDiaFestivo(diaFest);
+	   		this.mensaje = diaFest.getMensaje();
+	   		
 	   		return "redirect:/catalogos/diaFestivo";
 	   	}
 	

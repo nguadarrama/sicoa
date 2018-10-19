@@ -1,5 +1,7 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class Vacaciones {
 	private Date fechaInicio;
 	private Date fechaFin;
 	private Integer dias;
+	private Date fechaRegistro;
     private String name;
  
     private String description;
@@ -72,16 +75,48 @@ public class Vacaciones {
 		this.idEstatus = idEstatus;
 	}
 	public Date getFechaInicio() {
-		
+//		if(fechaInicio.length()>10){
+//			Date date = new Date();
+//			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+//			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+//		    try {
+//		    	String aux = fechaInicio.substring(0,12);
+//				date = sdf.parse(aux);
+//				fechaInicio = sdf1.format(date);
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		return fechaInicio;
 	}
 	public void setFechaInicio(Date fechaInicio) {
-		 String s = fechaInicio.toString();
-	      long l = Long.parseLong(s.substring(6, s.length() - 2));
-	      Date d = new Date(l);
-		this.fechaInicio = d;
+		 
 	}
 	public Date getFechaFin() {
+//		if(fechaFin.length()>13){
+//			Date date = new Date();
+//			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
+//			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+//		    try {
+//				date = sdf.parse(fechaFin);
+//				fechaFin = sdf1.format(date);
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}else if(fechaFin.length()>10){
+//			Date date = new Date();
+//			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+//			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+//		    try {
+//				date = sdf.parse(fechaFin);
+//				fechaFin = sdf1.format(date);
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		return fechaFin;
 	}
 	public void setFechaFin(Date fechaFin) {
@@ -110,5 +145,11 @@ public class Vacaciones {
 	}
 	public void setArchivo(List<MultipartFile> archivo) {
 		this.archivo = archivo;
+	}
+	public Date getFechaRegistro() {
+		return fechaRegistro;
+	}
+	public void setFechaRegistro(Date fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
 	}
 }

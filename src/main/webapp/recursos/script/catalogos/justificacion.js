@@ -10,6 +10,7 @@ $(document).ready(function() {
 		
 			$.get(href, function(justificacion, status) {
 				$('.justificacionForm #id').val(justificacion.idJustificacion);
+				$('.justificacionForm #clave').val(justificacion.clave);
 				$('.justificacionForm #justificacion').val(justificacion.justificacion);
 				$('.justificacionForm #activo').val(justificacion.activo);
 			});

@@ -10,6 +10,7 @@ public class DiaFestivo {
 	private String nombre;
 	private String fecha;
 	private Boolean activo;
+	private String mensaje;
 	/**
 	 * 
 	 */
@@ -22,12 +23,13 @@ public class DiaFestivo {
 	 * @param fecha
 	 * @param activo
 	 */
-	public DiaFestivo(Integer idDiaFestivo, String nombre, String fecha, Boolean activo) {
+	public DiaFestivo(Integer idDiaFestivo, String nombre, String fecha, Boolean activo, String mensaje) {
 		super();
 		this.idDiaFestivo = idDiaFestivo;
 		this.nombre = nombre;
 		this.fecha = fecha;
 		this.activo = activo;
+		this.mensaje = mensaje;
 	}
 	/**
 	 * @return the idDiaFestivo
@@ -57,9 +59,20 @@ public class DiaFestivo {
 	 * @return the fecha
 	 */
 	public String getFecha() {
-		if(fecha.length()>10){
+		if(fecha.length()>13){
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fecha);
+				fecha = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(fecha.length()>10){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 		    try {
 				date = sdf.parse(fecha);
@@ -89,6 +102,17 @@ public class DiaFestivo {
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
-	
+	/**
+	 * @return the mensaje
+	 */
+	public String getMensaje() {
+		return mensaje;
+	}
+	/**
+	 * @param mensaje the mensaje to set
+	 */
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
 	
 }

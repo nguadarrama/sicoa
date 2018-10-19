@@ -4,8 +4,10 @@ package mx.gob.segob.dgtic.web.mvc.dto;
 public class Justificacion {
 
 	private Integer idJustificacion;
+	private String clave;
 	private String justificacion;
 	private Boolean activo;
+	private String mensaje;
 	
 	public Justificacion () {
 		
@@ -13,14 +15,18 @@ public class Justificacion {
 
 	/**
 	 * @param idJustificacion
+	 * @param clave
 	 * @param justificacion
 	 * @param activo
+	 * @param mensaje
 	 */
-	public Justificacion(Integer idJustificacion, String justificacion, Boolean activo) {
+	public Justificacion(Integer idJustificacion, String clave, String justificacion, Boolean activo, String mensaje) {
 		super();
 		this.idJustificacion = idJustificacion;
+		this.clave = clave;
 		this.justificacion = justificacion;
 		this.activo = activo;
+		this.mensaje = mensaje;
 	}
 
 	/**
@@ -35,6 +41,20 @@ public class Justificacion {
 	 */
 	public void setIdJustificacion(Integer idJustificacion) {
 		this.idJustificacion = idJustificacion;
+	}
+
+	/**
+	 * @return the clave
+	 */
+	public String getClave() {
+		return clave;
+	}
+
+	/**
+	 * @param clave the clave to set
+	 */
+	public void setClave(String clave) {
+		this.clave = clave;
 	}
 
 	/**
@@ -65,5 +85,18 @@ public class Justificacion {
 		this.activo = activo;
 	}
 
+	/**
+	 * @return the mensaje
+	 */
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	/**
+	 * @param mensaje the mensaje to set
+	 */
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
 	
 }

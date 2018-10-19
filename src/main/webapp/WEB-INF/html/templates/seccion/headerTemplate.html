@@ -54,9 +54,11 @@
 	                    <span class="caret"></span></a>
 	                     <ul class="dropdown-menu" role="menu">
 	                    	<li><a th:href="@{/vacaciones/vacacionesPropias}" th:text="#{VACACIONES_PROPIAS}"></a></li>
-	                    	<li><a sec:authorize="!hasAuthority('3')"  th:href="@{/vacaciones/vacacionesEmpleados}" th:text="#{VACACIONES_EMPLEADOS}"></a></li>
+	                    	<li><a   ec:authorize="!hasAuthority('3')" th:href="@{/vacaciones/vacacionesEmpleados}" th:text="#{VACACIONES_EMPLEADOS}"></a></li>
 	                    	<li><a th:href="@{/vacaciones/solicitudVacaciones}" th:text="#{SOLICITUD_VACACIONES}"></a></li>
+	                    	<li><a ec:authorize="hasAuthority('2')" th:href="@{/vacaciones/solicitudVacacionesEmpleados}">Registra vacaciones de asignados</a></li>
 	                    	</ul>
+<!-- 	                    	sec:authorize="!hasAuthority('3')" -->
 	                    </li>
 	                    <li><a href="#" th:text="#{ELEMENTO3}"></a></li>
 	                    <li><a href="#" th:text="#{ELEMENTO4}"></a></li>	                    
@@ -67,7 +69,7 @@
 	                            <li><a th:href="@{/catalogos/usuario}" th:text="#{USUARIOS}"></a></li>
 	                            <li><a th:href="@{/catalogos/horario}" th:text="#{ELEMENTO5-2}"></a></li>
 	                            <li><a th:href="@{/catalogos/justificacion}" th:text="#{ELEMENTO5-3}"></a></li>
-	                            <!-- <li><a th:href="@{/catalogos/tipoDia}" th:text="#{ELEMENTO5-4}"></a></li> -->
+	                            <li><a th:href="@{/catalogos/diaFestivo}" >D&iacute;as inh&aacute;biles</a></li>
 	                            <!-- <li><a href="#">Otra acci�n</a></li>
 	                            <li><a href="#">Algo m�s aqu�</a></li>
 	                            <li class="divider"></li>

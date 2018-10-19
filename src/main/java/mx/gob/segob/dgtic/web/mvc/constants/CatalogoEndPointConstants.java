@@ -43,9 +43,11 @@ public final class CatalogoEndPointConstants {
 	public static final String WEB_SERVICE_REINICIA_CONTRASENIA = "/catalogo/reiniciaContrasenia";
 	public static final String WEB_SERVICE_INFO_RESPONSABLES =  "/catalogo/obtieneResponsables";
 	public static final String WEB_SERVICE_ACEPTAORECHAZA_VACACIONES = "/catalogo/aceptaORechazaDetalleVacacion";
+	public static final String WEB_SERVICE_BUSCA_USUARIO_POR_ID = "/catalogo/buscaUsuarioPorId";
 
 	//Archivo
 			public static final String WEB_SERVICE_GUARDA_ARCHIVO="/catalogo/agregaArchivo";
+			public static final String WEB_SERVICE_ACTUALIZA_ARCHIVO="/catalogo/modificaArchivo";
 	//
 	public static final String WEB_SERVICE_INFO_PERFIL =  "/catalogo/obtienePerfiles";
 	
@@ -58,6 +60,7 @@ public final class CatalogoEndPointConstants {
 		public static final String WEB_SERVICE_CONSULTA_VACACION="/catalogo/buscaVacacionPeriodoPorClaveUsuarioYPeriodo";
 		public static final String WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS = "/catalogo/consultaVacacionesPropiasPorFiltros";
 		public static final String WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS = "/catalogo/obtenerVacacionesPorFiltros";
+		public static final String WEB_SERVICE_GENERA_REPORTE = "/catalogo/generaReporte";
 		
 		
 		//Periodo
@@ -87,6 +90,9 @@ public final class CatalogoEndPointConstants {
 		public static final String WEB_SERVICE_MODIFICA_DIA_FESTIVO = "/diaFestivo/modifica";
 		public static final String WEB_SERVICE_AGREGA_DIA_FESTIVO = "/diaFestivo/agrega";
 		public static final String WEB_SERVICE_ELIMINA_DIA_FESTIVO = "/diaFestivo/elimina";
+		
+		//PeriodoVacacion
+		public static final String WEB_SERVICE_OBTIENE_USUARIOS_VACACIONES = "/catalogo/obtenerUsuariosVacacionesPorFiltros";
 		
 }
 
