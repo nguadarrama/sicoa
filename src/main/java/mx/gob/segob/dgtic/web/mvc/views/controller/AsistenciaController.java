@@ -250,11 +250,12 @@ public class AsistenciaController  {
     }
     
     @RequestMapping(value={"coordinador/buscaAsistenciasPorId"}, method = RequestMethod.POST)
-    public String buscaAsistenciasPorId(Model model, Integer[] checkboxes, String cve_m_usuario, String nombre, String paterno, 
-    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, Authentication authentication) {
+    public String buscaAsistenciasPorId(Model model, Integer[] checkboxes, String cve_m_usuario_hidden_lista_multiple, String fechaInicial_hidden_lista_multiple, 
+    		String fechaFinal_hidden_lista_multiple) {
     	
     	List<Asistencia> listaAsistenciaJustificar = new ArrayList<>();
     	String nombreJefe = "";
+    	String motivo = "";
     	
     	for (Integer idAsistencia : checkboxes) {
     		Asistencia asistenciaJustificar = asistenciaService.buscaAsistenciaPorId(idAsistencia);
@@ -263,6 +264,12 @@ public class AsistenciaController  {
     		//se obtiene el jefe del usuario
     		if (nombreJefe.isEmpty()) {
     			nombreJefe = asistenciaJustificar.getUsuarioDto().getNombreJefe();
+    		}
+    		
+    		if (motivo.isEmpty()) {
+    			if (asistenciaJustificar.getIncidencia().getJustificacion().getJustificacion() != null) {
+    				motivo = asistenciaJustificar.getIncidencia().getJustificacion().getJustificacion();
+    			}
     		}
     	}
     	
@@ -274,22 +281,17 @@ public class AsistenciaController  {
     	model.addAttribute("listaJustificaciones", listaJustificaciones);
     	model.addAttribute("listaAutorizadores", listaJefes);
     	model.addAttribute("nombreJefe", nombreJefe);
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario);
-    	model.addAttribute("nombre", nombre);
-    	model.addAttribute("paterno", paterno);
-    	model.addAttribute("materno", materno);
-    	model.addAttribute("nivel", nivel);
-    	model.addAttribute("tipo", tipo);
-    	model.addAttribute("estado", estado);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativa);
+    	model.addAttribute("justificacion", motivo);
+    	model.addAttribute("fechaInicial", fechaInicial_hidden_lista_multiple);
+    	model.addAttribute("fechaFinal", fechaFinal_hidden_lista_multiple);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_lista_multiple);
     	
     	return "/asistencia/coordinador";
     }
     
     @RequestMapping(value={"coordinador/justificaMultiple"}, method = RequestMethod.POST)
-    public String creaIncidencias(Model model, Integer[] listaIdAsistencias, MultipartFile archivo, Integer selectJustificacion, String nombreAutorizador) {
+    public String creaIncidencias(Model model, Integer[] listaIdAsistencias, MultipartFile archivo, Integer selectJustificacion, String nombreAutorizador,
+    		String cve_m_usuario_hidden_guarda_multiple, String fechaInicial_hidden_guarda_multiple, String fechaFinal_hidden_guarda_multiple, Authentication authentication) {
     	
     	Integer idArchivo = null;
     	Integer idJustificacion = selectJustificacion;
@@ -312,9 +314,15 @@ public class AsistenciaController  {
         		new Exception("No se logró crear la incidencia " + e.getMessage());
         	}
     	}
-    	   	
-    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+    	
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", "", "", 
+    			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName());
+    	
+    	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<>());
+    	model.addAttribute("fechaInicial", fechaInicial_hidden_guarda_multiple);
+    	model.addAttribute("fechaFinal", fechaFinal_hidden_guarda_multiple);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_guarda_multiple);
     	
     	
     	return "/asistencia/coordinador";

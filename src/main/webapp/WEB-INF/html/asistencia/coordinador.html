@@ -172,7 +172,7 @@
 														<th><input type="text" class="form-control" placeholder="TIPO" th:disabled="true"/></th>
 														<th><input type="text" class="form-control" placeholder="ESTADO" th:disabled="true"/></th>
 														<th><input type="text" class="form-control" placeholder="DETALLE" th:disabled="true"/></th>
-														<th th:if="${activaCheckbox}"><button class="btn btn-default" name="busca" value="busca">Justifica</button></th>
+														<th th:if="${activaCheckbox}"><button id="justificacionMultipleListaBtn" class="btn btn-default" name="busca" value="busca">Justifica</button></th>
 													</tr>
 												</thead>
 												<tbody>
@@ -199,6 +199,11 @@
 													</tr>
 												</tbody>
 											</table>
+												
+											<input type="hidden" class="form-control" id="numeroEmpleadoHiddenListaMultiple" name="cve_m_usuario_hidden_lista_multiple"/>
+									        <input type="hidden" class="form-control" id="fechaInicialHidddenListaMultiple" name="fechaInicial_hidden_lista_multiple"/>
+									        <input type="hidden" class="form-control" id="fechaFinalHiddenListaMultiple" name="fechaFinal_hidden_lista_multiple"/>
+									        
 										</form>
 									</div>
 								</div>
@@ -251,7 +256,7 @@
 									        	<p style="text-align: left">Motivo</p>
 									            <select class="form-control" id="selectJustificacion" name="selectJustificacion" th:required="required" autocomplete="off" >
 									            	<option> -- Selecciona motivo -- </option>
-									            	<option th:each="j : ${listaJustificaciones}" th:text="${j.justificacion}" th:value="${j.idJustificacion}"></option>
+									            	<option th:each="j : ${listaJustificaciones}" th:text="${j.justificacion}" th:value="${j.idJustificacion}" th:selected="${justificacion == j.justificacion}"></option>
 									            </select>
 									        </div>
 									        
@@ -259,7 +264,7 @@
 									        	<p style="text-align: left">Autorizador</p>
 									            <select class="form-control" id="selectAutorizador" name="nombreAutorizador" th:required="required" autocomplete="off">
 									            	<option> -- Selecciona autorizador -- </option>
-									            	<option th:each="j : ${listaAutorizadores}" th:text="${j.nombre}" th:value="${j.nombre}" th:selected="${nombreJefe == j.nombre}"></option>
+									            	<option th:each="a : ${listaAutorizadores}" th:text="${a.nombre}" th:value="${a.nombre}" th:selected="${nombreJefe == a.nombre}"></option>
 									            </select>
 									        </div>
 						        
@@ -270,10 +275,12 @@
 												</label>
 										    </div>
 										    
-										    <input type="hidden" class="form-control" id="maternoHidden" name="maternoHidden"/>
+										    <input type="hidden" class="form-control" id="numeroEmpleadoHiddenGuardaMultiple" name="cve_m_usuario_hidden_guarda_multiple"/>
+									        <input type="hidden" class="form-control" id="fechaInicialHidddenGuardaMultiple" name="fechaInicial_hidden_guarda_multiple"/>
+									        <input type="hidden" class="form-control" id="fechaFinalHiddenGuardaMultiple" name="fechaFinal_hidden_guarda_multiple"/>
 										    
 										    <div class="form-group col-md-3">
-									    		<input type="submit" class="btn btn-success" th:value="Justificar" />
+									    		<input type="submit" class="btn btn-success" th:value="Justificar" id="justificacionMultipleGuardaBtn" />
 									    	</div>
 									    </div>
 								    </div>

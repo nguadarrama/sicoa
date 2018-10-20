@@ -1,6 +1,22 @@
 $(document).ready(function() {
 	
 	var idAsistencia = "";
+	
+	$('#justificacionMultipleListaBtn').on('click', function(event) { 
+		$('#numeroEmpleadoHiddenListaMultiple').val($('#numeroEmpleado').val());
+		$('#fechaInicialHidddenListaMultiple').val($('#validBeforeDatepicker').val());
+		$('#fechaFinalHiddenListaMultiple').val($('#validAfterDatepicker').val());
+		
+		$('#justificacionMultipleListaBtn').submit();
+	});
+	
+	$('#justificacionMultipleGuardaBtn').on('click', function(event) { 
+		$('#numeroEmpleadoHiddenGuardaMultiple').val($('#numeroEmpleado').val());
+		$('#fechaInicialHidddenGuardaMultiple').val($('#validBeforeDatepicker').val());
+		$('#fechaFinalHiddenGuardaMultiple').val($('#validAfterDatepicker').val());
+		
+		$('#justificacionMultipleBtn').submit();
+	});
 
 	//pobla los campos del modal de justificación
 	$('.detalleBtn').on('click', function(event) { 					//botón justifica
