@@ -24,8 +24,8 @@ $(document).ready(function() {
 		var href = $(this).attr('href');
 		var text = $(this).text();
 		$('#selectJustificacion').empty();
-		var optionJustificacion = '<option>-- Selecciona --</option>';
-		var optionAutorizador = '<option>-- Selecciona --</option>';
+		var optionJustificacion = '<option></option>';
+		var optionAutorizador = '<option></option>';
 		
 		$('#fechaInicial').val($('#validBeforeDatepicker').val());
 		$('#fechaFinal').val($('#validAfterDatepicker').val());

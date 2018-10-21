@@ -257,6 +257,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		incidencia.setEstatus(estatus);
 		incidencia.setIdArchivo(archivo);
 		incidencia.setNombreAutorizador(nombreAutorizador);
+		incidencia.setDescuento(false);
 		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
@@ -281,19 +282,38 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
-	public void aplicaDescuento(Integer idAsistencia, Integer idArchivo) {
+	public void creaDescuento(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador) {
+		
+		//creación de la justificación para una incidencia
+		
+		//motivo de justificación
+		Justificacion justificacion = new Justificacion();
+		justificacion.setIdJustificacion(idJustificacion);
+		
+		//motivo de incidencia
+		TipoDia tipoDia = new TipoDia();
+		tipoDia.setIdTipoDia(idTipoDia);
 		
 		//la asistencia con incidencia que se quiere justificar
 		Asistencia asistencia = new Asistencia();
 		asistencia.setIdAsistencia(idAsistencia);
 		
+		//la justificación se crea con estatus "pendiente"
+		Estatus estatus = new Estatus();
+		estatus.setIdEstatus(1);
+		
 		Archivo archivo = new Archivo();
 		archivo.setIdArchivo(idArchivo);
-				
+		
 		//se crea la incidencia con la información 
 		Incidencia incidencia = new Incidencia();
+		incidencia.setJustificacion(justificacion);
+		incidencia.setTipoDia((tipoDia));
 		incidencia.setIdAsistencia(asistencia);
+		incidencia.setEstatus(estatus);
 		incidencia.setIdArchivo(archivo);
+		incidencia.setNombreAutorizador(nombreAutorizador);
+		incidencia.setDescuento(true); //bandera de descuento
 		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
@@ -310,7 +330,46 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		}
 		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_DESCUENTA, httpEntity, header);
+			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_CREA_DESCUENTO, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public void aplicaDescuento(Integer idAsistencia) {
+		
+		//la asistencia con incidencia que se quiere descontar
+		Asistencia asistencia = new Asistencia();
+		asistencia.setIdAsistencia(idAsistencia);
+		
+		//el descuento se actualiza con estatus "validada"
+		Estatus estatus = new Estatus();
+		estatus.setIdEstatus(2);
+		
+		//se crea la incidencia con la información 
+		Incidencia incidencia = new Incidencia();
+		incidencia.setIdAsistencia(asistencia);
+		incidencia.setEstatus(estatus);
+		incidencia.setDescuento(true);
+		
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("incidencia", incidencia);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try { //se consume recurso rest
+			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_APLICA_DESCUENTO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

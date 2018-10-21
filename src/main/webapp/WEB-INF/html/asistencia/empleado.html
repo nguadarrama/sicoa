@@ -138,7 +138,14 @@
 													<td th:text="${asistencia.usuario.nombreUnidad}"></td>
 													<td th:text="${asistencia.entrada}"></td>
 													<td th:text="${asistencia.idTipoDia.nombre}"></td>
-													<td th:text="${asistencia.idEstatus.estatus}"></td>
+													<td>
+														<span th:if="${asistencia.idEstatus.estatus == 'Validada' and asistencia.incidencia.descuento}">Descuento Aprobado</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Validada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Aprobada</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and asistencia.incidencia.descuento}">Descuento Pendiente</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Pendiente</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
+													</td>
 													<td> 
 														<a th:if="${asistencia.idTipoDia.idTipoDia != 1}" th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="nBtn">Ver detalle</a>
 													</td>

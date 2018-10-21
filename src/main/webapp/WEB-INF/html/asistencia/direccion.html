@@ -180,9 +180,19 @@
 													<td th:text="${asistencia.usuario.nombreUnidad}"></td>
 													<td th:text="${asistencia.entrada}"></td>
 													<td th:text="${asistencia.idTipoDia.nombre}"></td>
-													<td th:text="${asistencia.idEstatus.estatus}"></td>
+													<td>
+														<span th:if="${asistencia.idEstatus.estatus == 'Validada' and asistencia.incidencia.descuento}">Descuento Aprobado</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Validada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Aprobada</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and asistencia.incidencia.descuento}">Descuento Pendiente</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Pendiente</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
+													</td> 
 													<td> 
-														<a th:if="${asistencia.idTipoDia.idTipoDia != 1 and asistencia.idEstatus.estatus != null}" th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="nBtn">Dictaminar</a>
+														<a 
+															th:if="${asistencia.idTipoDia.idTipoDia != 1 and asistencia.idEstatus.estatus != null}" 
+															th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="nBtn">Dictaminar
+														</a>
 													</td>
 												</tr>
 											</tbody>
@@ -210,9 +220,9 @@
 		</div>	
 		
 		
-		<!-- modal para aceptar/rechazar justificación -->
+		<!-- modal para aceptar/rechazar justificación/descuento -->
 		<div class="justificaForm">
-      		<form th:action="@{/asistencia/direccion/dictaminaIncidencia}" method="post">
+      		<form th:action="@{/asistencia/direccion/dictamina_Incidencia_Descuento}" method="post">
 				<div class="modal fade" id="justificaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document" style="width: 80%">
 						<div class="modal-content">

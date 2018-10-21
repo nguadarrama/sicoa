@@ -211,7 +211,7 @@ public class AsistenciaController  {
     	
     }
     
-    @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST)
+    @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="justifica")
     public String creaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
     		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String nombreAutorizador) {
@@ -231,6 +231,47 @@ public class AsistenciaController  {
     		new Exception("No se logró crear la incidencia " + e.getMessage());
     	}
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
+    	
+    	model.addAttribute("listaAsistencia", asistencia);
+    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
+    	model.addAttribute("fechaInicial", fechaInicial);
+    	model.addAttribute("fechaFinal", fechaFinal);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
+    	model.addAttribute("nombre", nombreHidden);
+    	model.addAttribute("paterno", paternoHidden);
+    	model.addAttribute("materno", maternoHidden);
+    	model.addAttribute("nivel", nivelHidden);
+    	model.addAttribute("tipo", tipoHidden);
+    	model.addAttribute("estado", estadoHidden);
+    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	
+    	return "/asistencia/coordinador";
+    }
+    
+    @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="descuenta")
+    public String creaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
+    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String cve_m_usuario, String nombreAutorizador) {
+    	
+    	Integer idArchivo = null;
+    	
+    	try {
+    		//guarda el archivo
+    		if (archivo.getSize() > 0) {
+    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, new String("asistencia_descuento"));
+    		}
+    		
+    		//crea la petición de descuento y asocia el archivo
+    		asistenciaService.creaDescuento(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
+
+    	} catch(Exception e) {
+    		new Exception("No se logró crear la incidencia " + e.getMessage());
+    	}
+    	
+		
+
+		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
     	
     	model.addAttribute("listaAsistencia", asistencia);
@@ -328,42 +369,6 @@ public class AsistenciaController  {
     	return "/asistencia/coordinador";
     }
     
-    @RequestMapping(value={"aplicaDescuento"}, method = RequestMethod.POST)
-    public String aplicaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
-    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String cve_m_usuario) {
-    	
-    	Integer idArchivo = null;
-    	
-    	try {
-    		//guarda el archivo
-    		if (archivo.getSize() > 0) {
-    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario, new String("asistenciaDescuento"));
-    		}
-    		
-    		//aplica el descuento y asocia el archivo
-    		asistenciaService.aplicaDescuento(idAsistenciaHidden, idArchivo);
-
-    	} catch(Exception e) {
-    		new Exception("No se logró crear la incidencia " + e.getMessage());
-    	}
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
-    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
-    	
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
-    	model.addAttribute("nombre", nombreHidden);
-    	model.addAttribute("paterno", paternoHidden);
-    	model.addAttribute("materno", maternoHidden);
-    	model.addAttribute("nivel", nivelHidden);
-    	model.addAttribute("tipo", tipoHidden);
-    	model.addAttribute("estado", estadoHidden);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
-    	
-    	return "/asistencia/coordinador";
-    }
     //TERMINA COORDINADOR
     
     //DIRECCIÓN
@@ -447,8 +452,33 @@ public class AsistenciaController  {
     	
     }
     
-    @RequestMapping(value={"direccion/dictaminaIncidencia"}, method = RequestMethod.POST)
-    public String dictaminaIncidencia(Model model, String cve_m_usuario, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
+    @RequestMapping(value={"direccion/dictamina_Incidencia_Descuento"}, method = RequestMethod.POST) //permite aprobar o rechazar justificaciones y descuentos
+    public String dictaminaIncidenciaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
+    		String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
+    		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
+
+    	asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
+    	
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden);
+    	
+    	model.addAttribute("listaAsistencia", asistencia);
+    	model.addAttribute("fechaInicial", fechaInicial);
+    	model.addAttribute("fechaFinal", fechaFinal);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
+    	model.addAttribute("nombre", nombreHidden);
+    	model.addAttribute("paterno", paternoHidden);
+    	model.addAttribute("materno", maternoHidden);
+    	model.addAttribute("nivel", nivelHidden);
+    	model.addAttribute("tipo", tipoHidden);
+    	model.addAttribute("estado", estadoHidden);
+    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	
+    	return "/asistencia/direccion";
+    }
+    
+    @RequestMapping(value={"direccion/dictaminaDescuento"}, method = RequestMethod.POST)
+    public String dictaminaDescuento(Model model, String cve_m_usuario, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
     		String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
     		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
 

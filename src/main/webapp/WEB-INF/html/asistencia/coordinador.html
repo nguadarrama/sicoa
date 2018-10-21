@@ -184,13 +184,18 @@
 														<td th:text="${asistencia.usuario.nombreUnidad}"></td>
 														<td th:text="${asistencia.entrada}"></td>
 														<td th:text="${asistencia.idTipoDia.nombre}"></td>
-														<td th:text="${asistencia.idEstatus.estatus}"></td>
+														<td>
+															<span th:if="${asistencia.idEstatus.estatus == 'Validada' and asistencia.incidencia.descuento}">Descuento Aprobado</span>
+															<span th:if="${asistencia.idEstatus.estatus == 'Validada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Aprobada</span>
+															<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and asistencia.incidencia.descuento}">Descuento Pendiente</span>
+															<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Pendiente</span>
+															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
+															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
+														</td> 
 														<td> 
-															<span th:if="${(asistencia.idTipoDia.idTipoDia != 1 and asistencia.idTipoDia.idTipoDia != 5) and asistencia.idEstatus.idEstatus != 3}">
+															<span th:if="${(asistencia.idTipoDia.idTipoDia != 1 and asistencia.idTipoDia.idTipoDia != 5 and asistencia.idTipoDia.idTipoDia != 7 
+																			and asistencia.idTipoDia.idTipoDia != 8) and asistencia.idEstatus.idEstatus != 2 and asistencia.idEstatus.idEstatus != 3}">
 																<a th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="detalleBtn">Ver Detalle</a>
-															</span>
-															<span th:if="${asistencia.idEstatus.idEstatus == 3}">
-																<a th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="descuentoBtn">Aplicar Descuento</a>
 															</span>
 														</td>
 														<td th:if="${activaCheckbox}">
@@ -293,7 +298,7 @@
 		</div>	
 		
 		
-		<!-- modal para agregar justificación -->
+		<!-- modal para agregar justificación y descuento -->
 		<div class="justificaForm">
       		<form th:action="@{/asistencia/creaIncidencia}" method="post" enctype="multipart/form-data">
 				<div class="modal fade" id="justificaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -358,7 +363,7 @@
 						        <div class="form-group col-md-4">
 							        <label>
 										<p>Adjuntar Archivo</p>
-										 <input type="file" name="archivo" id="archivo" multiple="multiple" th:required="required" />
+										 <input type="file" name="archivo" id="archivo" multiple="multiple" th:required="required"/>
 									</label>
 							    </div>
 							    
@@ -382,7 +387,8 @@
 					    	</div>
 						    <div class="modal-footer">
 			    				<button type="button" class="btn btn-default" data-dismiss="modal" th:text="Regresar"></button>
-						    	<input type="submit" class="btn btn-success" th:value="Justificar" />
+						    	<input type="submit" class="btn btn-danger" th:value="Descontar" name="descuenta" value="descuenta" />
+						    	<input type="submit" class="btn btn-success" th:value="Justificar" name="justifica" value="justifica"/>
 						    </div>
 					  	</div>
 					</div>
@@ -392,7 +398,7 @@
     	
     	<!-- modal para descuento -->
 		<div class="descuentoForm">
-      		<form th:action="@{/asistencia/aplicaDescuento}" method="post" enctype="multipart/form-data">
+      		<form th:action="@{/asistencia/creaIncidencia}" method="post" enctype="multipart/form-data">
 				<div class="modal fade" id="justificaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document" style="width: 80%">
 						<div class="modal-content">
@@ -447,7 +453,7 @@
 						        <div class="form-group col-md-4">
 							        <label>
 										<p>Adjuntar Archivo</p>
-										 <input type="file" name="archivo" id="archivo" multiple="multiple" th:required="required" />
+										 <input type="file" name="archivo" id="archivo" multiple="multiple" />
 									</label>
 							    </div>
 							    
@@ -472,7 +478,7 @@
 						    <div class="modal-footer">
 			    				<button type="button" class="btn btn-default" data-dismiss="modal" th:text="Regresar"></button>
 			    				<button type="button" class="btn btn-default" data-dismiss="modal">Imprimir Formato</button>
-						    	<input type="submit" class="btn btn-danger" th:value="Descontar" />
+						    	<input type="submit" class="btn btn-danger" th:value="Descontar" name="descuenta" value="descuenta" />
 						    </div>
 					  	</div>
 					</div>
