@@ -309,6 +309,34 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 
 	@Override
+	public List<Justificacion> obtieneListaJ() {
+		List<Justificacion> listaJustificacion = new ArrayList<>();
+		HttpResponse response;
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_CAT_JUSTIFICACION);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaJustificacion = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Justificacion>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener catalogo de justificaciones: "+response.getStatusLine().getReasonPhrase());
+		}
+				
+		return listaJustificacion;
+	}
+
+	@Override
 	public List<Justificacion> obtieneJustificaciones() {
 		List<Justificacion> listaJustificacion = new ArrayList<>();
 		HttpResponse response;
@@ -380,32 +408,25 @@ public class CatalogoServiceImpl implements CatalogoService {
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("justificacion", justificacion);
-
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_JUSTIFICACION, httpEntity, header);
+			if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+				JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+				JsonElement dataJson = json.get("data").getAsJsonObject();
+				justificacion = gson.fromJson(dataJson, Justificacion.class);		
+			} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+				String mensaje = obtenerMensajeError(response);					 
+				throw new AuthenticationServiceException(mensaje);			
+			} else {
+				throw new AuthenticationServiceException("Error al guardar la justificaicon : "+response.getStatusLine().getReasonPhrase());
+			}
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
-		}
-		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-			JsonElement dataJson = json.get("data").getAsJsonObject();
-			justificacion = gson.fromJson(dataJson, Justificacion.class);		
-		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-			String mensaje = obtenerMensajeError(response);					 
-			throw new AuthenticationServiceException(mensaje);			
-		} else {
-			throw new AuthenticationServiceException("Error al obtener la justificaicon : "+response.getStatusLine().getReasonPhrase());
-		}
+		}		
 		return justificacion;
 	}
 
@@ -492,7 +513,6 @@ public class CatalogoServiceImpl implements CatalogoService {
 		
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public Periodo modificaPeriodoVacacional(Periodo periodo) {
 		HttpResponse response;
@@ -562,7 +582,6 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return lista;
 	}
 	
-	@SuppressWarnings("unused")
 	@Override
 	public DiaFestivo modificaDiaFestivo(DiaFestivo dia) {
 		HttpResponse response;

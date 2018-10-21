@@ -29,7 +29,11 @@
 		<commons-lang3.version>3.6</commons-lang3.version>
         <commons-codec.version>1.5</commons-codec.version>
         <client-http.version>4.3.6.redhat-1</client-http.version>
-        
+        <jasper.report.version>5.6.1</jasper.report.version>
+        <logging.slf4j.embeded.version>jcl-over-slf4j-1.7.2.redhat-3</logging.slf4j.embeded.version>
+        <logging.slf4j.version>1.7.25</logging.slf4j.version>
+        <dynamicJasper-core-fonts.version>1.0</dynamicJasper-core-fonts.version>
+        <commons-lang3.version>3.6</commons-lang3.version>
         <gson.version>2.8.0</gson.version>
     </properties>
 
@@ -139,6 +143,77 @@
 			<artifactId>poi</artifactId>
 			<version>3.6</version>
 		</dependency>
+		<!-- Jasper -->
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+<!-- 		<dependency> -->
+<!--             <groupId>net.sf.jasperreports</groupId> -->
+<!--             <artifactId>jasperreports</artifactId> -->
+<!--             <version>${jasper.report.version}</version> -->
+<!--             <exclusions> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>geronimo-stax-api_1.0_spec</artifactId> -->
+<!--                     <groupId>org.apache.geronimo.specs</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>stax-api</artifactId> -->
+<!--                     <groupId>stax</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>xmlbeans</artifactId> -->
+<!--                     <groupId>org.apache.xmlbeans</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>bcmail-jdk14</artifactId> -->
+<!--                     <groupId>bouncycastle</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>bcprov-jdk14</artifactId> -->
+<!--                     <groupId>bouncycastle</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>bcprov-jdk14</artifactId> -->
+<!--                     <groupId>org.bouncycastle</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>bctsp-jdk14</artifactId> -->
+<!--                     <groupId>org.bouncycastle</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>log4j</artifactId> -->
+<!--                     <groupId>log4j</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>xml-apis</artifactId> -->
+<!--                     <groupId>xml-apis</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>xercesImpl</artifactId> -->
+<!--                     <groupId>xerces</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>xmlParserAPIs</artifactId> -->
+<!--                     <groupId>xerces</groupId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <groupId>org.olap4j</groupId> -->
+<!--                     <artifactId>olap4j</artifactId> -->
+<!--                 </exclusion> -->
+<!--                 <exclusion> -->
+<!--                     <groupId>commons-logging</groupId> -->
+<!--                     <artifactId>commons-logging</artifactId> -->
+<!--                 </exclusion> -->
+<!--             </exclusions> -->
+<!--         </dependency> -->
+<!--         <dependency> -->
+<!--             <groupId>net.sf.jasperreports</groupId> -->
+<!--             <artifactId>jasperreports-fonts</artifactId> -->
+<!--             <version>${jasper.report.version}</version> -->
+<!--         </dependency> -->
+<!-- 		 <dependency> -->
+<!--           <groupId>org.apache.commons</groupId> -->
+<!--           <artifactId>commons-lang3</artifactId> -->
+<!--           <version>${commons-lang3.version}</version> -->
+<!--         </dependency> -->
     </dependencies>
     <build>
         <plugins>

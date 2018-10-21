@@ -208,7 +208,7 @@ public class CatalogoController {
 	@RequestMapping(value = { "justificacion" }, method = RequestMethod.GET)
 	public String obtieneJustificacion(Model model) {
 
-		model.addAttribute("listaJustificaciones", catalogoService.obtieneJustificaciones());
+		model.addAttribute("listaJustificaciones", catalogoService.obtieneListaJ());
 		if(!this.mensaje.equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);

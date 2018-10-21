@@ -1,10 +1,10 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -14,8 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,11 +21,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,11 +38,10 @@ import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
-import mx.gob.segob.dgtic.web.mvc.dto.Vaca;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
+import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
-import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
 import mx.gob.segob.dgtic.web.mvc.service.PerfilUsuarioService;
 import mx.gob.segob.dgtic.web.mvc.service.PeriodoService;
@@ -54,14 +49,6 @@ import mx.gob.segob.dgtic.web.mvc.service.UnidadAdministrativaService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import mx.gob.segob.dgtic.web.mvc.service.VacacionPeriodoService;
 import mx.gob.segob.dgtic.web.mvc.service.VacacionesService;
-//import net.sf.jasperreports.engine.JRDataSource;
-//import net.sf.jasperreports.engine.JREmptyDataSource;
-//import net.sf.jasperreports.engine.JRException;
-//import net.sf.jasperreports.engine.JasperCompileManager;
-//import net.sf.jasperreports.engine.JasperExportManager;
-//import net.sf.jasperreports.engine.JasperFillManager;
-//import net.sf.jasperreports.engine.JasperPrint;
-//import net.sf.jasperreports.engine.JasperReport;
 
 
 @Controller
@@ -137,67 +124,50 @@ public class VacacionesController {
 		return hmap;
 	}
     
-//    @RequestMapping(value= "generaArchivo",method = RequestMethod.GET)
-//	public void  generaReporteVacaciones(String idSolicitud,String idEstatus,String idPuesto,String unidadAdministrativa,String numeroEmpleado,String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio, String fechaFin, String dias, String responsable,HttpServletResponse response){
-//    	System.out.println("Datos para el archivo"+idSolicitud);
-//    	try {
-//			System.out.println("Datos "+nombre);
-//			JasperReport jasperReport=JasperCompileManager.compileReport("C:\\vacaciones\\Vacaciones.jrxml");
-//			JRDataSource dataSource= new JREmptyDataSource();
-//			Map<String,Object> parametros = new HashMap<String, Object>();
-//			parametros.put("nombre", nombre);
-//			parametros.put("apellidoPaterno", apellidoPaterno);
-//			parametros.put("apellidoMaterno", apellidoMaterno);
-//			parametros.put("rfc", rfc);
-//			parametros.put("idSolicitud", idSolicitud);
-//			parametros.put("idEstatus", idEstatus);
-//			parametros.put("idPuesto", idPuesto);
-//			parametros.put("unidadAdministrativa", unidadAdministrativa);
-//			parametros.put("numeroEmpleado", numeroEmpleado);
-//			parametros.put("fechaIngreso", fechaIngreso);
-//			parametros.put("fechaInicio", fechaInicio);
-//			parametros.put("fechaFin", fechaFin);
-//			parametros.put("responsable", responsable);
-//			parametros.put("numeroEmpleado", numeroEmpleado);
-//			parametros.put("responsable", responsable);
-//			parametros.put("numeroEmpleado", numeroEmpleado);
-//			parametros.put("diasVacaciones", dias);
-//			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, dataSource);
-//			byte [] output = JasperExportManager.exportReportToPdf (jasperPrint); 
-////			ServletOutputStream out = response.getOutputStream();
-////			InputStream in = 
-////                    new ByteArrayInputStream(output.toString().getBytes("UTF-8"));
-////    		//Archivo archivo = vacacionesService.generaReporte(new GeneraReporteArchivo (idSolicitud, idEstatus, idPuesto, unidadAdministrativa, numeroEmpleado, fechaIngreso, rfc, nombre, apellidoPaterno, apellidoMaterno, fechaInicio, fechaFin, dias, responsable));
-//			InputStream targetStream = new ByteArrayInputStream(output);
-////			byte[] outputByte = new byte[4096];
-////			//copy binary contect to output stream
-////			while(in.read(outputByte, 0, 4096) != -1)
-////			{
-////				out.write(outputByte, 0, 4096);
-////			}
-//////			in.close();
-////			out.flush();
-////			out.close();
-////			//InputStream inputStream = output; //load the file
-//	        IOUtils.copy(targetStream, response.getOutputStream());
-//	        ServletOutputStream stream = response.getOutputStream();
-////	        stream.write(output);
-////	        stream.flush();
-////	        stream.close();
-//	        response.flushBuffer();
-//	        
-//			//JasperViewer archivo= JasperViewer(jasperPrint,false);
-//			//JasperExportManager.exportReportToPdf(jasperPrint);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//    	//
-// catch (JRException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+    @RequestMapping(value= "vacacion/generaArchivo",method = RequestMethod.GET)
+	public void  generaReporteVacaciones(String idSolicitud,String idEstatus,String idPuesto,String unidadAdministrativa,String numeroEmpleado,
+			String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio, String fechaFin, 
+			String dias, String responsable,HttpServletRequest request, HttpServletResponse response){
+    		System.out.println("Datos para el archivo"+idSolicitud);
+    	try {
+			System.out.println("Datos "+nombre);
+			Map<String,Object> parametros = new HashMap<String, Object>();
+			parametros.put("nombre", nombre);
+			parametros.put("apellidoPaterno", apellidoPaterno);
+			parametros.put("apellidoMaterno", apellidoMaterno);
+			parametros.put("rfc", rfc);
+			parametros.put("idSolicitud", idSolicitud);
+			parametros.put("idEstatus", idEstatus);
+			parametros.put("idPuesto", idPuesto);
+			parametros.put("unidadAdministrativa", unidadAdministrativa);
+			parametros.put("numeroEmpleado", numeroEmpleado);
+			parametros.put("fechaIngreso", fechaIngreso);
+			parametros.put("fechaInicio", fechaInicio);
+			parametros.put("fechaFin", fechaFin);
+			parametros.put("responsable", responsable);
+			parametros.put("numeroEmpleado", numeroEmpleado);
+			parametros.put("responsable", responsable);
+			parametros.put("numeroEmpleado", numeroEmpleado);
+			parametros.put("diasVacaciones", dias);
+			
+			reporte archivo = vacacionesService.generaReporte(new GeneraReporteArchivo (idSolicitud, idEstatus, idPuesto, unidadAdministrativa, numeroEmpleado, fechaIngreso, rfc, nombre, apellidoPaterno, apellidoMaterno, fechaInicio, fechaFin, dias, responsable));
+			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
+			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
+			if(mimeType == null){
+				mimeType = "application/pdf";
+			}
+			response.setContentType(mimeType);
+			response.setHeader( "Content-Disposition", "attachment;filename= formatoVacaciones.pdf " );
+			IOUtils.copy(targetStream, response.getOutputStream());
+	        ServletOutputStream stream = response.getOutputStream();
+	        stream.flush();
+	        response.flushBuffer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
     
     @RequestMapping(value={"vacacionesPropias"}, method = RequestMethod.GET)
     public String obtieneAsistenciasPropias(String idPeriodo, String idEstatus, String fechaInicioBusca1, String fechaFinBusca1 ,Model model, HttpSession session) {

@@ -354,43 +354,34 @@ public class VacacionesServiceImpl implements VacacionesService{
 	public reporte generaReporte(GeneraReporteArchivo generaReporteArchivo) {
 		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		
-		reporte respuesta=new reporte();
-		
+		reporte respuesta = new reporte();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("generaReporteArchivo", generaReporteArchivo);
-		
-		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_GENERA_REPORTE);
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_GENERA_REPORTE, httpEntity, header);
+			if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+				JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+				try{
+					JsonElement dataJson = json.get("data").getAsJsonObject();
+					respuesta = gson.fromJson(dataJson, reporte.class);	
+				}catch(Exception e){
+					e.printStackTrace();
+				}		
+			} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+				String mensaje = obtenerMensajeError(response);					 
+				throw new AuthenticationServiceException(mensaje);			
+			} else {
+				throw new AuthenticationServiceException("Error al obtener el archivo : "+response.getStatusLine().getReasonPhrase());
+			}
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-			
-			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-			try{
-			JsonElement dataJson = json.get("data").getAsJsonObject();
-			respuesta = gson.fromJson(dataJson, reporte.class);	
-			}catch(Exception e){
-				e.printStackTrace();
-				//vacaciones.setDias(0);
-			}		
-			
-		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-			
-			String mensaje = obtenerMensajeError(response);					 
-			throw new AuthenticationServiceException(mensaje);			
-		} else {
-			throw new AuthenticationServiceException("Error al obtener vacaciones : "+response.getStatusLine().getReasonPhrase());
-		}
 		return respuesta;
 	}
-	
-	
+
 
 }

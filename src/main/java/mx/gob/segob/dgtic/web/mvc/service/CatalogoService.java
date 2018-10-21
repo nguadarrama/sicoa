@@ -23,6 +23,7 @@ public interface CatalogoService {
 	public List<TipoDia> obtieneTipoDias();
 	public TipoDia buscaTipoDia(Integer id);
 	//Catálogo justificacion
+	public List<Justificacion> obtieneListaJ();
 	public List<Justificacion> obtieneJustificaciones();
 	public Justificacion modificaJustificacion(Justificacion justificacion);
 	public Justificacion agregaJustificacion(Justificacion justificacion);

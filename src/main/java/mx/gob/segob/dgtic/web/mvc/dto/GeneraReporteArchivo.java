@@ -1,8 +1,14 @@
 
 package mx.gob.segob.dgtic.web.mvc.dto;
 
-public class GeneraReporteArchivo {
+import java.io.Serializable;
+
+public class GeneraReporteArchivo implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3939434980461556712L;
 	private String idsolicitud;
 	private String idEstatus;
 	private String idPuesto;
@@ -17,6 +23,15 @@ public class GeneraReporteArchivo {
 	private String fechaFin; 
 	private String dias; 
 	private String responsable;
+	
+
+	/**
+	 * 
+	 */
+	public GeneraReporteArchivo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public GeneraReporteArchivo(String idsolicitud,String idEstatus,String idPuesto,String unidadAdministrativa,String numeroEmpleado,String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio, String fechaFin, String dias, String responsable){
 		super();
 		this.idsolicitud = idsolicitud;
