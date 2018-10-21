@@ -692,4 +692,73 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 
 
+	@Override
+	public List<Periodo> obtienePeriodos() {
+		List<Periodo> listaPeriodos = new ArrayList<>();
+		HttpResponse response;
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_PERIODOS);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaPeriodos = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Periodo>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener los periodos : "+response.getStatusLine().getReasonPhrase());
+		}
+				
+		return listaPeriodos;
+	}
+	
+	@SuppressWarnings("unused")
+	@Override
+	public void modificaEstatusPeriodo(Integer idPeriodo, boolean activo) {
+		try {
+			HttpResponse response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_PERIODO+"?idPeriodo="+idPeriodo+"&activo="+activo);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(),e);
+			throw new AuthenticationServiceException(e.getMessage(),e);
+		}
+	}
+	
+	@Override
+	public Periodo buscaPeriodo(Integer id) {
+		Periodo periodo = new Periodo();
+		HttpResponse response;
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_PERIODO + "?id=" + id);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			periodo = gson.fromJson(dataJson, Periodo.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el periodo : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return periodo;
+	}
 }

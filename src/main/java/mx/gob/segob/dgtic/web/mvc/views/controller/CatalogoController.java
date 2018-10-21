@@ -322,4 +322,31 @@ public class CatalogoController {
 	   		return "redirect:/catalogos/diaFestivo";
 	   	}
 	
+	   	@RequestMapping(value = { "periodo" }, method = RequestMethod.GET)
+		public String periodos(Model model) {
+
+			model.addAttribute("listaPeriodos", catalogoService.obtienePeriodos());
+
+			return "/catalogos/PeriodoVacacional";
+		}
+	   	
+	   	@PostMapping("periodo/agrega")
+	   	public String periodoAgrega(Periodo periodo) {
+	   		catalogoService.agregaPeriodoVacacional(periodo);
+	   		return "redirect:/catalogos/periodo";
+	   	}
+	   	
+	   	@GetMapping ("periodo/modifica")
+	   	public String periodoModifica(Integer idPeriodo, boolean activo) {
+	   		System.out.println("idRecibido: "+idPeriodo+" activoRecibido: "+activo);
+	   		catalogoService.modificaEstatusPeriodo(idPeriodo, activo);
+	   		return "redirect:/catalogos/periodo";
+	   	}
+		
+		@GetMapping("periodo/busca")
+		@ResponseBody
+		public Periodo periodoBusca(Integer id) {
+			System.out.println("Id a buscar: "+id);
+			return catalogoService.buscaPeriodo(id);
+		}
 }

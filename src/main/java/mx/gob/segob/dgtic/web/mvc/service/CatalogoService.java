@@ -34,6 +34,9 @@ public interface CatalogoService {
 	// Catálogo de periodo vacacional
 	public Periodo agregaPeriodoVacacional (Periodo periodo);
 	public Periodo modificaPeriodoVacacional (Periodo periodo);
+	public List<Periodo> obtienePeriodos ();
+	public Periodo buscaPeriodo(Integer id);
+	public void modificaEstatusPeriodo(Integer idPeriodo, boolean activo);
 	
 	//Catálogo Día Festivo
 	public DiaFestivo agregaDiaFestivo(DiaFestivo dia);

@@ -42,7 +42,7 @@
 			<div class="container">
 				<div class="filterable">
            			<h1 class="ico-solicitudes"><span class="input-clock"></span> Periodo Vacacional
-           				<button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button>
+<!--            				<button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span></button> -->
            				<button class="btn btn-xs btn-default nBtn glyphicon glyphicon-plus-sign"></button>
            			</h1>
            			<hr/>
@@ -54,30 +54,29 @@
 								<th><input type="text" class="form-control" placeholder="FECHA FINAL" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="DESCRIPCI&Oacute;N" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="ESTATUS" th:disabled="true"/></th>
-<!-- 							<td th:text="#{COMUN.ACCIONES}"></td> -->
+							<td th:text="#{COMUN.ACCIONES}"></td>
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="periodo : ${listaPeriodos}">
 								<td th:text="${periodo.idPeriodo}"></td>
-								<td th:text="${#dates.format(periodo.fechaInicio,'dd-MM-yyyy')}"></td>
+								<td th:text="${periodo.fechaInicio}"></td>
 								<td th:text="${periodo.fechaFin}"></td>
 								<td th:text="${periodo.descripcion}"></td>
 								<td th:text="${periodo.activo} ? 'Activo' : 'Inactivo'"></td>
-<!-- 								<td class="col-md-3">  -->
-<!-- 									<div> -->
-<!-- 										<a th:href="@{/catalogos/tipoDia/busca/(id=${tipoDia.idTipoDia})}"   class="btn btn-xs btn-default eBtn"><span class="glyphicon glyphicon-pencil"></span></a> -->
-<!-- 										<a th:href="@{/catalogos/tipoDia/elimina/(id=${tipoDia.idTipoDia})}" class="btn btn-xs btn-default eliminaBtn"><span class="glyphicon glyphicon-trash"></span></a> -->
-<!-- 									</div> -->
-<!-- 								</td> -->
+								<td class="col-md-3"> 
+									<div>
+										<a th:href="@{/catalogos/periodo/busca/(id=${periodo.idPeriodo})}"   class="btn btn-xs btn-default eBtn"><span class="glyphicon glyphicon-pencil"></span></a>
+									</div>
+								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				
 				<div class="periodoForm">      <!-- Modal para editar -->
-		      		<form th:action="@{/catalogos/periodo/modifica}" method="post">
-						<div class="modal fade" id="tipoDiaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		      		<form th:action="@{/catalogos/periodo/modifica}" method="get">
+						<div class="modal fade" id="periodoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 							    	<div class="modal-header">
@@ -87,25 +86,24 @@
 										 </button>
 								    </div>
 							    	<div class="modal-body">
-								        <div class="form-group">
-								        	<label for="idPeriodo" class="col-form-label" th:text="#{ID_PERIODO}"></label>
-								            <input type="text" class="form-control" id="idPeriodo" name="idPeriodo" th:readonly="true" />
-								        </div>
-								        <div class="form-group">
-							          		<label for="fechaInicio" class="col-form-label" th:text="#{FECHA_INICIAL}"></label>
-							          		<input type="text" class="form-control" id="fechaInicio" name="fechaInicio" th:size="20" />
-								        </div>
-								        <div class="form-group">
-											<label for="fechaFin" class="col-form-label" th:text="#{FECHA_FINAL}"></label>
-									    	<input type="text" class="form-control" id="fechaFin" name="fechaFin" size="50" />
-										</div>
-								        <div class="form-group">
-								        	<label for="descripcion" class="col-form-label" th:text="#{DESCRIPCION}"></label>
-								        	<input type="text" class="form-control" id="descripcion" name="descripcion" />
-								        </div>
 								         <div class="form-group">
-								        	<label for="activo" class="col-form-label" th:text="#{ACTIVO}"></label>
-								        	<input type="text" class="form-control" id="activo" name="activo" />
+								        	<label for="idPeriodo" class="col-form-label" th:text="ID_PERIODO"></label>
+								            <input type="text" class="form-control"  id="idPeriodo"  name="idPeriodo"  th:readonly="true" />
+								        </div>
+										<div class="modal-body">
+								        <div class="form-group">
+							          		<label for="descripcion" class="col-form-label" th:text="DESCRIPCI&Oacute;N"></label>
+							          		<input type="text" class="form-control" id="descripcion" name="descripcion" th:size="40" th:disabled="true" />
+								        </div>	
+								         <div class="form-group">
+								         <label for="activo" class="col-form-label" th:text="ESTATUS" ></label>
+								        	<div class="form-group">
+									        	<input type="radio"  name="activo" th:value="true"/>                                
+	        									<label  th:text="Activo" ></label> 
+	        									<input type="radio"  name="activo" th:value="false"/>                                
+	        									<label  th:text="Inactivo" ></label> 
+	        								</div> 
+								        </div>
 								        </div>
 							    	</div>
 								    <div class="modal-footer">
@@ -120,7 +118,7 @@
       			
       			<div class="nuevoPeriodoForm"> <!-- Modal para agregar -->
 		      		<form th:action="@{/catalogos/periodo/agrega}" method="post">
-						<div class="modal fade" id="nuevoTipoDiaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal fade" id="nuevoPeriodoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 							    	<div class="modal-header">
@@ -130,25 +128,32 @@
 										 </button>
 								    </div>
 							    	<div class="modal-body">
+								      <!--   <div class="form-group">
+								        	<label for="idPeriodo" class="col-form-label" th:text="ID PERIODO"></label>
+								            <input type="text" class="form-control" id="idPeriodo"  name="idPeriodo" th:hidden="true" th:readonly="true" />
+								        </div>  -->
 								        <div class="form-group">
-								        	<label for="idPeriodo" class="col-form-label" th:text="#{ID_PERIODO}"></label>
-								            <input type="text" class="form-control" id="idPeriodo" name="idPeriodo" th:readonly="true" />
+							          		<label for="fechaInicio" class="col-form-label" th:text="FECHA_INICIAL"></label>
+							          		<input type="date" class="form-control" id="fechaInicio" name="fechaInicio"  th:size="20" />
 								        </div>
+<!-- 								        <div class="form-group"> -->
+<!-- 											<label for="fechaFin" class="col-form-label" th:text="FECHA_FINAL"></label> -->
+<!-- 									    	<input type="date" class="form-control" id="fechaFin" name="fechaFin" size="50" /> -->
+<!-- 										</div> -->
+										<div class="modal-body">
 								        <div class="form-group">
-							          		<label for="fechaInicio" class="col-form-label" th:text="#{FECHA_INICIAL}"></label>
-							          		<input type="text" class="form-control" id="fechaInicio" name="fechaInicio" th:size="20" />
-								        </div>
-								        <div class="form-group">
-											<label for="fechaFin" class="col-form-label" th:text="#{FECHA_FINAL}"></label>
-									    	<input type="text" class="form-control" id="fechaFin" name="fechaFin" size="50" />
-										</div>
-								        <div class="form-group">
-								        	<label for="descripcion" class="col-form-label" th:text="#{DESCRIPCION}"></label>
-								        	<input type="text" class="form-control" id="descripcion" name="descripcion" />
-								        </div>
+							          		<label for="descripcion" class="col-form-label" th:text="DESCRIPCI&Oacute;N"></label>
+							          		<input type="text" class="form-control" id="descripcion" name="descripcion" th:size="40" required="required" />
+								        </div>	
 								         <div class="form-group">
-								        	<label for="activo" class="col-form-label" th:text="#{ACTIVO}"></label>
-								        	<input type="text" class="form-control" id="activo" name="activo" />
+								        	<label for="activo" class="col-form-label" th:text="ESTATUS"></label>
+								        	<div class="form-group">
+									        	<input type="radio" id="activo" name="activo" th:value="true"/>                                
+	        									<label  th:text="Activo" ></label>  
+	        									<input type="radio"  name="activo" th:value="false"/>                                
+	        									<label  th:text="Inactivo" ></label> 
+	        								</div> 
+								        </div>
 								        </div>
 							    	</div>
 								    <div class="modal-footer">
