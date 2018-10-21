@@ -101,13 +101,12 @@
 											       th:text="${responsable.claveUsuario.nombre} + ' ' + ${responsable.claveUsuario.apellidoPaterno} + ' ' + ${responsable.claveUsuario.apellidoMaterno} ">
 											      </option>
 											    </select>
-											    <form:select path="responsable.idUsuario">
-												    <form:options items="${listaResponsable}" itemValue="idUsuario" itemLabel="nombre"/>
-												</form:select>
+											    
 										</div>
-										<!-- <div class="col-md-3">
+										 <!-- <div class="col-md-3">
 											<label>
 												<label class="col-form-label">Archivo</label>
+												<a th:href="@{/vacaciones/descargaArchivo}" download="archivoPrueba1.pdf" >Descargar</a>
 												 <input type="file" name="archivo" id="archivo" multiple="multiple"/>
 											</label>
 										</div> -->
@@ -116,7 +115,7 @@
 										<div class="col-md-12">
 											<p class="text-right">
 											<a th:href="@{/vacaciones/vacacionesPropias}"><button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button></a>
-								    			<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+								    			<input type="submit" id="botonGuardarVacaciones" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
 											</p>
 										</div>
 									</div>

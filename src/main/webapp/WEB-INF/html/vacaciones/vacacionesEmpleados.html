@@ -317,6 +317,15 @@
 																	<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />		
 											</form>
 										</div>
+										<div class="col-md-4" sec:authorize="hasAuthority('2')" >
+											<form th:action="@{/vacaciones/descargaArchivo}" class="descargaArchivo" method="get">
+																
+																	<!-- <label class="col-form-label">Descarga Archivo</label> -->
+																	 <!-- <input type="file" name="archivo" id="archivo" multiple="multiple"/> -->
+																	 <input id="idArchivo" name="idArchivo" type="text" class="form-control input-calendar" required="required" th:readonly="true" style="display: none;"/>
+																	<input type="submit" class="btn btn-primary" value="Descarg archivo" />		
+											</form>
+										</div>
 				</div>
 				</div>
 				</div>

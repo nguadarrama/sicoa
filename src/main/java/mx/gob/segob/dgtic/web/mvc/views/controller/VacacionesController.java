@@ -1,6 +1,8 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +43,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
+import mx.gob.segob.dgtic.web.mvc.dto.VacacionesAux;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
@@ -276,7 +280,7 @@ public class VacacionesController {
     @PostMapping("/vacacion/modifica")
     public String registraVacacioness(@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer diasPorPedir, @RequestParam Integer idPeriodo, @RequestParam String idVacacion,Integer responsable, HttpSession session ) {
     	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-    	System.out.println("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo);
+    	System.out.println("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" responsable "+responsable);
     	//System.out.println("Archivo "+archivo+" idVacacion "+idVacacion);
     	System.out.println("responsable "+responsable);
     	Date fechaInicial = new Date();
@@ -309,7 +313,7 @@ public class VacacionesController {
      	//archivoDto.setIdArchivo(idArchivo);
      	Estatus estatus=new Estatus();
      	estatus.setIdEstatus(1);
-     	vacacionesService.agregaVacaciones(new Vacaciones(null,vacacion,null, responsable, estatus, fechaInicial, fechaFinal, diasPorPedir), claveUsuario);
+     	vacacionesService.agregaVacaciones(new VacacionesAux(null,Integer.parseInt(idVacacion), responsable, 1, fechaInicio, fechaFin, diasPorPedir), claveUsuario);
     	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
     	//System.out.println("Archivo "+archivo);
     	return "redirect:/vacaciones/solicitudVacaciones";
@@ -337,7 +341,7 @@ public class VacacionesController {
      	vacacion.setIdVacacion(Integer.parseInt(idVacacion));
      	Estatus estatus=new Estatus();
      	estatus.setIdEstatus(1);
-     	vacacionesService.agregaVacaciones(new Vacaciones(null,vacacion,null, responsable, estatus, fechaInicial, fechaFinal, diasPorPedir), claveUsuario);
+     	vacacionesService.agregaVacaciones(new VacacionesAux(null,Integer.parseInt(idVacacion), responsable, 1, fechaInicio, fechaFin, diasPorPedir), claveUsuario);
     	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
     	return "redirect:/vacaciones/solicitudVacacionesEmpleados";
     }
@@ -418,21 +422,26 @@ public class VacacionesController {
     	return "redirect:/vacaciones/vacacionesEmpleados";
     }
     
-    @RequestMapping(value = "/archivo", method = RequestMethod.GET)
-    public void getFile(
-        @PathVariable("C:/Users/Anzen Digital/Pictures/tigre.jpg") String fileName, 
-        HttpServletResponse response){
-        try {
-          // get your file as InputStream
-        	FileInputStream archi= new FileInputStream("C:/Users/Anzen Digital/Desktop");
-          InputStream is = archi;
-          // copy it to response's OutputStream
-          org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
-          response.flushBuffer();
-        } catch (IOException ex) {
-          System.out.println("Error writing file to output stream. Filename was '{}'"+ fileName+" "+ex);
-          throw new RuntimeException("IOError writing file to output stream");
+    @RequestMapping(value = "/descargaArchivo", method = RequestMethod.GET)
+    public void getFile(Integer idArchivo, HttpServletRequest request, HttpServletResponse response) throws IOException{
+    	System.out.println("id del archivo "+idArchivo);
+    	Archivo archivo= new Archivo();
+    	archivo=archivoService.consultaArchivo(idArchivo);
+    	System.out.println("archivo retornado "+archivo.getUrl());
+    	String cadena="\\"+"\\";
+    	String nombrecompleto=archivo.getUrl()+archivo.getNombre();
+    	String nombreArchivo=nombrecompleto.replace('/','\\');
+    	System.out.println("nombre de archivo "+nombreArchivo);
+    	File file = new File(nombreArchivo);
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+        String mimeType= URLConnection.guessContentTypeFromStream(inputStream);
+        if(mimeType==null){
+        	mimeType="application/octect-stream";
         }
-
+        
+        response.setContentType(mimeType);
+        response.setContentLength((int)file.length());
+        response.setHeader("Content-Disposition", String.format("attachment; filename\"%s\"",file.getName()));
+        FileCopyUtils.copy(inputStream, response.getOutputStream());
     }
 }

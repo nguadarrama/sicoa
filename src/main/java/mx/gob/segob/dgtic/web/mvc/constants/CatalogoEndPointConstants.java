@@ -50,6 +50,7 @@ public final class CatalogoEndPointConstants {
 	//Archivo
 			public static final String WEB_SERVICE_GUARDA_ARCHIVO="/catalogo/agregaArchivo";
 			public static final String WEB_SERVICE_ACTUALIZA_ARCHIVO="/catalogo/modificaArchivo";
+			public static final String WEB_SERVICE_BUSCA_ARCHIVO="/catalogo/buscaArchivo";
 	//
 	public static final String WEB_SERVICE_INFO_PERFIL =  "/catalogo/obtienePerfiles";
 	

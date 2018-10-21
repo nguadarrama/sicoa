@@ -4,7 +4,8 @@ $(document).ready(function() {
 //	$('#collapseOne').collapse({
 //		  toggle: false
 //		})
-		
+	//$("#botonGuardarVacaciones").disabled = true;
+	document.getElementById("botonGuardarVacaciones").disabled = true;
 	$("#actualizamosVacacion").css("display","none");
 		$("#btnVacacionesPropias").on('click', function(event){
 			
@@ -27,6 +28,10 @@ $(document).ready(function() {
 		$("#fechaInicio").datepicker({ 
 			minDate: 1,
 		       beforeShowDay: $.datepicker.noWeekends,
+		       onSelect: function() 
+		       { 
+		    	   calcularDias();
+		       },
 		   });
 		$("#fechaFin").datepicker({ 
 			minDate: 1,
@@ -65,6 +70,7 @@ $(document).ready(function() {
 					$('.actualizaVacacion #fechaSolicitud').val(hmap.vacacion.fechaRegistro);
 					$('.actualizaVacacion #fechaFin1').val(hmap.vacacion.fechaFin);
 					$('.actualizaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
+					$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 					$('.actualizaArchivo #claveUsuario').val(hmap.vacacion.idUsuario.claveUsuario);
 					if(hmap.vacacion.idEstatus.idEstatus=='2' || hmap.vacacion.idEstatus.idEstatus=='3'){
 						$('.rechazaVacacion #rechazaVacacion').css("display","none");
@@ -107,28 +113,35 @@ $(document).ready(function() {
 			}
 		function calcularDias(){
 			var fechaInicio= $("#fechaInicio").val();
-			var x = fechaInicio.split("/");
-			fechaInicio = x[0] + "-" + x[1] + "-" + x[2];
 			var fechaFin=$("#fechaFin").val();
-			var y = fechaFin.split("/");
-			fechaFin = y[0] + "-" + y[1] + "-" + y[2];
-			var resultado = diasLibres(fechaInicio,fechaFin);
-			//var dias=diasEntreFechas();
-			//resultado+=1;
-			//alert ("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" resultado "+resultado);
-			if(resultado>=0 && resultado<=10){
-				//alert("bien ");
-				var diasAutorizados=$("#diasDispobibles").val();
-				//alert("Dias disponibles "+diasAutorizados);
-				if(diasAutorizados>=resultado){
-				$("#diasPorPedir").val(resultado);
-				}else{
-					alert("Error, los días no deben pasar del tope "+diasAutorizados);
+			alert("variable "+fechaInicio);
+			alert("variable2 "+fechaFin);
+			if(fechaInicio!=null && fechaInicio!=""){
+				if(fechaFin!=null && fechaFin!=""){	
+					var x = fechaInicio.split("/");
+					fechaInicio = x[0] + "-" + x[1] + "-" + x[2];
+					
+					var y = fechaFin.split("/");
+					fechaFin = y[0] + "-" + y[1] + "-" + y[2];
+					var resultado = diasLibres(fechaInicio,fechaFin);
+					//var dias=diasEntreFechas();
+					//resultado+=1;
+					//alert ("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" resultado "+resultado);
+					if(resultado>=0 && resultado<=10){
+						//alert("bien ");
+						var diasAutorizados=$("#diasDispobibles").val();
+						//alert("Dias disponibles "+diasAutorizados);
+						if(diasAutorizados>=resultado){
+						$("#diasPorPedir").val(resultado);
+						}else{
+							alert("Error, los días no deben pasar del tope "+diasAutorizados);
+							$("#botonGuardarVacaciones").disabled = true;
+						}
+					}else{
+						alert("El número de días no es permitido");
+					}
 				}
-			}else{
-				alert("El número de días no es permitido");
 			}
-			
 		};
 		$('#guardarVacaciones').on('click', function(event){
 			

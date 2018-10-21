@@ -41,6 +41,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
+import mx.gob.segob.dgtic.web.mvc.dto.VacacionesAux;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import mx.gob.segob.dgtic.web.mvc.service.VacacionesService;
@@ -131,13 +132,13 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 	
 	@Override
-	public void agregaVacaciones(Vacaciones vacaciones, String claveUsuario) {
+	public void agregaVacaciones(VacacionesAux vacaciones, String claveUsuario) {
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		Usuario usuario= new Usuario();
 		usuario=usuarioService.buscaUsuario(claveUsuario);
-		vacaciones.setIdUsuario(usuario);
+		vacaciones.setIdUsuario(usuario.getIdUsuario());
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("detalleVacacion", vacaciones);
 
