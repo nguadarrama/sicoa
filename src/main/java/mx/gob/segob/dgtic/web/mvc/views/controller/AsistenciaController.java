@@ -1,9 +1,11 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
 import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
@@ -63,6 +67,19 @@ public class AsistenciaController  {
 	
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	//JUSTIFICACION
+	private String MENSAJE_REGISTRO_JUSTIFICACION = "La justificación ha quedado registrada";
+	private String MENSAJE_AUTORIZA_JUSTIFICACION = "La justificación ha sido aceptada";
+	private String MENSAJE_RECHAZA_JUSTIFICACION  = "La justificación ha sido rechazada";
+	
+	//DESCUENTO
+	private String MENSAJE_REGISTRO_DESCUENTO     = "La incidencia ha sido marcada para enviar a descuento";
+	private String MENSAJE_AUTORIZA_DESCUENTO     = "Esta incidencia será enviada a descuento";
+	private String MENSAJE_RECHAZA_DESCUENTO      = "El descuento ha sido aceptado";
+	
+	private String MENSAJE = "Operación registrada correctamente.";
+	private String MENSAJE_EXCEPCION = "No se registró la operación.";
 	
 	//EMPLEADO
 	@RequestMapping(value={"empleado"}, method = RequestMethod.GET)
@@ -225,6 +242,7 @@ public class AsistenciaController  {
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
     		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String nombreAutorizador) {
     	
+    	Integer resultadoProceso = 0;
     	Integer idArchivo = null;
     	
     	try {
@@ -234,7 +252,7 @@ public class AsistenciaController  {
     		}
     		
     		//crea la incidencia y asocia el archivo
-    		asistenciaService.creaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
+    		resultadoProceso = asistenciaService.creaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
 
     	} catch(Exception e) {
     		new Exception("No se logró crear la incidencia " + e.getMessage());
@@ -255,6 +273,12 @@ public class AsistenciaController  {
     	model.addAttribute("estado", estadoHidden);
     	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
     	
+    	if (resultadoProceso == 1) {
+    		model.addAttribute("MENSAJE", MENSAJE_REGISTRO_JUSTIFICACION);
+    	} else if (resultadoProceso == 0) {
+    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    	}
+    	
     	return "/asistencia/coordinador";
     }
     
@@ -263,6 +287,7 @@ public class AsistenciaController  {
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
     		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String cve_m_usuario, String nombreAutorizador) {
     	
+    	Integer resultadoProceso = 0;
     	Integer idArchivo = null;
     	
     	try {
@@ -272,14 +297,12 @@ public class AsistenciaController  {
     		}
     		
     		//crea la petición de descuento y asocia el archivo
-    		asistenciaService.creaDescuento(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
+    		resultadoProceso = asistenciaService.creaDescuento(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
 
     	} catch(Exception e) {
     		new Exception("No se logró crear la incidencia " + e.getMessage());
     	}
     	
-		
-
 		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
     	
@@ -295,6 +318,12 @@ public class AsistenciaController  {
     	model.addAttribute("tipo", tipoHidden);
     	model.addAttribute("estado", estadoHidden);
     	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	
+    	if (resultadoProceso == 1) {
+    		model.addAttribute("MENSAJE", MENSAJE_REGISTRO_DESCUENTO);
+    	} else if (resultadoProceso == 0) {
+    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    	}
     	
     	return "/asistencia/coordinador";
     }
@@ -475,7 +504,8 @@ public class AsistenciaController  {
     @RequestMapping(value={"coordinador/justificaMultiple"}, method = RequestMethod.POST, params = "justificacionMultipleGuarda")
     public String creaIncidencias(Model model, Integer[] listaIdAsistencias, MultipartFile archivo, Integer selectJustificacion, String nombreAutorizador,
     		String cve_m_usuario_hidden_guarda_multiple, String fechaInicial_hidden_guarda_multiple, String fechaFinal_hidden_guarda_multiple, Authentication authentication) {
-    	
+
+    	Integer resultadoProceso = 0;
     	Integer idArchivo = null;
     	Integer idJustificacion = selectJustificacion;
     	
@@ -490,8 +520,9 @@ public class AsistenciaController  {
         			if (idArchivo == null) {
         				idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario, new String("asistencia_justificacion"));
         			}
+        			
         			//crea la incidencia y asocia el archivo
-            		asistenciaService.creaIncidencia(idAsistencia, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
+            		resultadoProceso = asistenciaService.creaIncidencia(idAsistencia, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
         		}
         	} catch(Exception e) {
         		new Exception("No se logró crear la incidencia " + e.getMessage());
@@ -507,6 +538,11 @@ public class AsistenciaController  {
     	model.addAttribute("fechaFinal", fechaFinal_hidden_guarda_multiple);
     	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_guarda_multiple);
     	
+    	if (resultadoProceso == 1) {
+    		model.addAttribute("MENSAJE", MENSAJE_REGISTRO_JUSTIFICACION);
+    	} else if (resultadoProceso == 0) {
+    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    	}
     	
     	return "/asistencia/coordinador";
     }
@@ -673,6 +709,75 @@ public class AsistenciaController  {
     @RequestMapping(value={"direccion/dictamina_Incidencia_Descuento"}, method = RequestMethod.POST) //permite aprobar o rechazar justificaciones y descuentos
     public String dictaminaIncidenciaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
     		String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
+    		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion, String nombre, String unidad, HttpServletResponse response) {
+    	
+    	Integer resultadoProceso = 0;
+
+    	//se lleva a cabo la dictaminación
+    	if (!dictaminacion.equals("Ver Archivo")) {
+	    	resultadoProceso = asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
+    	} else { //se muestra el archivo asociado de la petición
+    		Asistencia asistencia = asistenciaService.buscaAsistenciaPorId(idAsistenciaHidden);
+    		Integer idArchivo = asistencia.getIncidencia().getIdArchivo().getIdArchivo();    		
+
+    		Archivo archivoAsociado= new Archivo();
+        	archivoAsociado = archivoService.consultaArchivo(idArchivo);
+        	String cadena="\\"+"\\";
+        	String nombrecompleto = archivoAsociado.getUrl() + archivoAsociado.getNombre();
+        	String nombreArchivo = nombrecompleto.replace('/','\\');
+
+        	File file = new File(nombreArchivo);
+            InputStream inputStream;
+            
+			try {
+				inputStream = new BufferedInputStream(new FileInputStream(file));
+				String mimeType= URLConnection.guessContentTypeFromStream(inputStream);
+				
+				if(mimeType==null){
+	            	mimeType="application/octect-stream";
+	            }
+	            
+	            response.setContentType(mimeType);
+	            response.setContentLength((int)file.length());
+	            response.setHeader("Content-Disposition", String.format("attachment; filename\"%s\"",file.getName()));
+	            FileCopyUtils.copy(inputStream, response.getOutputStream());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            
+    	}
+    	
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden);
+    	
+    	model.addAttribute("listaAsistencia", asistencia);
+    	model.addAttribute("fechaInicial", fechaInicial);
+    	model.addAttribute("fechaFinal", fechaFinal);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
+    	model.addAttribute("nombre", nombreHidden);
+    	model.addAttribute("paterno", paternoHidden);
+    	model.addAttribute("materno", maternoHidden);
+    	model.addAttribute("nivel", nivelHidden);
+    	model.addAttribute("tipo", tipoHidden);
+    	model.addAttribute("estado", estadoHidden);
+    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+
+    	if (resultadoProceso == 1) {
+    		if (dictaminacion.equals("Autorizar")) {
+    			model.addAttribute("MENSAJE", MENSAJE_AUTORIZA_DESCUENTO);
+    		} else if (dictaminacion.equals("Rechazar")) {
+    			model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    		}
+    	} else if (resultadoProceso == 0) {
+    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    	}
+    	
+    	return "/asistencia/direccion";
+    }
+    
+    @RequestMapping(value={"direccion/dictamina_Incidencia_Descuento"}, method = RequestMethod.POST, params="descargaArchivoJustificacionDescuento") //permite aprobar o rechazar justificaciones y descuentos
+    public String descargaArchivoJustificacionDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
+    		String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
     		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
 
     	asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
@@ -699,8 +804,11 @@ public class AsistenciaController  {
     public String dictaminaDescuento(Model model, String cve_m_usuario, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
     		String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
     		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
+    	
+    	Integer resultadoProceso = 0;
 
-    	asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
+    	resultadoProceso = asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
+    	
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden);
     	
@@ -715,6 +823,16 @@ public class AsistenciaController  {
     	model.addAttribute("tipo", tipoHidden);
     	model.addAttribute("estado", estadoHidden);
     	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+
+    	if (resultadoProceso == 1) {
+    		if (dictaminacion.equals("Autorizar")) {
+    			model.addAttribute("MENSAJE", MENSAJE_AUTORIZA_DESCUENTO);
+    		} else if (dictaminacion.equals("Rechazar")) {
+    			model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    		}
+    	} else if (resultadoProceso == 0) {
+    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    	}
     	
     	return "/asistencia/direccion";
     }

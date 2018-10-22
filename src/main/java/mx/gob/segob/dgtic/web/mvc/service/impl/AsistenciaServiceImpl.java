@@ -213,13 +213,10 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		}
 		
 		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
 			asistencia = gson.fromJson(dataJson, Asistencia.class);		
-			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-			
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
@@ -230,7 +227,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
-	public void creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador) {
+	public Integer creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador) {
 		
 		//creación de la justificación para una incidencia
 		
@@ -277,16 +274,32 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			e1.printStackTrace();
 		}
 		
+		HttpResponse response = null;
+		Integer respuesta;
+		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_JUSTIFICA, httpEntity, header);
+			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_JUSTIFICA, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			respuesta = (Integer) json.get("data").getAsInt();
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al crear la incidencia: "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return respuesta;
+		
 	}
 	
 	@Override
-	public void creaDescuento(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador) {
+	public Integer creaDescuento(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador) {
 		
 		//creación de la justificación para una incidencia
 		
@@ -333,16 +346,31 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			e1.printStackTrace();
 		}
 		
+		HttpResponse response = null;
+		Integer respuesta;
+		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_CREA_DESCUENTO, httpEntity, header);
+			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_CREA_DESCUENTO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			respuesta = (Integer) json.get("data").getAsInt();
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al crear el descuento: "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return respuesta;
 	}
 	
 	@Override
-	public void aplicaDescuento(Integer idAsistencia) {
+	public Integer aplicaDescuento(Integer idAsistencia) {
 		
 		//la asistencia con incidencia que se quiere descontar
 		Asistencia asistencia = new Asistencia();
@@ -372,16 +400,31 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			e1.printStackTrace();
 		}
 		
+		HttpResponse response = null;
+		Integer respuesta;
+		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_APLICA_DESCUENTO, httpEntity, header);
+			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_APLICA_DESCUENTO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			respuesta = (Integer) json.get("data").getAsInt();
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al crear el descuento: "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return respuesta;
 	}
 	
 	@Override
-	public void dictaminaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, String dictaminacion) {
+	public Integer dictaminaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, String dictaminacion) {
 		//acepta justificación
 
 		//motivo de justificación
@@ -426,12 +469,27 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			e1.printStackTrace();
 		}
 		
+		HttpResponse response = null;
+		Integer respuesta;
+		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_DICTAMINA, httpEntity, header);
+			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_DICTAMINA, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			respuesta = (Integer) json.get("data").getAsInt();
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al crear el descuento: "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return respuesta;
 		
 	}
 	

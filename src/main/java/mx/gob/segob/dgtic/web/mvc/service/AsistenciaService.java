@@ -20,10 +20,10 @@ public interface AsistenciaService {
     		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa);
 	
 	public Asistencia buscaAsistenciaPorId(Integer id);
-	public void creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador);
-	public void creaDescuento(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador);
-	public void aplicaDescuento(Integer idAsistencia);
-	public void dictaminaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, String dictaminacion);
+	public Integer creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador);
+	public Integer creaDescuento(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador);
+	public Integer aplicaDescuento(Integer idAsistencia);
+	public Integer dictaminaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, String dictaminacion);
 	public reporte formatoJustificacion(FormatoIncidencia formatoIncidencia);
 	public reporte formatoDescuento(FormatoIncidencia formatoIncidencia);
 }
