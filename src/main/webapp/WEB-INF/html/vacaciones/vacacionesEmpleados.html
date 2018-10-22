@@ -142,12 +142,12 @@
 											<td th:text="${vacaciones.idUsuario.claveUsuario}"></td>
 											<td th:text="${vacaciones.idUsuario.nombreUnidad}"></td>
 											<td th:text="''+ ${vacaciones.idUsuario.nombre} + ' ' + ${vacaciones.idUsuario.apellidoPaterno} + ' ' + ${vacaciones.idUsuario.apellidoMaterno}"></td>
-											
+											<td th:text="${vacaciones.idVacacion.idPeriodo.descripcion}"></td>
 											<td th:text="${#dates.format(vacaciones.fechaInicio, 'dd-MM-yyyy')}"></td>
 											<td th:text="${#dates.format(vacaciones.fechaFin, 'dd-MM-yyyy')}"></td>
 											<td th:text="${vacaciones.dias}"></td>
 											<td th:text="${vacaciones.idEstatus.descripcion}"></td>
-											<td th:text="${vacaciones.idVacacion.idPeriodo.descripcion}"></td>
+											
 											<td class="col-md-3">
 												<a th:href="@{/vacaciones/vacacion/busca/(idVacacion=${vacaciones.idDetalle})}"  class="eBtn" id="botonLlamar" name="botonLlamar"> Ver Detalle </a>
 											</td>

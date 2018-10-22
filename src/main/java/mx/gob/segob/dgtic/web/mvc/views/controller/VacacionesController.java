@@ -231,7 +231,7 @@ public class VacacionesController {
     			usuario=true;
     		}
     	}
-    	System.out.println("Bandera para determinar si es empleado o no "+usuario);
+    	System.out.println("Bandera para determinar si es empleado o no "+usuario+" claveUsuario "+claveUsuario);
     	Usuario usuarioAux= new Usuario();
     	if(usuario==false){
     		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider);
@@ -275,7 +275,15 @@ public class VacacionesController {
 	    	 model.addAttribute("vacacion",null);
 	    }
 	    System.out.println("idPeriodo "+periodo.getIdPeriodo());
-	    if(vacacionPeriodo.getIdUsuario().getClaveUsuario()!=null && !vacacionPeriodo.getIdUsuario().getClaveUsuario().toString().isEmpty()){
+	    String claveUsuarioAux= null;
+	    try{
+	    
+	    claveUsuarioAux=vacacionPeriodo.getIdUsuario().getClaveUsuario();
+	    }catch(Exception e){
+	    	e.printStackTrace();
+	    }
+	    //claveUsuarioAux=vacacionPeriodo.getIdUsuario().getClaveUsuario();
+	    if(claveUsuarioAux!=null && !claveUsuarioAux.toString().isEmpty()){
 	    	model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuario));
 	    }else{
 	    	model.addAttribute("listaResponsable",null);
