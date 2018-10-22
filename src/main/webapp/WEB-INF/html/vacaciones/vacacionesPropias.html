@@ -288,19 +288,26 @@
 						</div>
 					</div>
 					</form>
-					<div>
+					</div>
+					<div class="card" >
+					<div class="row">
 					<div class="col-md-6">
 						<form th:action="@{/vacaciones/vacacion/actualizaArchivo}" class="actualizaArchivo" method="post" enctype="multipart/form-data">
-											
+											<div class="col-md-6">
 												<label class="col-form-label">Formato de vacaciones </label>
 												 <input type="file" name="archivo" id="archivo" multiple="multiple"/>
+												 </div>
+												 <div class="col-md-6">
 												 <input id="claveUsuario" name="claveUsuario" type="text" class="form-control" required="required" th:readonly="true" style="display: none;"/>
 												 <input id="idArchivo" name="idArchivo" type="text" class="form-control input-calendar" required="required" th:readonly="true" style="display: none;"/>
 												<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />		
+												</div>
 						</form>
 					</div>
 					</div>
-				</div>
+					</div>
+					
+				
 				</div>
 				</div>
 				</div>

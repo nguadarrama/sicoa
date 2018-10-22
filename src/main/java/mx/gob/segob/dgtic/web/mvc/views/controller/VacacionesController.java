@@ -414,9 +414,23 @@ public class VacacionesController {
     	return"redirect:/vacaciones/vacacionesPropias";
     	}
     @PostMapping("/vacacion/actualizaArchivoEmpleado")
-    public String registraVacacionesEmpleado(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario ){
-    	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario);
-    	archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo);	
+    public String registraVacacionesEmpleado(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idDetalle ){
+    	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario+" idDetalle "+idDetalle);
+    	Integer idArchivoAux=null;
+    	Vacaciones vacaciones= new Vacaciones();
+    	Archivo archivoDto=new Archivo();
+    	vacaciones.setIdDetalle(idDetalle);
+    	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
+    		archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo);
+    		archivoDto.setIdArchivo(idArchivo);
+    		vacaciones.setIdArchivo(archivoDto);
+    		vacacionesService.modificaVacaciones(vacaciones);
+    	}else{
+    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones");
+    		archivoDto.setIdArchivo(idArchivoAux);
+    		vacaciones.setIdArchivo(archivoDto);
+    		vacacionesService.modificaVacaciones(vacaciones);
+    	}
     	return"redirect:/vacaciones/vacacionesEmpleados";
     	}
     
