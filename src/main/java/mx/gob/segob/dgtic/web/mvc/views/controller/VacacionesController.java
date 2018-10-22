@@ -135,9 +135,10 @@ public class VacacionesController {
     
     @RequestMapping(value= "vacacion/generaArchivo",method = RequestMethod.GET)
 	public void  generaReporteVacaciones(String idSolicitud,String idEstatus,String idPuesto,String idUnidadAdministrativa,String numeroEmpleado,
-			String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio, String fechaFin, 
+			String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio1, String fechaFin1, 
 			String dias, String responsable, String idVacacion,HttpServletRequest request, HttpServletResponse response){
-    		System.out.println("Datos para el archivo "+idSolicitud+" unidadAdministrativa "+idUnidadAdministrativa+" idPuesto "+idPuesto +" idUnidad "+idVacacion);
+    		System.out.println("Datos para el archivo "+idSolicitud+" unidadAdministrativa "+idUnidadAdministrativa+" idPuesto "+idPuesto +" idUnidad "+idVacacion
+    				+" fechaInicio "+fechaInicio1+" fechaFin "+fechaFin1);
     	try {
 			System.out.println("Datos "+nombre);
 			Map<String,Object> parametros = new HashMap<String, Object>();
@@ -152,15 +153,15 @@ public class VacacionesController {
 			
 			parametros.put("numeroEmpleado", numeroEmpleado);
 			parametros.put("fechaIngreso", fechaIngreso);
-			parametros.put("fechaInicio", fechaInicio);
-			parametros.put("fechaFin", fechaFin);
+			parametros.put("fechaInicio", fechaInicio1);
+			parametros.put("fechaFin", fechaFin1);
 			parametros.put("responsable", responsable);
 			parametros.put("numeroEmpleado", numeroEmpleado);
 			parametros.put("responsable", responsable);
 			parametros.put("numeroEmpleado", numeroEmpleado);
 			parametros.put("diasVacaciones", dias);
 			
-			reporte archivo = vacacionesService.generaReporte(new GeneraReporteArchivo (idSolicitud, idEstatus, idPuesto, idUnidadAdministrativa, numeroEmpleado, fechaIngreso, rfc, nombre, apellidoPaterno, apellidoMaterno, fechaInicio, fechaFin, dias, responsable, idVacacion));
+			reporte archivo = vacacionesService.generaReporte(new GeneraReporteArchivo (idSolicitud, idEstatus, idPuesto, idUnidadAdministrativa, numeroEmpleado, fechaIngreso, rfc, nombre, apellidoPaterno, apellidoMaterno, fechaInicio1, fechaFin1, dias, responsable, idVacacion));
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			if(mimeType == null){
@@ -408,9 +409,23 @@ public class VacacionesController {
     }
     
     @PostMapping("/vacacion/actualizaArchivo")
-    public String registraVacaciones(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario ){
+    public String registraVacaciones(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idDetalle ){
     	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario);
-    	archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo);	
+    	Integer idArchivoAux=null;
+    	Vacaciones vacaciones= new Vacaciones();
+    	Archivo archivoDto=new Archivo();
+    	vacaciones.setIdDetalle(idDetalle);
+    	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
+    		archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo);
+    		archivoDto.setIdArchivo(idArchivo);
+    		vacaciones.setIdArchivo(archivoDto);
+    		vacacionesService.modificaVacaciones(vacaciones);
+    	}else{
+    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones");
+    		archivoDto.setIdArchivo(idArchivoAux);
+    		vacaciones.setIdArchivo(archivoDto);
+    		vacacionesService.modificaVacaciones(vacaciones);
+    	}
     	return"redirect:/vacaciones/vacacionesPropias";
     	}
     @PostMapping("/vacacion/actualizaArchivoEmpleado")

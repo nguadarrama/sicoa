@@ -125,6 +125,7 @@ $(document).ready(function() {
 			  return days;
 			}
 		function calcularDias(){
+			document.getElementById("botonGuardarVacaciones").disabled = true;
 			var fechaInicio= $("#fechaInicio").val();
 			var fechaFin=$("#fechaFin").val();
 			//alert("variable "+fechaInicio);
@@ -140,22 +141,27 @@ $(document).ready(function() {
 					//var dias=diasEntreFechas();
 					//resultado+=1;
 					//alert ("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" resultado "+resultado);
-					if(resultado>=0 && resultado<=10){
+					if(resultado>0 && resultado<=10){
 						//alert("bien ");
 						var diasAutorizados=$("#diasDispobibles").val();
 						//alert("Dias disponibles "+diasAutorizados);
 						if(diasAutorizados>=resultado){
+							$("#botonGuardarVacaciones").attr('disabled', false);
 						$("#diasPorPedir").val(resultado);
-						document.getElementById("botonGuardarVacaciones").disabled = false;
+						//alert("bien");
+						
 						}else{
-							alert("Error, los días no deben pasar del tope "+diasAutorizados);
-							$("#botonGuardarVacaciones").disabled = true;
+							alert("Error, los días no deben pasar del tope ");
+							document.getElementById("botonGuardarVacaciones").disabled = true;
 						}
 					}else{
 						alert("El número de días no es permitido");
+						document.getElementById("botonGuardarVacaciones").disabled = true;
 					}
 				}
+				//document.getElementById("botonGuardarVacaciones").disabled = true;
 			}
+			//document.getElementById("botonGuardarVacaciones").disabled = true;
 		};
 		$('#guardarVacaciones').on('click', function(event){
 			
