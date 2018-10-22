@@ -5,13 +5,15 @@ public class FormatoIncidencia {
 	private String unidadAdministrativa;
 	private String fechaActual;
 	private String codigoIncidencia;
+	private String cve_m_usuario;
 	
-	public FormatoIncidencia(String nombre, String unidadAdministrativa, String fechaActual, String codigoIncidencia) {
+	public FormatoIncidencia(String nombre, String unidadAdministrativa, String fechaActual, String codigoIncidencia, String cve_m_usuario) {
 		super();
 		this.nombre = nombre;
 		this.unidadAdministrativa = unidadAdministrativa;
 		this.fechaActual = fechaActual;
 		this.codigoIncidencia = codigoIncidencia;
+		this.cve_m_usuario = cve_m_usuario;
 	}
 	
 	public String getNombre() {
@@ -37,6 +39,13 @@ public class FormatoIncidencia {
 	}
 	public void setCodigoIncidencia(String codigoIncidencia) {
 		this.codigoIncidencia = codigoIncidencia;
+	}
+	public String getCve_m_usuario() {
+		return cve_m_usuario;
+	}
+
+	public void setCve_m_usuario(String cve_m_usuario) {
+		this.cve_m_usuario = cve_m_usuario;
 	}
 	
 	

@@ -327,7 +327,7 @@ public class AsistenciaController  {
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte archivo = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidad, fechaActual, codigoincidencia));
+			reporte archivo = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidad, fechaActual, codigoincidencia, ""));
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
@@ -377,7 +377,7 @@ public class AsistenciaController  {
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte archivo = asistenciaService.formatoDescuento(new FormatoIncidencia("", "", fechaActual, ""));
+			reporte archivo = asistenciaService.formatoDescuento(new FormatoIncidencia(nombre, "", fechaActual, "", cve_m_usuario));
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
