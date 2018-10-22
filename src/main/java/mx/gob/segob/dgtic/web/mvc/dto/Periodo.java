@@ -1,5 +1,7 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Periodo {
@@ -8,8 +10,6 @@ public class Periodo {
 	private String fechaInicio;
 	private String fechaFin;
 	private String descripcion;
-//	private String fechaIni;
-//	private String fechaFi;
 	private Boolean activo;
 	public Periodo(){
 		
@@ -33,6 +33,29 @@ public class Periodo {
 	}
 
 	public String getFechaInicio() {
+		if(fechaInicio.length()>13){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaInicio);
+				fechaInicio = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(fechaInicio.length()>10){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaInicio);
+				fechaInicio = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return fechaInicio;
 	}
 
@@ -41,6 +64,29 @@ public class Periodo {
 	}
 
 	public String getFechaFin() {
+		if(fechaFin.length()>13){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaFin);
+				fechaFin = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(fechaFin.length()>10){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaFin);
+				fechaFin = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return fechaFin;
 	}
 
@@ -55,22 +101,6 @@ public class Periodo {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-
-//	public String getFechaIni() {
-//		return fechaIni;
-//	}
-//
-//	public void setFechaIni(String fechaIni) {
-//		this.fechaIni = fechaIni;
-//	}
-//
-//	public String getFechaFi() {
-//		return fechaFi;
-//	}
-//
-//	public void setFechaFi(String fechaFi) {
-//		this.fechaFi = fechaFi;
-//	}
 
 	public Boolean getActivo() {
 		return activo;
