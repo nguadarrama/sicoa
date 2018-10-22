@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.http.Header;
@@ -33,11 +34,14 @@ import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
 import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
+import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Incidencia;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
+import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
+import mx.gob.segob.dgtic.web.mvc.util.FormatoIncidencia;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
@@ -430,7 +434,73 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		}
 		
 	}
-
+	
+	@Override
+	public reporte formatoJustificacion(FormatoIncidencia generaReporteArchivo) {
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		reporte respuesta = new reporte();
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("generaReporteArchivo", generaReporteArchivo);
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_FORMATO_JUSTIFICACION, httpEntity, header);
+			if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+				JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+				try{
+					JsonElement dataJson = json.get("data").getAsJsonObject();
+					respuesta = gson.fromJson(dataJson, reporte.class);	
+				}catch(Exception e){
+					e.printStackTrace();
+				}		
+			} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+				String mensaje = obtenerMensajeError(response);					 
+				throw new AuthenticationServiceException(mensaje);			
+			} else {
+				throw new AuthenticationServiceException("Error al obtener el archivo : "+response.getStatusLine().getReasonPhrase());
+			}
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		return respuesta;
+	}
+	
+	@Override
+	public reporte formatoDescuento(FormatoIncidencia generaReporteArchivo) {
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		reporte respuesta = new reporte();
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("generaReporteArchivo", generaReporteArchivo);
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_FORMATO_DESCUENTO, httpEntity, header);
+			if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+				JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+				try{
+					JsonElement dataJson = json.get("data").getAsJsonObject();
+					respuesta = gson.fromJson(dataJson, reporte.class);	
+				}catch(Exception e){
+					e.printStackTrace();
+				}		
+			} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+				String mensaje = obtenerMensajeError(response);					 
+				throw new AuthenticationServiceException(mensaje);			
+			} else {
+				throw new AuthenticationServiceException("Error al obtener el archivo : "+response.getStatusLine().getReasonPhrase());
+			}
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		return respuesta;
+	}
+	
 	private String obtenerMensajeError(HttpResponse response){
 		JsonObject respuesta = (JsonObject) HttpResponseUtil.getJsonContent(response);
 		JsonObject metadata = (JsonObject)respuesta.get(AutorizacionConstants.ATTR_META_DATA_JSON_NAME);			
@@ -438,5 +508,5 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
-	
+
 }

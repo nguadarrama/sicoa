@@ -1,15 +1,20 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,14 +31,17 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
+import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
+import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import mx.gob.segob.dgtic.web.mvc.util.AsistenciaJustificacion;
 import mx.gob.segob.dgtic.web.mvc.util.Excel;
+import mx.gob.segob.dgtic.web.mvc.util.FormatoIncidencia;
 
 /**
  * Controller donde se registran las vistas de asistencia
@@ -61,6 +69,7 @@ public class AsistenciaController  {
     public String buscaListaAsistenciaEmpleado(Model model) {
     	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	
     	return "/asistencia/empleado";
     }
@@ -290,6 +299,123 @@ public class AsistenciaController  {
     	return "/asistencia/coordinador";
     }
     
+    @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="formatoJustificacion")
+    public String descargaFormatoJustificacion(Model model, String nombre, String unidad, String nombreAutorizador, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
+    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cve_m_usuario, Integer idTipoDiaModal, HttpServletResponse response) {
+    	
+    	//se traduce la incidencia
+    	String codigoincidencia = "";
+    	
+    	if (idTipoDiaModal == 2) {
+    		codigoincidencia = "O";
+    	} else if (idTipoDiaModal == 3) {
+    		codigoincidencia = "1/2";
+    	} else if (idTipoDiaModal == 4) {
+    		codigoincidencia = "P";
+    	} else if (idTipoDiaModal == 6) {
+    		codigoincidencia = "Inasistencia";
+    	} else if (idTipoDiaModal == 7) {
+    		codigoincidencia = "Comisión";
+    	}else if (idTipoDiaModal == 8) {
+    		codigoincidencia = "Licencia Médica";
+    	}
+    	
+    	//fecha actual para el reporte
+    	Date fechaHoy = new Date();
+    	SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+    	String fechaActual = f.format(fechaHoy);
+    	
+    	try {
+			reporte archivo = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidad, fechaActual, codigoincidencia));
+			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
+			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
+			
+			if(mimeType == null){
+				mimeType = "application/pdf";
+			}
+			
+			response.setContentType(mimeType);
+			response.setHeader( "Content-Disposition", "attachment;filename= Formato Justificacion.pdf" );
+			IOUtils.copy(targetStream, response.getOutputStream());
+	        ServletOutputStream stream = response.getOutputStream();
+	        stream.flush();
+	        response.flushBuffer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
+    	
+    	model.addAttribute("listaAsistencia", asistencia);
+    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
+    	model.addAttribute("fechaInicial", fechaInicial);
+    	model.addAttribute("fechaFinal", fechaFinal);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
+    	model.addAttribute("nombre", nombreHidden);
+    	model.addAttribute("paterno", paternoHidden);
+    	model.addAttribute("materno", maternoHidden);
+    	model.addAttribute("nivel", nivelHidden);
+    	model.addAttribute("tipo", tipoHidden);
+    	model.addAttribute("estado", estadoHidden);
+    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	
+    	return "/asistencia/coordinador";
+    }
+    
+    @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="formatoDescuento")
+    public String descargaFormatoDescuento(Model model, String nombre, String unidad, String nombreAutorizador, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
+    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, String tipoHidden, String estadoHidden, String fechaInicial, 
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cve_m_usuario, HttpServletResponse response) {
+    	
+    	//fecha actual para el reporte
+    	Date fechaHoy = new Date();
+    	SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+    	String fechaActual = f.format(fechaHoy);
+    	
+    	try {
+			reporte archivo = asistenciaService.formatoDescuento(new FormatoIncidencia("", "", fechaActual, ""));
+			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
+			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
+			
+			if(mimeType == null){
+				mimeType = "application/pdf";
+			}
+			
+			response.setContentType(mimeType);
+			response.setHeader( "Content-Disposition", "attachment;filename= Formato Descuento.pdf" );
+			IOUtils.copy(targetStream, response.getOutputStream());
+	        ServletOutputStream stream = response.getOutputStream();
+	        stream.flush();
+	        response.flushBuffer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
+    	
+    	model.addAttribute("listaAsistencia", asistencia);
+    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
+    	model.addAttribute("fechaInicial", fechaInicial);
+    	model.addAttribute("fechaFinal", fechaFinal);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
+    	model.addAttribute("nombre", nombreHidden);
+    	model.addAttribute("paterno", paternoHidden);
+    	model.addAttribute("materno", maternoHidden);
+    	model.addAttribute("nivel", nivelHidden);
+    	model.addAttribute("tipo", tipoHidden);
+    	model.addAttribute("estado", estadoHidden);
+    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	
+    	return "/asistencia/coordinador";
+    }
+    
     @RequestMapping(value={"coordinador/buscaAsistenciasPorId"}, method = RequestMethod.POST)
     public String buscaAsistenciasPorId(Model model, Integer[] checkboxes, String cve_m_usuario_hidden_lista_multiple, String fechaInicial_hidden_lista_multiple, 
     		String fechaFinal_hidden_lista_multiple) {
@@ -368,7 +494,6 @@ public class AsistenciaController  {
     	
     	return "/asistencia/coordinador";
     }
-    
     //TERMINA COORDINADOR
     
     //DIRECCIÓN
@@ -376,6 +501,7 @@ public class AsistenciaController  {
     public String buscaListaAsistenciaDireccion(Model model) {
     	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	
     	return "/asistencia/direccion";
     }

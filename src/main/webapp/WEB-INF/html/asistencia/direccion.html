@@ -148,7 +148,7 @@
 					            </div>
 					            
 					        	<hr/>
-					        	<h2 th:hidden="${inicio}">
+					        	<h2 th:if="${#arrays.length(listaAsistencia)} != 0">
 					        		<span th:text="${#arrays.length(listaAsistencia)} > 1 ? 'Se encontraron' : 'Se encontr&oacute;'"></span>
 				        			<b>
 				        				<span th:text="${#arrays.length(listaAsistencia)}"></span>

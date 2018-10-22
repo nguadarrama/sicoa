@@ -18,4 +18,6 @@ public final class AsistenciaEndPointConstants {
 	public static final String WEB_SERVICE_INFO_ASISTENCIA_CREA_DESCUENTO =  "/asistencia/creaDescuento";
 	public static final String WEB_SERVICE_INFO_ASISTENCIA_DICTAMINA =  "/asistencia/dictaminaIncidencia";
 	public static final String WEB_SERVICE_INFO_ASISTENCIA_APLICA_DESCUENTO =  "/asistencia/descuentaIncidencia";
+	public static final String WEB_SERVICE_INFO_ASISTENCIA_FORMATO_JUSTIFICACION =  "/asistencia/formatoJustificacion";
+	public static final String WEB_SERVICE_INFO_ASISTENCIA_FORMATO_DESCUENTO =  "/asistencia/formatoDescuento";
 }
