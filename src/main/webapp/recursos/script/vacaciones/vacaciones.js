@@ -5,8 +5,9 @@ $(document).ready(function() {
 //		  toggle: false
 //		})
 	//$("#botonGuardarVacaciones").disabled = true;
-	document.getElementById("botonGuardarVacaciones").disabled = true;
+	//document.getElementById("botonGuardarVacaciones").disabled = true;
 	$("#actualizamosVacacion").css("display","none");
+	$('.actualizaVacacion #responsableAux').css("display","none");
 		$("#btnVacacionesPropias").on('click', function(event){
 			
 		
@@ -54,16 +55,17 @@ $(document).ready(function() {
 			var href = $(this).attr('href');
 			var text = $(this).text();
 				$.get(href, function(hmap, status) {
-					
+					alert(hmap.vacacion.idVacacion.idVacacion),
 					$('.actualizaVacacion #numeroEmpleado').val(hmap.vacacion.idUsuario.claveUsuario);
 					
 					$('.actualizaVacacion #nombre').val(hmap.vacacion.idUsuario.nombre);
 					$('.actualizaVacacion #apellidoPaterno').val(hmap.vacacion.idUsuario.apellidoPaterno);
 					$('.actualizaVacacion #apellidoMaterno').val(hmap.vacacion.idUsuario.apellidoMaterno);
 					$('.actualizaVacacion #idSolicitud').val(hmap.vacacion.idDetalle);
+					$('.actualizaVacacion #idVacacion').val(hmap.vacacion.idVacacion.idVacacion);
 					$('.actualizaVacacion #idEstatus').val(hmap.vacacion.idEstatus.estatus);
 					$('.actualizaVacacion #idPuesto').val(hmap.vacacion.idUsuario.idPuesto);
-					$('.actualizaVacacion #idUnidadAdministrativa').val(hmap.responsable.nombreUnidad);
+					$('.actualizaVacacion #idUnidadAdministrativa').val(hmap.vacacion.idUsuario.nombreUnidad);
 					$('.actualizaVacacion #fechaIngreso').val(hmap.vacacion.idUsuario.fechaIngreso);
 					$('.actualizaVacacion #rfc').val(hmap.vacacion.idUsuario.rfc);
 					$('.actualizaVacacion #fechaInicio1').val(hmap.vacacion.fechaInicio);
@@ -87,8 +89,13 @@ $(document).ready(function() {
 					$('.rechazaVacacion #idSolicitud').val(hmap.vacacion.idDetalle);
 					$('.rechazaVacacion #idVacacion').val(hmap.vacacion.idVacacion.idVacacion);
 					$('.rechazaVacacion #dias').val(hmap.vacacion.dias);
+					if(hmap.responsable!=null && hmap.responsable!=""){
 					$('.actualizaVacacion #responsable').val(hmap.responsable.nombre+" "+hmap.responsable.apellidoPaterno+" "+hmap.responsable.apellidoMaterno);
-					
+					$('.actualizaVacacion #responsableAux').css("display","none");
+					}else{
+						$('.actualizaVacacion #responsable').css("display","none");
+						$('.actualizaVacacion #responsableAux').css("display","inline");
+					}
 					$("#actualizamosVacacion").css("display","inline");
 					$(".misPropiasVacaciones").css("display","none");
 					

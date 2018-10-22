@@ -134,7 +134,7 @@
 									</thead>
 									<tbody>
 										<tr th:each="vacaciones : ${vacacionesPropias}">
-											<td ></td>
+											<td th:text="${vacaciones.idVacacion.idPeriodo.descripcion}"></td>
 											<td th:text="${vacaciones.idEstatus.descripcion}"></td>
 											<td th:text="${vacaciones.fechaInicio}"></td>
 											<td th:text="${vacaciones.fechaFin}"></td>
@@ -161,6 +161,7 @@
 							<label>
 									<label class="col-form-label">Folio de solicitud</label>
 									<input id="idSolicitud" name="idSolicitud" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="idVacacion" name="idVacacion" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
 							</label>
 						</div>
 						<div class="col-md-6">

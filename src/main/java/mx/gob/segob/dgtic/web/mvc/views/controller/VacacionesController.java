@@ -121,18 +121,23 @@ public class VacacionesController {
 		Vacaciones vacaciones = new Vacaciones();
 		vacaciones=vacacionesService.obtieneVacacion(idVacacion);
 		hmap.put("vacacion",vacaciones);
-		String claveResponsable=""+vacaciones.getIdResponsable();
-		hmap.put("responsable", usuarioService.buscaUsuarioPorId(claveResponsable));
+		//String claveResponsable=Integer.toString(vacaciones.getIdResponsable());
+		//System.out.println("claveResponsable "+claveResponsable);
+		if(vacaciones.getIdResponsable()!=null && !vacaciones.getIdResponsable().toString().isEmpty()){
+			hmap.put("responsable", usuarioService.buscaUsuarioPorId(Integer.toString(vacaciones.getIdResponsable())));
+		}else{
+			hmap.put("responsable", null);
+		}
 		//hmap.put("listaUsuarioPerfiles", perfilUsuarioService.recuperaPerfilesUsuario(id));
 		//hmap.put("listaPerfiles", catalogoService.obtienePerfiles());
 		return hmap;
 	}
     
     @RequestMapping(value= "vacacion/generaArchivo",method = RequestMethod.GET)
-	public void  generaReporteVacaciones(String idSolicitud,String idEstatus,String idPuesto,String unidadAdministrativa,String numeroEmpleado,
+	public void  generaReporteVacaciones(String idSolicitud,String idEstatus,String idPuesto,String idUnidadAdministrativa,String numeroEmpleado,
 			String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio, String fechaFin, 
-			String dias, String responsable,HttpServletRequest request, HttpServletResponse response){
-    		System.out.println("Datos para el archivo"+idSolicitud);
+			String dias, String responsable, String idVacacion,HttpServletRequest request, HttpServletResponse response){
+    		System.out.println("Datos para el archivo "+idSolicitud+" unidadAdministrativa "+idUnidadAdministrativa+" idPuesto "+idPuesto +" idUnidad "+idVacacion);
     	try {
 			System.out.println("Datos "+nombre);
 			Map<String,Object> parametros = new HashMap<String, Object>();
@@ -143,7 +148,8 @@ public class VacacionesController {
 			parametros.put("idSolicitud", idSolicitud);
 			parametros.put("idEstatus", idEstatus);
 			parametros.put("idPuesto", idPuesto);
-			parametros.put("unidadAdministrativa", unidadAdministrativa);
+			parametros.put("unidadAdministrativa", idUnidadAdministrativa);
+			
 			parametros.put("numeroEmpleado", numeroEmpleado);
 			parametros.put("fechaIngreso", fechaIngreso);
 			parametros.put("fechaInicio", fechaInicio);
@@ -154,7 +160,7 @@ public class VacacionesController {
 			parametros.put("numeroEmpleado", numeroEmpleado);
 			parametros.put("diasVacaciones", dias);
 			
-			reporte archivo = vacacionesService.generaReporte(new GeneraReporteArchivo (idSolicitud, idEstatus, idPuesto, unidadAdministrativa, numeroEmpleado, fechaIngreso, rfc, nombre, apellidoPaterno, apellidoMaterno, fechaInicio, fechaFin, dias, responsable));
+			reporte archivo = vacacionesService.generaReporte(new GeneraReporteArchivo (idSolicitud, idEstatus, idPuesto, idUnidadAdministrativa, numeroEmpleado, fechaIngreso, rfc, nombre, apellidoPaterno, apellidoMaterno, fechaInicio, fechaFin, dias, responsable, idVacacion));
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			if(mimeType == null){
@@ -258,17 +264,22 @@ public class VacacionesController {
     	System.out.println("periodo.getIdPeriodo() "+claveUsuario);
     	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
     	System.out.println("periodo.getIdPeriodo() "+periodo.getIdPeriodo());
-	   
+    	VacacionPeriodo vacacionPeriodo=new VacacionPeriodo();
 	    if(periodo.getIdPeriodo()!=null && !periodo.getIdPeriodo().toString().isEmpty()){
 	    	 model.addAttribute("periodo",periodo);
-	    	 model.addAttribute("vacacion",vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo()));
+	    	 vacacionPeriodo=vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo());
+	    	 model.addAttribute("vacacion",vacacionPeriodo);
 	    }else{
 	    	model.addAttribute("periodo",null);
 	    	 model.addAttribute("vacacion",null);
 	    }
 	    System.out.println("idPeriodo "+periodo.getIdPeriodo());
+	    if(vacacionPeriodo.getIdUsuario().getClaveUsuario()!=null && !vacacionPeriodo.getIdUsuario().getClaveUsuario().toString().isEmpty()){
+	    	model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuario));
+	    }else{
+	    	model.addAttribute("listaResponsable",null);
+	    }
 	    
-	    model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuario));
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 	    model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
     	//Periodo periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
