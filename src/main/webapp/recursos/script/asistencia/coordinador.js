@@ -24,6 +24,7 @@ $(document).ready(function() {
 		var href = $(this).attr('href');
 		var text = $(this).text();
 		$('#selectJustificacion').empty();
+		$('#selectAutorizador').empty();
 		var optionJustificacion = '<option></option>';
 		var optionAutorizador = '<option></option>';
 		
