@@ -17,6 +17,15 @@ $(document).ready(function() {
 		
 		$('#justificacionMultipleBtn').submit();
 	});
+	
+	$('#formatoJustificacionMultipleBtn').on('click', function(event) { 
+		$('#numeroEmpleadoHiddenGuardaMultiple').val($('#numeroEmpleado').val());
+		$('#fechaInicialHidddenGuardaMultiple').val($('#validBeforeDatepicker').val());
+		$('#fechaFinalHiddenGuardaMultiple').val($('#validAfterDatepicker').val());
+		
+		$('#justificacionMultipleBtn').submit();
+	});
+	
 
 	//pobla los campos del modal de justificación
 	$('.detalleBtn').on('click', function(event) { 					//botón justifica

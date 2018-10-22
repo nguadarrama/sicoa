@@ -418,45 +418,61 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"coordinador/buscaAsistenciasPorId"}, method = RequestMethod.POST)
     public String buscaAsistenciasPorId(Model model, Integer[] checkboxes, String cve_m_usuario_hidden_lista_multiple, String fechaInicial_hidden_lista_multiple, 
-    		String fechaFinal_hidden_lista_multiple) {
+    		String fechaFinal_hidden_lista_multiple, Authentication authentication) {
     	
     	List<Asistencia> listaAsistenciaJustificar = new ArrayList<>();
     	String nombreJefe = "";
     	String motivo = "";
     	
-    	for (Integer idAsistencia : checkboxes) {
-    		Asistencia asistenciaJustificar = asistenciaService.buscaAsistenciaPorId(idAsistencia);
-    		listaAsistenciaJustificar.add(asistenciaJustificar);
+    	if (checkboxes != null) {
+	    	for (Integer idAsistencia : checkboxes) {
+	    		Asistencia asistenciaJustificar = asistenciaService.buscaAsistenciaPorId(idAsistencia);
+	    		listaAsistenciaJustificar.add(asistenciaJustificar);
+	    		
+	    		//se obtiene el jefe del usuario
+	    		if (nombreJefe.isEmpty()) {
+	    			nombreJefe = asistenciaJustificar.getUsuarioDto().getNombreJefe();
+	    		}
+	    		
+	    		if (motivo.isEmpty()) {
+	    			if (asistenciaJustificar.getIncidencia().getJustificacion().getJustificacion() != null) {
+	    				motivo = asistenciaJustificar.getIncidencia().getJustificacion().getJustificacion();
+	    			}
+	    		}
+	    	}
+	    	
+	    	List<Justificacion> listaJustificaciones = catalogoService.obtieneJustificaciones();
+	    	List<Usuario> listaJefes = usuarioService.obtieneListaJefes();
+	    	
+	    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+	    	model.addAttribute("listaAsistenciaJustificar", listaAsistenciaJustificar);
+	    	model.addAttribute("listaJustificaciones", listaJustificaciones);
+	    	model.addAttribute("listaAutorizadores", listaJefes);
+	    	model.addAttribute("nombreJefe", nombreJefe);
+	    	model.addAttribute("justificacion", motivo);
+	    	model.addAttribute("fechaInicial", fechaInicial_hidden_lista_multiple);
+	    	model.addAttribute("fechaFinal", fechaFinal_hidden_lista_multiple);
+	    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_lista_multiple);
+    	} else {
+    		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_lista_multiple, "", "", "",
+        			"", "", "", fechaInicial_hidden_lista_multiple, fechaFinal_hidden_lista_multiple, "", authentication.getName());
     		
-    		//se obtiene el jefe del usuario
-    		if (nombreJefe.isEmpty()) {
-    			nombreJefe = asistenciaJustificar.getUsuarioDto().getNombreJefe();
-    		}
-    		
-    		if (motivo.isEmpty()) {
-    			if (asistenciaJustificar.getIncidencia().getJustificacion().getJustificacion() != null) {
-    				motivo = asistenciaJustificar.getIncidencia().getJustificacion().getJustificacion();
-    			}
-    		}
+    		model.addAttribute("listaAsistencia", asistencia);
+	    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
+	    	model.addAttribute("fechaInicial", fechaInicial_hidden_lista_multiple);
+	    	model.addAttribute("fechaFinal", fechaFinal_hidden_lista_multiple);
+	    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_lista_multiple);
+	    	
+	    	//se realizó búsqueda por usuario
+	    	if (!cve_m_usuario_hidden_lista_multiple.isEmpty()) {
+	    		model.addAttribute("activaCheckbox", true);
+	    	}
     	}
-    	
-    	List<Justificacion> listaJustificaciones = catalogoService.obtieneJustificaciones();
-    	List<Usuario> listaJefes = usuarioService.obtieneListaJefes();
-    	
-    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
-    	model.addAttribute("listaAsistenciaJustificar", listaAsistenciaJustificar);
-    	model.addAttribute("listaJustificaciones", listaJustificaciones);
-    	model.addAttribute("listaAutorizadores", listaJefes);
-    	model.addAttribute("nombreJefe", nombreJefe);
-    	model.addAttribute("justificacion", motivo);
-    	model.addAttribute("fechaInicial", fechaInicial_hidden_lista_multiple);
-    	model.addAttribute("fechaFinal", fechaFinal_hidden_lista_multiple);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_lista_multiple);
     	
     	return "/asistencia/coordinador";
     }
     
-    @RequestMapping(value={"coordinador/justificaMultiple"}, method = RequestMethod.POST)
+    @RequestMapping(value={"coordinador/justificaMultiple"}, method = RequestMethod.POST, params = "justificacionMultipleGuarda")
     public String creaIncidencias(Model model, Integer[] listaIdAsistencias, MultipartFile archivo, Integer selectJustificacion, String nombreAutorizador,
     		String cve_m_usuario_hidden_guarda_multiple, String fechaInicial_hidden_guarda_multiple, String fechaFinal_hidden_guarda_multiple, Authentication authentication) {
     	
@@ -494,6 +510,82 @@ public class AsistenciaController  {
     	
     	return "/asistencia/coordinador";
     }
+    
+    @RequestMapping(value={"coordinador/justificaMultiple"}, method = RequestMethod.POST, params = "formatoJustificacionMultipleBtn")
+    public String descargaFormatoJustificacionMultiple(Model model, Integer[] listaIdAsistencias, MultipartFile archivo, Integer selectJustificacion, 
+    		String nombreAutorizador, String cve_m_usuario_hidden_guarda_multiple, String fechaInicial_hidden_guarda_multiple, 
+    		String fechaFinal_hidden_guarda_multiple, Authentication authentication, HttpServletResponse response) {
+    	
+    	Asistencia asistencia = new Asistencia();
+    	Integer idTipoDia = 0;
+    	String nombre = "";
+    	String unidadAdministrativa = "";
+    	
+    	//obtiene la asistencia del primer checkbox seleccionado
+    	if (listaIdAsistencias != null) {
+    		asistencia = asistenciaService.buscaAsistenciaPorId(listaIdAsistencias[0]);
+    		idTipoDia = asistencia.getIdTipoDia().getIdTipoDia();
+    		nombre = asistencia.getUsuarioDto().getNombre() + " " + asistencia.getUsuarioDto().getApellidoPaterno() + " " + asistencia.getUsuarioDto().getApellidoPaterno();
+    		unidadAdministrativa = asistencia.getUsuarioDto().getNombreUnidad();
+    	}
+    	
+    	//se traduce la incidencia
+    	String codigoincidencia = "";
+    	
+    	if (idTipoDia == 2) {
+    		codigoincidencia = "O";
+    	} else if (idTipoDia == 3) {
+    		codigoincidencia = "1/2";
+    	} else if (idTipoDia == 4) {
+    		codigoincidencia = "P";
+    	} else if (idTipoDia == 6) {
+    		codigoincidencia = "Inasistencia";
+    	} else if (idTipoDia == 7) {
+    		codigoincidencia = "Comisión";
+    	} else if (idTipoDia == 8) {
+    		codigoincidencia = "Licencia Médica";
+    	} else {
+    		codigoincidencia = "Código no registrado";
+    	}
+    	
+    	//fecha actual para el reporte
+    	Date fechaHoy = new Date();
+    	SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+    	String fechaActual = f.format(fechaHoy);
+    	
+    	try {
+			reporte formatoJustificacion = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidadAdministrativa, fechaActual, codigoincidencia, ""));
+			InputStream targetStream = new ByteArrayInputStream(formatoJustificacion.getNombre());
+			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
+			
+			if(mimeType == null){
+				mimeType = "application/pdf";
+			}
+			
+			response.setContentType(mimeType);
+			response.setHeader( "Content-Disposition", "attachment;filename= Formato Justificacion.pdf" );
+			IOUtils.copy(targetStream, response.getOutputStream());
+	        ServletOutputStream stream = response.getOutputStream();
+	        stream.flush();
+	        response.flushBuffer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", "", "", 
+    			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName());
+   	
+    	model.addAttribute("listaAsistencia", listaAsistencia);
+    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<>());
+    	model.addAttribute("fechaInicial", fechaInicial_hidden_guarda_multiple);
+    	model.addAttribute("fechaFinal", fechaFinal_hidden_guarda_multiple);
+    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_guarda_multiple);
+   	
+    	return "/asistencia/coordinador";
+    }
+    
     //TERMINA COORDINADOR
     
     //DIRECCIÓN

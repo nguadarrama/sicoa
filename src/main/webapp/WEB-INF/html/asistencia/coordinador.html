@@ -260,7 +260,7 @@
 											<div class="form-group col-md-3">
 									        	<p style="text-align: left">Motivo</p>
 									            <select class="form-control" id="selectJustificacion" name="selectJustificacion" th:required="required" autocomplete="off" >
-									            	<option> -- Selecciona motivo -- </option>
+									            	<option></option>
 									            	<option th:each="j : ${listaJustificaciones}" th:text="${j.justificacion}" th:value="${j.idJustificacion}" th:selected="${justificacion == j.justificacion}"></option>
 									            </select>
 									        </div>
@@ -268,7 +268,7 @@
 									        <div class="form-group col-md-3">
 									        	<p style="text-align: left">Autorizador</p>
 									            <select class="form-control" id="selectAutorizador" name="nombreAutorizador" th:required="required" autocomplete="off">
-									            	<option> -- Selecciona autorizador -- </option>
+									            	<option></option>
 									            	<option th:each="a : ${listaAutorizadores}" th:text="${a.nombre}" th:value="${a.nombre}" th:selected="${nombreJefe == a.nombre}"></option>
 									            </select>
 									        </div>
@@ -283,10 +283,18 @@
 										    <input type="hidden" class="form-control" id="numeroEmpleadoHiddenGuardaMultiple" name="cve_m_usuario_hidden_guarda_multiple"/>
 									        <input type="hidden" class="form-control" id="fechaInicialHidddenGuardaMultiple" name="fechaInicial_hidden_guarda_multiple"/>
 									        <input type="hidden" class="form-control" id="fechaFinalHiddenGuardaMultiple" name="fechaFinal_hidden_guarda_multiple"/>
-										    
-										    <div class="form-group col-md-3">
-									    		<input type="submit" class="btn btn-success" th:value="Justificar" id="justificacionMultipleGuardaBtn" />
+									    	
+									    </div>
+									    
+									    <div class="row">
+									    	<div class="form-group col-md-3"></div>
+									    	<div class="form-group col-md-3"></div>
+									    	<div class="form-group col-md-3">	
+									    		<input type="submit" class="btn btn-default" th:value="#{IMPRIMIR_FORMATO_JUSTIFICACION}" id="formatoJustificacionMultipleBtn" name="formatoJustificacionMultipleBtn" value="formatoJustificacionMultipleBtn" />
 									    	</div>
+										    <div class="form-group col-md-3">
+										    		<input type="submit" class="btn btn-success" th:value="Justificar" id="justificacionMultipleGuardaBtn" name="justificacionMultipleGuarda" value="justificacionMultipleGuarda" />
+										    </div>
 									    </div>
 								    </div>
 							    </form>
