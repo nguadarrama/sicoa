@@ -199,7 +199,7 @@
 															</span>
 														</td>
 														<td th:if="${activaCheckbox}">
-															<input th:type="checkbox" th:value="${asistencia.idAsistencia}" name="checkboxes"/>
+															<input th:if="${asistencia.idEstatus.idEstatus == null}" th:type="checkbox" th:value="${asistencia.idAsistencia}" name="checkboxes"/>
 														</td>
 													</tr>
 												</tbody>
