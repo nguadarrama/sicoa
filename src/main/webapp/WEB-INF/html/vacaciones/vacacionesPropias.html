@@ -99,14 +99,14 @@
 										</div>
 										<div class="col-md-3">
 											<label>
-												<label class="col-form-label">Fecha de inicio</label>
-												<input id="fechaInicioBusca1" name="fechaInicioBusca1" type="text" class="form-control input-calendar" required="required" autocomplete="off" />
+												<label class="col-form-label">Fecha de Inicio</label>
+												<input id="fechaInicioBusca1" name="fechaInicioBusca1" type="text" class="form-control input-calendar" autocomplete="off" />
 											</label>
 										</div>
 										<div class="col-md-3">
 											<label>
-												<label class="col-form-label">Fecha de fin</label>
-												<input type="text" id="fechaFinBusca1" name="fechaFinBusca1" class="form-control input-calendar" required="required" autocomplete="off" />
+												<label class="col-form-label">Fecha de Fin</label>
+												<input type="text" id="fechaFinBusca1" name="fechaFinBusca1" class="form-control input-calendar" autocomplete="off" />
 											</label>
 										</div>
 									</div>
@@ -125,17 +125,17 @@
 										<tr class="filters">
 											<th>Periodo</th>
 											<th>Estatus</th>
-											<th>Fecha de inicio</th>
-											<th>Fecha de fin</th>
+											<th>Fecha de Inicio</th>
+											<th>Fecha de Fin</th>
 											<th>Dias</th>
-											<th>Acciones</th>
+											<th>Acci&oacute;n</th>
 											
 										</tr>
 									</thead>
 									<tbody>
 										<tr th:each="vacaciones : ${vacacionesPropias}">
 											<td th:text="${vacaciones.idVacacion.idPeriodo.descripcion}"></td>
-											<td th:text="${vacaciones.idEstatus.descripcion}"></td>
+											<td th:text="${vacaciones.idEstatus.estatus}"></td>
 											<td th:text="${#dates.format(vacaciones.fechaInicio, 'dd-MM-yyyy')}"></td>
 											<td th:text="${#dates.format(vacaciones.fechaFin, 'dd-MM-yyyy')}"></td>
 											<td th:text="${vacaciones.dias}"></td>
@@ -145,6 +145,9 @@
 										</tr>
 									</tbody>
 								</table>
+								<div th:if="${vacacionesPropias == null}">
+									<label>No hay Registros para mostrar, por favor intenta otra b&uacute;squeda</label>
+								</div>
 						</div>
 					 <!-- </div> -->
 					 </div>
@@ -159,7 +162,7 @@
 					<div class="row">
 						<div class="col-md-6">
 							<label>
-									<label class="col-form-label">Folio de solicitud</label>
+									<label class="col-form-label">Folio de Solicitud</label>
 									<input id="idSolicitud" name="idSolicitud" type="text" class="form-control" required="required" th:readonly="true" />
 									<input id="idVacacion" name="idVacacion" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
 							</label>
@@ -174,7 +177,7 @@
 					<div class="row">
 						 <div class="col-md-4">
 							<label>
-									<label class="col-form-label">Fecha de solicitud</label>
+									<label class="col-form-label">Fecha de Solicitud</label>
 									<input id="fechaSolicitud" name="fechaSolicitud" type="text" class="form-control" required="required" th:readonly="true"/>
 							</label>
 						 </div>
@@ -186,7 +189,7 @@
 						</div>
 						<div class="col-md-4">
 							<label>
-									<label class="col-form-label">Unidad administrativa</label>
+									<label class="col-form-label">Unidad Administrativa</label>
 									<input id="idUnidadAdministrativa" name="idUnidadAdministrativa" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
@@ -200,13 +203,13 @@
 						</div>
 						<div class="col-md-2">
 							<label>
-									<label class="col-form-label">Fecha de ingreso</label>
+									<label class="col-form-label">Fecha de Ingreso</label>
 									<input id="fechaIngreso" name="fechaIngreso" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
 						<div class="col-md-2">
 							<label>
-									<label class="col-form-label">FRC</label>
+									<label class="col-form-label">RFC</label>
 									<input id="rfc" name="rfc" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
@@ -218,13 +221,13 @@
 						</div>
 						<div class="col-md-2">
 							<label>
-									<label class="col-form-label">Apellido paterno</label>
+									<label class="col-form-label">Apellido Paterno</label>
 									<input id="apellidoPaterno" name="apellidoPaterno" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
 						<div class="col-md-2">
 							<label>
-									<label class="col-form-label">Apellido materno</label>
+									<label class="col-form-label">Apellido Materno</label>
 									<input id="apellidoMaterno" name="apellidoMaterno" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
@@ -294,7 +297,7 @@
 					<div class="col-md-6">
 						<form th:action="@{/vacaciones/vacacion/actualizaArchivo}" class="actualizaArchivo" method="post" enctype="multipart/form-data">
 											<div class="col-md-6">
-												<label class="col-form-label">Formato de vacaciones </label>
+												<label class="col-form-label">Formato de Vacaciones </label>
 												 <input type="file" name="archivo" id="archivo" multiple="multiple"/>
 												 </div>
 												 <div class="col-md-6">

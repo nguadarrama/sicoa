@@ -54,18 +54,27 @@
 		                    	<li><a sec:authorize="hasAuthority('3')" th:href="@{/asistencia/empleado}">Asistencias Empleado</a></li>
 		                    </ul>
 	                    </li>
-	                    <li class="dropdown">
+	                    <li class="dropdown" sec:authorize="!hasAuthority('0')">
 	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" th:text="#{ELEMENTO2}">
 	                    <span class="caret"></span></a>
 	                     <ul class="dropdown-menu" role="menu">
-	                    	<li><a th:href="@{/vacaciones/vacacionesPropias}" th:text="#{VACACIONES_PROPIAS}"></a></li>
-	                    	<li><a sec:authorize="!hasAuthority('3')" th:href="@{/vacaciones/vacacionesEmpleados}" th:text="#{VACACIONES_EMPLEADOS}"></a></li>
-	                    	<li><a th:href="@{/vacaciones/solicitudVacaciones}" th:text="#{SOLICITUD_VACACIONES}"></a></li>
-	                    	<li><a sec:authorize="hasAuthority('2')" th:href="@{/vacaciones/solicitudVacacionesEmpleados}">Registra vacaciones de asignados</a></li>
-	                    	</ul>
+		                    	<li><a th:href="@{/vacaciones/vacacionesPropias}" th:text="#{VACACIONES_PROPIAS}"></a></li>
+		                    	<li><a sec:authorize="!hasAuthority('3')" th:href="@{/vacaciones/vacacionesEmpleados}" th:text="#{VACACIONES_EMPLEADOS}"></a></li>
+		                    	<li><a th:href="@{/vacaciones/solicitudVacaciones}" th:text="#{SOLICITUD_VACACIONES}"></a></li>
+		                    	<li><a sec:authorize="hasAuthority('2')" th:href="@{/vacaciones/solicitudVacacionesEmpleados}">Registra vacaciones de asignados</a></li>
+		                    </ul>
 <!-- 	                    	sec:authorize="!hasAuthority('3')" -->
 	                    </li>
-	                    <li><a href="#" th:text="#{ELEMENTO3}"></a></li>
+	                    <li class="dropdown">
+	                    	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" th:text="#{ELEMENTO3}">
+	                    	<span class="caret"></span></a>
+		                    <ul class="dropdown-menu" role="menu">
+	                    		<li><a th:href="@{/licenciasMedicas/licenciasPropias}" th:text="#{LICENCIAS_PROPIAS}"></a></li>
+	                    		<li><a sec:authorize="!hasAuthority('3')" th:href="@{/vacaciones/licenciasEmpleados}" th:text="#{LICENCIAS_EMPLEADOS}"></a></li>
+	                    		<li><a th:href="@{/licenciasMedicas/solicitudLicencia}" th:text="#{SOLICITUD_LICENCIAS}"></a></li>
+	                    		<li><a sec:authorize="hasAuthority('2')" th:href="@{/vacaciones/solicitudLicenciasEmpleados}" th:text="#{SOLICITUD_LICENCIAS_EMPLEADOS}"></a></li>
+	                    	</ul>
+	                    </li>
 	                    <li><a href="#" th:text="#{ELEMENTO4}"></a></li>	                    
 	                    <li class="dropdown">
 	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" th:text="#{ELEMENTO5}">

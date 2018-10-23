@@ -10,8 +10,9 @@ $(document).ready(function() {
 			  //alert($(this).val());
 			});
 		 
-		 
-
+	$("#administrador").change(function() {
+		  alert($("#administrador").val());
+	});		 
 	$('#tableUsuarios').on('click','.eBtn' , function(event) { 					//botón edita
 		
 		 event.preventDefault();
@@ -33,9 +34,26 @@ $(document).ready(function() {
 				$('.usuarioForm #rfc').val(hmap.usuario.rfc);
 				$('.usuarioForm #nivel').val(hmap.usuario.nivel);
 				$('.usuarioForm #puesto').val(hmap.usuario.idPuesto);
+				$('.usuarioForm #fechaIngreso').val(hmap.usuario.fechaIngreso);
 				$('.usuarioForm #unidadAdministrativa').val(hmap.usuario.idUnidad).delay(3000);
-				
-				
+				var i=0;
+				//alert("datos "+hmap.listaUsuarioPerfiles.length);
+				for(i=0;hmap.listaUsuarioPerfiles.length>i;i++){
+					alert(hmap.listaUsuarioPerfiles[i].clavePerfil.clavePerfil);
+					if(hmap.listaUsuarioPerfiles[i].clavePerfil.clavePerfil=='0'){
+						$('#administrador').prop('checked', true);
+					}
+					if(hmap.listaUsuarioPerfiles[i].clavePerfil.clavePerfil=='1'){
+						$('#director').attr('checked', true);					
+					}
+					if(hmap.listaUsuarioPerfiles[i].clavePerfil.clavePerfil=='2'){
+						$('#coordinador').prop('checked', true);
+					}
+					if(hmap.listaUsuarioPerfiles[i].clavePerfil.clavePerfil=='3'){
+						
+						$('#empleado').prop('checked', true);
+					}
+				}
 				//alert("perfiles "+hmap.listaUsuarioPerfiles[0]);
 				//alert(hmap.listaUsuarioPerfiles.length);
 				var a=0;
@@ -47,25 +65,25 @@ $(document).ready(function() {
 				  option.text = array[value];
 				  select.add(option);
 				 }*/
-				var lengthPerfil = selectPerfil.options.length;
-				for(e=lengthPerfil;e>0;e--){
-					//alert($("#clavePerfil option[value='" + e + "']").val());
-					selectPerfil.remove(e-1);
-//					alert(selectPerfil.value(e-1));
-//					for(e=lengthPerfil;e>0;e--){
-//						for(a=0;a<hmap.listaUsuarioPerfiles.length;a++){
-//							alert()
-											
-					
-				}
+//				var lengthPerfil = selectPerfil.options.length;
+//				for(e=lengthPerfil;e>0;e--){
+//					//alert($("#clavePerfil option[value='" + e + "']").val());
+//					selectPerfil.remove(e-1);
+////					alert(selectPerfil.value(e-1));
+////					for(e=lengthPerfil;e>0;e--){
+////						for(a=0;a<hmap.listaUsuarioPerfiles.length;a++){
+////							alert()
+//											
+//					
+//				}
 				
-				for(a=0;a<hmap.listaUsuarioPerfiles.length;a++){
-					//alert(hmap.listaUsuarioPerfiles[a].clavePerfil.descripcion);
-					var option = document.createElement("option");
-					  option.text = hmap.listaUsuarioPerfiles[a].clavePerfil.descripcion;
-					  selectPerfil.add(option);
-					  //alert($("#perfiles option[value='" +a+ "']").val());
-				}
+//				for(a=0;a<hmap.listaUsuarioPerfiles.length;a++){
+//					//alert(hmap.listaUsuarioPerfiles[a].clavePerfil.descripcion);
+//					var option = document.createElement("option");
+//					  option.text = hmap.listaUsuarioPerfiles[a].clavePerfil.descripcion;
+//					  selectPerfil.add(option);
+//					  //alert($("#perfiles option[value='" +a+ "']").val());
+//				}
 				
 //				var opciones="<select  class='form-control' required='required' th:value='clavePerfil' name='clavePerfil' id='clavePerfil' multiple='multiple'> ";
 //				for(a=0;a<hmap.listaUsuarioPerfiles.length;a++){

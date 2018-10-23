@@ -279,6 +279,8 @@ public class VacacionesServiceImpl implements VacacionesService{
 		List<Vacaciones> listaVacaciones = new ArrayList<>();
 		HttpResponse response;
 		try{
+			
+			
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS+ "?claveUsuario="+claveUsuario+"&nombre="+nombre+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad+"&idEstatus="+idEstatus);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);

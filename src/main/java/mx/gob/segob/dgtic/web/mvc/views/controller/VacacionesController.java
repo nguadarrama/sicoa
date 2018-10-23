@@ -183,6 +183,12 @@ public class VacacionesController {
     @RequestMapping(value={"vacacionesPropias"}, method = RequestMethod.GET)
     public String obtieneAsistenciasPropias(String idPeriodo, String idEstatus, String fechaInicioBusca1, String fechaFinBusca1 ,Model model, HttpSession session) {
     	System.out.println("idEstatus "+idEstatus+" idPeriodo "+idPeriodo+" fechaInicio "+fechaInicioBusca1+" fechaFin "+fechaFinBusca1);
+    	if(idEstatus==null){
+    		idEstatus="";
+    	}
+    	if(idPeriodo==null){
+    		idPeriodo="";
+    	}
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
@@ -194,7 +200,13 @@ public class VacacionesController {
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 	    model.addAttribute("listaPeriodos",periodoService.periodos());
 	   // model.addAttribute("vacacion",vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo()));
-    	model.addAttribute("vacacionesPropias",vacacionesService.consultaVacacionesPropiasPorFiltros(claveUsuario, idPeriodo, idEstatus, fechaInicioBusca1, fechaFinBusca1));
+    	List<Vacaciones> vacaciones = new ArrayList<>();
+    	vacaciones=vacacionesService.consultaVacacionesPropiasPorFiltros(claveUsuario, idPeriodo, idEstatus, fechaInicioBusca1, fechaFinBusca1);
+    	if(vacaciones.size()>0){
+    		model.addAttribute("vacacionesPropias",vacaciones);	
+    	}else{
+    	model.addAttribute("vacacionesPropias",null);
+    	}
     	model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
     	return "/vacaciones/vacacionesPropias"; 
     	
@@ -212,7 +224,13 @@ public class VacacionesController {
 	    //model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 	    //model.addAttribute("listaPeriodos",periodoService.periodos());
 	   // model.addAttribute("vacacion",vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo()));
-    	model.addAttribute("usuariosConVacaciones",vacacionPeriodoService.obtenerUsuariosVacacionesPorFiltros(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad));
+    	List<VacacionPeriodo> conVacaciones= new ArrayList<>();
+    	conVacaciones=vacacionPeriodoService.obtenerUsuariosVacacionesPorFiltros(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad);
+    	if(conVacaciones.size()>0){
+    	model.addAttribute("usuariosConVacaciones",conVacaciones);
+    	}else{
+    		model.addAttribute("usuariosConVacaciones",null);
+    	}
     	//model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
     	return "/vacaciones/solicitudVacacionesEmpleados"; 
     	
@@ -220,6 +238,10 @@ public class VacacionesController {
     @RequestMapping(value={"vacacionesEmpleados"}, method = RequestMethod.GET)
     public String obtieneVacacionesEmpleados(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, String idUnidad, String idEstatus, Model model,HttpSession session) {
     	System.out.println("Datos para vacacionesEmpleados claveUsuario "+claveUsuario+" nombre "+nombre+" apellidoPaterno "+apellidoPaterno+" apellidoMaterno "+apellidoMaterno+" idUnidad "+idUnidad+" idEstatus "+idEstatus );
+    	if(idEstatus==null){
+    		idEstatus="";
+    		System.out.println("idestatus en controller "+idEstatus);
+    	}
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuarioLider = parts[1];
@@ -227,7 +249,7 @@ public class VacacionesController {
     	listaPerfilUsuario=perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider);
     	Boolean usuario= false;
     	for(PerfilUsuario perfilUsuario: listaPerfilUsuario){
-    		if(listaPerfilUsuario.size()==1 && perfilUsuario.getClavePerfil().equals('2')){
+    		if(perfilUsuario.getClavePerfil().equals('2')){
     			usuario=true;
     		}
     	}
@@ -236,6 +258,8 @@ public class VacacionesController {
     	if(usuario==false){
     		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider);
     		idUnidad=""+usuarioAux.getIdUnidad();
+    	}else if(idUnidad==null){
+    			idUnidad="";
     	}
     	
     	
@@ -245,7 +269,15 @@ public class VacacionesController {
 //	    System.out.println("idPeriodo "+periodo.getIdPeriodo());
 //	    model.addAttribute("vacacion",vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo()));
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
-    	model.addAttribute("vacacionesEmpleados",vacacionesService.obtenerVacacionesPorFiltros(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus));
+	    List<Vacaciones> vacaciones = new ArrayList<>();
+	    vacaciones=vacacionesService.obtenerVacacionesPorFiltros(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus);
+	    System.out.println("Tamaño "+vacaciones.size());
+	    if(vacaciones.size()>0){
+	    	model.addAttribute("vacacionesEmpleados",vacaciones);
+	    }else{
+	    	model.addAttribute("vacacionesEmpleados",null);
+	    }
+	    
     	model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
     	return "/vacaciones/vacacionesEmpleados"; 
     }

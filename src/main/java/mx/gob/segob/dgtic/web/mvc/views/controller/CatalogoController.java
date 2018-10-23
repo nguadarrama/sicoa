@@ -162,11 +162,13 @@ public class CatalogoController {
 	}
 
 	@PostMapping("/usuario/modifica")
-	public String modificaUsuario(Integer[] clavePerfil, Horario idHorario, String claveUsuario, String nombre,
-			String apellidoPaterno, String apellidoMaterno, String bloqueado, String reiniciarPassword, Integer unidadAdministrativa) {
-		System.out.println("unidadAdministrativa "+unidadAdministrativa);
-		System.out.println("valor clavePerfil " + clavePerfil.length);
-		perfilUsuarioService.guardaEliminaPerfilesUsuario(clavePerfil, claveUsuario);
+	public String modificaUsuario( Horario idHorario, String claveUsuario, String nombre,
+			String apellidoPaterno, String apellidoMaterno, String bloqueado, String reiniciarPassword, Integer unidadAdministrativa, 
+			String coordinador, String empleado, String director, String administrador) {
+		System.out.println("unidadAdministrativa "+unidadAdministrativa +" coordinador "+" empleado "+" director "+" administrador "+administrador
+				+" bloqueado "+bloqueado);
+		//System.out.println("valor clavePerfil " + clavePerfil.length);
+		//perfilUsuarioService.guardaEliminaPerfilesUsuario(clavePerfil, claveUsuario);
 		
 		usuarioService.modificaUsuario(
 				new Usuario(null, idHorario, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, bloqueado));

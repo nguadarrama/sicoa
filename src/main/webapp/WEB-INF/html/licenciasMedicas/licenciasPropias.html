@@ -40,65 +40,48 @@
 		</header>
 		<th:block layout:fragment="content"  th:remove="tag">
 		<div class="main-page">
-			<div class="container">
-				<h1 class="ico-solicitudes"><span class="input-clock"></span> Vacaciones</h1>
+			<div class="container" >
+				<h1 class="ico-solicitudes"><span class="input-clock"></span> Mis solicitudes</h1>
 				<hr/>
 				
-				<div class="row misPropiasVacaciones">
+				<div class="row">
 						<ul class="nav nav-tabs">
-							<!-- <li class="active"><a data-toggle="tab" href="#misVacacione">Mis vacaciones</a></li> -->
-							<li class="active"><a data-toggle="tab" href="#vacacionesEmpleado">Vacaciones de empleados</a></li>
-							<!-- <li><a data-toggle="tab" href="#agregar">Peticion de vacaciones</a></li> -->
+							<li class="active"><a data-toggle="tab" href="#misSolicitudes">Mis solicitudes</a></li>
 						</ul>
 				</div>
-				<div class="tab-content">
-					<div class="row tab-pane fade in active misPropiasVacaciones" id="vacacionesEmpleado">
-						
-						<div class="card vacacionesDeEmpleados">
-							<h3>Vacaciones de empleados</h3>
+				<div class="tab-content" >
+					<div class="row tab-pane fade in active misPropiasVacaciones" >
+						  <div class="card" id="misPropiasVacaciones">
+						  <div id="misVacaciones">
+						    <!-- <div class="card-header" id="headingOne">
+						      <h5 class="mb-0">
+						        <button id="muestraVacacionesPropias"  name="muestraVacacionesPropias" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						          <span class="glyphicon glyphicon-chevron-right"  ></span><span> Mis solicitudes</span>
+						        </button>
+						        <button id="ocultaVacacionesPropias" name="ocultaVacacionesPropias" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="display: none;">
+						          <span class="glyphicon glyphicon-chevron-down"  ></span><span> Mis solicitudes</span>
+						        </button>
+						      </h5>
+						    </div> -->
+						    <!-- <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion"> -->
+						    <div class="card">
+							<h3>Busca licencias m&eacute;dicas</h3>
 							<div class="asistenciaForm">      <!-- Formulario busqueda asistencia -->
-			      				<form th:action="@{/vacaciones/vacacionesEmpleados}" method="get" enctype="multipart/form-data">
+			      				<form th:action="@{/licenciasMedicas/licenciasPropias}" method="get">
 									<div class="row">
-										<div class="col-md-3">
+										<div class="col-md-4">
 											<label>
-												<p>No. de Empleado</p>
-												<input id="claveUsuario" name="claveUsuario" type="text" class="form-control" />
+												<label class="col-form-label">Fecha de inicio</label>
+												<input id="fechaInicioBusca1" name="fechaInicioBusca1" type="text" class="form-control input-calendar" required="required" autocomplete="off" />
 											</label>
 										</div>
-										<div class="col-md-3">
+										<div class="col-md-4">
 											<label>
-												<p>Nombre</p>
-												<input id="nombre" name="nombre" type="text" class="form-control input-user" />
+												<label class="col-form-label">Fecha de fin</label>
+												<input type="text" id="fechaFinBusca1" name="fechaFinBusca1" class="form-control input-calendar" required="required" autocomplete="off" />
 											</label>
 										</div>
-										<div class="col-md-3">
-											<label>
-												<p>Apellido Paterno</p>
-												<input id="apellidoPaterno" name="apellidoPaterno" type="text" class="form-control" />
-											</label>
-										</div>
-										<div class="col-md-3">
-											<label>
-												<p>Apellido Materno</p>
-												<input id="apellidoMaterno" name="apellidoMaterno" type="text" class="form-control" />
-											</label>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-3" sec:authorize="hasAuthority('1')" >
-											<label>
-												<label for="idUnidad" class="col-form-label" th:text="#{UNIDAD_ADMINISTRATIVA}"></label>
-									        	<select  class="form-control" required="required" 
-											       th:value="idUnidad" name="idUnidad" id="idUnidad">
-											      <option disabled="disabled" selected="selected" > Elige una unidad
-											      </option>
-											      <option th:each="unidades : ${listaUnidades}" th:value="${unidades.idUnidad.idUnidad}" 
-											       th:text="${unidades.idUnidad.nombre}">
-											      </option>
-											    </select>
-											</label>
-										</div>
-										<div class="col-md-3">
+										<div class="col-md-4">
 											<label>
 												<label for="unidadAdministrativa" class="col-form-label" th:text="Estatus"></label>
 									        	<select  class="form-control" required="required" 
@@ -115,7 +98,7 @@
 									<div class="row">
 										<div class="col-md-12">
 											<p class="text-right">
-												<button id="btnVacacionesEmpleados" class="btn btn-default">Buscar</button>
+												<button id="btnVacacionesPropias" class="btn btn-default">Buscar</button>
 											</p>
 										</div>
 									</div>
@@ -125,51 +108,41 @@
 								<table id="vacacionesPropias" class="table table-striped table-text-center">
 									<thead>
 										<tr class="filters">
-											<th>No. de Empleado</th>
-											<th>Unidad</th>
-											<th>Nombre de Empleado</th>
-											<th>Periodo</th>
-											<th>Fecha de Inicio</th>
-											<th>Fecha de Fin</th>
-											<th>Dias</th>
-											<th>estatus</th>
-											<th>Acciones</th>
+											<th>Fecha de inicio</th>
+											<th>Fecha de fin</th>
+											<th>Estatus</th>
+											<th>Acci&oacute;n</th>
 											
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="vacaciones : ${vacacionesEmpleados}">
-											<td th:text="${vacaciones.idUsuario.claveUsuario}"></td>
-											<td th:text="${vacaciones.idUsuario.nombreUnidad}"></td>
-											<td th:text="''+ ${vacaciones.idUsuario.nombre} + ' ' + ${vacaciones.idUsuario.apellidoPaterno} + ' ' + ${vacaciones.idUsuario.apellidoMaterno}"></td>
-											<td th:text="${vacaciones.idVacacion.idPeriodo.descripcion}"></td>
-											<td th:text="${#dates.format(vacaciones.fechaInicio, 'dd-MM-yyyy')}"></td>
-											<td th:text="${#dates.format(vacaciones.fechaFin, 'dd-MM-yyyy')}"></td>
-											<td th:text="${vacaciones.dias}"></td>
-											<td th:text="${vacaciones.idEstatus.estatus}"></td>
-											
+										<tr th:each="licencia : ${licenciasMedicas}">
+											<td th:text="${licencia.fechaInicio}"></td>
+											<td th:text="${licencia.fechaFin}"></td>
+											<!-- <td th:text="${#dates.format(vacaciones.fechaInicio, 'dd-MM-yyyy')}"></td>
+											<td th:text="${#dates.format(vacaciones.fechaFin, 'dd-MM-yyyy')}"></td> -->
+											<td th:text="${licencia.idEstatus.estatus}"></td>
 											<td class="col-md-3">
-												<a th:href="@{/vacaciones/vacacion/busca/(idVacacion=${vacaciones.idDetalle})}"  class="eBtn" id="botonLlamar" name="botonLlamar"> Ver Detalle </a>
+												<a th:href="@{/vacaciones/vacacion/busca}"  class="eBtn" id="botonLlamar" name="botonLlamar"> Ver Detalle </a>
 											</td>
 										</tr>
 									</tbody>
 								</table>
-								<div th:if="${vacacionesEmpleados == null}">
-									<label>No hay Registros para mostrar, por favor intenta otra b&uacute;squeda</label>
-								</div>
 						</div>
-							
+					 <!-- </div> -->
+					 </div>
 						</div>
-						<div class="row tab-pane fade in active" id="actualizamosVacacion" style="display: none; ">
+						</div>
+				<div class="row tab-pane fade in active" id="actualizamosVacacion" style="display: none; ">
 				<div class="card" >
-				<form  th:action="@{/vacaciones/vacacion/generaArchivo}"  method="get" class="actualizaVacacion">
+				<form  th:action="@{/vacaciones/vacacion/generaArchivo}"  method="get" class="actualizaVacacion" enctype="multipart/form-data">
 					<div class="row">
 						<h2 class="ico-solicitudes"><span class="input-clock"></span>Solicitud de vacaciones</h2>
 					</div>
 					<div class="row">
 						<div class="col-md-6">
 							<label>
-									<label class="col-form-label">Folio de Solicitud</label>
+									<label class="col-form-label">Folio de solicitud</label>
 									<input id="idSolicitud" name="idSolicitud" type="text" class="form-control" required="required" th:readonly="true" />
 									<input id="idVacacion" name="idVacacion" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
 							</label>
@@ -182,12 +155,12 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-4">
+						 <div class="col-md-4">
 							<label>
-									<label class="col-form-label">Fecha de Solicitud</label>
-									<input id="fechaSolicitud" name="fechaSolicitud" type="text" class="form-control" required="required" th:readonly="true" />
+									<label class="col-form-label">Fecha de solicitud</label>
+									<input id="fechaSolicitud" name="fechaSolicitud" type="text" class="form-control" required="required" th:readonly="true"/>
 							</label>
-						</div>
+						 </div>
 						<div class="col-md-4">
 							<label>
 									<label class="col-form-label">Puesto</label>
@@ -196,7 +169,7 @@
 						</div>
 						<div class="col-md-4">
 							<label>
-									<label class="col-form-label">Unidad Administrativa</label>
+									<label class="col-form-label">Unidad administrativa</label>
 									<input id="idUnidadAdministrativa" name="idUnidadAdministrativa" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
@@ -210,13 +183,13 @@
 						</div>
 						<div class="col-md-2">
 							<label>
-									<label class="col-form-label">Fecha de Ingreso</label>
+									<label class="col-form-label">Fecha de ingreso</label>
 									<input id="fechaIngreso" name="fechaIngreso" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
 						<div class="col-md-2">
 							<label>
-									<label class="col-form-label">RFC</label>
+									<label class="col-form-label">FRC</label>
 									<input id="rfc" name="rfc" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
@@ -228,13 +201,13 @@
 						</div>
 						<div class="col-md-2">
 							<label>
-									<label class="col-form-label">Apellido Paterno</label>
+									<label class="col-form-label">Apellido paterno</label>
 									<input id="apellidoPaterno" name="apellidoPaterno" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
 						<div class="col-md-2">
 							<label>
-									<label class="col-form-label">Apellido Materno</label>
+									<label class="col-form-label">Apellido materno</label>
 									<input id="apellidoMaterno" name="apellidoMaterno" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
@@ -245,13 +218,13 @@
 									<div class="col-md-4">
 											<label>
 													<label class="col-form-label">Me voy del </label>
-													<input id="fechaInicio1" name="fechaInicio1" type="text" class="form-control" required="required" th:readonly="true" />
+													<input id="fechaInicio1" name="fechaInicio1" type="text" class="form-control" required="required" th:readonly="true" autocomplete="off" />
 											</label>
 									</div>
 									<div class="col-md-4">
 											<label>
 													<label class="col-form-label">al </label>
-													<input id="fechaFin1" name="fechaFin1" type="text" class="form-control" required="required" th:readonly="true" />
+													<input id="fechaFin1" name="fechaFin1" type="text" class="form-control" required="required" th:readonly="true" autocomplete="off" />
 											</label>
 									</div>
 									<div class="col-md-4">
@@ -263,34 +236,37 @@
 							</div>
 							<div class="row">
 								<p class="text-center">
-												<a th:href="@{/vacaciones/vacacionesEmpleados}"><button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button></a>
-								    			<!-- <input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" /> -->
+												<a th:href="@{/vacaciones/vacacionesPropias}"><button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button></a>
+<!-- 								    			<a th:href="@{/vacaciones/vacacionesPropias}"><input type="submit" class="btn btn-danger" th:value="Eliminar" /></a> -->
 											</p>
 							</div>
+							<!-- <div class="row">
+								<p class="text-center">
+												<a th:href="@{/vacaciones/vacacionesPropias}"><button type="button" class="btn btn-danger" data-dismiss="modal" th:text="Rechazar"></button></a>
+								    			<a th:href="@{/vacaciones/vacacionesPropias}"><input type="submit" class="btn btn-primary" th:value="Aceptar" /></a>
+											</p>
+							</div> -->
+							
 						</div>
 						<div class="col-md-6">
-							<div class="row">
+							<div class="row text-center">
 									<label>
 											<label class="col-form-label">Persona que autoriza </label>
-											<input id="responsable" name="responsable" type="text" class="form-control" required="required" th:readonly="true" />
-											<input id="responsableAux" name="responsableAux" type="text" class="form-control" />
+											<input id="responsable" name="responsable" type="text" class="form-control input-calendar" required="required" th:readonly="true" />
 									</label>
 							</div>
 							<div class="row">
-											<!-- <div class="col-md-12">
-											<label>
-												<label class="col-form-label">Formato de vacaciones</label>
-												 <input type="file" name="archivo" id="archivo" multiple="multiple"/>
-											</label>
-											</div> -->
-											<div class="col-md-12">
-											<button type="submit" class="btn btn-secondary" data-dismiss="modal" >Descargar Formato</button>
 											
 											
-											<!-- <a th:href="@{/vacaciones/vacacion/acepta}"></button></a> -->
-								    			<!-- <input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" /> -->	
-											</div>
 											<!-- <input id="responsable" name="responsable" type="text" class="form-control input-calendar" required="required" /> -->
+									
+							</div>
+							<div class="row">
+								<p class="text-center">
+								    			<a th:href="@{/vacaciones/vacacionesPropias}"><input type="submit" class="btn btn-secondary" th:value="Aceptar" /></a>
+												<button type="submit" class="btn btn-secondary" data-dismiss="modal" >Descargar formato</button>		
+										
+								</p>
 							</div>
 						</div>
 					</div>
@@ -298,35 +274,28 @@
 					</div>
 					<div class="card" >
 					<div class="row">
-										<div class="col-md-8 text-center" sec:authorize="hasAuthority('2')" >
-											<form th:action="@{/vacaciones/vacacion/actualizaArchivoEmpleado}" class="actualizaArchivo" method="post" enctype="multipart/form-data">
-																<div class="col-md-6">
-																	<label class="col-form-label">Adjunta Formato de Vacaciones </label>
-																	 <input type="file" name="archivo" id="archivo" multiple="multiple"/>
-																</div>
-																<div class="col-md-6 ">
-																	 <input id="claveUsuario" name="claveUsuario" type="text" class="form-control" required="required" th:readonly="true" style="display: none;"/>
-																	 <input id="idArchivo" name="idArchivo" type="text" class="form-control input-calendar" required="required" th:readonly="true" style="display: none;"/>
-																	 <input id="idDetalle" name="idDetalle" type="text" class="form-control" required="required" th:readonly="true" style="display: none;"/>
-																	<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />	
-																</div>	
-											</form>
-										</div>
-										<div class="col-md-4 text-center" sec:authorize="hasAuthority('2')" >
-											<form th:action="@{/vacaciones/descargaArchivo}" class="descargaArchivo" method="get">
-																
-																	<!-- <label class="col-form-label">Descarga Archivo</label> -->
-																	 <!-- <input type="file" name="archivo" id="archivo" multiple="multiple"/> -->
-																	 <input id="idArchivo" name="idArchivo" type="text" class="form-control input-calendar" required="required" th:readonly="true" style="display: none;"/>
-																	<input type="submit" class="btn btn-primary" value="Descarga formato" />		
-											</form>
-										</div>
-						</div>
-						</div>
+					<div class="col-md-6">
+						<form th:action="@{/vacaciones/vacacion/actualizaArchivo}" class="actualizaArchivo" method="post" enctype="multipart/form-data">
+											<div class="col-md-6">
+												<label class="col-form-label">Formato de vacaciones </label>
+												 <input type="file" name="archivo" id="archivo" multiple="multiple"/>
+												 </div>
+												 <div class="col-md-6">
+												 <input id="claveUsuario" name="claveUsuario" type="text" class="form-control" required="required" th:readonly="true" style="display: none;"/>
+												 <input id="idArchivo" name="idArchivo" type="text" class="form-control input-calendar" required="required" th:readonly="true" style="display: none;"/>
+												 <input id="idDetalle" name="idDetalle" type="text" class="form-control" required="required" th:readonly="true" style="display: none;"/>
+												<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />		
+												</div>
+						</form>
+					</div>
+					</div>
+					</div>
+					
 				
 				</div>
 				</div>
-			</div>
+				</div>
+			
 			<div class="modal fade" id="aceptarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 				  <div class="modal-dialog" role="document">
 				    <div class="modal-content">
@@ -364,8 +333,7 @@
 				      </div>
 				    </div>
 				  </div>
-				</div>
-				
+				</div>	
 		</div>		
 		</th:block>
 		
