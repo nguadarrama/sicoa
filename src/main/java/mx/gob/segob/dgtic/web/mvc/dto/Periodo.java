@@ -11,17 +11,19 @@ public class Periodo {
 	private String fechaFin;
 	private String descripcion;
 	private Boolean activo;
+	private String mensaje;
 	public Periodo(){
 		
 	}
 	
-	public Periodo(Integer idPeriodo, String fechaInicio, String fechaFin, String descripcion, Boolean activo) {
+	public Periodo(Integer idPeriodo, String fechaInicio, String fechaFin, String descripcion, Boolean activo, String mensaje) {
 		super();
 		this.idPeriodo = idPeriodo;
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
 		this.descripcion = descripcion;
 		this.activo = activo;
+		this.mensaje = mensaje;
 	} 
 
 	public Integer getIdPeriodo() {
@@ -108,6 +110,14 @@ public class Periodo {
 
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
+	}
+
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
 	}
 
 	

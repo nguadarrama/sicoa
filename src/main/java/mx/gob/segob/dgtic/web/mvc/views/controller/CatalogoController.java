@@ -280,7 +280,6 @@ public class CatalogoController {
 	 @RequestMapping(value = { "periodo/agrega" }, method = RequestMethod.GET)
      public String agregaPeriodoVacacional(Periodo periodo) {
             periodo = catalogoService.agregaPeriodoVacacional(periodo);
-            periodo.setMensaje(periodo.getMensaje());
             return "/catalogos/periodoVacacional";
      }
 	       
@@ -347,10 +346,9 @@ public class CatalogoController {
 	
 	   	@RequestMapping(value = { "periodo" }, method = RequestMethod.GET)
 		public String periodos(Model model) {
-
 			model.addAttribute("listaPeriodos", catalogoService.obtienePeriodos());
-			if(!this.getMensaje().equals("")){
-				if(this.getMensaje().contains("correctamente"))
+			if(!this.mensaje.equals("")){
+				if(this.mensaje.contains("correctamente"))
 					model.addAttribute("MENSAJE", this.mensaje);
 				else
 					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
@@ -361,32 +359,16 @@ public class CatalogoController {
 	   	
 		@PostMapping("periodo/agrega")
 	   	public String periodoAgrega(Periodo periodo) {
-	   		Model model = null;
 	   		periodo = catalogoService.agregaPeriodoVacacional(periodo);
-	   		if(!this.getMensaje().equals("")){
-				if(this.getMensaje().contains("correctamente"))
-					model.addAttribute("MENSAJE", this.mensaje);
-				else
-					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
-			}
-			this.mensaje = "";
-//	   		this.mensaje = periodo.getMensaje();
+	   		this.mensaje = periodo.getMensaje();
 	   		return "redirect:/catalogos/periodo";
 	   	}
 	   	
 		@GetMapping ("periodo/modifica")
 	   	public String periodoModifica(Periodo periodo) {
 	   		System.out.println("idRecibido: "+periodo.getIdPeriodo()+" activoRecibido: "+periodo.getActivo());
-	   		Model model = null;
-	   		catalogoService.modificaEstatusPeriodo(periodo);
-	   		if(!this.getMensaje().equals("")){
-				if(this.getMensaje().contains("correctamente"))
-					model.addAttribute("MENSAJE", this.mensaje);
-				else
-					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
-			}
-			this.mensaje = "";
-//	   		this.mensaje = periodo.getMensaje();
+	   		periodo = catalogoService.modificaEstatusPeriodo(periodo);
+	   		this.mensaje = periodo.getMensaje();
 	   		return "redirect:/catalogos/periodo";
 	   	}
 		
