@@ -396,4 +396,13 @@ public class CatalogoController {
 			System.out.println("Id a buscar: "+id);
 			return catalogoService.buscaPeriodo(id);
 		}
+
+		public String getMensaje() {
+			return mensaje;
+		}
+
+		public void setMensaje(String mensaje) {
+			this.mensaje = mensaje;
+		}
+		
 }
