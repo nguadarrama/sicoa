@@ -34,7 +34,7 @@ public class Usuario {
 		
 	}
 	public Usuario (Perfil clavePerfil, Horario idHorario, String claveUsuario, String nombre,
-			String apellidoPaterno, String apellidoMaterno, String bloqueado){
+			String apellidoPaterno, String apellidoMaterno, String estatus){
 		super();
 		this.clavePerfil=clavePerfil;
 		this.idHorario=idHorario;
@@ -42,7 +42,7 @@ public class Usuario {
 		this.nombre=nombre;
 		this.apellidoPaterno=apellidoPaterno;
 		this.apellidoMaterno=apellidoMaterno;
-		this.bloqueado=bloqueado;
+		this.estatus=estatus;
 		}
 	public Integer getIdUsuario() {
 		return idUsuario;

@@ -10,9 +10,12 @@ $(document).ready(function() {
 			  //alert($(this).val());
 			});
 		 
-	$("#administrador").change(function() {
-		  alert($("#administrador").val());
-	});		 
+//	$("#director").change(function() {
+//		  alert($("#director").val());
+//	});	
+//	$("#administrador").change(function() {
+//		  alert($("#administrador").val());
+//	});
 	$('#tableUsuarios').on('click','.eBtn' , function(event) { 					//botón edita
 		
 		 event.preventDefault();
@@ -24,10 +27,17 @@ $(document).ready(function() {
 				$('.usuarioForm #apellidoPaterno').val(hmap.usuario.apellidoPaterno);
 				$('.usuarioForm #apellidoMaterno').val(hmap.usuario.apellidoMaterno);
 				$('.usuarioForm #activo').val(hmap.usuario.activo);
-				$('.usuarioForm #bloqueado').val(hmap.usuario.bloqueado);
-				if(hmap.usuario.bloqueado=='N'){
-					$('.usuarioForm #bloqueado').attr('checked',true);
+				//$('.usuarioForm #estatus').val(hmap.usuario.bloqueado);
+				//$('#activado').prop("checked", true);
+				//alert(hmap.usuario.estatus)
+				if(hmap.usuario.estatus=='A'){
+					$('.usuarioForm #activado').prop("checked", true);
+				}else{
+					$('.usuarioForm #desactivado').prop("checked", true);
 				}
+//				if(hmap.usuario.bloqueado=='N'){
+//					$('.usuarioForm #bloqueado').attr('checked',true);
+//				}
 				$('.usuarioForm #idHorario').val(hmap.usuario.idHorario);
 				$('.usuarioForm #clavePerfil').val(hmap.usuario.clavePerfil);
 				$('.usuarioForm #idHorario').val(hmap.usuario.idHorario.idHorario);
@@ -39,7 +49,7 @@ $(document).ready(function() {
 				var i=0;
 				//alert("datos "+hmap.listaUsuarioPerfiles.length);
 				for(i=0;hmap.listaUsuarioPerfiles.length>i;i++){
-					alert(hmap.listaUsuarioPerfiles[i].clavePerfil.clavePerfil);
+					//alert(hmap.listaUsuarioPerfiles[i].clavePerfil.clavePerfil);
 					if(hmap.listaUsuarioPerfiles[i].clavePerfil.clavePerfil=='0'){
 						$('#administrador').prop('checked', true);
 					}
