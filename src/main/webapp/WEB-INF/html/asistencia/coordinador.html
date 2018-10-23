@@ -220,7 +220,7 @@
 															</span>
 														</td>
 														<td th:if="${activaCheckbox}">
-															<input th:if="${asistencia.idEstatus.idEstatus == null}" th:type="checkbox" th:value="${asistencia.idAsistencia}" name="checkboxes"/>
+															<input th:if="${asistencia.idEstatus.idEstatus == null and asistencia.idTipoDia.idTipoDia != 1}" th:type="checkbox" th:value="${asistencia.idAsistencia}" name="checkboxes"/>
 														</td>
 													</tr>
 												</tbody>
@@ -234,7 +234,7 @@
 									</div>
 								</div>
 								
-								<!-- Sección justificación -->
+								<!-- Sección justificación múltiple -->
 								<form id="formJustificacionMultiple" th:action="@{/asistencia/coordinador/justificaMultiple}" method="POST" enctype="multipart/form-data">
 									<div th:if="${#arrays.length(listaAsistenciaJustificar)} != 0">
 										<h2>
