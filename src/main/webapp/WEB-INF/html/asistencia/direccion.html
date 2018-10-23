@@ -177,48 +177,46 @@
 				        			</b>
 					        	</h2>
 					        	<div class="buscador" th:hidden="${#arrays.length(listaAsistencia)} == 0 ? 'true' : 'false'">
-									<div class="filterable">
-										<table id="tableAsistencias" class="table table-striped table-text-center">
-											<thead>
-												<tr class="filters">
-													<th><input type="text" class="form-control" placeholder="NIVEL" th:disabled="true"/></th>
-													<th><input type="text" class="form-control" placeholder="EMPLEADO" th:disabled="true"/></th>
-													<th><input type="text" class="form-control" placeholder="NOMBRE" th:disabled="true"/></th>
-													<th><input type="text" class="form-control" placeholder="PUESTO" th:disabled="true"/></th>
-													<th><input type="text" class="form-control" placeholder="U. A." th:disabled="true"/></th>
-													<th><input type="text" class="form-control" placeholder="FECHA" th:disabled="true"/></th>
-													<th><input type="text" class="form-control" placeholder="TIPO" th:disabled="true"/></th>
-													<th><input type="text" class="form-control" placeholder="ESTADO" th:disabled="true"/></th>
-													<th><input type="text" class="form-control" placeholder="DETALLE" th:disabled="true"/></th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr th:each="asistencia : ${listaAsistencia}">
-													<td id="idAsistencia" th:text="${asistencia.usuario.nivel}"></td>
-													<td th:text="${asistencia.usuario.claveUsuario}"></td>
-													<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
-													<td th:text="${asistencia.usuario.clavePerfil.descripcion}"></td>
-													<td th:text="${asistencia.usuario.nombreUnidad}"></td>
-													<td th:text="${asistencia.entrada}"></td>
-													<td th:text="${asistencia.idTipoDia.nombre}"></td>
-													<td>
-														<span th:if="${asistencia.idEstatus.estatus == 'Validada' and asistencia.incidencia.descuento}">Descuento Aprobado</span>
-														<span th:if="${asistencia.idEstatus.estatus == 'Validada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Aprobada</span>
-														<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and asistencia.incidencia.descuento}">Descuento Pendiente</span>
-														<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Pendiente</span>
-														<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
-														<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
-													</td> 
-													<td> 
-														<a 
-															th:if="${asistencia.idTipoDia.idTipoDia != 1 and asistencia.idEstatus.estatus != null}" 
-															th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="nBtn">Dictaminar
-														</a>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
+									<table id="tableAsistencias" class="table table-striped table-text-center">
+										<thead>
+											<tr>
+												<th>NIVEL</th>
+												<th>EMPLEADO</th>
+												<th>NOMBRE</th>
+												<th>PUESTO</th>
+												<th>U. A.</th>
+												<th>FECHA</th>
+												<th>TIPO</th>
+												<th>ESTADO</th>
+												<th>DETALLE</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="asistencia : ${listaAsistencia}">
+												<td id="idAsistencia" th:text="${asistencia.usuario.nivel}"></td>
+												<td th:text="${asistencia.usuario.claveUsuario}"></td>
+												<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
+												<td th:text="${asistencia.usuario.clavePerfil.descripcion}"></td>
+												<td th:text="${asistencia.usuario.nombreUnidad}"></td>
+												<td th:text="${asistencia.entrada}"></td>
+												<td th:text="${asistencia.idTipoDia.nombre}"></td>
+												<td>
+													<span th:if="${asistencia.idEstatus.estatus == 'Validada' and asistencia.incidencia.descuento}">Descuento Aprobado</span>
+													<span th:if="${asistencia.idEstatus.estatus == 'Validada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Aprobada</span>
+													<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and asistencia.incidencia.descuento}">Descuento Pendiente</span>
+													<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Pendiente</span>
+													<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
+													<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
+												</td> 
+												<td> 
+													<a 
+														th:if="${asistencia.idTipoDia.idTipoDia != 1 and asistencia.idEstatus.estatus != null}" 
+														th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="nBtn">Dictaminar
+													</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>

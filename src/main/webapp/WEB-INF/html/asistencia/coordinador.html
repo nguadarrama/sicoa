@@ -24,7 +24,7 @@
 		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_dialog/css/bootstrap-dialog.min.css}" />
 		<link rel="stylesheet" th:href="@{/recursos/assets/date-picker/style/jquery-ui.css}" />
 		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
-		<link rel="stylesheet" th:href="@{/recursos/css/styles.css}" />	
+		<link rel="stylesheet" th:href="@{/recursos/css/styles.css}" />
 	</head>
 	
 	<body>
@@ -179,59 +179,57 @@
 				        			</b>
 					        	</h2>
 					        	<div class="buscador" th:if="${#arrays.length(listaAsistencia)} != 0">
-									<div class="filterable">
-										<form id="buscarRango" th:action="@{/asistencia/coordinador/buscaAsistenciasPorId}" method="POST">
-											<table id="tableAsistencias" class="table table-striped table-text-center">
-												<thead>
-													<tr class="filters">
-														<th><input type="text" class="form-control" placeholder="NIVEL" th:disabled="true"/></th>
-														<th><input type="text" class="form-control" placeholder="EMPLEADO" th:disabled="true"/></th>
-														<th><input type="text" class="form-control" placeholder="NOMBRE" th:disabled="true"/></th>
-														<th><input type="text" class="form-control" placeholder="PUESTO" th:disabled="true"/></th>
-														<th><input type="text" class="form-control" placeholder="U. A." th:disabled="true"/></th>
-														<th><input type="text" class="form-control" placeholder="FECHA" th:disabled="true"/></th>
-														<th><input type="text" class="form-control" placeholder="TIPO" th:disabled="true"/></th>
-														<th><input type="text" class="form-control" placeholder="ESTADO" th:disabled="true"/></th>
-														<th><input type="text" class="form-control" placeholder="DETALLE" th:disabled="true"/></th>
-														<th th:if="${activaCheckbox}"><button id="justificacionMultipleListaBtn" class="btn btn-default" name="busca" value="busca">Justifica</button></th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr th:each="asistencia : ${listaAsistencia}">
-														<td id="idAsistencia" th:text="${asistencia.usuario.nivel}"></td>
-														<td th:text="${asistencia.usuario.claveUsuario}"></td>
-														<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
-														<td th:text="${asistencia.usuario.clavePerfil.descripcion}"></td>
-														<td th:text="${asistencia.usuario.nombreUnidad}"></td>
-														<td th:text="${asistencia.entrada}"></td>
-														<td th:text="${asistencia.idTipoDia.nombre}"></td>
-														<td>
-															<span th:if="${asistencia.idEstatus.estatus == 'Validada' and asistencia.incidencia.descuento}">Descuento Aprobado</span>
-															<span th:if="${asistencia.idEstatus.estatus == 'Validada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Aprobada</span>
-															<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and asistencia.incidencia.descuento}">Descuento Pendiente</span>
-															<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Pendiente</span>
-															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
-															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
-														</td> 
-														<td> 
-															<span th:if="${(asistencia.idTipoDia.idTipoDia != 1 and asistencia.idTipoDia.idTipoDia != 5 and asistencia.idTipoDia.idTipoDia != 7 
-																			and asistencia.idTipoDia.idTipoDia != 8) and asistencia.idEstatus.idEstatus != 2 and asistencia.idEstatus.idEstatus != 3}">
-																<a th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="detalleBtn">Ver Detalle</a>
-															</span>
-														</td>
-														<td th:if="${activaCheckbox}">
-															<input th:if="${asistencia.idEstatus.idEstatus == null and asistencia.idTipoDia.idTipoDia != 1}" th:type="checkbox" th:value="${asistencia.idAsistencia}" name="checkboxes"/>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-												
-											<input type="hidden" class="form-control" id="numeroEmpleadoHiddenListaMultiple" name="cve_m_usuario_hidden_lista_multiple"/>
-									        <input type="hidden" class="form-control" id="fechaInicialHidddenListaMultiple" name="fechaInicial_hidden_lista_multiple"/>
-									        <input type="hidden" class="form-control" id="fechaFinalHiddenListaMultiple" name="fechaFinal_hidden_lista_multiple"/>
-									        
-										</form>
-									</div>
+									<form id="buscarRango" th:action="@{/asistencia/coordinador/buscaAsistenciasPorId}" method="POST">
+										<table id="tableAsistencias" class="table table-striped table-text-center">
+											<thead>
+												<tr>
+													<th>NIVEL</th>
+													<th>EMPLEADO</th>
+													<th>NOMBRE</th>
+													<th>PUESTO</th>
+													<th>U. A.</th>
+													<th>FECHA</th>
+													<th>TIPO</th>
+													<th>ESTADO</th>
+													<th>DETALLE</th>
+													<th th:if="${activaCheckbox}"><button id="justificacionMultipleListaBtn" class="btn btn-default" name="busca" value="busca">Justifica</button></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="asistencia : ${listaAsistencia}">
+													<td id="idAsistencia" th:text="${asistencia.usuario.nivel}"></td>
+													<td th:text="${asistencia.usuario.claveUsuario}"></td>
+													<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
+													<td th:text="${asistencia.usuario.clavePerfil.descripcion}"></td>
+													<td th:text="${asistencia.usuario.nombreUnidad}"></td>
+													<td th:text="${asistencia.entrada}"></td>
+													<td th:text="${asistencia.idTipoDia.nombre}"></td>
+													<td>
+														<span th:if="${asistencia.idEstatus.estatus == 'Validada' and asistencia.incidencia.descuento}">Descuento Aprobado</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Validada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Aprobada</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and asistencia.incidencia.descuento}">Descuento Pendiente</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Pendiente</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
+														<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
+													</td> 
+													<td> 
+														<span th:if="${(asistencia.idTipoDia.idTipoDia != 1 and asistencia.idTipoDia.idTipoDia != 5 and asistencia.idTipoDia.idTipoDia != 7 
+																		and asistencia.idTipoDia.idTipoDia != 8) and asistencia.idEstatus.idEstatus != 2 and asistencia.idEstatus.idEstatus != 3}">
+															<a th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="detalleBtn">Ver Detalle</a>
+														</span>
+													</td>
+													<td th:if="${activaCheckbox}">
+														<input th:if="${asistencia.idEstatus.idEstatus == null and asistencia.idTipoDia.idTipoDia != 1}" th:type="checkbox" th:value="${asistencia.idAsistencia}" name="checkboxes"/>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+											
+										<input type="hidden" class="form-control" id="numeroEmpleadoHiddenListaMultiple" name="cve_m_usuario_hidden_lista_multiple"/>
+								        <input type="hidden" class="form-control" id="fechaInicialHidddenListaMultiple" name="fechaInicial_hidden_lista_multiple"/>
+								        <input type="hidden" class="form-control" id="fechaFinalHiddenListaMultiple" name="fechaFinal_hidden_lista_multiple"/>
+								        
+									</form>
 								</div>
 								
 								<!-- Sección justificación múltiple -->
@@ -246,35 +244,34 @@
 							        	</h2>
 							        	
 							        	<div class="buscador" th:if="${#arrays.length(listaAsistenciaJustificar)} != 0">
-											<div class="filterable">
-												<table id="tableAsistencias" class="table table-striped table-text-center">
-													<thead>
-														<tr class="filters">
-															<th><input type="text" class="form-control" placeholder="NIVEL" th:disabled="true"/></th>
-															<th><input type="text" class="form-control" placeholder="EMPLEADO" th:disabled="true"/></th>
-															<th><input type="text" class="form-control" placeholder="NOMBRE" th:disabled="true"/></th>
-															<th><input type="text" class="form-control" placeholder="PUESTO" th:disabled="true"/></th>
-															<th><input type="text" class="form-control" placeholder="U. A." th:disabled="true"/></th>
-															<th><input type="text" class="form-control" placeholder="FECHA" th:disabled="true"/></th>
-															<th><input type="text" class="form-control" placeholder="TIPO" th:disabled="true"/></th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr th:each="asistencia : ${listaAsistenciaJustificar}">
-															<td id="idAsistencia" th:text="${asistencia.usuario.nivel}"></td>
-															<td th:text="${asistencia.usuario.claveUsuario}"></td>
-															<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
-															<td th:text="${asistencia.usuario.clavePerfil.descripcion}"></td>
-															<td th:text="${asistencia.usuario.nombreUnidad}"></td>
-															<td th:text="${asistencia.entrada}"></td>
-															<td th:text="${asistencia.idTipoDia.nombre}"></td>
-															<td>
-																<input th:type="checkbox" th:value="${asistencia.idAsistencia}" name="listaIdAsistencias" th:checked="true"/>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
+											<table id="tableAsistencias" class="table table-striped table-text-center">
+												<thead>
+													<tr>
+														<th>NIVEL</th>
+														<th>EMPLEADO</th>
+														<th>NOMBRE</th>
+														<th>PUESTO</th>
+														<th>U. A.</th>
+														<th>FECHA</th>
+														<th>TIPO</th>
+														<th></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="asistencia : ${listaAsistenciaJustificar}">
+														<td id="idAsistencia" th:text="${asistencia.usuario.nivel}"></td>
+														<td th:text="${asistencia.usuario.claveUsuario}"></td>
+														<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
+														<td th:text="${asistencia.usuario.clavePerfil.descripcion}"></td>
+														<td th:text="${asistencia.usuario.nombreUnidad}"></td>
+														<td th:text="${asistencia.entrada}"></td>
+														<td th:text="${asistencia.idTipoDia.nombre}"></td>
+														<td>
+															<input th:type="checkbox" th:value="${asistencia.idAsistencia}" name="listaIdAsistencias" th:checked="true"/>
+														</td>
+													</tr>
+												</tbody>
+											</table>
 										</div>
 										  	
 										<div class="modal-footer">
