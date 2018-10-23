@@ -474,49 +474,36 @@ public class CatalogoServiceImpl implements CatalogoService {
 
 	@Override
 	public Periodo agregaPeriodoVacacional(Periodo periodo) {
-		HttpResponse response;
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("periodo", periodo);
+
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_PERIODO, httpEntity, header);
+			ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_PERIODO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		
-		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-			
-			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-			JsonElement dataJson = json.get("data").getAsJsonObject();
-			periodo = gson.fromJson(dataJson, Periodo.class);		
-			
-		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-			
-			String mensaje = obtenerMensajeError(response);					 
-			throw new AuthenticationServiceException(mensaje);			
-		} else {
-			throw new AuthenticationServiceException("Error al obtener periodo : "+response.getStatusLine().getReasonPhrase());
-		}
-		
 		return periodo;
-			
-		
 	}
 
 	@Override
-	public Periodo modificaPeriodoVacacional(Periodo periodo) {
-		HttpResponse response;
+	public void modificaPeriodoVacacional(Periodo periodo) {
+			HttpResponse response;
+		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
@@ -530,27 +517,13 @@ public class CatalogoServiceImpl implements CatalogoService {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_PERIODO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-			
-			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-			JsonElement dataJson = json.get("data").getAsJsonObject();
-			periodo = gson.fromJson(dataJson, Periodo.class);		
-			
-		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-			
-			String mensaje = obtenerMensajeError(response);					 
-			throw new AuthenticationServiceException(mensaje);			
-		} else {
-			throw new AuthenticationServiceException("Error al obtener el periodo : "+response.getStatusLine().getReasonPhrase());
-		}
-		
-		return periodo;
 	}
 	
 	@Override
@@ -723,13 +696,33 @@ public class CatalogoServiceImpl implements CatalogoService {
 	
 	@SuppressWarnings("unused")
 	@Override
-	public void modificaEstatusPeriodo(Integer idPeriodo, boolean activo) {
+	public Periodo modificaEstatusPeriodo(Periodo periodo) {
+		HttpResponse response;
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("periodo", periodo);
+
 		try {
-			HttpResponse response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_PERIODO+"?idPeriodo="+idPeriodo+"&activo="+activo);
-		} catch (ClienteException e) {
-			logger.error(e.getMessage(),e);
-			throw new AuthenticationServiceException(e.getMessage(),e);
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_PERIODO, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		return periodo;
 	}
 	
 	@Override

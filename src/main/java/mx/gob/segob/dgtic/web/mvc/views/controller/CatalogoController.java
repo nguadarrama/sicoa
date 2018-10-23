@@ -256,12 +256,12 @@ public class CatalogoController {
 	+        * ^M
 	+        * @return La vista del menú de catálogos^M
 	+        */
-	       @RequestMapping(value = { "periodo/agrega" }, method = RequestMethod.GET)
-	       public String agregaPeriodoVacacional(Periodo periodo) {
-	
-	              catalogoService.agregaPeriodoVacacional(periodo);
-	              return "/catalogos/periodoVacacional";
-	       }
+	 @RequestMapping(value = { "periodo/agrega" }, method = RequestMethod.GET)
+     public String agregaPeriodoVacacional(Periodo periodo) {
+            periodo = catalogoService.agregaPeriodoVacacional(periodo);
+            periodo.setMensaje(periodo.getMensaje());
+            return "/catalogos/periodoVacacional";
+     }
 	       
 	       /**
 	   	 * Vista donde se ubica el catálogo de dias Festivos. Path :
@@ -328,20 +328,44 @@ public class CatalogoController {
 		public String periodos(Model model) {
 
 			model.addAttribute("listaPeriodos", catalogoService.obtienePeriodos());
-
+			if(!this.getMensaje().equals("")){
+				if(this.getMensaje().contains("correctamente"))
+					model.addAttribute("MENSAJE", this.mensaje);
+				else
+					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+			}
+			this.mensaje = "";
 			return "/catalogos/PeriodoVacacional";
 		}
 	   	
-	   	@PostMapping("periodo/agrega")
+		@PostMapping("periodo/agrega")
 	   	public String periodoAgrega(Periodo periodo) {
-	   		catalogoService.agregaPeriodoVacacional(periodo);
+	   		Model model = null;
+	   		periodo = catalogoService.agregaPeriodoVacacional(periodo);
+	   		if(!this.getMensaje().equals("")){
+				if(this.getMensaje().contains("correctamente"))
+					model.addAttribute("MENSAJE", this.mensaje);
+				else
+					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+			}
+			this.mensaje = "";
+//	   		this.mensaje = periodo.getMensaje();
 	   		return "redirect:/catalogos/periodo";
 	   	}
 	   	
-	   	@GetMapping ("periodo/modifica")
-	   	public String periodoModifica(Integer idPeriodo, boolean activo) {
-	   		System.out.println("idRecibido: "+idPeriodo+" activoRecibido: "+activo);
-	   		catalogoService.modificaEstatusPeriodo(idPeriodo, activo);
+		@GetMapping ("periodo/modifica")
+	   	public String periodoModifica(Periodo periodo) {
+	   		System.out.println("idRecibido: "+periodo.getIdPeriodo()+" activoRecibido: "+periodo.getActivo());
+	   		Model model = null;
+	   		catalogoService.modificaEstatusPeriodo(periodo);
+	   		if(!this.getMensaje().equals("")){
+				if(this.getMensaje().contains("correctamente"))
+					model.addAttribute("MENSAJE", this.mensaje);
+				else
+					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+			}
+			this.mensaje = "";
+//	   		this.mensaje = periodo.getMensaje();
 	   		return "redirect:/catalogos/periodo";
 	   	}
 		
