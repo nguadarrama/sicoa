@@ -10,13 +10,13 @@ $(document).ready(function() {
 	$("#actualizamosVacacion").css("display","none");
 	$('.actualizaVacacion #responsableAux').css("display","none");
 		$("#btnVacacionesPropias").on('click', function(event){
-			
 		
 			
 		});
-		$("#btnVacacionesEmpleados").on('click', function(event){
-			
-			
+		$("#miBotonCancelar").on('click', function(event){
+			event.preventDefault();
+			$("#actualizamosVacacion").css("display","none");
+			$(".misPropiasVacaciones").css("display","inline");
 		});
 		
 		$("#fechaInicioBusca1").datepicker({

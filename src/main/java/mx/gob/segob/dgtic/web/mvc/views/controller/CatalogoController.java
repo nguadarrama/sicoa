@@ -156,22 +156,43 @@ public class CatalogoController {
 		model.addAttribute("listaPerfiles", catalogoService.obtienePerfiles());
 		model.addAttribute("listaHorarios", catalogoService.obtieneHorarios());
 		model.addAttribute("listaUsuarios", usuarioService.obtieneUsuarios());
-		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerListaUnidadAdministrativa());
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas());
 
 		return "/catalogos/usuario";
 	}
 
 	@PostMapping("/usuario/modifica")
 	public String modificaUsuario( Horario idHorario, String claveUsuario, String nombre,
-			String apellidoPaterno, String apellidoMaterno, String bloqueado, String reiniciarPassword, Integer unidadAdministrativa, 
+			String apellidoPaterno, String apellidoMaterno, String estatus, String reiniciarPassword, Integer unidadAdministrativa, 
 			String coordinador, String empleado, String director, String administrador) {
-		System.out.println("unidadAdministrativa "+unidadAdministrativa +" coordinador "+" empleado "+" director "+" administrador "+administrador
-				+" bloqueado "+bloqueado);
-		//System.out.println("valor clavePerfil " + clavePerfil.length);
-		//perfilUsuarioService.guardaEliminaPerfilesUsuario(clavePerfil, claveUsuario);
+		System.out.println("claveUsuario "+claveUsuario+"unidadAdministrativa "+unidadAdministrativa +" coordinador "+coordinador+" empleado "+empleado+" director "+director+" administrador "+administrador
+				+" estatus "+estatus);
+		
+		Integer clavePerfil[]= new Integer[4]; 
+		String cadenaPerfil="";
+		
+		if(coordinador!=null && !coordinador.trim().isEmpty()){
+			clavePerfil[2]=Integer.parseInt(coordinador);
+		}
+		if(empleado!=null && !empleado.trim().isEmpty()){
+			clavePerfil[3]=Integer.parseInt(empleado);
+		}
+		if(director!=null && !director.trim().isEmpty()){
+			clavePerfil[1]=Integer.parseInt(director);
+		}
+		if(administrador!=null && !administrador.trim().isEmpty()){
+			clavePerfil[0]=Integer.parseInt(administrador);
+		}
+	
+		System.out.println("valor clavePerfil " + clavePerfil.length);
+		for(int i=0; i<clavePerfil.length;i++){
+			System.out.println("valor clavePerfil posicion "+i+" " + clavePerfil[i]);
+		}
+		
+		perfilUsuarioService.guardaEliminaPerfilesUsuario(clavePerfil, claveUsuario);
 		
 		usuarioService.modificaUsuario(
-				new Usuario(null, idHorario, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, bloqueado));
+				new Usuario(null, idHorario, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, estatus));
 		unidadAdministrativaService.consultaRegistraUsuarioUnidadAdministrativa(unidadAdministrativa, claveUsuario);
 		char dato = reiniciarPassword.charAt(0);
 

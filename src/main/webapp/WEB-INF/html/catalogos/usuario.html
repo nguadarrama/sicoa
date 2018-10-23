@@ -155,27 +155,30 @@
 								        		<label th:text="Perfiles"></label>
 								        	</div>
 								        	<div class="col-md-6">
-									        	  <div class="form-check">
-												    	<input value="0" id="administrador" name="administrador" type="checkbox" class="form-check-input" />
-												    	<label class="form-check-label" for="exampleCheck1">Administrador</label>
+									        	  
+									        	  	<div class="">
+												    <input value="1" id="director" name="director" type="checkbox" />
+												    <label for="director">Direcci&oacute;n</label>
 												  </div>
-												  <div class="form-check">
-												    <input value="1" id="director" name="director" type="checkbox" class="form-check-input" />
-												    <label class="form-check-label" for="exampleCheck1">Direcci&oacute;n</label>
-												  </div>
+												    	<input value="0" id="administrador" name="administrador" type="checkbox"  />
+												    	<label for="administrador">Administrador</label>
+												  
+												  
 											</div>
 											<div class="col-md-6">
 												  <div class="form-check">
 												    <input value="2" id="coordinador" name="coordinador" type="checkbox" class="form-check-input" />
-												    <label class="form-check-label" for="exampleCheck1">Coordinador</label>
+												    <label class="form-check-label" for="coordinador">Coordinador</label>
 												  </div>
 												  <div class="form-check">
 												    <input value="3" id="empleado" name="empleado" type="checkbox" class="form-check-input" />
-												    <label class="form-check-label" for="exampleCheck1">Empleado</label>
+												    <label class="form-check-label" for="empleado">Empleado</label>
 												  </div>
 											</div>
 								        </div>
+								        &nbsp;
 								        <div class="form-group">
+								         
 								        	<label for="unidadAdministrativa" class="col-form-label" th:text="#{UNIDAD_ADMINISTRATIVA}"></label>
 								        	<select  class="form-control" required="required" 
 											        name="unidadAdministrativa" id="unidadAdministrativa" >
@@ -218,14 +221,14 @@
 									        <div class="form-group">
 										        <div class="col-md-6">
 										        	<div class="row">
-										        		<label for="bloqueado" class="col-form-label" th:text="#{BLOQUEADO}"></label>
+										        		<label for="bloqueado" class="col-form-label" th:text="Estatus"></label>
 										        	</div>
 										        	<div class="row">
 										        		<!-- <input type="checkbox" name="bloqueado" id="bloqueado" value="S"/> -->
-										        			<input type="radio" name="bloqueado" id="bloqueado" value="S" />
-										        			<label for="bloqueado" class="col-form-label" th:text="Si"></label>
-										    				<input type="radio" name="bloqueado" id="bloqueado" value="N" />
-										    				<label for="bloqueado" class="col-form-label" th:text="No"></label>
+										        			<input type="radio" name="estatus" id="activado" value="A" />
+										        			<label for="estatus" class="col-form-label" th:text="Activo"></label>
+										    				<input type="radio" name="estatus" id="desactivado" value="I" />
+										    				<label for="estatus" class="col-form-label" th:text="Inactivo"></label>
 										        	</div>
 										        </div>
 										        <div class="col-md-6">
