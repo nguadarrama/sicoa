@@ -5,7 +5,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
@@ -35,7 +34,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
-import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
@@ -722,7 +720,6 @@ public class AsistenciaController  {
 
     		Archivo archivoAsociado= new Archivo();
         	archivoAsociado = archivoService.consultaArchivo(idArchivo);
-        	String cadena="\\"+"\\";
         	String nombrecompleto = archivoAsociado.getUrl() + archivoAsociado.getNombre();
         	String nombreArchivo = nombrecompleto.replace('/','\\');
 
@@ -867,7 +864,6 @@ public class AsistenciaController  {
 			IOUtils.copy(inputStream, response.getOutputStream());
 	        response.flushBuffer();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} //load the file
         

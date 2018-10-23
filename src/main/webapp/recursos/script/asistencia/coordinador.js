@@ -2,6 +2,7 @@ $(document).ready(function() {
 	
 	var idAsistencia = "";
 	
+	//pasa datos de campos de búsqueda a campos hidden del modal para llevarlos al controller
 	$('#justificacionMultipleListaBtn').on('click', function(event) { 
 		$('#numeroEmpleadoHiddenListaMultiple').val($('#numeroEmpleado').val());
 		$('#fechaInicialHidddenListaMultiple').val($('#validBeforeDatepicker').val());
@@ -10,6 +11,7 @@ $(document).ready(function() {
 		$('#justificacionMultipleListaBtn').submit();
 	});
 	
+	//pasa datos de campos de búsqueda a campos hidden del modal para llevarlos al controller
 	$('#justificacionMultipleGuardaBtn').on('click', function(event) { 
 		$('#numeroEmpleadoHiddenGuardaMultiple').val($('#numeroEmpleado').val());
 		$('#fechaInicialHidddenGuardaMultiple').val($('#validBeforeDatepicker').val());
@@ -18,6 +20,7 @@ $(document).ready(function() {
 		$('#justificacionMultipleBtn').submit();
 	});
 	
+	//pasa datos de campos de búsqueda a campos hidden del modal para llevarlos al controller
 	$('#formatoJustificacionMultipleBtn').on('click', function(event) { 
 		$('#numeroEmpleadoHiddenGuardaMultiple').val($('#numeroEmpleado').val());
 		$('#fechaInicialHidddenGuardaMultiple').val($('#validBeforeDatepicker').val());
@@ -91,6 +94,13 @@ $(document).ready(function() {
 			
 			$('#selectJustificacion').append(optionJustificacion);
 			//termina select justificación
+			
+			//para capturar autorizador, si no hay autorizadores coloca un text en lugar de un select
+			if (asistenciaJustificacion.listaAutorizador.length > 0) {
+				$('#textAutorizador').remove();
+			} else if (asistenciaJustificacion.listaAutorizador.length == 0) {
+				$('#selectAutorizador').remove();
+			}
 			
 			//select autorizadores
 			for (var i=0; i < asistenciaJustificacion.listaAutorizador.length; i++) {

@@ -278,23 +278,24 @@
 										</div>
 										  	
 										<div class="modal-footer">
-											<div class="form-group col-md-3">
+											<div class="form-group col-md-4">
 									        	<p style="text-align: left">Motivo</p>
-									            <select class="form-control" id="selectJustificacion" name="selectJustificacion" th:required="required" autocomplete="off" >
+									            <select class="form-control" id="selectJustificacion" name="selectJustificacion" th:required="required" th:autocomplete="off" >
 									            	<option></option>
 									            	<option th:each="j : ${listaJustificaciones}" th:text="${j.justificacion}" th:value="${j.idJustificacion}" th:selected="${justificacion == j.justificacion}"></option>
 									            </select>
 									        </div>
 									        
-									        <div class="form-group col-md-3">
+									        <div class="form-group col-md-4">
 									        	<p style="text-align: left">Autorizador</p>
-									            <select class="form-control" id="selectAutorizador" name="nombreAutorizador" th:required="required" autocomplete="off">
+									            <select th:if="${#arrays.length(listaAutorizadores)} > 0" class="form-control" id="selectAutorizador" name="nombreAutorizador" th:required="required" th:autocomplete="off">
 									            	<option></option>
 									            	<option th:each="a : ${listaAutorizadores}" th:text="${a.nombre}" th:value="${a.nombre}" th:selected="${nombreJefe == a.nombre}"></option>
 									            </select>
+									            <input th:if="${#arrays.length(listaAutorizadores)} == 0" type="text" class="form-control input-flag" name="nombreAutorizador" />
 									        </div>
 						        
-									        <div class="form-group col-md-3">
+									        <div class="form-group col-md-4">
 										        <label>
 													<p style="text-align: left">Adjuntar Archivo</p>
 													 <input type="file" name="archivo" id="archivo" multiple="multiple" />
@@ -387,6 +388,7 @@
 						            <select class="form-control" id="selectAutorizador" name="nombreAutorizador" th:required="required" autocomplete="off">
 						            	<!-- los option se generan a través de jquery en asistencias.js -->
 						            </select>
+						            <input id="textAutorizador" type="text" name="nombreAutorizador" class="form-control input-user" /> 
 						        </div>
 						        
 						        <div class="form-group col-md-4">
@@ -396,10 +398,6 @@
 									</label>
 							    </div>
 							    
-							    <div class="form-group col-md-4">
-									<a id="linkArchivo">Ver Archivo</a>
-						        </div>
-						        
 						        <input type="hidden" class="form-control" id="idTipoDiaModal" name="idTipoDiaModal" />
 						        <input type="hidden" class="form-control" id="idAsistenciaHidden" name="idAsistenciaHidden" />
 						        <input type="hidden" class="form-control" id="idTipoDia" name="idTipoDia"/>
