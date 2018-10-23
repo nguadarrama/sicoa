@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+	
 	//pobla los campos del modal de justificación
 	$('.nBtn').on('click', function(event) { 					//botón justifica
 		event.preventDefault();
@@ -146,5 +146,10 @@ $(document).ready(function() {
 		wme.print();
 		wme.close();
 	});
+    
+    $('#tableAsistencias').DataTable({
+        "scrollY": "500px",
+        "scrollCollapse": true
+     });
 	
 }); 

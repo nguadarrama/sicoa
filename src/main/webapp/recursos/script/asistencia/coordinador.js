@@ -17,7 +17,7 @@ $(document).ready(function() {
 		$('#fechaInicialHidddenGuardaMultiple').val($('#validBeforeDatepicker').val());
 		$('#fechaFinalHiddenGuardaMultiple').val($('#validAfterDatepicker').val());
 		
-		$('#justificacionMultipleBtn').submit();
+		$('#justificacionMultipleGuardaBtn').submit();
 	});
 	
 	//pasa datos de campos de búsqueda a campos hidden del modal para llevarlos al controller
@@ -26,7 +26,7 @@ $(document).ready(function() {
 		$('#fechaInicialHidddenGuardaMultiple').val($('#validBeforeDatepicker').val());
 		$('#fechaFinalHiddenGuardaMultiple').val($('#validAfterDatepicker').val());
 		
-		$('#justificacionMultipleBtn').submit();
+		$('#formatoJustificacionMultipleBtn').submit();
 	});
 	
 
@@ -333,15 +333,8 @@ $(document).ready(function() {
 		wme.close();
 	});
 	
-	$("#linkArchivo").on("click", function() {
-		 $.ajax({
-			 type: "get",
-			 url: "archivo", 
-			 data: {"id" : idAsistencia},
-			 success: function(result){
-				 	
-			 }
-		 });
-	  });
-	
+	$('#tableAsistencias').DataTable({
+		"scrollY": "500px",
+        "scrollCollapse": true
+     });
 }); 
