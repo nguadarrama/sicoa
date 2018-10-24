@@ -220,6 +220,13 @@ public class VacacionesController {
     	model.addAttribute("vacacionesPropias",null);
     	}
     	model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
+    	if(!this.mensaje.equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
     	return "/vacaciones/vacacionesPropias"; 
     	
     }
@@ -384,10 +391,11 @@ public class VacacionesController {
      	//archivoDto.setIdArchivo(idArchivo);
      	Estatus estatus=new Estatus();
      	estatus.setIdEstatus(1);
-     	vacacionesService.agregaVacaciones(new VacacionesAux(null,Integer.parseInt(idVacacion), responsable, 1, fechaInicio, fechaFin, diasPorPedir), claveUsuario);
+     	Vacaciones respuesta=vacacionesService.agregaVacaciones(new VacacionesAux(null,Integer.parseInt(idVacacion), responsable, 1, fechaInicio, fechaFin, diasPorPedir), claveUsuario);
     	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
-    	//System.out.println("Archivo "+archivo);
+    	System.out.println("respuesta con mensaje "+respuesta.getMensaje());
     	
+    	this.mensaje=respuesta.getMensaje();
     	
     	return "redirect:/vacaciones/solicitudVacaciones";
     }
@@ -414,13 +422,15 @@ public class VacacionesController {
      	vacacion.setIdVacacion(Integer.parseInt(idVacacion));
      	Estatus estatus=new Estatus();
      	estatus.setIdEstatus(1);
-     	vacacionesService.agregaVacaciones(new VacacionesAux(null,Integer.parseInt(idVacacion), responsable, 1, fechaInicio, fechaFin, diasPorPedir), claveUsuario);
-    	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
+     	Vacaciones vacaciones= vacacionesService.agregaVacaciones(new VacacionesAux(null,Integer.parseInt(idVacacion), responsable, 1, fechaInicio, fechaFin, diasPorPedir), claveUsuario);
+    	System.out.println("Mensaje obtenido "+vacaciones.getMensaje());
+     	this.mensaje=vacaciones.getMensaje();
+     	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
     	return "redirect:/vacaciones/solicitudVacacionesEmpleados";
     }
     @GetMapping("vacacion/acepta")
-    public String aceptaVacaciones(Integer idSolicitud, String fechaInicio1, String fechaFin1,Integer id) {
-    	System.out.println("idVacacion "+idSolicitud+" fechaInicio "+fechaInicio1+" fechaFinal "+fechaFin1+" idUsuario "+id);
+    public String aceptaVacaciones(Integer idSolicitud, String fechaInicio, String fechaFin,Integer id) {
+    	System.out.println("idVacacion "+idSolicitud+" fechaInicio "+fechaInicio+" fechaFinal "+fechaFin+" idUsuario "+id);
     	//fechaInicio=fechaInicio.substring(0,21);
     	ParsePosition pos = new ParsePosition(4);
     	//fechaFin=fechaFin.substring(0,12);
@@ -433,11 +443,12 @@ public class VacacionesController {
     	usuario.setIdUsuario(id);
     	Estatus estatus= new Estatus();
         estatus.setIdEstatus(2);
-        fechaInicial = formatter.parse(fechaInicio1,pos);
-		fechaFinal=formatter.parse(fechaFin1,pos);
+        fechaInicial = formatter.parse(fechaInicio,pos);
+		fechaFinal=formatter.parse(fechaFin,pos);
 		System.out.println("fechaInicio "+fechaInicial);
-    	vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,null,null,null,estatus,fechaInicial,fechaFinal,null), idSolicitud);
+		Vacaciones vacaciones=vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,null,null,null,estatus,fechaInicial,fechaFinal,null), idSolicitud);
     	//catalogoService.eliminaHorario(id);
+		this.mensaje=vacaciones.getMensaje();
     	
     	return "redirect:/vacaciones/vacacionesEmpleados";
     }
@@ -451,7 +462,8 @@ public class VacacionesController {
     	usuario.setIdUsuario(Integer.parseInt(idUsuario));
     	Estatus estatus= new Estatus();
         estatus.setIdEstatus(3);
-    	vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), id);
+    	Vacaciones vacaciones=vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), id);
+    	this.mensaje=vacaciones.getMensaje();
     	return "redirect:/vacaciones/vacacionesPropias";
     
     }
@@ -464,7 +476,8 @@ public class VacacionesController {
     	usuario.setIdUsuario(Integer.parseInt(idUsuario));
     	Estatus estatus= new Estatus();
         estatus.setIdEstatus(3);
-    	//vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), id);
+    	Vacaciones vacaciones=vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), id);
+    	this.mensaje=vacaciones.getMensaje();
     	return "redirect:/vacaciones/vacacionesEmpleados";
     
     }
@@ -487,6 +500,7 @@ public class VacacionesController {
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones);
     	}
+    	this.mensaje=archivoDto.getMensaje();
     	return"redirect:/vacaciones/vacacionesPropias";
     	}
     @PostMapping("/vacacion/actualizaArchivoEmpleado")

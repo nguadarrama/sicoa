@@ -13,6 +13,7 @@ public class Archivo {
 	private byte[] archivo;
 	private String accion;
 	private String claveUsuario;
+	private String mensaje;
 	public Archivo(){
 		
 	}
@@ -23,6 +24,12 @@ public class Archivo {
 		this.claveUsuario=claveUsuario;
 	}
 	
+	public String getMensaje() {
+		return mensaje;
+	}
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
 	public Integer getIdArchivo() {
 		return idArchivo;
 	}

@@ -133,7 +133,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 	
 	@Override
-	public void agregaVacaciones(VacacionesAux vacaciones, String claveUsuario) {
+	public Vacaciones agregaVacaciones(VacacionesAux vacaciones, String claveUsuario) {
 		Vacaciones vacacio= new Vacaciones();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
@@ -170,6 +170,8 @@ public class VacacionesServiceImpl implements VacacionesService{
 		} else {
 			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
 		}
+				
+		return vacacio;
 //		HttpResponse response;
 //		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 //		
@@ -209,10 +211,10 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 	
 	@Override
-	public void modificaVacaciones(Vacaciones vacaciones) {
+	public Vacaciones modificaVacaciones(Vacaciones vacaciones) {
 		Vacaciones vacacio= new Vacaciones();
 		HttpResponse response;
-		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
@@ -233,6 +235,18 @@ public class VacacionesServiceImpl implements VacacionesService{
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+		}
+		return vacacio;
 //		HttpResponse response;
 //		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 //		
@@ -328,10 +342,10 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 	
 	@Override
-	public void aceptaORechazaVacaciones(Vacaciones vacaciones,Integer idDetalle) {
+	public Vacaciones aceptaORechazaVacaciones(Vacaciones vacaciones,Integer idDetalle) {
 		Vacaciones vacacio= new Vacaciones();
 		HttpResponse response;
-		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		vacaciones.setIdDetalle(idDetalle);
 		
 		
@@ -355,6 +369,18 @@ public class VacacionesServiceImpl implements VacacionesService{
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+//			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+		}
+		return vacacio;
 //		HttpResponse response;
 //		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 //		

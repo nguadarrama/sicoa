@@ -330,13 +330,30 @@
 																</div>	
 											</form>
 										</div>
-										<div class="col-md-4 text-center" sec:authorize="hasAuthority('2')" >
+										<div class="col-md-4 text-center" sec:authorize="hasAuthority('1')" >
 											<form th:action="@{/vacaciones/descargaArchivo}" class="descargaArchivo" method="get">
-																
 																	<!-- <label class="col-form-label">Descarga Archivo</label> -->
 																	 <!-- <input type="file" name="archivo" id="archivo" multiple="multiple"/> -->
 																	 <input id="idArchivo" name="idArchivo" type="text" class="form-control input-calendar" required="required" th:readonly="true" style="display: none;"/>
 																	<input type="submit" class="btn btn-primary" value="Descarga formato" />		
+											</form>
+										</div>
+										<div class="col-md-2" sec:authorize="hasAuthority('1')">
+											<form th:action="@{/vacaciones/vacacion/acepta}"  method="get" class="aceptaVacacion">
+												<input id="idSolicitud" name="idSolicitud" type="text" class="form-control" required="required" th:readonly="true" style="display: none;"/>
+												<input id="fechaFin" name="fechaFin" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
+												<input id="id" name="id" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
+												<input id="fechaInicio" name="fechaInicio" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
+												<button type="submit" id="aceptaVacacion" class="btn btn-success" data-dismiss="modal" th:text="Aceptar"></button>
+											</form>
+										</div>
+										<div class="col-md-2" sec:authorize="hasAuthority('1')">
+											<form th:action="@{/vacaciones/vacacion/rechaza}"  method="get" class="rechazaVacacion">
+												<input id="idSolicitud" name="idSolicitud" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
+												<input id="idVacacion" name="idVacacion" type="text" class="form-control" required="required" th:readonly="true"  style="display: none;" />
+												<input id="idUsuario" name="idUsuario" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
+												<input id="dias" name="dias" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
+												<button type="submit" id="rechazaVacacion" class="btn btn-danger" data-dismiss="modal" th:text="Rechazar" ></button>
 											</form>
 										</div>
 						</div>
