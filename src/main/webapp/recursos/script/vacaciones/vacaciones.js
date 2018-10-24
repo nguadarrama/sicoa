@@ -6,6 +6,7 @@ $(document).ready(function() {
 //		})
 	//$("#botonGuardarVacaciones").disabled = true;
 	//document.getElementById("botonGuardarVacaciones").disabled=true;
+		//document.getElementById("validacionDias").style.display = "none";
 	$('.descargaArchivo').css("display","none");
 	$("#actualizamosVacacion").css("display","none");
 	$('.actualizaVacacion #responsableAux').css("display","none");
@@ -95,6 +96,7 @@ $(document).ready(function() {
 					$('.rechazaVacacion #idSolicitud').val(hmap.vacacion.idDetalle);
 					$('.rechazaVacacion #idVacacion').val(hmap.vacacion.idVacacion.idVacacion);
 					$('.rechazaVacacion #dias').val(hmap.vacacion.dias);
+					//alert(hmap.responsable);
 					if(hmap.responsable!=null && hmap.responsable!=""){
 					$('.actualizaVacacion #responsable').val(hmap.responsable.nombre+" "+hmap.responsable.apellidoPaterno+" "+hmap.responsable.apellidoMaterno);
 					$('.actualizaVacacion #responsableAux').css("display","none");
@@ -151,12 +153,14 @@ $(document).ready(function() {
 						//alert("bien");
 						
 						}else{
-							alert("Error, los días no deben pasar del tope ");
+							//$("#validacionDias").css("display","inline");
+							//alert("Error, los días no deben pasar del tope ");
 							document.getElementById("botonGuardarVacaciones").disabled = true;
 						}
 					}else{
-						alert("El número de días no es permitido");
+						//alert("El número de días no es permitido");
 						document.getElementById("botonGuardarVacaciones").disabled = true;
+						//$("#validacionDias").css("display","inline");
 					}
 				}
 				//document.getElementById("botonGuardarVacaciones").disabled = true;

@@ -83,6 +83,8 @@ public class VacacionesController {
 	@Autowired
 	private VacacionPeriodoService vacacionPeriodoService;
 	
+	private String mensaje = "";
+	
     @RequestMapping(value={"solicitudVacaciones"}, method = RequestMethod.GET)
     public String obtieneAsistencias(Model model, HttpSession session) {
     	System.out.print("Peticion de vacaciones");
@@ -108,6 +110,13 @@ public class VacacionesController {
 	    model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuario));
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 	    model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
+	    if(!this.mensaje.equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
     	//Periodo periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
     	//System.out.println("datos del periodo "+periodo.getFechaInicio());
     	return "/vacaciones/solicitudVacaciones";
@@ -136,9 +145,9 @@ public class VacacionesController {
     @RequestMapping(value= "vacacion/generaArchivo",method = RequestMethod.GET)
 	public void  generaReporteVacaciones(String idSolicitud,String idEstatus,String idPuesto,String idUnidadAdministrativa,String numeroEmpleado,
 			String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio1, String fechaFin1, 
-			String dias, String responsable, String idVacacion,HttpServletRequest request, HttpServletResponse response){
+			String dias, String responsable, String idVacacion, String responsableAux,HttpServletRequest request, HttpServletResponse response){
     		System.out.println("Datos para el archivo "+idSolicitud+" unidadAdministrativa "+idUnidadAdministrativa+" idPuesto "+idPuesto +" idUnidad "+idVacacion
-    				+" fechaInicio "+fechaInicio1+" fechaFin "+fechaFin1);
+    				+" fechaInicio "+fechaInicio1+" fechaFin "+fechaFin1+" responsableAux "+responsableAux +" responsable "+responsable);
     	try {
 			System.out.println("Datos "+nombre);
 			Map<String,Object> parametros = new HashMap<String, Object>();
@@ -160,6 +169,9 @@ public class VacacionesController {
 			parametros.put("responsable", responsable);
 			parametros.put("numeroEmpleado", numeroEmpleado);
 			parametros.put("diasVacaciones", dias);
+			if(responsable==null || responsable.trim().isEmpty()){
+				responsable=responsableAux;
+			}
 			
 			reporte archivo = vacacionesService.generaReporte(new GeneraReporteArchivo (idSolicitud, idEstatus, idPuesto, idUnidadAdministrativa, numeroEmpleado, fechaIngreso, rfc, nombre, apellidoPaterno, apellidoMaterno, fechaInicio1, fechaFin1, dias, responsable, idVacacion));
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
@@ -231,6 +243,13 @@ public class VacacionesController {
     	}else{
     		model.addAttribute("usuariosConVacaciones",null);
     	}
+    	if(!this.mensaje.equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
     	//model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
     	return "/vacaciones/solicitudVacacionesEmpleados"; 
     	
@@ -261,13 +280,6 @@ public class VacacionesController {
     	}else if(idUnidad==null){
     			idUnidad="";
     	}
-    	
-    	
-    	//    	Periodo periodo= new Periodo();
-//    	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
-//	    model.addAttribute("periodo",periodo);
-//	    System.out.println("idPeriodo "+periodo.getIdPeriodo());
-//	    model.addAttribute("vacacion",vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo()));
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 	    List<Vacaciones> vacaciones = new ArrayList<>();
 	    vacaciones=vacacionesService.obtenerVacacionesPorFiltros(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus);
@@ -279,6 +291,13 @@ public class VacacionesController {
 	    }
 	    
     	model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
+    	if(!this.mensaje.equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
     	return "/vacaciones/vacacionesEmpleados"; 
     }
     
@@ -316,7 +335,7 @@ public class VacacionesController {
 	    }
 	    //claveUsuarioAux=vacacionPeriodo.getIdUsuario().getClaveUsuario();
 	    if(claveUsuarioAux!=null && !claveUsuarioAux.toString().isEmpty()){
-	    	model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuario));
+	    	model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuarioAux));
 	    }else{
 	    	model.addAttribute("listaResponsable",null);
 	    }
@@ -368,6 +387,8 @@ public class VacacionesController {
      	vacacionesService.agregaVacaciones(new VacacionesAux(null,Integer.parseInt(idVacacion), responsable, 1, fechaInicio, fechaFin, diasPorPedir), claveUsuario);
     	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
     	//System.out.println("Archivo "+archivo);
+    	
+    	
     	return "redirect:/vacaciones/solicitudVacaciones";
     }
     @PostMapping("/vacacion/guardaVacacion")

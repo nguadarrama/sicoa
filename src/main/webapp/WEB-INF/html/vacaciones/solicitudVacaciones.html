@@ -49,6 +49,33 @@
 							<li class="active"><a data-toggle="tab" href="#agregar">Peticion de vacaciones</a></li>
 						</ul>
 				</div>
+				<!-- <div id="validacionDias" class="form-group" style="display: none;">
+						<div class="alert alert-danger">
+							<span class="fa fa-exclamation-triangle"></span>
+			      			<span>Error, los d&iacute;as seleccionados no cumplen con las reglas establecias, por favor cambia las fechas</span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div> -->
+				<div class="form-group" th:if="${MENSAJE_EXCEPCION}">
+						<div class="alert alert-danger">
+							<span class="fa fa-exclamation-triangle"></span>
+			      			<span th:text="${MENSAJE_EXCEPCION}"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div>
+					<div class="form-group" th:if="${MENSAJE}">
+						<div class="alert alert-success">
+							<span class="fa fa-check"></span>
+			      			<span th:text="${MENSAJE}"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div>
 				<div class="tab-content">
 					<div class="row tab-pane fade in active" id="agregar">
 						

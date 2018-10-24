@@ -49,6 +49,24 @@
 							<li class="active"><a data-toggle="tab" href="#misVacacione">Mis vacaciones</a></li>
 						</ul>
 				</div>
+				<div class="form-group" th:if="${MENSAJE_EXCEPCION}">
+						<div class="alert alert-danger">
+							<span class="fa fa-exclamation-triangle"></span>
+			      			<span th:text="${MENSAJE_EXCEPCION}"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div>
+					<div class="form-group" th:if="${MENSAJE}">
+						<div class="alert alert-success">
+							<span class="fa fa-check"></span>
+			      			<span th:text="${MENSAJE}"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div>
 				<div class="tab-content" >
 					<div class="row tab-pane fade in active misPropiasVacaciones" >
 						  <div class="card" id="misPropiasVacaciones">
@@ -66,6 +84,7 @@
 						    <!-- <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion"> -->
 						    <div class="card">
 							<h3>Busca vacaciones</h3>
+							
 							<div class="asistenciaForm">      <!-- Formulario busqueda asistencia -->
 			      				<form th:action="@{/vacaciones/vacacionesPropias}" method="get">
 									<div class="row">
@@ -272,7 +291,8 @@
 							<div class="row text-center">
 									<label>
 											<label class="col-form-label">Persona que autoriza </label>
-											<input id="responsable" name="responsable" type="text" class="form-control input-calendar" required="required" th:readonly="true" />
+											<input id="responsable" name="responsable" type="text" class="form-control" required="required" th:readonly="true" />
+											<input id="responsableAux" name="responsableAux" type="text" class="form-control" />
 									</label>
 							</div>
 							<div class="row">

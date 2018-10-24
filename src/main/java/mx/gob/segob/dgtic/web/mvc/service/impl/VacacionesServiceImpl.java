@@ -34,6 +34,7 @@ import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
+import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
@@ -133,8 +134,11 @@ public class VacacionesServiceImpl implements VacacionesService{
 	
 	@Override
 	public void agregaVacaciones(VacacionesAux vacaciones, String claveUsuario) {
+		Vacaciones vacacio= new Vacaciones();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HttpEntity httpEntity = new BasicHttpEntity();
+		HttpResponse response;
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		Usuario usuario= new Usuario();
 		usuario=usuarioService.buscaUsuario(claveUsuario);
@@ -150,19 +154,64 @@ public class VacacionesServiceImpl implements VacacionesService{
 		}
 		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_VACACIONES, httpEntity, header);
+			response=ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_VACACIONES, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+		}
+//		HttpResponse response;
+//		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+//		
+//		Header header = new BasicHeader("Authorization", "Bearer %s");
+//		HttpEntity httpEntity = new BasicHttpEntity();
+//		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+//		
+//		Map<String, Object> content = new HashMap<String, Object>();
+//		content.put("detalleVacacion", vacaciones);
+//
+//		try {
+//			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+//		} catch (ClienteException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		try { //se consume recurso rest
+//			response =  ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_VACACIONES, httpEntity, header);
+//		} catch (ClienteException e) {
+//			logger.error(e.getMessage(), e);
+//			throw new AuthenticationServiceException(e.getMessage(), e);
+//		}
+//		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+//			
+//			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+//			JsonElement dataJson = json.get("data").getAsJsonObject();
+//			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
+//		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+//			String mensaje = obtenerMensajeError(response);					 
+//			throw new AuthenticationServiceException(mensaje);			
+//		} else {
+//			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+//		}
+//				
+//		return vacacio;	
 	}
 	
 	@Override
 	public void modificaVacaciones(Vacaciones vacaciones) {
+		Vacaciones vacacio= new Vacaciones();
 		HttpResponse response;
-		
-		
-		
 		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
@@ -184,7 +233,42 @@ public class VacacionesServiceImpl implements VacacionesService{
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		
+//		HttpResponse response;
+//		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+//		
+//		Header header = new BasicHeader("Authorization", "Bearer %s");
+//		HttpEntity httpEntity = new BasicHttpEntity();
+//		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+//		
+//		Map<String, Object> content = new HashMap<String, Object>();
+//		content.put("detalleVacacion", vacaciones);
+//
+//		try {
+//			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+//		} catch (ClienteException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		try { //se consume recurso rest
+//			response =  ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_VACACIONES, httpEntity, header);
+//		} catch (ClienteException e) {
+//			logger.error(e.getMessage(), e);
+//			throw new AuthenticationServiceException(e.getMessage(), e);
+//		}
+//		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+//			
+//			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+//			JsonElement dataJson = json.get("data").getAsJsonObject();
+//			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
+//		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+//			String mensaje = obtenerMensajeError(response);					 
+//			throw new AuthenticationServiceException(mensaje);			
+//		} else {
+//			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+//		}
+				
+		//return vacacio;	
 	}
 	
 	private String obtenerMensajeError(HttpResponse response){
@@ -245,6 +329,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 	
 	@Override
 	public void aceptaORechazaVacaciones(Vacaciones vacaciones,Integer idDetalle) {
+		Vacaciones vacacio= new Vacaciones();
 		HttpResponse response;
 		
 		vacaciones.setIdDetalle(idDetalle);
@@ -270,7 +355,42 @@ public class VacacionesServiceImpl implements VacacionesService{
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		
+//		HttpResponse response;
+//		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+//		
+//		Header header = new BasicHeader("Authorization", "Bearer %s");
+//		HttpEntity httpEntity = new BasicHttpEntity();
+//		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+//		
+//		Map<String, Object> content = new HashMap<String, Object>();
+//		content.put("detalleVacacion", vacaciones);
+//
+//		try {
+//			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+//		} catch (ClienteException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		try { //se consume recurso rest
+//			response =  ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_ACEPTAORECHAZA_VACACIONES, httpEntity, header);
+//		} catch (ClienteException e) {
+//			logger.error(e.getMessage(), e);
+//			throw new AuthenticationServiceException(e.getMessage(), e);
+//		}
+//		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+//			
+//			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+//			JsonElement dataJson = json.get("data").getAsJsonObject();
+//			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
+//		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+//			String mensaje = obtenerMensajeError(response);					 
+//			throw new AuthenticationServiceException(mensaje);			
+//		} else {
+//			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+//		}
+				
+		//return vacacio;
 	}
 
 	@Override

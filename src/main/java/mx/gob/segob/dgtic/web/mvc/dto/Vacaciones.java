@@ -19,8 +19,14 @@ public class Vacaciones {
 	private Integer dias;
 	private Date fechaRegistro;
     private String name;
- 
-    private String description;
+    private String mensaje;
+    public String getMensaje() {
+		return mensaje;
+	}
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+	private String description;
  
     private List<MultipartFile> archivo;
 	
