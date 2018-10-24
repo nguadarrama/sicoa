@@ -7,7 +7,7 @@ $(document).ready(function() {
 
 	
 
-	$('.eBtn').on('click', function(event) { 					//botón edita
+	$('#tablePeriodos').on('click','.eBtn', function(event) { 					//botón edita
 		event.preventDefault();
 		var href = $(this).attr('href');
 		var text = $(this).text();
