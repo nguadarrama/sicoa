@@ -228,9 +228,9 @@ public class CatalogoController {
 	 * 
 	 * @return La vista del menú de catálogos
 	 */
-	@RequestMapping(value = { "justificacion" }, method = RequestMethod.GET)
-	public String obtieneJustificacion(Model model) {
 
+	@RequestMapping(value = { "justificacion" }, method = RequestMethod.GET)
+	public String obtieneJustificaciones(Model model) {
 		model.addAttribute("listaJustificaciones", catalogoService.obtieneListaJ());
 		if(!this.mensaje.equals("")){
 			if(this.mensaje.contains("correctamente"))
@@ -241,7 +241,8 @@ public class CatalogoController {
 		this.mensaje = "";
 		return "/catalogos/justificacion";
 	}
-
+	
+	
 	@GetMapping("justificacion/busca")
 	@ResponseBody
 	public Justificacion buscaJustificacion(Integer id) {
@@ -360,7 +361,7 @@ public class CatalogoController {
 		@PostMapping("periodo/agrega")
 	   	public String periodoAgrega(Periodo periodo) {
 	   		periodo = catalogoService.agregaPeriodoVacacional(periodo);
-	   		this.mensaje = periodo.getMensaje();
+	   		this.mensaje = periodo.getMensaje()== null ? ""  : periodo.getMensaje();
 	   		return "redirect:/catalogos/periodo";
 	   	}
 	   	
@@ -368,7 +369,7 @@ public class CatalogoController {
 	   	public String periodoModifica(Periodo periodo) {
 	   		System.out.println("idRecibido: "+periodo.getIdPeriodo()+" activoRecibido: "+periodo.getActivo());
 	   		periodo = catalogoService.modificaEstatusPeriodo(periodo);
-	   		this.mensaje = periodo.getMensaje();
+	   		this.mensaje = periodo.getMensaje() == null ? ""  : periodo.getMensaje();
 	   		return "redirect:/catalogos/periodo";
 	   	}
 		

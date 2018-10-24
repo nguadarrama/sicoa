@@ -29,12 +29,12 @@ public final class CatalogoEndPointConstants {
 	/**
 	 * Constante que representa el atributo WEB_SERVICE_INFO_JUSTIFICACION, path del WebService para obtener la información del catálogo justificacion. 
 	 */	
-	public static final String WEB_SERVICE_INFO_JUSTIFICACION =  "/justificacion/obtieneJustificaciones";
-	public static final String WEB_SERVICE_CAT_JUSTIFICACION =  "/justificacion/obtieneLista";
-	public static final String WEB_SERVICE_BUSCA_JUSTIFICACION = "/justificacion/buscaJustificacion";
-	public static final String WEB_SERVICE_MODIFICA_JUSTIFICACION = "/justificacion/modificaJustificacion";
-	public static final String WEB_SERVICE_AGREGA_JUSTIFICACION = "/justificacion/agregaJustificacion";
-	public static final String WEB_SERVICE_ELIMINA_JUSTIFICACION = "/justificacion/eliminaJustificacion";
+	public static final String WEB_SERVICE_INFO_JUSTIFICACION =  "/catalogo/obtieneJustificaciones";
+	public static final String WEB_SERVICE_CAT_JUSTIFICACION =  "/catalogo/obtieneLista";
+	public static final String WEB_SERVICE_BUSCA_JUSTIFICACION = "/catalogo/buscaJustificacion";
+	public static final String WEB_SERVICE_MODIFICA_JUSTIFICACION = "/catalogo/modificaJust";
+	public static final String WEB_SERVICE_AGREGA_JUSTIFICACION = "/catalogo/agregaJust";
+	public static final String WEB_SERVICE_ELIMINA_JUSTIFICACION = "/catalogo/eliminaJustificacion";
 	//Usuario
 	public static final String WEB_SERVICE_INFO_USUARIO =  "/catalogo/obtieneUsuarios";
 	public static final String WEB_SERVICE_BUSCA_USUARIO = "/catalogo/buscaUsuario";

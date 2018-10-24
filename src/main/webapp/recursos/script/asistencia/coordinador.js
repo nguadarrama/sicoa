@@ -303,17 +303,15 @@ $(document).ready(function() {
     $('#buscarRango').validate({ 
         rules: {
             fechaInicial: { 
-                required: true, 
                 dpCompareDate: "notAfter #validAfterDatepicker"
             },
 		    fechaFinal: { 
-		        required: true, 
 		        dpCompareDate: "notBefore #validBeforeDatepicker"
 		    } 
         },
     	messages: {
-    		fechaInicial: 'Debe ser menor que la "Fecha Final"',
-    		fechaFinal: 'Debe ser mayor que la "Fecha Inicial"'
+    		fechaInicial: 'Ingresa fecha menor ó igual a la Fecha Final',
+    		fechaFinal: 'Ingresa fecha mayor ó igual a la Fecha Inicial'
     	}
     			
     });
@@ -333,8 +331,27 @@ $(document).ready(function() {
 		wme.close();
 	});
 	
+	//paginador
 	$('#tableAsistencias').DataTable({
 		"scrollY": "500px",
         "scrollCollapse": true
      });
+	
+	//validación para datepicker, si se selecciona uno, entonces ambos deben seleccionarse
+    $('#buscaBtn').on('click', function(event) {
+    	$("#validAfterDatepicker").prop('required',false);
+    	$("#validBeforeDatepicker").prop('required',false);
+    	
+    	var existefechaInicial = $('#validBeforeDatepicker').datepicker('getDate') != null;
+    	var existefechaFinal = $('#validAfterDatepicker').datepicker('getDate') != null;
+    	
+    	if (existefechaInicial && !existefechaFinal) {
+    		$("#validAfterDatepicker").prop('required',true);
+    	} else if (existefechaFinal && !existefechaInicial) {
+    		$("#validBeforeDatepicker").prop('required',true);
+    	} else if (existefechaInicial && existefechaFinal) {
+    		$('#buscaBtn').submit();
+    	}
+    });
+	
 }); 
