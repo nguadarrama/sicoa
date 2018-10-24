@@ -474,9 +474,10 @@ public class CatalogoServiceImpl implements CatalogoService {
 
 	@Override
 	public Periodo agregaPeriodoVacacional(Periodo periodo) {
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("periodo", periodo);
@@ -487,13 +488,24 @@ public class CatalogoServiceImpl implements CatalogoService {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		try { //se consume recurso rest
-			ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_PERIODO, httpEntity, header);
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_PERIODO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			periodo = gson.fromJson(dataJson, Periodo.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+		}
+		System.out.println("CAtalogoServiceImpl--method--agregaPeriodoVacacional-- "+gson.toJson(periodo));
 		return periodo;
 	}
 

@@ -361,32 +361,18 @@ public class CatalogoController {
 	   	
 		@PostMapping("periodo/agrega")
 	   	public String periodoAgrega(Periodo periodo) {
-	   		Model model = null;
-	   		periodo = catalogoService.agregaPeriodoVacacional(periodo);
-	   		if(!this.getMensaje().equals("")){
-				if(this.getMensaje().contains("correctamente"))
-					model.addAttribute("MENSAJE", this.mensaje);
-				else
-					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
-			}
-			this.mensaje = "";
-//	   		this.mensaje = periodo.getMensaje();
+			Periodo per = new Periodo();
+	   		per = catalogoService.agregaPeriodoVacacional(periodo);
+	   		this.mensaje = per.getMensaje();
 	   		return "redirect:/catalogos/periodo";
 	   	}
 	   	
 		@GetMapping ("periodo/modifica")
-	   	public String periodoModifica(Periodo periodo) {
+		public String periodoModifica(Periodo periodo) {
+	   		Periodo per = new Periodo();
 	   		System.out.println("idRecibido: "+periodo.getIdPeriodo()+" activoRecibido: "+periodo.getActivo());
-	   		Model model = null;
-	   		catalogoService.modificaEstatusPeriodo(periodo);
-	   		if(!this.getMensaje().equals("")){
-				if(this.getMensaje().contains("correctamente"))
-					model.addAttribute("MENSAJE", this.mensaje);
-				else
-					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
-			}
-			this.mensaje = "";
-//	   		this.mensaje = periodo.getMensaje();
+	   		per = catalogoService.modificaEstatusPeriodo(periodo);
+	   		this.mensaje = per.getMensaje();
 	   		return "redirect:/catalogos/periodo";
 	   	}
 		
