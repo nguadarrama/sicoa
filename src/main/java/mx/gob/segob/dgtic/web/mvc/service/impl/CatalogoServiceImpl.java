@@ -718,17 +718,13 @@ public class CatalogoServiceImpl implements CatalogoService {
 	@Override
 	public Periodo modificaEstatusPeriodo(Periodo periodo) {
 		HttpResponse response;
-		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		
 		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("periodo", periodo);
-
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
@@ -742,6 +738,18 @@ public class CatalogoServiceImpl implements CatalogoService {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			periodo = gson.fromJson(dataJson, Periodo.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el periodo : "+response.getStatusLine().getReasonPhrase());
+		}
+		System.out.println("CatalogoServiceimpl--method--modificaEstatusPeriodo: "+gson.toJson(periodo));	
 		return periodo;
 	}
 	
