@@ -15,7 +15,7 @@ $(document).ready(function() {
 			$.get(href, function(periodo, status) {
 				$('.periodoForm #idPeriodo').val(periodo.idPeriodo);
 				$('.periodoForm #fechaInicio').val(periodo.fechaInicio);
-				$('.periodoForm #fechafin').val(periodo.fechafin);
+				$('.periodoForm #fechaFin').val(periodo.fechaFin);
 				$('.periodoForm #descripcion').val(periodo.descripcion);
 				$('.periodoForm #activo').val(periodo.activo);
 			});

@@ -354,6 +354,17 @@ public class CatalogoController {
 				else
 					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
 			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			this.mensaje = "";
 			return "/catalogos/PeriodoVacacional";
 		}

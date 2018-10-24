@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
 	
 	var idAsistencia = "";
@@ -353,5 +354,4 @@ $(document).ready(function() {
     		$('#buscaBtn').submit();
     	}
     });
-	
-}); 
+});
