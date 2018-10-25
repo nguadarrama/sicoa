@@ -20,8 +20,10 @@ public interface CatalogoService {
 	public void eliminaHorario(Integer id);
 	public List<Perfil> obtienePerfiles();
 	//Catálogo tipoDia
+	
 	public List<TipoDia> obtieneTipoDias();
 	public TipoDia buscaTipoDia(Integer id);
+	
 	//Catálogo justificacion
 	public List<Justificacion> obtieneListaJ();
 	public List<Justificacion> obtieneJustificaciones();
