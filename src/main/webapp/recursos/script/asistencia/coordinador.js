@@ -9,6 +9,14 @@ $(document).ready(function() {
 		$('#fechaInicialHidddenListaMultiple').val($('#validBeforeDatepicker').val());
 		$('#fechaFinalHiddenListaMultiple').val($('#validAfterDatepicker').val());
 		
+		var idAsistencias = [];
+		
+		$('#tableAsistencias').find('input[type="checkbox"]:checked').each(function () {
+	       idAsistencias.push($(this).val());
+		});
+		
+		$('#checkboxesIdAsistenciaHidden').val(idAsistencias);
+		
 		$('#justificacionMultipleListaBtn').submit();
 	});
 	

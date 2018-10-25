@@ -444,15 +444,21 @@ public class AsistenciaController  {
     }
     
     @RequestMapping(value={"coordinador/buscaAsistenciasPorId"}, method = RequestMethod.POST)
-    public String buscaAsistenciasPorId(Model model, Integer[] checkboxes, String cve_m_usuario_hidden_lista_multiple, String fechaInicial_hidden_lista_multiple, 
+    public String buscaAsistenciasPorId(Model model, Integer[] checkboxes, String[] arregloIdAsistencias, String cve_m_usuario_hidden_lista_multiple, String fechaInicial_hidden_lista_multiple, 
     		String fechaFinal_hidden_lista_multiple, Authentication authentication) {
     	
     	List<Asistencia> listaAsistenciaJustificar = new ArrayList<>();
     	String nombreJefe = "";
     	String motivo = "";
     	
-    	if (checkboxes != null) {
-	    	for (Integer idAsistencia : checkboxes) {
+    	List<Integer> idAsistencias = new ArrayList<>();
+    	
+    	for (String a : arregloIdAsistencias) {
+    		idAsistencias.add(Integer.parseInt(a));
+    	}
+    	
+    	if (idAsistencias != null) {
+	    	for (Integer idAsistencia : idAsistencias) {
 	    		Asistencia asistenciaJustificar = asistenciaService.buscaAsistenciaPorId(idAsistencia);
 	    		listaAsistenciaJustificar.add(asistenciaJustificar);
 	    		
