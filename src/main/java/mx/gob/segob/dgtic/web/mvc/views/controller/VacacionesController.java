@@ -224,7 +224,7 @@ public class VacacionesController {
     	model.addAttribute("vacacionesPropias",null);
     	}
     	model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
-    	if(!this.mensaje.equals("")){
+    	if(!this.getMensaje().equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
 			else
@@ -251,7 +251,7 @@ public class VacacionesController {
     	}else{
     		model.addAttribute("usuariosConVacaciones",null);
     	}
-    	if(!this.mensaje.equals("")){
+    	if(!this.getMensaje().equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
 			else
@@ -299,7 +299,7 @@ public class VacacionesController {
 	    }
 	    
     	model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
-    	if(!this.mensaje.equals("")){
+    	if(!this.getMensaje().equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
 			else

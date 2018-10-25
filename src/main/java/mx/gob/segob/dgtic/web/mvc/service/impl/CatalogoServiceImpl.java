@@ -79,17 +79,14 @@ public class CatalogoServiceImpl implements CatalogoService {
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
-		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("horario", horario);
-
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_HORARIO, httpEntity, header);
 		} catch (ClienteException e) {
@@ -109,9 +106,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 		} else {
 			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
 		}
-		
-		return horario;
-				
+		return horario;		
 	}
 	
 	@Override
@@ -367,50 +362,46 @@ public class CatalogoServiceImpl implements CatalogoService {
 	
 	@Override
 	public Justificacion modificaJustificacion(Justificacion justificacion) {
-		HttpResponse response = null;
-		HttpEntity httpEntity = new BasicHttpEntity();
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		Header header = new BasicHeader("Authorization", "Bearer %s");
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("justificacion", justificacion);
-		try {
-			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_JUSTIFICACION, httpEntity, header);
-			
-		}catch (ClienteException e) {
-			logger.error(e.getMessage(), e);
-			throw new AuthenticationServiceException(e.getMessage(), e);
-		}catch (Exception i){
-			logger.error(i.getMessage(), i);
-		}
-		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-			
-			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-			JsonElement dataJson = json.get("data").getAsJsonObject();
-			justificacion = gson.fromJson(dataJson, Justificacion.class);		
-			
-		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-			
-			String mensaje = obtenerMensajeError(response);					 
-			throw new AuthenticationServiceException(mensaje);			
-		} else {
-			throw new AuthenticationServiceException("Error al obtener la justificaicon : "+response.getStatusLine().getReasonPhrase());
+			HttpResponse response;
+			Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+			Header header = new BasicHeader("Authorization", "Bearer %s");
+			HttpEntity httpEntity = new BasicHttpEntity();
+			Map<String, Object> content = new HashMap<String, Object>();
+			content.put("justificacion", justificacion);
+			try {
+				httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+			} catch (ClienteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try { //se consume recurso rest
+				response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_JUSTIFICACION, httpEntity, header);
+			} catch (ClienteException e) {
+				logger.error(e.getMessage(), e);
+				throw new AuthenticationServiceException(e.getMessage(), e);
+			}
+			if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+				
+				JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+				JsonElement dataJson = json.get("data").getAsJsonObject();
+				justificacion = gson.fromJson(dataJson, Justificacion.class);		
+				
+			} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+				
+				String mensaje = obtenerMensajeError(response);					 
+				throw new AuthenticationServiceException(mensaje);			
+			} else {
+				throw new AuthenticationServiceException("Error al obtener justificacion : "+response.getStatusLine().getReasonPhrase());
+			}
+			return justificacion;		
 		}
 		
-		return justificacion;
-	}
-
 	@Override
 	public Justificacion agregaJustificacion(Justificacion justificacion) {
 		HttpResponse response;
-		HttpEntity httpEntity = new BasicHttpEntity();
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("justificacion", justificacion);
 		try {
@@ -419,21 +410,24 @@ public class CatalogoServiceImpl implements CatalogoService {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		try {
+		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_JUSTIFICACION, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
-		}		
+		}
 		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
 			justificacion = gson.fromJson(dataJson, Justificacion.class);		
+			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al guardar la justificaicon : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException("Error al obtener justificacion : "+response.getStatusLine().getReasonPhrase());
 		}
 		return justificacion;
 	}
@@ -519,25 +513,18 @@ public class CatalogoServiceImpl implements CatalogoService {
 
 	@Override
 	public void modificaPeriodoVacacional(Periodo periodo) {
-			HttpResponse response;
-		
+		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		
-		
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("periodo", periodo);
-
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_PERIODO, httpEntity, header);
 		} catch (ClienteException e) {
