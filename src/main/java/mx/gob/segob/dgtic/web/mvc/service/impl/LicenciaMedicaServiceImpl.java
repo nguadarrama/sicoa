@@ -68,4 +68,33 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
 
+	@Override
+	public List<LicenciaMedica> obtenerListaLicenciaMedicaEmpleados(String claveUsuario, String nombre,
+			String apellidoPaterno, String apellidoMaterno, String idEstatus, String idUnidad) {
+		List<LicenciaMedica> listaLicencias = new ArrayList<>();
+		HttpResponse response;
+		try{
+			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_EMPLEADOS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&nombre="+nombre
+					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaLicencias = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<LicenciaMedica>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
+		}
+		return listaLicencias;
+	}
+
 }

@@ -46,6 +46,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionesAux;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
+import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
 import mx.gob.segob.dgtic.web.mvc.service.PerfilUsuarioService;
 import mx.gob.segob.dgtic.web.mvc.service.PeriodoService;
@@ -83,6 +84,8 @@ public class VacacionesController {
 	@Autowired
 	private VacacionPeriodoService vacacionPeriodoService;
 	
+	@Autowired CatalogoService catalogoService;
+	
 	private String mensaje = "";
 	
     @RequestMapping(value={"solicitudVacaciones"}, method = RequestMethod.GET)
@@ -110,6 +113,7 @@ public class VacacionesController {
 	    model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuario));
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 	    model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
+	    model.addAttribute("listaDiasFestivos", catalogoService.obtieneDiaFestivo());
 	    if(!this.mensaje.equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
@@ -240,9 +244,6 @@ public class VacacionesController {
     	Usuario usuario= new Usuario();
     	usuario=usuarioService.buscaUsuario(claveUsuarioAux);
     	String idUnidad=""+usuario.getIdUnidad();
-	    //model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
-	    //model.addAttribute("listaPeriodos",periodoService.periodos());
-	   // model.addAttribute("vacacion",vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo()));
     	List<VacacionPeriodo> conVacaciones= new ArrayList<>();
     	conVacaciones=vacacionPeriodoService.obtenerUsuariosVacacionesPorFiltros(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad);
     	if(conVacaciones.size()>0){
@@ -543,9 +544,9 @@ public class VacacionesController {
     	Archivo archivo= new Archivo();
     	archivo=archivoService.consultaArchivo(idArchivo);
     	System.out.println("archivo retornado "+archivo.getUrl());
-    	String cadena="\\"+"\\";
     	String nombrecompleto=archivo.getUrl()+archivo.getNombre();
-    	String nombreArchivo=nombrecompleto.replace('/','\\');
+    	//String nombreArchivo=nombrecompleto.replace('/','\\');
+    	String nombreArchivo=nombrecompleto;
     	System.out.println("nombre de archivo "+nombreArchivo);
     	File file = new File(nombreArchivo);
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
@@ -559,4 +560,12 @@ public class VacacionesController {
         response.setHeader("Content-Disposition", String.format("attachment; filename\"%s\"",file.getName()));
         FileCopyUtils.copy(inputStream, response.getOutputStream());
     }
+	public String getMensaje() {
+		return mensaje == null ? "" : this.mensaje;
+	}
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+    
+    
 }

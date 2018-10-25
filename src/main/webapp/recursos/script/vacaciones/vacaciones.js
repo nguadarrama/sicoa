@@ -7,6 +7,25 @@ $(document).ready(function() {
 	//$("#botonGuardarVacaciones").disabled = true;
 	//document.getElementById("botonGuardarVacaciones").disabled=true;
 		//document.getElementById("validacionDias").style.display = "none";
+	var disableddates = ["10-26-2018", "10-30-2018", "10-31-2018"];
+
+	  function DisableSpecificDates(date) {
+
+	   var m = date.getMonth();
+	   var d = date.getDate();
+	   var y = date.getFullYear();
+	   var currentdate = (m + 1) + '-' + d + '-' + y ;
+
+	   for (var i = 0; i < disableddates.length; i++) {
+
+
+	   if ($.inArray(currentdate, disableddates) != -1 ) {
+	   return [false];
+	   } 
+	   }
+
+	   return disableddates;
+	  }
 	$('.descargaArchivo').css("display","none");
 	$("#actualizamosVacacion").css("display","none");
 	$('.actualizaVacacion #responsableAux').css("display","none");
@@ -31,6 +50,7 @@ $(document).ready(function() {
 		$("#fechaInicio").datepicker({ 
 			minDate: 1,
 		       beforeShowDay: $.datepicker.noWeekends,
+		       beforeShowDay: DisableSpecificDates,
 		       onSelect: function() 
 		       { 
 		    	   calcularDias();

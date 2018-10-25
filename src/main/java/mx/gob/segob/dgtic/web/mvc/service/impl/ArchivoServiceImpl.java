@@ -51,7 +51,7 @@ public class ArchivoServiceImpl implements ArchivoService{
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		String ruta="C:/Sicoa/"+claveUsuario+"/"+accion+"/";
+		String ruta="/Sicoa/"+claveUsuario+"/"+accion+"/";
 		try {
 			System.out.println("Antes del error");
 			archivoDto.setArchivo(IOUtils.toByteArray(archivo.getInputStream()));

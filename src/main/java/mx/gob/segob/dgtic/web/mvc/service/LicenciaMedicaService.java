@@ -8,4 +8,6 @@ public interface LicenciaMedicaService {
 
 	public List<LicenciaMedica> obtenerListaLicenciaMedicaPorFiltros(String claveUsuario, String fechaInicio,
 			String fechaFin, String idEstatus);
+	public List<LicenciaMedica> obtenerListaLicenciaMedicaEmpleados(String claveUsuario ,String nombre,String apellidoPaterno, String apellidoMaterno, 
+			String idEstatus,String idUnidad);
 }
