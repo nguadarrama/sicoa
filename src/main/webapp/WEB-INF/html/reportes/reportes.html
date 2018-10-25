@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="templates/mainTemplate"
+	xmlns:sec="http://www.thymeleaf.org">
+	
+	<head>
+		<title th:text="#{TITULO_MAIN_PAGE}" layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE"></title>
+	
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+		<meta name="_token" th:content="${session._token}"></meta>
+		<meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"></meta> 
+	   	<meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"></meta>   	
+	   	
+	   	<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="icon"  type="image/x-icon" />
+		<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="shortcut icon"  type="image/x-icon"/>
+		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_3.3.7/css/bootstrap.min.css}" />	
+		<link rel="stylesheet" th:href="@{/recursos/assets/font-awesome-4.7.0/css/font-awesome.min.css}" />	
+		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_dialog/css/bootstrap-dialog.min.css}" />
+		<link rel="stylesheet" th:href="@{/recursos/assets/date-picker/style/jquery-ui.css}" />
+		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+		<link rel="stylesheet" th:href="@{/recursos/css/styles.css}" />	
+	</head>
+	
+	<body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="logos">
+							<div class="logo-segob"></div>
+							<div class="logo-control"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<th:block layout:fragment="content"  th:remove="tag">
+			<div class="main-page">
+				<div class="container">
+					<h1 class="ico-solicitudes"><span class="input-clock"></span> Reportes</h1>
+					<hr/>
+					
+					<div class="row">
+						<div>
+							<ul class="nav nav-tabs" id="tabs" role="tablist">
+								<li class="nav-item active">
+									<a class="nav-link" id="asistencias-tab" data-toggle="tab" href="#asistencias" role="tab" aria-controls="asistencias" aria-selected="true">Reportes</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="row">
+						<!-- Tab panes -->
+						<div class="tab-content">
+							
+							<!-- buscar -->
+							<div class="tab-pane active" id="asistencias" role="tabpanel" aria-labelledby="asistencias-tab">
+								<div class="card">
+								
+									<div class="asistenciaForm form-group">
+										<form id="buscarRango" th:action="@{/asistencia/empleado/busca}" method="get">
+											<div class="row">	
+												<div class="col-md-12">
+	
+	
+	
+													<div class="row">	
+														<div class="form-group col-md-3">
+															<p>No. de Empleado</p>
+															<input th:value="${cve_m_usuario}" type="text" class="form-control" id="numeroEmpleado" name="cve_m_usuario" autocomplete="off" size="100%" />
+														</div>
+											            <div class="col-md-3">
+															<label>
+																<p>Nombre</p>
+																<input th:value="${nombre}" type="text" class="form-control input-user" id="nombre" name="nombre" />
+															</label>
+														</div>
+														<div class="col-md-3">
+															<label>
+																<p>Apellido Paterno</p>
+																<input th:value="${paterno}" type="text" class="form-control" id="paterno" name="paterno" />
+															</label>
+														</div>
+														<div class="col-md-3">
+															<label>
+																<p>Apellido Materno</p>
+																<input th:value="${materno}" type="text" class="form-control" id="materno" name="materno" />
+															</label>
+														</div>
+											        </div>
+											        <div class="row">
+														<div class="col-md-2">
+															<label>
+																<p>Nivel</p>
+																<input th:value="${nivel}" type="text" class="form-control input-flag" id="nivel" name="nivel" />
+															</label>
+														</div>
+														<div class="col-md-4">
+															<label>
+																<p>Tipo</p>
+																<input th:value="${tipo}" type="text" class="form-control input-flag" id="tipo" name="tipo" />
+															</label>
+														</div>
+														<div class="col-md-2">
+															<label>
+																<p>Estado</p>
+																<input th:value="${estado}" type="text" class="form-control input-flag" id="estado" name="estado"/>
+															</label>
+														</div>
+														<div class="col-md-2">
+										                	<p>Fecha Inicial</p>
+										                    <input th:value="${fechaInicial}" type='text' class="form-control input-calendar input-group date" id="validBeforeDatepicker" name="fechaInicial" autocomplete="off" size="100%" />
+											            </div>
+											            <div class="col-md-2">
+										                	<p>Fecha Final</p>
+										                    <input th:value="${fechaFinal}" type='text' class="form-control input-calendar input-group date" id="validAfterDatepicker" name="fechaFinal" autocomplete="off" size="100%" />
+											            </div>
+													</div>
+													<div class="row">
+														<div class="col-md-4">
+										                	<p>Unidad Administrativa</p>
+										                    <input th:value="${unidadAdministrativa}" type="text" class="form-control input-flag" id="unidadAdministrativa" name="unidadAdministrativa"/>
+											            </div>
+													</div>
+													<div class="row">
+														<div class="col-md-12">
+															<div class="form-check form-check-inline">
+																<p>Unidad Administrativa</p>
+											                	
+											                	<!-- Radio Buttons -->
+																<div class="form-check form-check-inline">
+																	<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1" />
+																	<label class="form-check-label">1</label>
+																</div>
+																
+																<div class="form-check form-check-inline">
+																	<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2" />
+																	<label class="form-check-label">2</label>
+																</div>
+																
+																<div class="form-check form-check-inline">
+																	<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="3" />
+																	<label class="form-check-label">3</label>
+																</div>
+															</div>
+											            </div>
+													</div>
+											    </div>
+										  	</div>
+									  	</form>
+									</div>
+								</div>
+	    					</div>
+	    				</div>
+	    			</div>
+	    		</div>
+			</div>	
+		</th:block>
+		
+		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+	
+		<th:block th:inline="text" layout:fragment="includeScript">
+			<script charset="utf-8" th:src="@{/recursos/assets/bootstrap_dialog/js/bootstrap-dialog.min.js}"></script>
+			<script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/jquery.dataTables.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery.ui.datepicker.validation.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/script/asistencia/empleado.js}"></script>	 
+		</th:block>
+		
+	</body>
+</html>
