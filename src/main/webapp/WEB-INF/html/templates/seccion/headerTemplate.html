@@ -75,7 +75,8 @@
 	                    		<li><a sec:authorize="hasAuthority('2')" th:href="@{/licenciasMedicas/solicitudLicenciasEmpleados}" th:text="#{SOLICITUD_LICENCIAS_EMPLEADOS}"></a></li>
 	                    	</ul>
 	                    </li>
-	                    <li><a href="#" th:text="#{ELEMENTO4}"></a></li>	
+	                    <li><a href="#" th:text="#{ELEMENTO4}"></a></li>
+	                    <li sec:authorize="hasAuthority('1') or hasAuthority('2')"><a th:href="@{/reportes/coordinador}" th:text="#{ELEMENTO6}"></a></li>	
 	                    <li class="dropdown" sec:authorize="hasAuthority('0')">
 	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" th:text="#{ELEMENTO5}">
 	                            <span class="caret"></span></a>
