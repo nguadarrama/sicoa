@@ -8,9 +8,16 @@ public class LicenciaMedica {
 	private Archivo idArchivo;
 	private Estatus idEstatus;
 	private String fechaInicio;
+	public String getFechaRegistro() {
+		return fechaRegistro;
+	}
+	public void setFechaRegistro(String fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
+	}
 	private String fechaFin;
 	private Integer dias;
 	private String padecimiento;
+	private String fechaRegistro;
 	
 	public LicenciaMedica(){
 		

@@ -7,25 +7,72 @@ $(document).ready(function() {
 	//$("#botonGuardarVacaciones").disabled = true;
 	//document.getElementById("botonGuardarVacaciones").disabled=true;
 		//document.getElementById("validacionDias").style.display = "none";
-	var disableddates = ["10-26-2018", "10-30-2018", "10-31-2018"];
-
-	  function DisableSpecificDates(date) {
-
-	   var m = date.getMonth();
-	   var d = date.getDate();
-	   var y = date.getFullYear();
-	   var currentdate = (m + 1) + '-' + d + '-' + y ;
-
-	   for (var i = 0; i < disableddates.length; i++) {
-
-
-	   if ($.inArray(currentdate, disableddates) != -1 ) {
-	   return [false];
-	   } 
-	   }
-
-	   return disableddates;
-	  }
+	var array =$("#listaDiasFestivos").val();
+	//alert("LLegada "+array);
+	var disableddates=array.split(",");
+	//alert("LLegada "+disableddates);
+	
+	$("#fechaInicio").datepicker({ 
+		beforeShowDay: function(date){ 
+			show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
+		//No Weekends 
+		for (var i = 0; i < disableddates.length; i++) {
+			if (new Date(disableddates[i]).toString() == date.toString()) {
+				show = false;
+				}
+		//No Holidays 
+		} var display = [show,'',(show)?'':'No Weekends or Holidays'];
+		//With Fancy hover tooltip! 
+		return display; 
+		},
+		minDate: 1,
+		onSelect: function() 
+	       { 
+	    	   calcularDias();
+	       },
+	})
+	$("#fechaFin").datepicker({ 
+		beforeShowDay: function(date){ 
+			show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
+		//No Weekends 
+		for (var i = 0; i < disableddates.length; i++) {
+			if (new Date(disableddates[i]).toString() == date.toString()) {
+				show = false;
+				}
+		//No Holidays 
+		} var display = [show,'',(show)?'':'No Weekends or Holidays'];
+		//With Fancy hover tooltip! 
+		return display; 
+		},
+		minDate: 1,
+		onSelect: function() 
+	       { 
+	    	   calcularDias();
+	       },
+		   })
+//	  function DisableSpecificDates(date) {
+//
+//	   var m = date.getMonth();
+//	   var d = date.getDate();
+//	   var y = date.getFullYear();
+//	   var currentdate = (m + 1) + '-' + d + '-' + y ;
+//
+//	   for (var i = 0; i < disableddates.length; i++) {
+//
+//
+//	   if ($.inArray(currentdate, disableddates) != -1 ) {
+//	   return [false];
+//	   } 
+//	   }
+//	   var highlight = eventDates[date];
+//       if( highlight ) {
+//            return [true, "event", 'Tooltip text'];
+//       } else {
+//            return [true, '', ''];
+//       }
+//	  
+//	   return disableddates;
+//	  }
 	$('.descargaArchivo').css("display","none");
 	$("#actualizamosVacacion").css("display","none");
 	$('.actualizaVacacion #responsableAux').css("display","none");
@@ -47,23 +94,20 @@ $(document).ready(function() {
 			dateFormat: 'yy-mm-dd',
 		       beforeShowDay: $.datepicker.noWeekends 
 		   });
-		$("#fechaInicio").datepicker({ 
-			minDate: 1,
-		       beforeShowDay: $.datepicker.noWeekends,
-		       beforeShowDay: DisableSpecificDates,
-		       onSelect: function() 
-		       { 
-		    	   calcularDias();
-		       },
-		   });
-		$("#fechaFin").datepicker({ 
-			minDate: 1,
-		       beforeShowDay: $.datepicker.noWeekends ,
-		       onSelect: function() 
-		       { 
-		    	   calcularDias();
-		       },
-		   });
+//		$("#fechaInicio").datepicker({ 
+//			minDate: 1,
+//		       beforeShowDay: $.datepicker.noWeekends,
+//		       //beforeShowDay: DisableSpecificDates,
+//		       onSelect: function() 
+//		       { 
+//		    	   DisableSpecificDates();
+//		    	   calcularDias();
+//		       },
+//		   });
+//		$("#fechaInicio").on('click', function(event){
+//			alert();
+//			DisableSpecificDates();
+//		});
 		
 		function cambiarFile(){
 		    const input = document.getElementById('inputFileServer');
@@ -156,6 +200,7 @@ $(document).ready(function() {
 			document.getElementById("botonGuardarVacaciones").disabled = true;
 			var fechaInicio= $("#fechaInicio").val();
 			var fechaFin=$("#fechaFin").val();
+			alert("Valor1 "+fechaInicio+" valor2 "+fechaFin);
 			//alert("variable "+fechaInicio);
 			//alert("variable2 "+fechaFin);
 			if(fechaInicio!=null && fechaInicio!=""){
@@ -168,11 +213,11 @@ $(document).ready(function() {
 					var resultado = diasLibres(fechaInicio,fechaFin);
 					//var dias=diasEntreFechas();
 					//resultado+=1;
-					//alert ("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" resultado "+resultado);
+					alert ("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" resultado "+resultado);
 					if(resultado>0 && resultado<=10){
 						//alert("bien ");
 						var diasAutorizados=$("#diasDispobibles").val();
-						//alert("Dias disponibles "+diasAutorizados);
+						alert("Dias disponibles "+diasAutorizados);
 						if(diasAutorizados>=resultado){
 							$("#botonGuardarVacaciones").attr('disabled', false);
 						$("#diasPorPedir").val(resultado);

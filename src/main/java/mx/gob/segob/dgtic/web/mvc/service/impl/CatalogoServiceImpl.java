@@ -1,6 +1,9 @@
 package mx.gob.segob.dgtic.web.mvc.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -938,5 +941,54 @@ public class CatalogoServiceImpl implements CatalogoService {
 		}
 		System.out.println("CAtalogoServiceImpl--method--modificaNivel-- "+gson.toJson(nivel));	
 		return nivel;
+	}
+	
+	@Override
+	public String obtieneDiaFestivoParaBloquear() {
+		
+		List<DiaFestivo> lista = new ArrayList<>();
+		HttpResponse response;
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_DIA_FESTIVO);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			lista = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<DiaFestivo>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener los días festivos : "+response.getStatusLine().getReasonPhrase());
+		}
+			//listaDias+="";
+		System.out.println("tamaño "+lista.size());
+		String listaDias= "";
+		for(DiaFestivo diaFestivo: lista){
+			Date date = new Date();
+			String fecha=null;
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+			System.out.println("Fechas obtenidas "+diaFestivo.getFecha());
+		    try {
+				date = sdf.parse(diaFestivo.getFecha());
+				fecha = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    listaDias+=""+fecha+",";
+		}
+		listaDias=listaDias.substring(0, (listaDias.length()- 1));
+		listaDias+="";
+		return listaDias;
 	}
 }

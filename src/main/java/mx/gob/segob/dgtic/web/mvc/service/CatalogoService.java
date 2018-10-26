@@ -54,5 +54,6 @@ public interface CatalogoService {
 	public NivelOrganizacional nivelAgrega(NivelOrganizacional nivel);
 	public NivelOrganizacional nivelBusca(Integer idNivel);
 	public NivelOrganizacional modificaNivel(NivelOrganizacional nivel);
+	public String obtieneDiaFestivoParaBloquear();
 	
 }

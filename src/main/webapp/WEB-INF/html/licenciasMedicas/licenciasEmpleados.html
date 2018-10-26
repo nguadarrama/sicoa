@@ -44,14 +44,14 @@
 				<h1 class="ico-solicitudes"><span class="input-clock"></span> Mis solicitudes</h1>
 				<hr/>
 				
-				<div class="row">
+				<div class="row listaDeLicenciasEmpleados">
 						<ul class="nav nav-tabs">
 							<li class="active"><a data-toggle="tab" href="#misSolicitudes">Mis solicitudes</a></li>
 						</ul>
 				</div>
 				<div class="tab-content" >
-					<div class="row tab-pane fade in active misPropiasVacaciones" >
-						  <div class="card" id="misPropiasVacaciones">
+					<div class="row tab-pane fade in active listaDeLicenciasEmpleados" >
+						  <div class="card" id="listaDeLicenciasEmpleados">
 						  <div id="misVacaciones">
 						    <!-- <div class="card-header" id="headingOne">
 						      <h5 class="mb-0">
@@ -67,7 +67,7 @@
 						    <div class="card">
 							<h3>Busca licencias m&eacute;dicas</h3>
 							<div class="asistenciaForm">      <!-- Formulario busqueda asistencia -->
-			      				<form th:action="@{/vacaciones/vacacionesEmpleados}" method="get" enctype="multipart/form-data">
+			      				<form th:action="@{/vacaciones/vacacionesEmpleados}" class="actualizaLicencia" method="get" enctype="multipart/form-data">
 									<div class="row">
 										<div class="col-md-3">
 											<label>
@@ -132,7 +132,7 @@
 								</form>
 							</div>
 							
-								<table id="vacacionesPropias" class="table table-striped table-text-center">
+								<table id="tablaLicenciasEmpleados" class="table table-striped table-text-center">
 									<thead>
 										<tr class="filters">
 											<th>No. de Empleado</th>
@@ -154,7 +154,7 @@
 											<td th:text="${licencia.idEstatus.estatus}"></td>
 											<td th:text="${licencia.dias}"></td>
 											<td class="col-md-3">
-												<a th:href="@{/vacaciones/vacacion/busca}"  class="eBtn" id="botonLlamar" name="botonLlamar"> Ver Detalle </a>
+												<a th:href="@{/licenciasMedicas/busca(idLicencia=${licencia.idLicencia})}"  class="eBtn" id="botonLlamar" name="botonLlamar"> Ver Detalle </a>
 											</td>
 										</tr>
 									</tbody>
@@ -164,66 +164,22 @@
 					 </div>
 						</div>
 						</div>
-				<div class="row tab-pane fade in active" id="actualizamosVacacion" style="display: none; ">
-				<div class="card" >
-				<form  th:action="@{/vacaciones/vacacion/generaArchivo}"  method="get" class="actualizaVacacion" enctype="multipart/form-data">
+				<div class="row tab-pane fade in active" id="detalleLicencia" style="display: none; ">
+				<div class="card"  >
+				<form  th:action="@{/licenciasMedicas/agregaSolicitudLicencia}"  method="get" class="actualizaLicencia">
 					<div class="row">
-						<h2 class="ico-solicitudes"><span class="input-clock"></span>Solicitud de vacaciones</h2>
+						<h2 class="ico-solicitudes"><span class="input-clock"></span>Solicitud de licencia m&eacute;dica</h2>
 					</div>
 					<div class="row">
 						<div class="col-md-6">
-							<label>
-									<label class="col-form-label">Folio de solicitud</label>
-									<input id="idSolicitud" name="idSolicitud" type="text" class="form-control" required="required" th:readonly="true" />
-									<input id="idVacacion" name="idVacacion" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
-							</label>
-						</div>
-						<div class="col-md-6">
-							<label>
-									<label class="col-form-label">Estatus</label>
-									<input id="idEstatus" name="idEstatus" type="text" class="form-control" required="required" th:readonly="true" />
-							</label>
-						</div>
-					</div>
-					<div class="row">
-						 <div class="col-md-4">
 							<label>
 									<label class="col-form-label">Fecha de solicitud</label>
-									<input id="fechaSolicitud" name="fechaSolicitud" type="text" class="form-control" required="required" th:readonly="true"/>
-							</label>
-						 </div>
-						<div class="col-md-4">
-							<label>
-									<label class="col-form-label">Puesto</label>
-									<input id="idPuesto" name="idPuesto" type="text" class="form-control" required="required" th:readonly="true" />
-							</label>
-						</div>
-						<div class="col-md-4">
-							<label>
-									<label class="col-form-label">Unidad administrativa</label>
-									<input id="idUnidadAdministrativa" name="idUnidadAdministrativa" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="idSolicitud" name="idSolicitud" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="fechaSolicitud" name="fechaSolicitud" type="text" class="form-control" required="required" th:readonly="true" style="display: none;" />
 							</label>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-2">
-							<label>
-									<label class="col-form-label">No. Empleado</label>
-									<input id="numeroEmpleado" name="numeroEmpleado" type="text" class="form-control" required="required" th:readonly="true" />
-							</label>
-						</div>
-						<div class="col-md-2">
-							<label>
-									<label class="col-form-label">Fecha de ingreso</label>
-									<input id="fechaIngreso" name="fechaIngreso" type="text" class="form-control" required="required" th:readonly="true" />
-							</label>
-						</div>
-						<div class="col-md-2">
-							<label>
-									<label class="col-form-label">FRC</label>
-									<input id="rfc" name="rfc" type="text" class="form-control" required="required" th:readonly="true" />
-							</label>
-						</div>
 						<div class="col-md-2">
 							<label>
 									<label class="col-form-label">Nombre</label>
@@ -242,65 +198,104 @@
 									<input id="apellidoMaterno" name="apellidoMaterno" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
+						<div class="col-md-2">
+							<label>
+									<label class="col-form-label">No. Empleado</label>
+									<input id="claveUsuario1" name="claveUsuario1" type="text" class="form-control" required="required" th:readonly="true" />
+							</label>
+						</div>
+						<div class="col-md-2">
+							<label>
+									<label class="col-form-label">Fecha de ingreso</label>
+									<input id="fechaIngreso" name="fechaIngreso" type="text" class="form-control" required="required" th:readonly="true" />
+							</label>
+						</div>
+						<div class="col-md-2">
+							<label>
+									<label class="col-form-label">FRC</label>
+									<input id="rfc" name="rfc" type="text" class="form-control" required="required" th:readonly="true" />
+							</label>
+						</div>
+						
 					</div>
 					<div class="row">
-						<div class="col-md-6">
-							<div class="row">
-									<div class="col-md-4">
-											<label>
-													<label class="col-form-label">Me voy del </label>
-													<input id="fechaInicio1" name="fechaInicio1" type="text" class="form-control" required="required" th:readonly="true" autocomplete="off" />
-											</label>
-									</div>
-									<div class="col-md-4">
-											<label>
-													<label class="col-form-label">al </label>
-													<input id="fechaFin1" name="fechaFin1" type="text" class="form-control" required="required" th:readonly="true" autocomplete="off" />
-											</label>
-									</div>
-									<div class="col-md-4">
-											<label>
-													<label class="col-form-label">Dias </label>
-													<input id="dias" name="dias" type="text" class="form-control" required="required" th:readonly="true" />
-											</label>
-									</div>
-							</div>
-							<div class="row">
-								<p class="text-center">
-												<a th:href="@{/vacaciones/vacacionesPropias}"><button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button></a>
-<!-- 								    			<a th:href="@{/vacaciones/vacacionesPropias}"><input type="submit" class="btn btn-danger" th:value="Eliminar" /></a> -->
-											</p>
-							</div>
-							<!-- <div class="row">
-								<p class="text-center">
-												<a th:href="@{/vacaciones/vacacionesPropias}"><button type="button" class="btn btn-danger" data-dismiss="modal" th:text="Rechazar"></button></a>
-								    			<a th:href="@{/vacaciones/vacacionesPropias}"><input type="submit" class="btn btn-primary" th:value="Aceptar" /></a>
-											</p>
-							</div> -->
-							
+					 	<div class="col-md-6">
+							<label>
+									<label class="col-form-label">Puesto</label>
+									<input id="idPuesto" name="idPuesto" type="text" class="form-control" required="required" th:readonly="true" />
+							</label>
 						</div>
 						<div class="col-md-6">
-							<div class="row text-center">
-									<label>
-											<label class="col-form-label">Persona que autoriza </label>
-											<input id="responsable" name="responsable" type="text" class="form-control input-calendar" required="required" th:readonly="true" />
-									</label>
-							</div>
-							<div class="row">
-											
-											
-											<!-- <input id="responsable" name="responsable" type="text" class="form-control input-calendar" required="required" /> -->
-									
-							</div>
-							<div class="row">
-								<p class="text-center">
-								    			<a th:href="@{/vacaciones/vacacionesPropias}"><input type="submit" class="btn btn-secondary" th:value="Aceptar" /></a>
-												<button type="submit" class="btn btn-secondary" data-dismiss="modal" >Descargar formato</button>		
-										
-								</p>
-							</div>
+							<label>
+									<label class="col-form-label">Unidad administrativa</label>
+									<input id="idUnidadAdministrativa" name="idUnidadAdministrativa" type="text" class="form-control" required="required" th:readonly="true" />
+							</label>
 						</div>
 					</div>
+					<div class="row">
+					 	<div class="col-md-6">
+							<label>
+									<label class="col-form-label">Licencias otorgadas</label>
+									<input id="idPuesto" name="idPuesto" type="text" class="form-control" required="required" th:readonly="true" />
+							</label>
+						</div>
+						<div class="col-md-6">
+							<label>
+									<label class="col-form-label">D&iacute;as de incapacidad</label>
+									<input id="idUnidadAdministrativa" name="idUnidadAdministrativa" type="text" class="form-control" required="required" th:readonly="true" />
+							</label>
+						</div>
+					</div>
+					<div class="row">
+					<label> Selecciona fecha inicio y la fecha fin de la licencia m&eacute;dica</label>
+									<div class="col-md-4">
+											<label>
+													<label class="col-form-label">Fecha de inicio </label>
+													<input id="fechaInicio1" name="fechaInicio" type="text" class="form-control input-calendar" required="required" th:readonly="true" />
+											</label>
+									</div>
+									<div class="col-md-4">
+											<label>
+													<label class="col-form-label">Fecha de Fin </label>
+													<input id="fechaFin1" name="fechaFin" type="text" class="form-control input-calendar" required="required" th:readonly="true" />
+											</label>
+									</div>
+									<div class="col-md-4">
+											<div class="row">
+												<label>
+													<label class="col-form-label">Fecha de inicio </label>
+													<input id="fechaInicio2" name="fechaInicio1" type="text" class="form-control" required="required" th:readonly="true" />
+											</label>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<label class="col-form-label">Fecha de fin </label>
+												</div>
+												<div class="col-md-6">
+													<input id="fechaFin2" name="dias" type="text" class="form-control" required="required" th:readonly="true" />
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-5">
+													<label class="col-form-label">D&iacute;as otorgados </label>
+												</div>
+												<div class="col-md-7">
+													<input id="dias" name="dias" type="text" class="form-control" required="required" th:readonly="true" />
+												</div>
+											</div>
+											<div class="row">
+													<p>Motivo de la licencia </p>
+													<input id="padecimiento" name="padecimiento" type="text" class="form-control" required="required" />
+											</div>
+									</div>
+							
+					</div>
+					<div class="row">
+								<p class="text-center">
+												<a th:href="@{/vacaciones/vacacionesEmpleados}"><button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button></a>
+								    			<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+											</p>
+							</div>
 					</form>
 					</div>
 					<div class="card" >
@@ -376,7 +371,7 @@
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
-	        <script charset="utf-8" th:src="@{/recursos/script/vacaciones/vacaciones.js}"></script>	 
+	        <script charset="utf-8" th:src="@{/recursos/script/licencias/licenciasEmpleados.js}"></script>	 
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/moment.js}"></script>
 	        <!-- <script charset="utf-8" th:src="@{/recursos/assets/date-picker/style/jquery-ui.css}"></script> -->

@@ -98,7 +98,11 @@ public class VacacionesController {
     	String claveUsuario = parts[1];
     	Periodo periodo= new Periodo();
     	System.out.println("periodo.getIdPeriodo() "+claveUsuario);
+    	String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
+	    System.out.println("Dias festivos para bloquear "+cadena);
+	    model.addAttribute("listaDiasFestivos", cadena);
     	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
+    	periodo.setMensaje(cadena);
     	System.out.println("periodo.getIdPeriodo() "+periodo.getIdPeriodo());
 	   
 	    if(periodo.getIdPeriodo()!=null && !periodo.getIdPeriodo().toString().isEmpty()){
@@ -113,7 +117,7 @@ public class VacacionesController {
 	    model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuario));
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 	    model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
-	    model.addAttribute("listaDiasFestivos", catalogoService.obtieneDiaFestivo());
+	    
 	    if(!this.mensaje.equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
@@ -328,6 +332,7 @@ public class VacacionesController {
 	    if(periodo.getIdPeriodo()!=null && !periodo.getIdPeriodo().toString().isEmpty()){
 	    	 model.addAttribute("periodo",periodo);
 	    	 vacacionPeriodo=vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo());
+	    	 System.out.println("Datos para la consulta "+claveUsuario +" idPeriodo "+periodo.getIdPeriodo()+" vacacionPeriodo.getIdUsuario().getClaveUsuario() "+vacacionPeriodo.getIdUsuario().getClaveUsuario());
 	    	 model.addAttribute("vacacion",vacacionPeriodo);
 	    }else{
 	    	model.addAttribute("periodo",null);
@@ -347,7 +352,9 @@ public class VacacionesController {
 	    }else{
 	    	model.addAttribute("listaResponsable",null);
 	    }
-	    
+	    String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
+	    System.out.println("Dias festivos para bloquear "+cadena);
+	    model.addAttribute("listaDiasFestivos", cadena);
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 	    model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
     	//Periodo periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);

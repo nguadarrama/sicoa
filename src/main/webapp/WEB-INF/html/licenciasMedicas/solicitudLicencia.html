@@ -52,7 +52,7 @@
 				<div class="tab-content">
 					<div class="row tab-pane fade in active" id="agregar">
 						<div class="card" >
-				<form  th:action="@{/vacaciones/vacacion/generaArchivo}"  method="get" class="actualizaVacacion">
+				<form  th:action="@{/licenciasMedicas/agregaSolicitudLicencia}"  method="get" class="guardaLicencia">
 					<div class="row">
 						<h2 class="ico-solicitudes"><span class="input-clock"></span>Solicitud de licencia m&eacute;dica</h2>
 					</div>
@@ -69,37 +69,37 @@
 						<div class="col-md-2">
 							<label>
 									<label class="col-form-label">Nombre</label>
-									<input id="nombre" name="nombre" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="nombre" name="nombre" type="text" class="form-control" required="required" th:field="*{usuario.nombre}" th:readonly="true" />
 							</label>
 						</div>
 						<div class="col-md-2">
 							<label>
 									<label class="col-form-label">Apellido paterno</label>
-									<input id="apellidoPaterno" name="apellidoPaterno" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="apellidoPaterno" name="apellidoPaterno" type="text" class="form-control" th:field="*{usuario.apellidoPaterno}" required="required" th:readonly="true" />
 							</label>
 						</div>
 						<div class="col-md-2">
 							<label>
 									<label class="col-form-label">Apellido materno</label>
-									<input id="apellidoMaterno" name="apellidoMaterno" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="apellidoMaterno" name="apellidoMaterno" type="text" class="form-control" th:field="*{usuario.apellidoMaterno}" required="required" th:readonly="true" />
 							</label>
 						</div>
 						<div class="col-md-2">
 							<label>
 									<label class="col-form-label">No. Empleado</label>
-									<input id="numeroEmpleado" name="numeroEmpleado" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="claveUsuario" name="claveUsuario" type="text" class="form-control" th:field="*{usuario.claveUsuario}" required="required" th:readonly="true" />
 							</label>
 						</div>
 						<div class="col-md-2">
 							<label>
 									<label class="col-form-label">Fecha de ingreso</label>
-									<input id="fechaIngreso" name="fechaIngreso" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="fechaIngreso" name="fechaIngreso" type="text" class="form-control" th:field="*{usuario.fechaIngreso}" required="required" th:readonly="true" />
 							</label>
 						</div>
 						<div class="col-md-2">
 							<label>
 									<label class="col-form-label">FRC</label>
-									<input id="rfc" name="rfc" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="rfc" name="rfc" type="text" class="form-control" th:field="*{usuario.rfc}" required="required" th:readonly="true" />
 							</label>
 						</div>
 						
@@ -108,13 +108,13 @@
 					 	<div class="col-md-6">
 							<label>
 									<label class="col-form-label">Puesto</label>
-									<input id="idPuesto" name="idPuesto" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="idPuesto" name="idPuesto" type="text" class="form-control" th:field="*{usuario.idPuesto}" required="required" th:readonly="true" />
 							</label>
 						</div>
 						<div class="col-md-6">
 							<label>
 									<label class="col-form-label">Unidad administrativa</label>
-									<input id="idUnidadAdministrativa" name="idUnidadAdministrativa" type="text" class="form-control" required="required" th:readonly="true" />
+									<input id="idUnidadAdministrativa" name="idUnidadAdministrativa" th:field="*{usuario.nombreUnidad}" type="text" class="form-control" required="required" th:readonly="true" />
 							</label>
 						</div>
 					</div>
@@ -137,13 +137,13 @@
 									<div class="col-md-4">
 											<label>
 													<label class="col-form-label">Fecha de inicio </label>
-													<input id="fechaInicio1" name="fechaInicio1" type="text" class="form-control input-calendar" required="required" th:readonly="true" />
+													<input id="fechaInicio" name="fechaInicio" type="text" class="form-control input-calendar" required="required" th:readonly="true" />
 											</label>
 									</div>
 									<div class="col-md-4">
 											<label>
 													<label class="col-form-label">Fecha de Fin </label>
-													<input id="fechaFin1" name="fechaFin1" type="text" class="form-control input-calendar" required="required" th:readonly="true" />
+													<input id="fechaFin" name="fechaFin" type="text" class="form-control input-calendar" required="required" th:readonly="true" />
 											</label>
 									</div>
 									<div class="col-md-4">
@@ -171,7 +171,7 @@
 											</div>
 											<div class="row">
 													<p>Motivo de la licencia </p>
-													<input id="dias" name="dias" type="text" class="form-control" required="required" />
+													<input id="padecimiento" name="padecimiento" type="text" class="form-control" required="required" />
 											</div>
 									</div>
 							
@@ -237,7 +237,7 @@
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
-	        <script charset="utf-8" th:src="@{/recursos/script/vacaciones/vacaciones.js}"></script>	 
+	        <script charset="utf-8" th:src="@{/recursos/script/licencias/solicitudLicencia.js}"></script>	 
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/moment.js}"></script>
 	        <!-- <script charset="utf-8" th:src="@{/recursos/assets/date-picker/style/jquery-ui.css}"></script> -->
