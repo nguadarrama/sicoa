@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.NivelOrganizacional;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
@@ -391,4 +392,52 @@ public class CatalogoController {
 			System.out.println("Id a buscar: "+id);
 			return catalogoService.buscaPeriodo(id);
 		}
+		
+		@RequestMapping(value = { "nivelOrganizacional" }, method = RequestMethod.GET)
+		public String inicioNivel(Model model) {
+			model.addAttribute("listaNiveles", catalogoService.obtieneNiveles()); // niveles en c_nivel_organizacional
+			model.addAttribute("listaUnidades", catalogoService.nivelesEmpleado()); // niveles de empleados en m_usuario
+			model.addAttribute("listaHorarios", catalogoService.obtieneHorarios()); // horarios en c_horario
+			if(!this.getMensaje().equals("")){
+				if(this.mensaje.contains("correctamente"))
+					model.addAttribute("MENSAJE", this.mensaje);
+				else
+					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+			}
+			return "/catalogos/NivelOrganizacional";
+		}
+		
+		@PostMapping("nivel/agrega")
+	   	public String nivelAgrega(NivelOrganizacional nivel) {
+			NivelOrganizacional nv = new NivelOrganizacional();
+			nv = catalogoService.nivelAgrega(nivel);
+			System.out.println("CatalogoControler-.mensaje: "+nv.getMensaje());
+			this.mensaje = nv.getMensaje()== null ? ""  : nv.getMensaje();
+	   		return "redirect:/catalogos/nivelOrganizacional";
+	   	}
+
+		public String getMensaje() {
+			
+			return mensaje == null ? "" : this.mensaje;
+		}
+
+		public void setMensaje(String mensaje) {
+			this.mensaje = mensaje;
+		}
+		
+		@GetMapping("nivel/busca")
+		@ResponseBody
+		public NivelOrganizacional nivelBusca(Integer id) {
+			System.out.println("id a consultar: "+id);
+			 return catalogoService.nivelBusca(id);
+		}
+		
+		@GetMapping ("nivel/modifica")
+	   	public String nivelModifica(NivelOrganizacional nivel) {
+			NivelOrganizacional nv = new NivelOrganizacional();
+	   		nv = catalogoService.modificaNivel(nivel);
+	   		this.mensaje = nv.getMensaje() == null ? "" :nv.getMensaje();
+	   		System.out.println("this.mensaje: "+this.mensaje);
+	   		return "redirect:/catalogos/nivelOrganizacional";
+	   	}
 }

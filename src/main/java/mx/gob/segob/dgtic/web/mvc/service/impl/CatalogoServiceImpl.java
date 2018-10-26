@@ -27,7 +27,9 @@ import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.NivelOrganizacional;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
+import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
@@ -768,5 +770,173 @@ public class CatalogoServiceImpl implements CatalogoService {
 		}
 		
 		return periodo;
+	}
+	
+	@Override
+	public List<Usuario> nivelesEmpleado() {
+		List<Usuario> listaNiveles = new ArrayList<>();
+		HttpResponse response;
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_NIVELES_EMPLEADOS);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaNiveles = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Usuario>>(){}.getType());
+//			System.out.println("ResponseObtieneUnidades: "+gson.toJson(listaNiveles));
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener la lista de Unidades : "+response.getStatusLine().getReasonPhrase());
+		}
+			
+//			System.out.println("CatalogoServiceimpl--method--obtieneUnidades: "+gson.toJson(listaNiveles));
+		return listaNiveles;
+	}
+
+	@Override
+	public List<NivelOrganizacional> obtieneNiveles() {
+		List<NivelOrganizacional> listaNiveles = new ArrayList<>();
+		HttpResponse response;
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_NIVELES);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaNiveles = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<NivelOrganizacional>>(){}.getType());
+			System.out.println("ResponseObtieneUnidades: "+gson.toJson(listaNiveles));
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener la lista de Niveles Organizacionales : "+response.getStatusLine().getReasonPhrase());
+		}
+			
+//			System.out.println("CatalogoServiceimpl--method--obtieneUnidades: "+gson.toJson(listaNiveles));
+		return listaNiveles;
+	}
+
+	@Override
+	public NivelOrganizacional nivelAgrega(NivelOrganizacional nivel) {
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("nivel", nivel);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_NIVEL_ORGANIZACIONAL, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			nivel = gson.fromJson(dataJson, NivelOrganizacional.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+		}
+//		System.out.println("CAtalogoServiceImpl--method--agregaPeriodoVacacional-- "+gson.toJson(nivel));
+		return nivel;
+	}
+
+	@Override
+	public NivelOrganizacional nivelBusca(Integer idNivel) {
+		System.out.println("entro a catalogoServiceImpl--method--nivelBusca idNivel: "+idNivel);
+		NivelOrganizacional nivel = new NivelOrganizacional();
+		HttpResponse response;
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_NIVEL+"?idNivel="+idNivel);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			nivel = gson.fromJson(dataJson, NivelOrganizacional.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el nivel : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return nivel;
+	}
+
+	@Override
+	public NivelOrganizacional modificaNivel(NivelOrganizacional nivel) {
+		HttpResponse response;
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HttpEntity httpEntity = new BasicHttpEntity();
+		
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("nivel", nivel);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_NIVEL, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			nivel = gson.fromJson(dataJson, NivelOrganizacional.class);		
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener nivel : "+response.getStatusLine().getReasonPhrase());
+		}
+		System.out.println("CAtalogoServiceImpl--method--modificaNivel-- "+gson.toJson(nivel));	
+		return nivel;
 	}
 }

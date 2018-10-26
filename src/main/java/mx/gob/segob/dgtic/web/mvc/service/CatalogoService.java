@@ -6,7 +6,9 @@ import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.NivelOrganizacional;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
+import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 
 public interface CatalogoService {
 	
@@ -45,4 +47,12 @@ public interface CatalogoService {
 	public DiaFestivo modificaDiaFestivo(DiaFestivo dia);
 	public List<DiaFestivo> obtieneDiaFestivo();
 	public DiaFestivo buscaDiaFestivo(Integer id);
+	
+	// Catálogo Niveles
+	public List<Usuario> nivelesEmpleado();
+	public List<NivelOrganizacional> obtieneNiveles();
+	public NivelOrganizacional nivelAgrega(NivelOrganizacional nivel);
+	public NivelOrganizacional nivelBusca(Integer idNivel);
+	public NivelOrganizacional modificaNivel(NivelOrganizacional nivel);
+	
 }

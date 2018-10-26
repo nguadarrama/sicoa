@@ -78,7 +78,7 @@ public final class CatalogoEndPointConstants {
 		public static final String WEB_SERVICE_GUARDA_USUARIO_UNIDAD_ADMINISTRATIVA =  "/catalogo/consultaRegistraUsuarioUnidadAdministrativa";
 		public static final String WEB_SERVICE_CONSULTA_RESPONSABLE =  "/catalogo/consultaResponsable";
 		public static final String WEB_SERVICE_INFO_UNIDADES_ADMINISTRATIVAS =  "/catalogo/obtieneUnidadesAdministrativasCompletas";
-		
+		public static final String WEB_SERVICE_OBTIENE_NIVELES_EMPLEADOS = "/catalogo/obtieneNivelesEmpleado";
 		//Perfiles
 		public static final String WEB_SERVICE_BUSCA_PERFILES_USUARIO = "/catalogo/consultaPerfilesUsuario";
 		public static final String WEB_SERVICE_AGREGA_PERFILES_USUARIO = "/catalogo/agregaEliminaPerfilesUsuario";
@@ -97,6 +97,12 @@ public final class CatalogoEndPointConstants {
 		
 		//PeriodoVacacion
 		public static final String WEB_SERVICE_OBTIENE_USUARIOS_VACACIONES = "/catalogo/obtenerUsuariosVacacionesPorFiltros";
+		
+		//Niveles Organizacionales
+		public static final String 	WEB_SERVICE_OBTIENE_NIVELES = "/catalogo/obtieneNiveles";
+		public static final String WEB_SERVICE_AGREGA_NIVEL_ORGANIZACIONAL = "/catalogo/agregaNivel";
+		public static final String WEB_SERVICE_BUSCA_NIVEL = "/catalogo/buscaNivel";
+		public static final String WEB_SERVICE_MODIFICA_NIVEL = "/catalogo/modificaNivel";
 		
 }
 
