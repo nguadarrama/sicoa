@@ -281,8 +281,10 @@ public class CatalogoController {
 	+        */
 	 @RequestMapping(value = { "periodo/agrega" }, method = RequestMethod.GET)
      public String agregaPeriodoVacacional(Periodo periodo) {
-            periodo = catalogoService.agregaPeriodoVacacional(periodo);
-            return "/catalogos/periodoVacacional";
+		 Periodo p = new Periodo();	
+		 p = catalogoService.agregaPeriodoVacacional(periodo);
+	   		this.mensaje = p.getMensaje()== null ? ""  : p.getMensaje();
+	   		return "redirect:/catalogos/periodo";
      }
 	       
 	       /**
@@ -372,16 +374,18 @@ public class CatalogoController {
 	   	
 		@PostMapping("periodo/agrega")
 	   	public String periodoAgrega(Periodo periodo) {
-			periodo = catalogoService.agregaPeriodoVacacional(periodo);
-	   		this.mensaje = periodo.getMensaje()== null ? ""  : periodo.getMensaje();
-	   		return "redirect:/catalogos/periodo";
+			Periodo p = new Periodo();	
+			 p = catalogoService.agregaPeriodoVacacional(periodo);
+		   		this.mensaje = p.getMensaje()== null ? ""  : p.getMensaje();
+		   		return "redirect:/catalogos/periodo";
 	   	}
 	   	
 		@GetMapping ("periodo/modifica")
 	   	public String periodoModifica(Periodo periodo) {
+			Periodo p = new Periodo();
 			System.out.println("idRecibido: "+periodo.getIdPeriodo()+" activoRecibido: "+periodo.getActivo());
-	   		periodo = catalogoService.modificaEstatusPeriodo(periodo);
-	   		this.mensaje = periodo.getMensaje() == null ? ""  : periodo.getMensaje();
+	   		p = catalogoService.modificaEstatusPeriodo(periodo);
+	   		this.mensaje = p.getMensaje() == null ? ""  : p.getMensaje();
 	   		System.out.println("this.mensaje "+this.mensaje);
 	   		return "redirect:/catalogos/periodo";
 	   	}

@@ -70,9 +70,9 @@
 						<thead>
 							<tr class="filters">
 								<th><input type="text" class="form-control" placeholder="ID PERIODO" th:disabled="true"/></th>
+								<th><input type="text" class="form-control" placeholder="DESCRIPCI&Oacute;N" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="FECHA INICIAL" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="FECHA FINAL" th:disabled="true"/></th>
-								<th><input type="text" class="form-control" placeholder="DESCRIPCI&Oacute;N" th:disabled="true"/></th>
 								<th><input type="text" class="form-control" placeholder="ESTATUS" th:disabled="true"/></th>
 							<td th:text="#{COMUN.ACCIONES}"></td>
 							</tr>
@@ -80,9 +80,9 @@
 						<tbody>
 							<tr th:each="periodo : ${listaPeriodos}">
 								<td th:text="${periodo.idPeriodo}"></td>
+								<td th:text="${periodo.descripcion}"></td>
 								<td th:text="${periodo.fechaInicio}"></td>
 								<td th:text="${periodo.fechaFin}"></td>
-								<td th:text="${periodo.descripcion}"></td>
 								<td th:text="${periodo.activo} ? 'Activo' : 'Inactivo'"></td>
 								<td class="col-md-3"> 
 									<div>
