@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	
-	$('#tablePeriodos').DataTable({
+	$('#tableNiveles').DataTable({
 	    "scrollY": "500px",
 	    "scrollCollapse": true
 	  });
