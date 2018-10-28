@@ -26,4 +26,10 @@ public interface AsistenciaService {
 	public Integer dictaminaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, String dictaminacion);
 	public reporte formatoJustificacion(FormatoIncidencia formatoIncidencia);
 	public reporte formatoDescuento(FormatoIncidencia formatoIncidencia);
+	
+	public List<Asistencia> buscaAsistenciaDireccionReporte (String cve_m_usuario, String nombre, String paterno, 
+    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos);
+	
+	public List<Asistencia> buscaAsistenciaCoordinadorReporte (String cve_m_usuario, String nombre, String paterno, 
+    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String cveCoordinador, String[] permisos);
 }

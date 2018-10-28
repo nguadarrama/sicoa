@@ -567,4 +567,92 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
 
+	@Override
+	public List<Asistencia> buscaAsistenciaDireccionReporte(String cve_m_usuario, String nombre, String paterno,
+			String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal,
+			String unidadAdministrativa, String[] p) {
+
+		List<Asistencia> listaAsistencia = new ArrayList<>();
+		HttpResponse response;
+		StringBuilder permisos = new StringBuilder();
+		
+		if (p != null) {
+			permisos.append("&permisos=");
+			for (int i = 0; i < p.length; i++ ) {
+				permisos.append(p[i]);
+				
+				if (i < p.length - 1) {
+					permisos.append(",");
+				}
+			}
+		}
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(
+					AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_REPORTE_DIRECCION
+					+ "?claveEmpleado=" + cve_m_usuario + "&nombre=" + nombre + "&paterno=" + paterno + "&materno=" + materno + "&nivel=" + nivel
+					+ "&tipo=" + tipo + "&estado=" + estado + "&inicio=" + fechaInicial + "&fin=" + fechaFinal + "&unidad=" + unidadAdministrativa + permisos);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			if(dataJson != null){
+				listaAsistencia = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Asistencia>>(){}.getType());
+			}
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return listaAsistencia;
+	}
+
+	@Override
+	public List<Asistencia> buscaAsistenciaCoordinadorReporte(String cve_m_usuario, String nombre, String paterno,
+			String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal,
+			String unidadAdministrativa, String cveCoordinador, String[] permisos) {
+
+		
+		List<Asistencia> listaAsistencia = new ArrayList<>();
+		HttpResponse response;
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(
+					AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_REPORTE_COORDINADOR 
+					+ "?claveEmpleado=" + cve_m_usuario + "&nombre=" + nombre + "&paterno=" + paterno + "&materno=" + materno + "&nivel=" + nivel
+					+ "&tipo=" + tipo + "&estado=" + estado + "&inicio=" + fechaInicial + "&fin=" + fechaFinal + "&unidad=" + unidadAdministrativa
+					+ "&permisos=" + permisos + "&cveCoordinador=" + cveCoordinador);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			if(dataJson != null){
+				listaAsistencia = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Asistencia>>(){}.getType());
+			}
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al información para el reporte de coordinador : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return listaAsistencia;
+	}
+
 }

@@ -229,7 +229,7 @@ public class AsistenciaController  {
         model.put("registros", asistencias);
         
         response.setContentType( "application/ms-excel" );
-        response.setHeader( "Content-disposition", "attachment; filename=SESNSP.xls" );         
+        response.setHeader( "Content-disposition", "attachment; filename=ReporteSESNSP.xls" );         
         
         return new ModelAndView(new Excel(), model);
     	
