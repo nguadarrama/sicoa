@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	document.getElementById("botonGuardarLicencia").disabled=true;
 	$("#fechaInicio").datepicker({ 
 		//minDate: 1,
 	       beforeShowDay: $.datepicker.noWeekends,
@@ -50,6 +51,7 @@ $(document).ready(function() {
 				if(resultado>0){
 					//alert("bien ");
 					//alert(resultado);
+					$("#botonGuardarLicencia").attr('disabled', false);
 					$("#dias").val(resultado);
 //					var diasAutorizados=$("#diasDispobibles").val();
 //					//alert("Dias disponibles "+diasAutorizados);
@@ -64,9 +66,7 @@ $(document).ready(function() {
 //						document.getElementById("botonGuardarVacaciones").disabled = true;
 //					}
 				}else{
-					//alert("El número de días no es permitido");
-					//document.getElementById("botonGuardarVacaciones").disabled = true;
-					//$("#validacionDias").css("display","inline");
+					document.getElementById("botonGuardarLicencia").disabled = true;
 				}
 			}
 			//document.getElementById("botonGuardarVacaciones").disabled = true;
