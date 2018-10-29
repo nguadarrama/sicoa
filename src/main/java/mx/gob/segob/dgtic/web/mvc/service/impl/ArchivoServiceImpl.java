@@ -41,7 +41,7 @@ public class ArchivoServiceImpl implements ArchivoService{
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
 	@Override
-	public Integer guardaArchivo(MultipartFile archivo, String claveUsuario, String accion) {
+	public Integer guardaArchivo(MultipartFile archivo, String claveUsuario, String accion, String nombreArchivo) {
 		HttpResponse response;
 		Archivo archivoResponse = null;
 		
@@ -61,11 +61,16 @@ public class ArchivoServiceImpl implements ArchivoService{
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
+//		String nombreaux=archivo.getOriginalFilename();
+//		String[] parts = nombreaux.split(".");
+//		String part1 = parts[0]; // 004
+//		String part2 = parts[1];
+//		System.out.println("extensión del archivo "+part1);
 		archivoDto.setUrl(ruta);
 		archivoDto.setSize((int) (long) archivo.getSize());
 		archivoDto.setActivo(true);
 		System.out.println("nombre compelto "+archivo.getOriginalFilename()+" nombre"+archivo.getName());
-		archivoDto.setNombre(archivo.getOriginalFilename());
+		archivoDto.setNombre(nombreArchivo);
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("archivo", archivoDto);
 		System.out.println("Despues del error1");
@@ -97,7 +102,7 @@ public class ArchivoServiceImpl implements ArchivoService{
 	}
 
 	@Override
-	public void actualizaArchivo(MultipartFile archivo, String claveUsuario, String accion, Integer idArchivo) {
+	public void actualizaArchivo(MultipartFile archivo, String claveUsuario, String accion, Integer idArchivo,String nombreArchivo) {
 		HttpResponse response;
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
@@ -116,12 +121,19 @@ public class ArchivoServiceImpl implements ArchivoService{
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
+		String nombreaux=archivo.getOriginalFilename().toString();
+		
+		System.out.println("nombreOriginal "+nombreaux);
+//		String[] parts = nombreaux.split(".");
+//		String part1 = parts[0];
+		//String part2 = parts[1];
+		//System.out.println("extensión del archivo "+part1);
 		archivoDto.setIdArchivo(idArchivo);
 		archivoDto.setUrl(ruta);
 		archivoDto.setSize((int) (long) archivo.getSize());
 		archivoDto.setActivo(true);
 		//System.out.println("nombre compelto "+archivo.getOriginalFilename()+" nombre"+archivo.getName());
-		archivoDto.setNombre(archivo.getOriginalFilename());
+		archivoDto.setNombre(nombreArchivo);
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("archivo", archivoDto);
 		System.out.println("Despues del error1");

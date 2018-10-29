@@ -259,7 +259,7 @@ public class LicenciasMedicasController {
     	//vacaciones.setIdDetalle(idDetalle);
     	if(archivo!=null && !archivo.isEmpty()){
 	    	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
-	    		archivoService.actualizaArchivo(archivo, claveUsuario, "licenciasMedicas",idArchivo);
+	    		archivoService.actualizaArchivo(archivo, claveUsuario, "licenciasMedicas",idArchivo,"licenciaMedica-");
 	    		licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivo,1,null,null,null,null), claveUsuario);
 	    		//archivoService.guardaArchivo(archivo, claveUsuario, "licenciasMedicas");
 	    		//archivoDto.setIdArchivo(idArchivo);
@@ -268,7 +268,7 @@ public class LicenciasMedicasController {
 	    	}else{
 	    		//idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones");
 	    		//archivoDto.setIdArchivo(idArchivoAux);
-	    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "licenciasMedicas");
+	    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "licenciasMedicas","licenciaMedica-");
 	    		System.out.println("IDArchivo recuperado "+idArchivoAux);
 	    		licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivoAux,1,null,null,null,null), claveUsuario);
 	    		//vacaciones.setIdArchivo(archivoDto);
@@ -293,7 +293,7 @@ public class LicenciasMedicasController {
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         String mimeType= URLConnection.guessContentTypeFromStream(inputStream);
         if(mimeType==null){
-        	mimeType="application/octect-stream";
+        	mimeType="application/pdf";
         }
         
         response.setContentType(mimeType);

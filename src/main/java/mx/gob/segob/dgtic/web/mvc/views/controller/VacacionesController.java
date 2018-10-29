@@ -501,12 +501,12 @@ public class VacacionesController {
     	Archivo archivoDto=new Archivo();
     	vacaciones.setIdDetalle(idDetalle);
     	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
-    		archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo);
+    		archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo,"vacacion-");
     		archivoDto.setIdArchivo(idArchivo);
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones);
     	}else{
-    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones");
+    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones","vacacion-");
     		archivoDto.setIdArchivo(idArchivoAux);
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones);
@@ -522,12 +522,12 @@ public class VacacionesController {
     	Archivo archivoDto=new Archivo();
     	vacaciones.setIdDetalle(idDetalle);
     	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
-    		archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo);
+    		archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo,"vacacion-");
     		archivoDto.setIdArchivo(idArchivo);
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones);
     	}else{
-    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones");
+    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones","vacacion-");
     		archivoDto.setIdArchivo(idArchivoAux);
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones);

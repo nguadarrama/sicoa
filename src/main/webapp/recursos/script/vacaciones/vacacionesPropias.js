@@ -1,5 +1,9 @@
 $(document).ready(function() {
 	
+	$('#vacacionesPropias').DataTable({
+	    "scrollY": "500px",
+	    "scrollCollapse": true
+	  });
 	$('.collapse').collapse();
 //	$('#collapseOne').collapse({
 //		  toggle: false

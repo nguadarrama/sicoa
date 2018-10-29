@@ -1,4 +1,8 @@
 $(document).ready(function() {
+	$('#tablaLicenciasEmpleados').DataTable({
+	    "scrollY": "500px",
+	    "scrollCollapse": true
+	  });
 	document.getElementById("botonGuardarLicencia").disabled=true;
 	$("#fechaInicio").datepicker({ 
 		//minDate: 1,
