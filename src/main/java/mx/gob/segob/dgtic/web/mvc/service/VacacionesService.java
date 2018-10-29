@@ -19,4 +19,5 @@ public interface VacacionesService {
 	public List<Vacaciones> obtenerVacacionesPorFiltros(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, String idUnidad, String idEstatus);
 	public List<Vacaciones> consultaVacacionesPropiasPorFiltros(String claveUsuario, String idPeriodo, String idEstatus, String pfechaInicio, String pfechaFin );
 	public reporte generaReporte(GeneraReporteArchivo generaReporteArchivo);
+	public String recuperaDiasVacacioness(String claveUsuario);
 }

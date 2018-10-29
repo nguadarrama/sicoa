@@ -117,10 +117,8 @@
 									</thead>
 									<tbody>
 										<tr th:each="licencia : ${licenciasMedicas}">
-											<td th:text="${licencia.fechaInicio}"></td>
-											<td th:text="${licencia.fechaFin}"></td>
-											<!-- <td th:text="${#dates.format(vacaciones.fechaInicio, 'dd-MM-yyyy')}"></td>
-											<td th:text="${#dates.format(vacaciones.fechaFin, 'dd-MM-yyyy')}"></td> -->
+											<td th:text="${#dates.format(licencia.fechaInicio, 'dd-MM-yyyy')}"></td>
+											<td th:text="${#dates.format(licencia.fechaFin, 'dd-MM-yyyy')}"></td>
 											<td th:text="${licencia.idEstatus.estatus}"></td>
 											<td class="col-md-3">
 												<a th:href="@{/licenciasMedicas/busca(idLicencia=${licencia.idLicencia})}"  class="eBtn" id="botonLlamar" name="botonLlamar"> Ver Detalle </a>

@@ -532,5 +532,60 @@ public class VacacionesServiceImpl implements VacacionesService{
 		return respuesta;
 	}
 
+	@Override
+	public String recuperaDiasVacacioness(String claveUsuario) {
+			List<Vacaciones> listaVacaciones = new ArrayList<>();
+			String idEstatus="";
+			String idUnidad="";
+			String idPeriodo="";
+			String pfechaInicio="";
+			String pfechaFin="";
+			HttpResponse response;
+			try{
+				response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin);
+			} catch (ClienteException e) {
+				logger.error(e.getMessage(), e);
+				throw new AuthenticationServiceException(e.getMessage(), e);
+			}
+			
+			if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+				
+				JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+				JsonArray dataJson = json.getAsJsonArray("data");
+				listaVacaciones = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Vacaciones>>(){}.getType());
+				
+			} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+				
+				String mensaje = obtenerMensajeError(response);					 
+				throw new AuthenticationServiceException(mensaje);			
+			} else {
+				throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
+			}
+			for(Vacaciones vacaciones: listaVacaciones){
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		    	String fechaInicial =null;
+		    	String fechaFinal = null;
+		    	Estatus estatus= new Estatus();
+		    	Date nuevaFecha = new Date();
+		    	Date nuevaFecha1 = new Date();
+		        estatus.setIdEstatus(2);
+		        fechaInicial = df.format(vacaciones.getFechaInicio());
+	    		fechaFinal=df.format(vacaciones.getFechaFin());
+		        try {
+		    		
+		    		nuevaFecha=df.parse(fechaInicial);
+		    		nuevaFecha1=df.parse(fechaFinal);
+		    		vacaciones.setFechaInicio(nuevaFecha);
+		    		vacaciones.setFechaFin(nuevaFecha1);
+					System.out.println("fechaInicio "+fechaInicial);
+				} catch (java.text.ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return "";
+	}
+	
+
 
 }

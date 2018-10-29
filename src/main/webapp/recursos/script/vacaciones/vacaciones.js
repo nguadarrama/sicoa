@@ -5,7 +5,7 @@ $(document).ready(function() {
 //		  toggle: false
 //		})
 	//$("#botonGuardarVacaciones").disabled = true;
-	//document.getElementById("botonGuardarVacaciones").disabled=true;
+	document.getElementById("botonGuardarVacaciones").disabled=true;
 		//document.getElementById("validacionDias").style.display = "none";
 	var array =$("#listaDiasFestivos").val();
 	//alert("LLegada "+array);
