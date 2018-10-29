@@ -8,31 +8,53 @@ public class LicenciaMedica {
 	private Archivo idArchivo;
 	private Estatus idEstatus;
 	private String fechaInicio;
-	public String getFechaRegistro() {
-		return fechaRegistro;
-	}
-	public void setFechaRegistro(String fechaRegistro) {
-		this.fechaRegistro = fechaRegistro;
-	}
 	private String fechaFin;
 	private Integer dias;
 	private String padecimiento;
 	private String fechaRegistro;
+	private String fechaInicioAux;
+	private String fechaFinAux;
+	private String totalLicencias;
+	private String diasTotales;
 	
+	public String getDiasTotales() {
+		return diasTotales;
+	}
+	public void setDiasTotales(String diasTotales) {
+		this.diasTotales = diasTotales;
+	}
+	public String getTotalLicencias() {
+		return totalLicencias;
+	}
+	public void setTotalLicencias(String totalLicencias) {
+		this.totalLicencias = totalLicencias;
+	}
 	public LicenciaMedica(){
 		
 	}
-	public LicenciaMedica(Integer idLicencia, Usuario idUsuario, Integer idResponsable, Archivo idArchivo, Estatus idEstatus, String fechaInicio, 
-			String fechaFin, Integer dias, String padecimiento){
+	public LicenciaMedica(Integer idLicencia, Usuario idUsuario, Integer idResponsable, Archivo idArchivo, Estatus idEstatus, String fechaInicioAux, 
+			String fechaFinAux, Integer dias, String padecimiento){
 		this.idLicencia=idLicencia;
 		this.idUsuario=idUsuario;
 		this.idResponsable=idResponsable;
 		this.idArchivo=idArchivo;
 		this.idEstatus=idEstatus;
-		this.fechaInicio=fechaInicio;
-		this.fechaFin=fechaFin;
+		this.fechaInicioAux=fechaInicioAux;
+		this.fechaFinAux=fechaFinAux;
 		this.dias=dias;
 		this.padecimiento=padecimiento;
+	}
+	public String getFechaInicioAux() {
+		return fechaInicioAux;
+	}
+	public void setFechaInicioAux(String fechaInicioAux) {
+		this.fechaInicioAux = fechaInicioAux;
+	}
+	public String getFechaFinAux() {
+		return fechaFinAux;
+	}
+	public void setFechaFinAux(String fechaFinAux) {
+		this.fechaFinAux = fechaFinAux;
 	}
 	public Integer getIdLicencia() {
 		return idLicencia;
@@ -87,6 +109,12 @@ public class LicenciaMedica {
 	}
 	public void setPadecimiento(String padecimiento) {
 		this.padecimiento = padecimiento;
+	}
+	public String getFechaRegistro() {
+		return fechaRegistro;
+	}
+	public void setFechaRegistro(String fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
 	}
 	
 }

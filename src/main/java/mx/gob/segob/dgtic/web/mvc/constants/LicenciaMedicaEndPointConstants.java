@@ -16,4 +16,6 @@ public class LicenciaMedicaEndPointConstants {
 	public static final String WEB_SERVICE_ELIMINA_LICENCIA = "/licencia/eliminaLicenciaMedica";
 	public static final String WEB_SERVICE_CONSULTA_LICENCIA_POR_FILTROS = "/licencia/obtieneListaLicenciaMedicaPorFiltros";
 	public static final String WEB_SERVICE_CONSULTA_LICENCIA_EMPLEADOS = "/licencia/obtieneListaLicenciaMedicaEmpleados";
+	public static final String WEB_SERVICE_CONSULTA_LICENCIA_POR_UNIDAD = "/licencia/obtieneLicenciasPorUnidad";
+	
 }

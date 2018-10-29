@@ -331,8 +331,11 @@ public class VacacionesController {
     	VacacionPeriodo vacacionPeriodo=new VacacionPeriodo();
 	    if(periodo.getIdPeriodo()!=null && !periodo.getIdPeriodo().toString().isEmpty()){
 	    	 model.addAttribute("periodo",periodo);
+	    	 System.out.println("Datos claveUsuario "+claveUsuario+"periodo.getIdPeriodo() "+periodo.getIdPeriodo());
 	    	 vacacionPeriodo=vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo());
-	    	 System.out.println("Datos para la consulta "+claveUsuario +" idPeriodo "+periodo.getIdPeriodo()+" vacacionPeriodo.getIdUsuario().getClaveUsuario() "+vacacionPeriodo.getIdUsuario().getClaveUsuario());
+//	    	 System.out.println("Datos para la consulta "+claveUsuario +" idPeriodo "+periodo.getIdPeriodo()+" "
+//		    	 		+ "vacacionPeriodo.getIdUsuario().getClaveUsuario() "+vacacionPeriodo.getIdUsuario().getClaveUsuario());
+	    	 
 	    	 model.addAttribute("vacacion",vacacionPeriodo);
 	    }else{
 	    	model.addAttribute("periodo",null);

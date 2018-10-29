@@ -32,6 +32,7 @@ import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.constants.LicenciaMedicaEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
+import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedicaAux;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
 import mx.gob.segob.dgtic.web.mvc.service.LicenciaMedicaService;
@@ -116,7 +117,7 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	}
 
 	@Override
-	public void AgregaLicenciaMedica(LicenciaMedica licenciaMedica, String claveUsuario) {
+	public void AgregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario) {
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HttpEntity httpEntity = new BasicHttpEntity();
@@ -124,10 +125,9 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		Usuario usuario= new Usuario();
 		usuario=usuarioService.buscaUsuario(claveUsuario);
-		licenciaMedica.setIdUsuario(usuario);
-		Estatus idEstatus= new Estatus();
-		idEstatus.setIdEstatus(1);
-		licenciaMedica.setIdEstatus(idEstatus);
+		System.out.println("id del usuario "+usuario.getIdUsuario());
+		licenciaMedica.setIdUsuario(usuario.getIdUsuario());
+		licenciaMedica.setIdEstatus(1);
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("licenciaMedica", licenciaMedica);
 
@@ -189,6 +189,73 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		}
 		
 		return licencia;
+	}
+
+	@Override
+	public List<LicenciaMedica> obtenerLicenciasPorUnidad(String idUnidad,String claveUsuario, String nombre,
+			String apellidoPaterno, String apellidoMaterno) {
+		List<LicenciaMedica> listaLicencias = new ArrayList<>();
+		HttpResponse response;
+		try{
+			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_POR_UNIDAD+ "?idUnidad="+idUnidad+"&claveUsuario="+claveUsuario+"&nombre="+nombre
+					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaLicencias = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<LicenciaMedica>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
+		}
+		System.out.println("Recuperados "+listaLicencias.size());
+		for(LicenciaMedica licencia: listaLicencias){
+			if(licencia.getTotalLicencias()==null || licencia.getTotalLicencias().toString().isEmpty()){
+				licencia.setTotalLicencias("0");
+			}
+			if(licencia.getDiasTotales()==null || licencia.getDiasTotales().toString().isEmpty()){
+				licencia.setDiasTotales("0");
+			}
+		}
+		return listaLicencias;
+	}
+
+	@Override
+	public void modificaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario) {
+		Header header = new BasicHeader("Authorization", "Bearer %s");
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		HttpEntity httpEntity = new BasicHttpEntity();
+		HttpResponse response;
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		Usuario usuario= new Usuario();
+		usuario=usuarioService.buscaUsuario(claveUsuario);
+		System.out.println("IdUsuario recuperado "+usuario.getIdUsuario());
+		licenciaMedica.setIdUsuario(usuario.getIdUsuario());
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("licenciaMedica", licenciaMedica);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try { //se consume recurso rest
+			response=ClienteRestUtil.getCliente().put(LicenciaMedicaEndPointConstants.WEB_SERVICE_MODIFICA_LICENCIA, httpEntity, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
 	}
 
 }

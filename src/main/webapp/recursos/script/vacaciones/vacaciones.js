@@ -116,7 +116,8 @@ $(document).ready(function() {
 		    
 		}
 		$('#vacacionesPropias').on('click','.eBtn' , function(event) { 					//botón edita
-			 event.preventDefault();
+			//alert(""); 
+			event.preventDefault();
 			var href = $(this).attr('href');
 			var text = $(this).text();
 				$.get(href, function(hmap, status) {
@@ -200,7 +201,7 @@ $(document).ready(function() {
 			document.getElementById("botonGuardarVacaciones").disabled = true;
 			var fechaInicio= $("#fechaInicio").val();
 			var fechaFin=$("#fechaFin").val();
-			alert("Valor1 "+fechaInicio+" valor2 "+fechaFin);
+			//alert("Valor1 "+fechaInicio+" valor2 "+fechaFin);
 			//alert("variable "+fechaInicio);
 			//alert("variable2 "+fechaFin);
 			if(fechaInicio!=null && fechaInicio!=""){
@@ -213,11 +214,11 @@ $(document).ready(function() {
 					var resultado = diasLibres(fechaInicio,fechaFin);
 					//var dias=diasEntreFechas();
 					//resultado+=1;
-					alert ("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" resultado "+resultado);
+					//alert ("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" resultado "+resultado);
 					if(resultado>0 && resultado<=10){
 						//alert("bien ");
 						var diasAutorizados=$("#diasDispobibles").val();
-						alert("Dias disponibles "+diasAutorizados);
+						//alert("Dias disponibles "+diasAutorizados);
 						if(diasAutorizados>=resultado){
 							$("#botonGuardarVacaciones").attr('disabled', false);
 						$("#diasPorPedir").val(resultado);
