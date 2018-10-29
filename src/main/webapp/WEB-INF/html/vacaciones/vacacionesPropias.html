@@ -306,7 +306,7 @@
 						<form th:action="@{/vacaciones/vacacion/actualizaArchivo}" class="actualizaArchivo" method="post" enctype="multipart/form-data">
 											<div class="col-md-6">
 												<label class="col-form-label">Formato de Vacaciones </label>
-												 <input type="file" name="archivo" id="archivo" multiple="multiple"/>
+												 <input type="file" name="archivo" id="archivo" multiple="multiple" accept="application/pdf" />
 												 </div>
 												 <div class="col-md-4">
 												 <input id="claveUsuario" name="claveUsuario" type="text" class="form-control" required="required" th:readonly="true" style="display: none;"/>
