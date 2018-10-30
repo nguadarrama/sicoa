@@ -109,7 +109,7 @@
 					            </div>
 					            
 					        	<hr/>
-					        	<h2 th:if="${#arrays.length(listaAsistencia)} == 0">No se encontraron resultados</h2>
+					        	<h2 th:if="${#arrays.length(listaAsistencia)} == 0 and !${inicio}">No se encontraron resultados</h2>
 					        	<h2 th:if="${#arrays.length(listaAsistencia)} != 0">
 					        		<span th:text="${#arrays.length(listaAsistencia)} > 1 ? 'Se encontraron' : 'Se encontr&oacute;'"></span>
 				        			<b>

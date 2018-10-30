@@ -85,6 +85,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
+    	model.addAttribute("inicio", true);
     	
     	return "/asistencia/empleado";
     }
@@ -157,6 +158,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
+    	model.addAttribute("inicio", true);
     	
     	return "/asistencia/coordinador";
     }
@@ -634,6 +636,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
+    	model.addAttribute("inicio", true);
     	
     	return "/asistencia/direccion";
     }
