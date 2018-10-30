@@ -1,10 +1,13 @@
 package mx.gob.segob.dgtic.web.mvc.service.impl;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -561,29 +564,36 @@ public class VacacionesServiceImpl implements VacacionesService{
 			} else {
 				throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
 			}
+			String listaFechas="";
 			for(Vacaciones vacaciones: listaVacaciones){
-				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		    	String fechaInicial =null;
-		    	String fechaFinal = null;
-		    	Estatus estatus= new Estatus();
-		    	Date nuevaFecha = new Date();
-		    	Date nuevaFecha1 = new Date();
-		        estatus.setIdEstatus(2);
-		        fechaInicial = df.format(vacaciones.getFechaInicio());
-	    		fechaFinal=df.format(vacaciones.getFechaFin());
-		        try {
-		    		
-		    		nuevaFecha=df.parse(fechaInicial);
-		    		nuevaFecha1=df.parse(fechaFinal);
-		    		vacaciones.setFechaInicio(nuevaFecha);
-		    		vacaciones.setFechaFin(nuevaFecha1);
-					System.out.println("fechaInicio "+fechaInicial);
-				} catch (java.text.ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Date fechaInicio=vacaciones.getFechaInicio();
+				Date fechaFin=vacaciones.getFechaFin();
+				
+				Calendar c1 = Calendar.getInstance();
+				//System.out.println("Fechas fecha inicial "+detalleVacacionDto.getFechaInicio()+" fecha final "+detalleVacacionDto.getFechaFin());
+			    c1.setTime(fechaInicio);
+			    Calendar c2 = Calendar.getInstance();
+			    c2.setTime(fechaFin);
+			    List<Date> listaFechasAux = new ArrayList<Date>();
+			    while (!c1.after(c2)) {
+			        listaFechasAux.add(c1.getTime());
+			        c1.add(Calendar.DAY_OF_MONTH, 1);
+			    }
+			    SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+			    String fecha=null;
+			    for (Iterator<Date> it = listaFechasAux.iterator(); it.hasNext();) {
+			        Date date = it.next();
+			        fecha = sdf1.format(date);
+			        listaFechas+=""+fecha+",";
+			    }
+				    
 			}
-			return "";
+				if(!listaFechas.isEmpty() && listaFechas!=null){
+				listaFechas=listaFechas.substring(0, (listaFechas.length()- 1));
+				}
+				System.out.println("Fecha de fechas desde el array "+listaFechas);
+			
+			return listaFechas;
 	}
 	
 

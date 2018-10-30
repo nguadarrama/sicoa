@@ -21,7 +21,7 @@ $(document).ready(function() {
 				show = false;
 				}
 		//No Holidays 
-		} var display = [show,'',(show)?'':'No Weekends or Holidays'];
+		} var  display = [show,'',(show)?'':'Día no disponible por una de las siguientes razones: día festivo, fin de semana o vacaciones'];
 		//With Fancy hover tooltip! 
 		return display; 
 		},
@@ -40,7 +40,7 @@ $(document).ready(function() {
 				show = false;
 				}
 		//No Holidays 
-		} var display = [show,'',(show)?'':'No Weekends or Holidays'];
+		} var display = [show,'',(show)?'':'Día no disponible por una de las siguientes razones: día festivo, fin de semana o vacaciones'];
 		//With Fancy hover tooltip! 
 		return display; 
 		},

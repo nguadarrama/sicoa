@@ -242,7 +242,7 @@
 										</label>
 									</div>
 									<div class="col-md-2">
-										<label> <label class="col-form-label">FRC</label> <input
+										<label> <label class="col-form-label">RFC</label> <input
 											id="rfc" name="rfc" type="text" class="form-control"
 											required="required" th:readonly="true" />
 										</label>
@@ -318,10 +318,9 @@
 								</div>
 								<div class="row">
 									<p class="text-center">
-										<a th:href="@{/vacaciones/vacacionesEmpleados}"><button
-												type="button" class="btn btn-secondary" data-dismiss="modal"
-												th:text="#{COMUN.CANCELAR}"></button></a> <input type="submit"
-											class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+										<button
+												type="button" class="btn btn-secondary" id="botonCancelar" data-dismiss="modal"
+												th:text="#{COMUN.CANCELAR}"></button>
 									</p>
 								</div>
 							</form>
@@ -333,7 +332,7 @@
 										class="actualizaArchivo" method="post"
 										enctype="multipart/form-data">
 										<div class="col-md-4">
-											<label class="col-form-label">Formato de vacaciones </label>
+											<label class="col-form-label">Archivo de licencias meedicas </label>
 											<input type="file" name="archivo" id="archivo"
 												multiple="multiple" accept="application/pdf" />
 										</div>

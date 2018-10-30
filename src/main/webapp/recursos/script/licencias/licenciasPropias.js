@@ -11,6 +11,12 @@ $(document).ready(function() {
 	$("#fechaFin").datepicker({ 
 	       beforeShowDay: $.datepicker.noWeekends,
 	   });
+	$("#mostrarTabla").on('click', function(event){
+		event.preventDefault();
+		$("#detalleLicencia").css("display","none");
+		$(".listaDeLicenciasPropias").css("display","inline");
+		
+	});
 	$('#tablaLicenciasPropias').on('click','.eBtn' , function(event) { 					//botón edita
 	 	event.preventDefault();
 	 	var href = $(this).attr('href');

@@ -84,7 +84,8 @@ public class VacacionesController {
 	@Autowired
 	private VacacionPeriodoService vacacionPeriodoService;
 	
-	@Autowired CatalogoService catalogoService;
+	@Autowired 
+	private CatalogoService catalogoService;
 	
 	private String mensaje = "";
 	
@@ -96,12 +97,22 @@ public class VacacionesController {
 	    String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
+    	
     	Periodo periodo= new Periodo();
     	System.out.println("periodo.getIdPeriodo() "+claveUsuario);
     	String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
-	    System.out.println("Dias festivos para bloquear "+cadena);
+	    ;
 	    model.addAttribute("listaDiasFestivos", cadena);
     	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
+    	String fechas=vacacionesService.recuperaDiasVacacioness(claveUsuario);
+    	if(!fechas.isEmpty() && fechas!=null){
+    		if(!cadena.isEmpty() && cadena!=null){
+    			cadena+=","+fechas;
+    		}else{
+    			cadena=fechas;
+    		}
+    	}
+    	System.out.println("Dias festivos para bloquear "+cadena);
     	periodo.setMensaje(cadena);
     	System.out.println("periodo.getIdPeriodo() "+periodo.getIdPeriodo());
 	   
@@ -331,6 +342,14 @@ public class VacacionesController {
 	    System.out.println("Dias festivos para bloquear "+cadena);
 	    model.addAttribute("listaDiasFestivos", cadena);
     	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
+    	String fechas=vacacionesService.recuperaDiasVacacioness(claveUsuario);
+    	if(!fechas.isEmpty() && fechas!=null){
+    		if(!cadena.isEmpty() && cadena!=null){
+    			cadena+=","+fechas;
+    		}else{
+    			cadena=fechas;
+    		}
+    	}
     	periodo.setMensaje(cadena);
     	System.out.println("periodo.getIdPeriodo() "+periodo.getIdPeriodo());
     	VacacionPeriodo vacacionPeriodo=new VacacionPeriodo();
@@ -567,7 +586,7 @@ public class VacacionesController {
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         String mimeType= URLConnection.guessContentTypeFromStream(inputStream);
         if(mimeType==null){
-        	mimeType="application/octect-stream";
+        	mimeType="application/pdf";
         }
         
         response.setContentType(mimeType);

@@ -987,8 +987,9 @@ public class CatalogoServiceImpl implements CatalogoService {
 			}
 		    listaDias+=""+fecha+",";
 		}
+		if(!listaDias.isEmpty() && listaDias!=null){
 		listaDias=listaDias.substring(0, (listaDias.length()- 1));
-		listaDias+="";
+		}
 		return listaDias;
 	}
 }

@@ -15,6 +15,12 @@ $(document).ready(function() {
 	    	   calcularDias();
 	       },
 	   });
+	$("#botonCancelar").on('click', function(event){
+		event.preventDefault();
+		$("#detalleLicencia").css("display","none");
+		$(".listaDeLicenciasEmpleados").css("display","inline");
+		
+	});
 	$("#fechaFin").datepicker({ 
 		minDate: 1,
 	       beforeShowDay: $.datepicker.noWeekends,

@@ -38,6 +38,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
+import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
 import mx.gob.segob.dgtic.web.mvc.service.LicenciaMedicaService;
 import mx.gob.segob.dgtic.web.mvc.service.UnidadAdministrativaService;
@@ -59,29 +60,33 @@ public class LicenciasMedicasController {
 	@Autowired 
 	private UsuarioService usuarioService;
 	
-	@Autowired ArchivoService archivoService;
+	@Autowired 
+	private ArchivoService archivoService;
+	
+	@Autowired CatalogoService catalogoService;
 	
 	@RequestMapping(value={"licenciasPropias"}, method = RequestMethod.GET)
-    public String obtieneLicencias(String fechaInicio, String fechaFin, String idEstatus, Model model, HttpSession session) {
+    public String obtieneLicencias(String fechaInicioBusca1, String fechaFinBusca1, String idEstatus, Model model, HttpSession session) {
 		String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
     	Periodo periodo= new Periodo();
-		System.out.println("Datos claveUsuario "+ claveUsuario +" fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" idEstatus "+idEstatus);
+		System.out.println("Datos claveUsuario "+ claveUsuario +" fechaInicio "+fechaInicioBusca1+" fechaFin "+fechaFinBusca1+" idEstatus "+idEstatus);
 		
-		if(fechaInicio==null || fechaInicio.trim().isEmpty()){
-			fechaInicio="";
+		if(fechaInicioBusca1==null || fechaInicioBusca1.trim().isEmpty()){
+			fechaInicioBusca1="";
 		}
-		if(fechaFin==null || fechaFin.trim().isEmpty()){
-			fechaFin="";
+		if(fechaFinBusca1==null || fechaFinBusca1.trim().isEmpty()){
+			fechaFinBusca1="";
 		}
 		if(idEstatus==null || idEstatus.trim().isEmpty()){
 			idEstatus="";
 		}
 		List<LicenciaMedica> lista= new ArrayList<>();
-		lista=licenciaMedicaService.obtenerListaLicenciaMedicaPorFiltros(claveUsuario, fechaInicio, fechaFin, idEstatus);
+		lista=licenciaMedicaService.obtenerListaLicenciaMedicaPorFiltros(claveUsuario, fechaInicioBusca1, fechaFinBusca1, idEstatus);
 		System.out.println("Haciendo la consulta "+lista.size());
 		model.addAttribute("licenciasMedicas",lista);
+		model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
     	return "/licenciasMedicas/licenciasPropias"; 
     }
 	
@@ -233,9 +238,12 @@ public class LicenciasMedicasController {
 //		String string=""+ session.getAttribute("usuario");
 //    	String[] parts = string.split(": ");
 //    	String claveUsuario = parts[1];
-//    	System.out.println("recuperando datos "+claveUsuario);
+    	System.out.println("recuperando datos "+claveUsuario);
 		hmap.put("usuario",usuarioService.buscaUsuario(claveUsuario));
-		
+//		String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
+//		Periodo periodo= new Periodo();
+//		periodo.setMensaje(cadena);
+//		hmap.put("periodo",periodo);
     	//return "/licenciasMedicas/solicitudLicencia";
 		//hmap.put("licencia",licenciaMedicaService.buscaLicenciaMedica(idLicencia));
     	return hmap;

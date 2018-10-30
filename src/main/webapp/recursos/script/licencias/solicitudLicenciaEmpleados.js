@@ -3,6 +3,12 @@ $(document).ready(function() {
 	    "scrollY": "500px",
 	    "scrollCollapse": true
 	  });
+	$("#botonCancelar").on('click', function(event){
+		event.preventDefault();
+		$("#detalleLicencia").css("display","none");
+		$(".tablaLicencias").css("display","inline");
+		
+	});
 	document.getElementById("botonGuardarLicencia").disabled=true;
 	$("#fechaInicio").datepicker({ 
 		//minDate: 1,
@@ -147,6 +153,7 @@ $(document).ready(function() {
 			$(".actualizaLicencia #apellidoMaterno").val(hmap.usuario.apellidoMaterno);
 			$(".actualizaLicencia #idPuesto").val(hmap.usuario.idPuesto);
 			$(".actualizaLicencia #rfc").val(hmap.usuario.rfc);
+			//$(".actualizaLicencia #listaDiasFestivos").val(hmap.periodo.mensaje);
 			$(".actualizaLicencia #idUnidadAdministrativa").val(hmap.usuario.nombreUnidad);
 			var today = new Date();
 			var dd = today.getDate();
