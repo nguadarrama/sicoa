@@ -205,6 +205,38 @@
 													</tr>
 												</tbody>
 											</table>
+											
+											<!-- Tabla escondida para imprimir -->
+											<table id="tablaImprimir" border="1" cellpadding="3" hidden="true">
+												<thead>
+													<tr>
+														<th>EMPLEADO</th>
+														<th>NOMBRE</th>
+														<th>NIVEL</th>
+														<th>U. A.</th>
+														<th>TIPO</th>
+														<th>ESTADO</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="asistencia : ${listaAsistencia}">
+														<td th:text="${asistencia.usuario.claveUsuario}"></td>
+														<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
+														<td id="idAsistencia" th:text="${asistencia.usuario.nivel}"></td>
+														<td th:text="${asistencia.usuario.nombreUnidad}"></td>
+														<td th:text="${asistencia.idTipoDia.nombre}"></td>
+														<td>
+															<span th:if="${asistencia.idEstatus.estatus == 'Validada' and asistencia.incidencia.descuento}">Descuento Aprobado</span>
+															<span th:if="${asistencia.idEstatus.estatus == 'Validada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Aprobada</span>
+															<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and asistencia.incidencia.descuento}">Descuento Pendiente</span>
+															<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Pendiente</span>
+															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
+															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
+														</td> 
+													</tr>
+												</tbody>
+											</table>
+											
 										</form>
 									</div>
 								</div>

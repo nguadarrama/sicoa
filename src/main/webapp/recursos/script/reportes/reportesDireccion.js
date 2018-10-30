@@ -31,9 +31,12 @@ $(document).ready(function() {
     });
     
     $('#imprimir').click(function() {
-		var imprime = document.getElementById('tableAsistencias');
-		var wme = window.open("", "", "width=900, height=700");
-		wme.document.write(imprime.outerHTML);
+		var contenidoTabla = document.getElementById('tablaImprimir');
+		contenidoTabla.border = 2;
+		contenidoTabla.hidden = false;
+		var wme = window.open("");
+		wme.document.write(contenidoTabla.outerHTML);
+		contenidoTabla.hidden = true;
 		wme.document.close();
 		wme.focus();
 		wme.print();
