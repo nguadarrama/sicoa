@@ -156,6 +156,9 @@ public class AsistenciaController  {
     @RequestMapping(value={"coordinador"}, method = RequestMethod.GET)
     public String buscaListaAsistenciaCoordinador(Model model, Authentication authentication) {
     	
+    	//busca nivel
+    	
+    	
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("inicio", true);
@@ -248,7 +251,7 @@ public class AsistenciaController  {
     	try {
     		//guarda el archivo
     		if (archivo.getSize() > 0) {
-    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, new String("asistencia_justificacion"));
+    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, "asistencia_justificacion", "justificacion-");
     		}
     		
     		//crea la incidencia y asocia el archivo
@@ -293,7 +296,7 @@ public class AsistenciaController  {
     	try {
     		//guarda el archivo
     		if (archivo.getSize() > 0) {
-    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, new String("asistencia_descuento"));
+    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, "asistencia_descuento" , "descuento-");
     		}
     		
     		//crea la petición de descuento y asocia el archivo
@@ -524,7 +527,7 @@ public class AsistenciaController  {
         		//guarda el archivo
         		if (archivo.getSize() > 0) {
         			if (idArchivo == null) {
-        				idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario, new String("asistencia_justificacion"));
+        				idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario, "asistencia_justificacion", "justificacion-");
         			}
         			
         			//crea la incidencia y asocia el archivo
@@ -740,7 +743,7 @@ public class AsistenciaController  {
 				String mimeType= URLConnection.guessContentTypeFromStream(inputStream);
 				
 				if(mimeType==null){
-	            	mimeType="application/octect-stream";
+	            	mimeType="application/pdf";
 	            }
 	            
 	            response.setContentType(mimeType);
