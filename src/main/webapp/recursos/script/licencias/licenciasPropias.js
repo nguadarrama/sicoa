@@ -5,10 +5,12 @@ $(document).ready(function() {
 	    "scrollCollapse": true
 	  });
 	$("#fechaInicio").datepicker({ 
+		dateFormat: 'yy-mm-dd',
 	       beforeShowDay: $.datepicker.noWeekends,
 	      
 	   });
 	$("#fechaFin").datepicker({ 
+			dateFormat: 'yy-mm-dd',
 	       beforeShowDay: $.datepicker.noWeekends,
 	   });
 	$("#mostrarTabla").on('click', function(event){
