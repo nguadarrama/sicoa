@@ -32,12 +32,22 @@ public class ReporteController {
 	@Autowired
 	private AsistenciaService asistenciaService;
 	
-	@RequestMapping(value={"inicio"}, method = RequestMethod.GET)
-    public String inicioReporte(Model model) {
+	@RequestMapping(value={"inicioDireccion"}, method = RequestMethod.GET)
+    public String inicioReporteDireccion(Model model) {
 		
 		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+		model.addAttribute("inicio", true);
     	
     	return "/reportes/reportesDireccion";
+    }
+	
+	@RequestMapping(value={"inicioCoordinador"}, method = RequestMethod.GET)
+    public String inicioReporteCoordinador(Model model) {
+		
+		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+		model.addAttribute("inicio", true);
+    	
+    	return "/reportes/reportesCoordinador";
     }
 	
 	//DIRECCIÓN
