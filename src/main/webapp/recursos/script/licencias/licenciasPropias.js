@@ -1,5 +1,9 @@
 $(document).ready(function() {
 	
+	$('#tablaLicenciasPropias').DataTable({
+	    "scrollY": "500px",
+	    "scrollCollapse": true
+	  });
 	$("#fechaInicio").datepicker({ 
 	       beforeShowDay: $.datepicker.noWeekends,
 	      

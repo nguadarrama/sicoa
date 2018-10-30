@@ -1,4 +1,9 @@
 $(document).ready(function() {
+	$('#tablaLicenciasEmpleados').DataTable({
+	    "scrollY": "500px",
+	    "scrollCollapse": true
+	  });
+	
 	$("#detalleLicencia").css("display","none");
 	$("#fechaInicio").datepicker({ 
 		minDate: 1,
