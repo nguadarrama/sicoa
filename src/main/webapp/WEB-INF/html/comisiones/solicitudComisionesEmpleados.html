@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="templates/mainTemplate">
+	
+	<head>
+		<title th:text="#{TITULO_MAIN_PAGE}" layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE"></title>
+	
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+		<meta name="_token" th:content="${session._token}"></meta>
+		<meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"></meta> 
+	   	<meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"></meta>   	
+	   	
+	   	<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="icon"  type="image/x-icon" />
+		<link  th:href="@{/recursos/image/ico/favicon.ico}" rel="shortcut icon"  type="image/x-icon"/>
+		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_3.3.7/css/bootstrap.min.css}" />	
+		<link rel="stylesheet" th:href="@{/recursos/assets/font-awesome-4.7.0/css/font-awesome.min.css}" />	
+		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_dialog/css/bootstrap-dialog.min.css}" />
+		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+		<link rel="stylesheet" th:href="@{/recursos/css/styles.css}" />	
+	</head>
+	
+	<body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="logos">
+							<div class="logo-segob"></div>
+							<div class="logo-control"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<th:block layout:fragment="content"  th:remove="tag">
+		<div class="main-page">
+			<div class="container">
+				<h1 class="ico-solicitudes"><span class="input-clock"></span> Comisiones</h1>
+				<hr/>
+				
+				<div class="row misPropiasVacaciones">
+						<ul class="nav nav-tabs">
+							<!-- <li class="active"><a data-toggle="tab" href="#misVacacione">Mis vacaciones</a></li> -->
+							<li class="active"><a data-toggle="tab" href="#vacacionesEmpleado">Comisiones de empleados</a></li>
+							<!-- <li><a data-toggle="tab" href="#agregar">Peticion de vacaciones</a></li> -->
+						</ul>
+				</div>
+				<div class="tab-content">
+					<div class="row tab-pane fade in active misPropiasVacaciones" id="tablaVacacionesEmpleado">
+						
+						<div class="card vacacionesDeEmpleados">
+							<h3>Comisiones de empleados</h3>
+							<div class="asistenciaForm">      <!-- Formulario busqueda asistencia -->
+			      				<form th:action="@{/comisiones/solicitudComisionEmpleados}" method="get" enctype="multipart/form-data">
+									<div class="row">
+										<div class="col-md-3">
+											<label>
+												<p>No. de Empleado</p>
+												<input id="claveUsuario" name="claveUsuario" type="text" class="form-control" />
+											</label>
+										</div>
+										<div class="col-md-3">
+											<label>
+												<p>Nombre</p>
+												<input id="nombre" name="nombre" type="text" class="form-control input-user" />
+											</label>
+										</div>
+										<div class="col-md-3">
+											<label>
+												<p>Apellido Paterno</p>
+												<input id="apellidoPaterno" name="apellidoPaterno" type="text" class="form-control" />
+											</label>
+										</div>
+										<div class="col-md-3">
+											<label>
+												<p>Apellido Materno</p>
+												<input id="apellidoMaterno" name="apellidoMaterno" type="text" class="form-control" />
+											</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<p class="text-right">
+												<button id="btnVacacionesEmpleados" class="btn btn-default">Buscar</button>
+											</p>
+										</div>
+									</div>
+								</form>
+							</div>
+							
+								<table id="registraVacacionesEmpleados" class="table table-striped table-text-center">
+									<thead>
+										<tr class="filters">
+											<th>No. de Empleado</th>
+											<th>Nombre de Empleado</th>
+											<th>Nivel</th>
+											<th>Acci&oacute;n</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="comisiones : ${comisionesEmpleados}">
+											<td th:text="${comisiones.idUsuario.claveUsuario}"></td>
+											<td th:text="''+ ${comisiones.idUsuario.nombre} + ' ' + ${comisiones.idUsuario.apellidoPaterno} + ' ' + ${comisiones.idUsuario.apellidoMaterno}"></td>
+											<td th:text="${comisiones.idUsuario.nivel}"></td>
+											<td class="col-md-3">
+												<a th:href="@{/comisiones/comision/buscaUsuario/(claveUsuario=${comisiones.idUsuario.claveUsuario})}"  class="eBtn" id="botonLlamar" name="botonLlamar"> Agregar </a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<div th:if="${comisionesEmpleados == null}">
+									<label>No hay Registros para mostrar, por favor intenta otra b&uacute;squeda</label>
+								</div>
+						</div>
+							
+						</div>
+						<div class="row tab-pane fade in active" id="actualizamosVacacion" style="display: none; ">
+				<div class="card" id="regitsraVacacionEmpleado" >
+				
+				</div>
+				</div>
+				</div>
+			</div>
+			<div class="modal fade" id="aceptarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h3 class="modal-title" id="exampleModalLongTitle" th:text="#{COMUN.GUARDAR}"></h3>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        <p th:text="#{COMUN.ACEPTA.CONFIRMACION}"></p>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
+				        <a href="" class="btn btn-danger" id="aceptaModal" th:text="#{COMUN.ACEPTAR}"></a>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+				<div class="modal fade" id="rechazarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h3 class="modal-title" id="exampleModalLongTitle" th:text="#{COMUN.ELIMINA}"></h3>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        <p th:text="#{COMUN.RECHAZA.CONFIRMACION}"></p>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
+				        <a href="" class="btn btn-danger" id="rechazaModal" th:text="#{COMUN.RECHAZA}"></a>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+				
+		</div>		
+		</th:block>
+		
+		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
+	
+		<th:block th:inline="text" layout:fragment="includeScript">
+			<script charset="utf-8" th:src="@{/recursos/assets/bootstrap_dialog/js/bootstrap-dialog.min.js}"></script>
+			<script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/jquery.dataTables.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/script/comisiones/comisiones.js}"></script>	 
+	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/moment.js}"></script>
+	        <!-- <script charset="utf-8" th:src="@{/recursos/assets/date-picker/style/jquery-ui.css}"></script> -->
+	        <link rel="stylesheet" th:href="@{/recursos/assets/date-picker/style/jquery-ui.css}" />	
+	        
+		</th:block>
+	</body>
+</html>
