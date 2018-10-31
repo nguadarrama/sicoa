@@ -15,10 +15,12 @@ $(document).ready(function() {
 			$.get(href, function(nivel, status) {
 				$('.nivelForm #idNivel').val(nivel.idNivel);
 				$('.nivelForm #nivel').val(nivel.nivel);
-				$('.nivelForm #horario').val(nivel.horario);
+				$('.nivelForm #idHorario').val(nivel.horario);
+				$('.nivelForm #horario').val(nivel.idHorario);
 			});
 			
 			$('.nivelForm #nivelModal').modal();
+
 	});
 
 	
@@ -26,9 +28,6 @@ $(document).ready(function() {
 		$('.nuevoNivelForm #nuevoNivelModal').modal(); 
 	});
 	
-	$('.eBtn').on('click', function(event) {					//botón edita
-		$('.nivelForm #nivelModal').modal(); 
-	});
 	
 	$('.eliminaBtn').on('click', function(event) {			    //botón elimina
 		event.preventDefault();

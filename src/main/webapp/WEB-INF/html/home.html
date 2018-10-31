@@ -5,23 +5,107 @@
 	
 	<body>
 		<th:block layout:fragment="content"  th:remove="tag">
-			
-			<!-- Solo acceso al demo -->
-			<h1 th:text="#{TITULO_HOME}"></h1>	
-			<hr/> 
-			<ul>
-				<li><a th:href="@{/demo/formularios}">Formularios</a></li>
-				<li><a th:href="@{/demo/jqueryValidator}">Jquery Validator</a></li>
-				<li><a th:href="@{/demo/ajax}">Llamadas asincronas (Ajax JQuery)</a></li>
-				<li><a th:href="@{/demo/tabla}">Tabla</a></li>
-				<li><a th:href="@{/catalogos/horario}" th:text="#{CATALOGOS}"></a></li>
-				<li><a th:href="@{/catalogos/usuario}" th:text="#{USUARIOS}"></a></li>
-			</ul>
-			<!-- Demo -->
-			
-		</th:block>
+			<div class="main-page">
+				<h1 th:text="#{TITULO_HOME}"></h1>	
+				<hr/> 
+			<div class="col-md-12">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="card card-detail">
+							<h1 class="ico-asistencias">Asistencias</h1>
+							<div class="detail green">
+								<p class="big-text"><span th:text="${top.asistencia}"></span></p>
+								<p>D&iacute;as  Laborados</p>
+								<a th:href="@{/asistencia/empleado}"><div class="arrow"></div></a>
+							</div>
+							<div class="detail green">
+								<p class="big-text"><span th:text="${top.justificaciones}"></span></p>
+								<p>D&iacute;as  Justificados</p>
+								<a th:href="@{/asistencia/empleado}"><div class="arrow"></div></a>
+							</div>
+							<div class="detail green">
+								<p class="big-text"><span th:text="${top.incidencias}"></span></p>
+								<p>D&iacute;as  con Incidencias</p>
+								<a th:href="@{/asistencia/empleado}"><div class="arrow"></div></a>
+							</div>
+							<div class="detail green">
+								<p class="big-text"><span th:text="${top.descuentos}"></span></p>
+								<p>D&iacute;as  por Descontar</p>
+								<a th:href="@{/asistencia/empleado}"><div class="arrow"></div></a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="card card-detail">
+							<h1 class="ico-vacaciones">Vacaciones</h1>
+							<div class="form-group" th:if="${top.vacacion}">
+								<p class="detail-text"><span th:text="${top.vacacion.descripcion}"></span></p>
+								<div class="detail green">
+									<p class="big-text"><span th:text="${top.vacacion.dias}"></span></p>
+									<p>D&iacute;as Disponibles</p>
+									<a th:href="@{/vacaciones/vacacionesPropias}"><div class="arrow"></div></a>
+								</div>
+							</div>
+							<div  class="form-group" th:if="${top.vacacion1}">
+								<p class="detail-text"><span th:text="${top.vacacion1.descripcion}"></span></p>
+								<div class="detail gray">
+									<p class="big-text"><span th:text="${top.vacacion1.dias}"></span></p>
+									<p>D&iacute;as No disponibles</p>
+									<div class="arrow"></div>
+								</div>
+							</div>
+							<div  class="form-group" th:if="${top.vacacion2}">
+								<p class="detail-text"><span th:text="${top.vacacion2.descripcion}"></span></p>
+								<div class="detail gray">
+									<p class="big-text"><span th:text="${top.vacacion2.dias}"></span></p>
+									<p>D&iacute;as No disponibles</p>
+									<div class="arrow"></div>
+								</div>
+							</div>
+							<p class="text-right">
+								<a class="btn btn-info" th:href="@{/vacaciones/vacacionesPropias}" >Solicitar vacaciones</a>
+							</p>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="card card-detail">
+							<h1 class="ico-licencias">Licencias medicas</h1>
+							<div class="detail green">
+								<p class="big-text"><span th:text="${top.licencias}"></span></p>
+								<p>Licencias encontradas</p>
+								<a th:href="@{/licenciasMedicas/licenciasPropias}"><div class="arrow"></div></a>
+							</div>
+							<div class="detail green">
+								<p class="big-text"><span th:text="${top.diasIncapacidad}"></span></p>
+								<p>D&iacute;as de Incapacidad</p>
+								<a th:href="@{/licenciasMedicas/licenciasPropias}"><div class="arrow"></div></a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="card card-detail">
+							<h1 class="ico-comisiones">Comisiones</h1>
+							<div class="detail green">
+								<p class="big-text"><span th:text="${top.comisionesT}"></span></p>
+								<p>Comisiones al d&iacute;a </p>
+								<div class="arrow"></div>
+							</div>
+							<div class="detail green">
+								<p class="big-text"><span th:text="${top.comisiones}"></span></p>
+								<p>Comisiones asignadas</p>
+								<div class="arrow"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+	</th:block>
 		<th:block th:inline="text" layout:fragment="includeCSS">
-	    </th:block>
+			<link rel="stylesheet" th:href="@{/recursos/css/main.css}" />
+		</th:block>
 	
 		<th:block th:inline="text" layout:fragment="includeScript">		 				
 		</th:block>

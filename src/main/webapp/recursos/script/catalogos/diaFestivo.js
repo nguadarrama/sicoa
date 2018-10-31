@@ -10,7 +10,7 @@ $(document).ready(function() {
         "scrollCollapse": true
       });
 	
-	$('.eBtn').on('click', function(event) { 					//botón edita
+	$('#tableDiaFestivo').on('click','.eBtn' , function(event){			//botón edita
 		event.preventDefault();
 		var href = $(this).attr('href');
 		var text = $(this).text();

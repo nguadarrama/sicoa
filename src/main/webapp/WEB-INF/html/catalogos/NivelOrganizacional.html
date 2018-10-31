@@ -91,7 +91,7 @@
 				</div>
 				
 				<div class="nivelForm">      <!-- Modal para editar -->
-		      		<form th:action="@{/catalogos/nivel/modifica}" method="put">
+		      		<form th:action="@{/catalogos/nivel/modifica}" method="post">
 						<div class="modal fade" id="nivelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
@@ -103,7 +103,7 @@
 								    </div>
 							    	<div class="modal-body">
 								        <div class="form-group">
-								        <div class="form-group" th:hidden="true">
+								        <div class="form-group">
 											<label for="nivel" class="col-form-label" th:text="ID_NIVEL"></label>
 									    	<input type="text" class="form-control"  id="idNivel"  name="idNivel"  th:readonly="true" />
 										</div>
