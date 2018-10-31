@@ -6,4 +6,5 @@ import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 
 public interface EstatusService {
 	public List<Estatus> obtieneListaEstatus();
+	public List<Estatus> obtieneListaCompletaEstatus();
 }

@@ -113,7 +113,10 @@
 														<div class="col-md-2">
 															<label>
 																<p>Estado</p>
-																<input th:value="${estado}" type="text" class="form-control input-flag" id="estado" name="estado"/>
+																<select class="form-control" id="estado" name="estado" th:autocomplete="off" >
+												        	    	<option></option>
+												            		<option th:each="e : ${listaEstado}" th:text="${e.estatus}" th:value="${e.idEstatus}" th:selected="${estado == e.idEstatus}"></option>
+									     				       </select>
 															</label>
 														</div>
 														<div class="col-md-2">

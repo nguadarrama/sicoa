@@ -120,7 +120,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	
 	@Override
 	public List<Asistencia> buscaAsistenciaEmpleadoRangoCoordinador(String cve_m_usuario, String nombre, String paterno,
-			String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal,
+			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa, String cveCoordinador) {
 
 		List<Asistencia> listaAsistencia = new ArrayList<>();
@@ -161,7 +161,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	
 	@Override
 	public List<Asistencia> buscaAsistenciaEmpleadoRangoDireccion(String cve_m_usuario, String nombre, String paterno,
-			String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal,
+			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa) {
 
 		List<Asistencia> listaAsistencia = new ArrayList<>();
@@ -569,7 +569,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	@Override
 	public List<Asistencia> buscaAsistenciaDireccionReporte(String cve_m_usuario, String nombre, String paterno,
-			String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal,
+			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa, String[] p) {
 
 		List<Asistencia> listaAsistencia = new ArrayList<>();
@@ -618,7 +618,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	@Override
 	public List<Asistencia> buscaAsistenciaCoordinadorReporte(String cve_m_usuario, String nombre, String paterno,
-			String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal,
+			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa, String cveCoordinador, String[] p) {
 
 		

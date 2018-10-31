@@ -67,5 +67,32 @@ public class EstatusServiceImpl implements EstatusService{
 		
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
+	
+	@Override
+	public List<Estatus> obtieneListaCompletaEstatus() {
+		List<Estatus> listaEstatus = new ArrayList<>();
+		HttpResponse response;
+		try{
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_LISTA_ESTATUS);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaEstatus = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Estatus>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener lista estatus : "+response.getStatusLine().getReasonPhrase());
+		}
+		return listaEstatus;
+	}
 
 }

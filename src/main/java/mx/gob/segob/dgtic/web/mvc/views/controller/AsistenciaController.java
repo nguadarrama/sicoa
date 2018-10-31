@@ -34,12 +34,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
+import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
+import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import mx.gob.segob.dgtic.web.mvc.util.AsistenciaJustificacion;
 import mx.gob.segob.dgtic.web.mvc.util.Excel;
@@ -65,6 +67,9 @@ public class AsistenciaController  {
 	
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private EstatusService estatusService;
 	
 	//JUSTIFICACION
 	private String MENSAJE_REGISTRO_JUSTIFICACION = "La justificación ha quedado registrada";
@@ -158,6 +163,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("inicio", true);
@@ -167,13 +173,14 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"coordinador/busca"}, method = RequestMethod.GET, params="busca")
     public String buscaListaAsistenciaCoordinadorRango(Model model, Authentication authentication, String cve_m_usuario, String nombre, String paterno, 
-    		String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
+    		String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
 
 	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
 	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName());
 	    	
 	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
 	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
 	    	model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
 	    	model.addAttribute("fechaInicial", fechaInicial);
@@ -197,7 +204,7 @@ public class AsistenciaController  {
     
     @RequestMapping(value="coordinador/busca", method=RequestMethod.GET, params="exporta")
     public ModelAndView exportaExcelCoordinador(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String nombre, String paterno, 
-    		String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
+    		String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
         
     	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
     			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName());
@@ -243,7 +250,7 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="justifica")
     public String creaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
-    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, String estadoHidden, String fechaInicial, 
+    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
     		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String nombreAutorizador) {
     	
     	Integer resultadoProceso = 0;
@@ -266,6 +273,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -290,7 +298,7 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="descuenta")
     public String creaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
-    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, String estadoHidden, String fechaInicial, 
+    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
     		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String cve_m_usuario, String nombreAutorizador) {
     	
     	Integer resultadoProceso = 0;
@@ -314,6 +322,7 @@ public class AsistenciaController  {
     	
 		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
 		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -338,7 +347,7 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="formatoJustificacion")
     public String descargaFormatoJustificacion(Model model, String nombre, String unidad, String nombreAutorizador, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
-    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, String estadoHidden, String fechaInicial, 
+    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
     		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cve_m_usuario, Integer idTipoDiaModal, HttpServletResponse response) {
     	
     	//se traduce la incidencia
@@ -389,6 +398,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -407,7 +417,7 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="formatoDescuento")
     public String descargaFormatoDescuento(Model model, String nombre, String unidad, String nombreAutorizador, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
-    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, String estadoHidden, String fechaInicial, 
+    		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
     		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cve_m_usuario, HttpServletResponse response) {
     	
     	//fecha actual para el reporte
@@ -441,6 +451,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -493,6 +504,7 @@ public class AsistenciaController  {
 	    	
 	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
 	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
 	    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 	    	model.addAttribute("listaAsistenciaJustificar", listaAsistenciaJustificar);
 	    	model.addAttribute("listaJustificaciones", listaJustificaciones);
@@ -504,10 +516,11 @@ public class AsistenciaController  {
 	    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_lista_multiple);
     	} else {
     		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_lista_multiple, "", "", "",
-        			"", 0, "", fechaInicial_hidden_lista_multiple, fechaFinal_hidden_lista_multiple, "", authentication.getName());
+        			"", 0, 0, fechaInicial_hidden_lista_multiple, fechaFinal_hidden_lista_multiple, "", authentication.getName());
     		
     		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
     		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+    		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     		model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
 	    	model.addAttribute("fechaInicial", fechaInicial_hidden_lista_multiple);
@@ -551,11 +564,12 @@ public class AsistenciaController  {
         	}
     	}
     	
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", 0, "", 
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", 0, 0, 
     			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName());
     	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<>());
     	model.addAttribute("fechaInicial", fechaInicial_hidden_guarda_multiple);
@@ -634,7 +648,7 @@ public class AsistenciaController  {
 			e.printStackTrace();
 		}
     	
-    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", 0, "", 
+    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", 0, 0, 
     			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName());
    	
     	model.addAttribute("listaAsistencia", listaAsistencia);
@@ -654,6 +668,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("inicio", true);
@@ -663,13 +678,14 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"direccion/busca"}, method = RequestMethod.GET, params="busca")
     public String buscaListaAsistenciaDireccionRango(Model model, Authentication authentication, String cve_m_usuario, String nombre, String paterno, 
-    		String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
+    		String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
 
 	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombre, paterno, materno, nivel, 
 	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa);
 	    	
 	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
 	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
 	    	model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("fechaInicial", fechaInicial);
 	    	model.addAttribute("fechaFinal", fechaFinal);
@@ -687,7 +703,7 @@ public class AsistenciaController  {
     
     @RequestMapping(value="direccion/busca", method=RequestMethod.GET, params="exporta")
     public ModelAndView exportaExcelDireccion(HttpServletRequest request, HttpServletResponse response, Authentication authentication, 
-    		String cve_m_usuario, String nombre, String paterno, String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
+    		String cve_m_usuario, String nombre, String paterno, String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
         
     	if (!cve_m_usuario.isEmpty() && !fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
 	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombre, paterno, materno, nivel, 
@@ -737,7 +753,7 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"direccion/dictamina_Incidencia_Descuento"}, method = RequestMethod.POST) //permite aprobar o rechazar justificaciones y descuentos
     public String dictaminaIncidenciaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
-    		String maternoHidden, String nivelHidden, Integer tipoHidden, String estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
+    		String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
     		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion, String nombre, String unidad, HttpServletResponse response) {
     	
     	Integer resultadoProceso = 0;
@@ -780,6 +796,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -807,7 +824,7 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"direccion/dictamina_Incidencia_Descuento"}, method = RequestMethod.POST, params="descargaArchivoJustificacionDescuento") //permite aprobar o rechazar justificaciones y descuentos
     public String descargaArchivoJustificacionDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
-    		String maternoHidden, String nivelHidden, Integer tipoHidden, String estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
+    		String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
     		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
 
     	asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
@@ -817,6 +834,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -834,7 +852,7 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"direccion/dictaminaDescuento"}, method = RequestMethod.POST)
     public String dictaminaDescuento(Model model, String cve_m_usuario, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
-    		String maternoHidden, String nivelHidden, Integer tipoHidden, String estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
+    		String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
     		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
     	
     	Integer resultadoProceso = 0;
@@ -846,6 +864,7 @@ public class AsistenciaController  {
     	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);

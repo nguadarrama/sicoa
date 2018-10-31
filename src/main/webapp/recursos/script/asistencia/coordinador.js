@@ -58,7 +58,7 @@ $(document).ready(function() {
 		$('#maternoHidden').val($('#materno').val());
 		$('#nivelHidden').val($('#nivel option:selected').val());
 		$('#tipoHidden').val($('#tipo option:selected').val());
-		$('#estadoHidden').val($('#estado').val());
+		$('#estadoHidden').val($('#estado option:selected').val());
 		$('#unidadAdministrativaHidden').val($('#unidadAdministrativa').val());
 		
 		$.get(href, function(asistenciaJustificacion, status) {

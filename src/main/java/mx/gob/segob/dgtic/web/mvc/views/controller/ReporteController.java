@@ -61,7 +61,7 @@ public class ReporteController {
 	//DIRECCIÓN
 	@RequestMapping(value={"reporteDireccion"}, method = RequestMethod.GET, params="busca")
     public String reporteDireccion(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
-    		Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos) {
+    		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cve_m_usuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos);
@@ -105,7 +105,7 @@ public class ReporteController {
 	
 	@RequestMapping(value={"reporteDireccion"}, method = RequestMethod.GET, params="exporta")
     public ModelAndView exportaReporteDireccion(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
-    		Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
+    		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
     		HttpServletResponse response) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cve_m_usuario, nombre, paterno, materno, 
@@ -170,7 +170,7 @@ public class ReporteController {
 	//COORDINADOR
 	@RequestMapping(value={"reporteCoordinador"}, method = RequestMethod.GET, params="busca")
     public String reporteCoordinador(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
-    		Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
+    		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cve_m_usuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos);
@@ -214,7 +214,7 @@ public class ReporteController {
 	
 	@RequestMapping(value={"reporteCoordinador"}, method = RequestMethod.GET, params="exporta")
     public ModelAndView exportaReporteCoordinador(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
-    		Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
+    		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
     		HttpServletResponse response, Authentication authentication) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cve_m_usuario, nombre, paterno, materno, 
