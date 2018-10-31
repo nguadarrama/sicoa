@@ -1,4 +1,4 @@
-f<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="templates/mainTemplate">
@@ -355,7 +355,7 @@ f<!DOCTYPE html>
 										<div class="col-md-6">
 											<label class="col-form-label">Adjunta Formato de
 												Vacaciones </label> <input type="file" name="archivo" id="archivo"
-												multiple="multiple" accept="application/pdf"  />
+												accept="application/pdf"  />
 										</div>
 										<div class="col-md-6 ">
 											<input id="claveUsuario" name="claveUsuario" type="text"
@@ -367,7 +367,7 @@ f<!DOCTYPE html>
 												id="idDetalle" name="idDetalle" type="text"
 												class="form-control" required="required" th:readonly="true"
 												style="display: none;" /> <input type="submit"
-												class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+												class="btn btn-primary" id="guardarArchivo" th:value="#{COMUN.GUARDAR}" />
 										</div>
 									</form>
 								</div>

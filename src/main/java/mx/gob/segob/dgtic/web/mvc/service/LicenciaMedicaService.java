@@ -11,9 +11,9 @@ public interface LicenciaMedicaService {
 			String fechaFin, String idEstatus);
 	public List<LicenciaMedica> obtenerListaLicenciaMedicaEmpleados(String claveUsuario ,String nombre,String apellidoPaterno, String apellidoMaterno, 
 			String idEstatus,String idUnidad);
-	public void AgregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario);
+	public LicenciaMedica AgregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario);
 	public LicenciaMedica buscaLicenciaMedica(Integer idLicencia);
 	public List<LicenciaMedica> obtenerLicenciasPorUnidad(String idUnidad, String claveUsuario, String nombre, String apellidoPaterno, 
 			String apellidoMaterno);
-	public void modificaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario);
+	public LicenciaMedica modificaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario);
 }

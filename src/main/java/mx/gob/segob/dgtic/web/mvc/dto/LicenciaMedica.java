@@ -16,7 +16,14 @@ public class LicenciaMedica {
 	private String fechaFinAux;
 	private String totalLicencias;
 	private String diasTotales;
+	private String mensaje;
 	
+	public String getMensaje() {
+		return mensaje;
+	}
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
 	public String getDiasTotales() {
 		return diasTotales;
 	}

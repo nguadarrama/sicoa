@@ -4,6 +4,16 @@ $(document).ready(function() {
 	    "scrollCollapse": true
 	  });
 	
+	var elementExists = document.getElementById("archivo");
+	if(elementExists!=null && elementExists!=""){
+			document.getElementById("guardarArchivo").disabled = true;
+			document.getElementById("archivo").required = true;
+			if(document.getElementById("archivo").required == true){
+				$("#guardarArchivo").attr('disabled', false);
+			}else{
+				document.getElementById("guardarArchivo").disabled = true;
+			}
+	}
 	$("#detalleLicencia").css("display","none");
 	$("#fechaInicio").datepicker({ 
 		minDate: 1,

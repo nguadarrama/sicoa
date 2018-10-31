@@ -26,6 +26,7 @@ $(document).ready(function() {
 		return display; 
 		},
 		minDate: 1,
+		maxDate:'1y',
 		onSelect: function() 
 	       { 
 	    	   calcularDias();
@@ -45,6 +46,7 @@ $(document).ready(function() {
 		return display; 
 		},
 		minDate: 1,
+		maxDate:'1y',
 		onSelect: function() 
 	       { 
 	    	   calcularDias();

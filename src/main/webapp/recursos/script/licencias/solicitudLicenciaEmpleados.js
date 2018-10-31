@@ -11,7 +11,8 @@ $(document).ready(function() {
 	});
 	document.getElementById("botonGuardarLicencia").disabled=true;
 	$("#fechaInicio").datepicker({ 
-		//minDate: 1,
+		minDate: '-1m',
+		maxDate:'1m',
 	       beforeShowDay: $.datepicker.noWeekends,
 	       onSelect: function() 
 	       { 
@@ -19,7 +20,8 @@ $(document).ready(function() {
 	       },
 	   });
 	$("#fechaFin").datepicker({ 
-		//minDate: 1,
+		minDate: '-1m',
+		maxDate:'1m',
 	       beforeShowDay: $.datepicker.noWeekends,
 	       onSelect: function() 
 	       { 

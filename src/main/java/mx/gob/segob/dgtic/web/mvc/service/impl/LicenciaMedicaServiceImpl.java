@@ -117,11 +117,12 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	}
 
 	@Override
-	public void AgregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario) {
+	public LicenciaMedica AgregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario) {
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HttpEntity httpEntity = new BasicHttpEntity();
 		HttpResponse response;
+		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		Usuario usuario= new Usuario();
 		usuario=usuarioService.buscaUsuario(claveUsuario);
@@ -144,19 +145,18 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-//		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-//			
-//			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-//			JsonElement dataJson = json.get("data").getAsJsonObject();
-//			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
-//		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-//			String mensaje = obtenerMensajeError(response);					 
-//			throw new AuthenticationServiceException(mensaje);			
-//		} else {
-//			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
-//		}
-//				
-//		return vacacio;
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			licenciaMedicaRespuesta = gson.fromJson(dataJson, LicenciaMedica.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+		}
+		return licenciaMedicaRespuesta;
 		
 	}
 
@@ -230,7 +230,8 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	}
 
 	@Override
-	public void modificaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario) {
+	public LicenciaMedica modificaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario) {
+		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HttpEntity httpEntity = new BasicHttpEntity();
@@ -256,6 +257,18 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			licenciaMedicaRespuesta = gson.fromJson(dataJson, LicenciaMedica.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+		}
+		return licenciaMedicaRespuesta;
 	}
 
 }
