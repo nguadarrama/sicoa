@@ -109,6 +109,7 @@ $(document).ready(function() {
 					if(hmap.comision.idEstatus.idEstatus=='2' || hmap.comision.idEstatus.idEstatus=='3'){
 						$('.rechazaVacacion #rechazaVacacion').css("display","none");
 						$('.aceptaVacacion #aceptaVacacion').css("display","none");
+						$('.formModificar #botonEditar').css("display","none");
 					}else{
 						
 					}
