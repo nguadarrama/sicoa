@@ -95,9 +95,16 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 	 * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry)
 	 */
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/recursos/**").addResourceLocations("/recursos/");
+        registry.addResourceHandler("/recursos/**",
+                "/img/**",
+                "/css/**",
+                "/js/**").addResourceLocations("/recursos/",
+                        "classpath:/recursos/img/",
+                        "classpath:/recursos/css/",
+                        "classpath:/recursos/script/");
     }
 
+	
     /**
      * Establece y configura el objeto encargado de resolver las vistas dentro de Thymeleaf.
      *

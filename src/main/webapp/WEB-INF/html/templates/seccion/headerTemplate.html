@@ -44,22 +44,22 @@
 	                    </li>
 	                </ul>		              
 	                <ul class="nav navbar-nav navbar-right">	                	
-	                    <li class="dropdown" sec:authorize="hasAuthority('1') or hasAuthority('2') or hasAuthority('3')">
+	                    <li class="dropdown">
 	                    	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" th:text="Asistencias">
 	                            <span class="caret"></span>
 	                        </a>
 	                        <ul class="dropdown-menu" role="menu">
 	                    		<li><a sec:authorize="hasAuthority('1')" th:href="@{/asistencia/direccion}">Asistencias Direcci&oacute;n de personal</a></li>
 		                    	<li><a sec:authorize="hasAuthority('2')" th:href="@{/asistencia/coordinador}">Asistencias Coordinador Administrativo</a></li>
-		                    	<li><a sec:authorize="hasAuthority('3')" th:href="@{/asistencia/empleado}">Asistencias Empleado</a></li>
+		                    	<li><a th:href="@{/asistencia/empleado}">Asistencias Empleado</a></li>
 		                    </ul>
 	                    </li>
-	                    <li class="dropdown" sec:authorize="!hasAuthority('0')">
+	                    <li class="dropdown">
 	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" th:text="#{ELEMENTO2}">
 	                    <span class="caret"></span></a>
 	                     <ul class="dropdown-menu" role="menu">
 		                    	<li><a th:href="@{/vacaciones/vacacionesPropias}" th:text="#{VACACIONES_PROPIAS}"></a></li>
-		                    	<li><a sec:authorize="!hasAuthority('3')" th:href="@{/vacaciones/vacacionesEmpleados}" th:text="#{VACACIONES_EMPLEADOS}"></a></li>
+		                    	<li><a sec:authorize="hasAuthority('1') or hasAuthority('2')" th:href="@{/vacaciones/vacacionesEmpleados}" th:text="#{VACACIONES_EMPLEADOS}"></a></li>
 		                    	<li><a th:href="@{/vacaciones/solicitudVacaciones}" th:text="#{SOLICITUD_VACACIONES}"></a></li>
 		                    	<li><a sec:authorize="hasAuthority('2')" th:href="@{/vacaciones/solicitudVacacionesEmpleados}">Registra vacaciones de asignados</a></li>
 		                    </ul>
@@ -70,10 +70,11 @@
 	                    	<span class="caret"></span></a>
 		                    <ul class="dropdown-menu" role="menu">
 	                    		<li><a th:href="@{/licenciasMedicas/licenciasPropias}" th:text="#{LICENCIAS_PROPIAS}"></a></li>
-	                    		<li><a sec:authorize="!hasAuthority('3')" th:href="@{/licenciasMedicas/licenciasEmpleados}" th:text="#{LICENCIAS_EMPLEADOS}"></a></li>
-	                    		<li><a th:href="@{/licenciasMedicas/solicitudLicencia}" th:text="#{SOLICITUD_LICENCIAS}"></a></li>
+	                    		<li><a sec:authorize="hasAuthority('1') or hasAuthority('2')" th:href="@{/licenciasMedicas/licenciasEmpleados}" th:text="#{LICENCIAS_EMPLEADOS}"></a></li>
 	                    		<li><a sec:authorize="hasAuthority('2')" th:href="@{/licenciasMedicas/solicitudLicenciasEmpleados}" th:text="#{SOLICITUD_LICENCIAS_EMPLEADOS}"></a></li>
 	                    	</ul>
+	                    </li>
+	                    <li ><a href="#" th:text="#{ELEMENTO4}"></a>
 	                    </li>
 	                    <li class="dropdown">
 	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" th:text="#{ELEMENTO4}">
@@ -115,7 +116,7 @@
 	                            <li><a href="#">Enlace separado</a></li>
 	                            -->
 	                        </ul>
-	                    </li>                    
+	                    </li>
 	                    <li class="dropdown" sec:authorize="hasAuthority('1')">
 	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" th:text="#{ELEMENTO5}">
 	                            <span class="caret"></span></a>
@@ -132,7 +133,7 @@
 	                            <li><a href="#">Enlace separado</a></li>
 	                            -->
 	                        </ul>
-	                    </li>	                    
+	                    </li>                                        
 	                </ul>
 	                
 	                	                

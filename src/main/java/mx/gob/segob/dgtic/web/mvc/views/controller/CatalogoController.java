@@ -63,7 +63,7 @@ public class CatalogoController {
 	 */
 	@RequestMapping(value = { "horario" }, method = RequestMethod.GET)
 	public String obtieneHorarios(Model model) {
-		model.addAttribute("listaHorarios", catalogoService.obtieneHorarios());
+		model.addAttribute("listaHorarios", catalogoService.obtieneHorariosCat());
 		if(!this.mensaje.equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
@@ -170,7 +170,6 @@ public class CatalogoController {
 				+" estatus "+estatus);
 		
 		Integer clavePerfil[]= new Integer[4]; 
-		String cadenaPerfil="";
 		
 		if(coordinador!=null && !coordinador.trim().isEmpty()){
 			clavePerfil[2]=Integer.parseInt(coordinador);
@@ -262,6 +261,7 @@ public class CatalogoController {
 	public String agregaJustificacion(Integer id, String clave, String justificacion, boolean activo) {
 		Justificacion  justi  = new Justificacion(id, clave,justificacion, activo, "");
 		justi = catalogoService.agregaJustificacion(justi);
+		this.mensaje = justi.getMensaje();
 		return "redirect:/catalogos/justificacion";
 	}
 
@@ -295,7 +295,7 @@ public class CatalogoController {
 	   	 */
 	   	@RequestMapping(value = {"diaFestivo"}, method = RequestMethod.GET)
 	   	public String obtieneDiaFestivo(Model model) {
-	   		model.addAttribute("listaDiasFestivos", catalogoService.obtieneDiaFestivo());
+	   		model.addAttribute("listaDiasFestivos", catalogoService.obtieneDiaFestivoCat());
 	   		if(!this.mensaje.equals("")){
 				if(this.mensaje.contains("correctamente"))
 					model.addAttribute("MENSAJE", this.mensaje);
@@ -350,24 +350,13 @@ public class CatalogoController {
 	
 	   	@RequestMapping(value = { "periodo" }, method = RequestMethod.GET)
 		public String periodos(Model model) {
-			model.addAttribute("listaPeriodos", catalogoService.obtienePeriodos());
+			model.addAttribute("listaPeriodos", catalogoService.obtienePeriodosCat());
 			if(!this.mensaje.equals("")){
 				if(this.mensaje.contains("correctamente"))
 					model.addAttribute("MENSAJE", this.mensaje);
 				else
 					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
 			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			this.mensaje = "";
 			return "/catalogos/PeriodoVacacional";
 		}
@@ -408,6 +397,7 @@ public class CatalogoController {
 				else
 					model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
 			}
+			this.mensaje="";
 			return "/catalogos/NivelOrganizacional";
 		}
 		
@@ -436,7 +426,7 @@ public class CatalogoController {
 			 return catalogoService.nivelBusca(id);
 		}
 		
-		@GetMapping ("nivel/modifica")
+		@PostMapping ("nivel/modifica")
 	   	public String nivelModifica(NivelOrganizacional nivel) {
 			NivelOrganizacional nv = new NivelOrganizacional();
 	   		nv = catalogoService.modificaNivel(nivel);

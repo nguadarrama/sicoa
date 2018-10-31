@@ -53,14 +53,12 @@ public class CatalogoServiceImpl implements CatalogoService {
 	public List<Horario> obtieneHorarios() {
 		List<Horario> listaHorario = new ArrayList<>();
 		HttpResponse response;
-		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_HORARIO);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		
 		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
@@ -73,8 +71,33 @@ public class CatalogoServiceImpl implements CatalogoService {
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
 			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+		}	
+		return listaHorario;
+	}
+	
+	@Override
+	public List<Horario> obtieneHorariosCat() {
+		List<Horario> listaHorario = new ArrayList<>();
+		HttpResponse response;
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_HORARIO_CAT);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-				
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaHorario = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Horario>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+		}	
 		return listaHorario;
 	}
 	
@@ -568,6 +591,35 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 	
 	@Override
+	public List<DiaFestivo> obtieneDiaFestivoCat() {
+		List<DiaFestivo> lista = new ArrayList<>();
+		HttpResponse response;
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_DIA_FESTIVO_CAT);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			lista = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<DiaFestivo>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener los días festivos : "+response.getStatusLine().getReasonPhrase());
+		}
+				
+		return lista;
+	}
+	
+	@Override
 	public DiaFestivo modificaDiaFestivo(DiaFestivo dia) {
 		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
@@ -706,7 +758,35 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return listaPeriodos;
 	}
 	
-	@SuppressWarnings("unused")
+	@Override
+	public List<Periodo> obtienePeriodosCat() {
+		List<Periodo> listaPeriodos = new ArrayList<>();
+		HttpResponse response;
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_PERIODOS_CAT);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaPeriodos = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Periodo>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener los periodos : "+response.getStatusLine().getReasonPhrase());
+		}
+				
+		return listaPeriodos;
+	}
+	
 	@Override
 	public Periodo modificaEstatusPeriodo(Periodo periodo) {
 		HttpResponse response;
@@ -775,6 +855,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return periodo;
 	}
 	
+	@SuppressWarnings("unused")
 	@Override
 	public List<Usuario> nivelesEmpleado() {
 		List<Usuario> listaNiveles = new ArrayList<>();

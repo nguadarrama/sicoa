@@ -21,6 +21,7 @@ public interface CatalogoService {
 	public Horario buscaHorario(Integer id);
 	public void eliminaHorario(Integer id);
 	public List<Perfil> obtienePerfiles();
+	public List<Horario> obtieneHorariosCat();
 	//Catálogo tipoDia
 	
 	public List<TipoDia> obtieneTipoDias();
@@ -41,12 +42,14 @@ public interface CatalogoService {
 	public List<Periodo> obtienePeriodos ();
 	public Periodo buscaPeriodo(Integer id);
 	public Periodo modificaEstatusPeriodo(Periodo periodo);
+	public List<Periodo> obtienePeriodosCat();
 	
 	//Catálogo Día Festivo
 	public DiaFestivo agregaDiaFestivo(DiaFestivo dia);
 	public DiaFestivo modificaDiaFestivo(DiaFestivo dia);
 	public List<DiaFestivo> obtieneDiaFestivo();
 	public DiaFestivo buscaDiaFestivo(Integer id);
+	public List<DiaFestivo> obtieneDiaFestivoCat();
 	
 	// Catálogo Niveles
 	public List<Usuario> nivelesEmpleado();
@@ -55,5 +58,8 @@ public interface CatalogoService {
 	public NivelOrganizacional nivelBusca(Integer idNivel);
 	public NivelOrganizacional modificaNivel(NivelOrganizacional nivel);
 	public String obtieneDiaFestivoParaBloquear();
+	
+	
+	
 	
 }

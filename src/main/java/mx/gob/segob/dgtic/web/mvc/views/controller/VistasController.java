@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 
 import mx.gob.segob.dgtic.web.config.security.service.AutenticacionService;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
+import mx.gob.segob.dgtic.web.mvc.service.DashService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 
 
@@ -40,6 +41,9 @@ public class VistasController {
     
     @Autowired 
     CatalogoController catalogoController;
+    
+    @Autowired
+	private DashService dashService;
 	
 	 /**
      * Vista principal : Path : {contextoAplicacion}/home
@@ -48,7 +52,6 @@ public class VistasController {
      */
     @RequestMapping(value={"","home"}, method = RequestMethod.GET)
     public String index(HttpSession session, Model model){ 
-
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
@@ -58,6 +61,7 @@ public class VistasController {
     	if(usuario.getPrimeraVez().equals("Y") || usuario.getPrimeraVez().equals("S")){
     		return "/cambiaContrasenia";
     	}else{
+    		model.addAttribute("top",dashService.getDash(usuario.getIdUsuario()));
     		return "home"; 
 	   	}
     }   
@@ -89,7 +93,13 @@ public class VistasController {
     	return "cambiaContrasenia1";
     }
     @GetMapping("/home")
-    public String home() {
+    public String home(HttpSession session, Model model){ 
+    	String string=""+ session.getAttribute("usuario");
+    	String[] parts = string.split(": ");
+    	String claveUsuario = parts[1];
+    	Usuario usuario=null;
+    	usuario=usuarioService.buscaUsuario(claveUsuario);
+    	model.addAttribute("top",dashService.getDash(usuario.getIdUsuario()));
     	return "home";
     }
     @GetMapping("/mensajeConfirmacion")

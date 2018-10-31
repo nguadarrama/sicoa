@@ -14,6 +14,7 @@ public final class CatalogoEndPointConstants {
 	 * Constante que representa el atributo WEB_SERVICE_INFO_HORARIO, path del WebService para obtener la información del catálogo horario. 
 	 */	
 	public static final String WEB_SERVICE_INFO_HORARIO =  "/catalogo/obtieneHorarios";
+	public static final String WEB_SERVICE_INFO_HORARIO_CAT =  "/catalogo/obtieneHorariosCat";
 	public static final String WEB_SERVICE_BUSCA_HORARIO = "/catalogo/buscaHorario";
 	public static final String WEB_SERVICE_MODIFICA_HORARIO = "/catalogo/modificaHorario";
 	public static final String WEB_SERVICE_AGREGA_HORARIO = "/catalogo/agregaHorario";
@@ -69,6 +70,7 @@ public final class CatalogoEndPointConstants {
 		//Periodo
 		public static final String WEB_SERVICE_BUSCA_PERFIL_POR_CLAVE_USUARIO="/catalogo/buscaPeriodoPorClaveUsuario";
 		public static final String WEB_SERVICE_OBTIENE_PERIODOS = "/catalogo/obtienePeriodos";
+		public static final String WEB_SERVICE_OBTIENE_PERIODOS_CAT = "/catalogo/obtienePeriodosCat";
 		public static final String WEB_SERVICE_AGREGA_PERIODO = "/catalogo/agregaPeriodo";
 		public static final String WEB_SERVICE_MODIFICA_PERIODO ="/catalogo/modificaEstatusPeriodo";
 		public static final String WEB_SERVICE_BUSCA_PERIODO ="/catalogo/buscaPeriodo";
@@ -78,7 +80,7 @@ public final class CatalogoEndPointConstants {
 		public static final String WEB_SERVICE_GUARDA_USUARIO_UNIDAD_ADMINISTRATIVA =  "/catalogo/consultaRegistraUsuarioUnidadAdministrativa";
 		public static final String WEB_SERVICE_CONSULTA_RESPONSABLE =  "/catalogo/consultaResponsable";
 		public static final String WEB_SERVICE_INFO_UNIDADES_ADMINISTRATIVAS =  "/catalogo/obtieneUnidadesAdministrativasCompletas";
-		public static final String WEB_SERVICE_OBTIENE_NIVELES_EMPLEADOS = "/catalogo/obtieneNivelesEmpleado";
+		public static final String WEB_SERVICE_OBTIENE_NIVELES_EMPLEADOS = "/nivel/obtieneNivelesEmpleado";
 		//Perfiles
 		public static final String WEB_SERVICE_BUSCA_PERFILES_USUARIO = "/catalogo/consultaPerfilesUsuario";
 		public static final String WEB_SERVICE_AGREGA_PERFILES_USUARIO = "/catalogo/agregaEliminaPerfilesUsuario";
@@ -91,6 +93,7 @@ public final class CatalogoEndPointConstants {
 		 * Constante que representa el atributo WEB_SERVICE_INFO_DIA_FESTIVO, path del WebService para obtener la información del catálogo día festivo. 
 		 */	
 		public static final String WEB_SERVICE_INFO_DIA_FESTIVO =  "/diaFestivo/obtiene";
+		public static final String WEB_SERVICE_INFO_DIA_FESTIVO_CAT =  "/diaFestivo/obtieneCat";
 		public static final String WEB_SERVICE_BUSCA_DIA_FESTIVO = "/diaFestivo/busca";
 		public static final String WEB_SERVICE_MODIFICA_DIA_FESTIVO = "/diaFestivo/modifica";
 		public static final String WEB_SERVICE_AGREGA_DIA_FESTIVO = "/diaFestivo/agrega";
@@ -100,10 +103,10 @@ public final class CatalogoEndPointConstants {
 		public static final String WEB_SERVICE_OBTIENE_USUARIOS_VACACIONES = "/catalogo/obtenerUsuariosVacacionesPorFiltros";
 		
 		//Niveles Organizacionales
-		public static final String 	WEB_SERVICE_OBTIENE_NIVELES = "/catalogo/obtieneNiveles";
-		public static final String WEB_SERVICE_AGREGA_NIVEL_ORGANIZACIONAL = "/catalogo/agregaNivel";
-		public static final String WEB_SERVICE_BUSCA_NIVEL = "/catalogo/buscaNivel";
-		public static final String WEB_SERVICE_MODIFICA_NIVEL = "/catalogo/modificaNivel";
+		public static final String 	WEB_SERVICE_OBTIENE_NIVELES = "/nivel/obtiene";
+		public static final String WEB_SERVICE_AGREGA_NIVEL_ORGANIZACIONAL = "/nivel/agrega";
+		public static final String WEB_SERVICE_BUSCA_NIVEL = "/nivel/busca";
+		public static final String WEB_SERVICE_MODIFICA_NIVEL = "/nivel/modifica";
 		
 }
 
