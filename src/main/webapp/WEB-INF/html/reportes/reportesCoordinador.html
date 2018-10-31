@@ -104,7 +104,7 @@
 														<div class="col-md-4">
 															<label>
 																<p>Tipo</p>
-																<select class="form-control" id="tipo" name="tipo" th:autocomplete="off" >
+																<select class="form-control" id="tipo" name="tipo" th:autocomplete="off" th:disabled="${hayPermiso}" >
 													            	<option></option>
 													            	<option th:each="t : ${listaTipo}" th:text="${t.nombre}" th:value="${t.idTipoDia}" th:selected="${tipo == t.idTipoDia}"></option>
 													            </select>
@@ -134,19 +134,19 @@
 										                    <input th:value="${unidadAdministrativa}" type="text" class="form-control input-flag" id="unidadAdministrativa" name="unidadAdministrativa"/>
 											            </div>
 											            <div class="col-md-2">
-											            	<input class="form-check-input" id="checkVacacion" type="checkbox" name="permisos" value="vacacion" th:checked="${vacacion}"/>
+											            	<input class="form-check-input" id="checkVacacion" type="checkbox" name="permisos" value="vacacion" th:checked="${vacacion}" th:disabled="${hayTipo}"/>
 															<label class="form-check-label">Vacaci&oacute;n</label>
 											            </div>
 											            <div class="col-md-2">
-											            	<input class="form-check-input" id="checkComision" type="checkbox" name="permisos" value="comision" th:checked="${comision}"/>
+											            	<input class="form-check-input" id="checkComision" type="checkbox" name="permisos" value="comision" th:checked="${comision}" th:disabled="${hayTipo}"/>
 															<label class="form-check-label">Comisi&oacute;n</label>
 											            </div>
 											            <div class="col-md-2">
-											            	<input class="form-check-input" id="checkLicencia" type="checkbox" name="permisos" value="licencia" th:checked="${licencia}"/>
+											            	<input class="form-check-input" id="checkLicencia" type="checkbox" name="permisos" value="licencia" th:checked="${licencia}" th:disabled="${hayTipo}"/>
 															<label class="form-check-label">Licencia M&eacute;dica</label>
 											            </div>
 											            <div class="col-md-2">
-											            	<input class="form-check-input" id="checkDescuento" type="checkbox" name="permisos" value="descuento" th:checked="${descuento}"/>
+											            	<input class="form-check-input" id="checkDescuento" type="checkbox" name="permisos" value="descuento" th:checked="${descuento}" th:disabled="${hayTipo}"/>
 															<label class="form-check-label">Descuento</label>
 											            </div>
 													</div>

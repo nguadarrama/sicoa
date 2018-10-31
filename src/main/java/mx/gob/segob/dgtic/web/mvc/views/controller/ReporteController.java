@@ -87,24 +87,36 @@ public class ReporteController {
     	model.addAttribute("estado", estado);
     	model.addAttribute("unidadAdministrativa", unidadAdministrativa);
     	
+    	Boolean p = false;
+    	
     	if (permisos != null) {
     		List<String> listaPermisos = new ArrayList<String>(Arrays.asList(permisos));
     		
     		if (listaPermisos.contains("vacacion")) {
     			model.addAttribute("vacacion", true);
+    			p = true;
     		}
     		
     		if (listaPermisos.contains("comision")) {
     			model.addAttribute("comision", true);
+    			p = true;
     		}
     		
     		if (listaPermisos.contains("licencia")) {
     			model.addAttribute("licencia", true);
+    			p = true;
     		}
     		
     		if (listaPermisos.contains("descuento")) {
     			model.addAttribute("descuento", true);
+    			p = true;
     		}
+    	}
+    	
+    	model.addAttribute("hayPermiso", p);
+    	
+    	if (tipo != null) {
+    		model.addAttribute("hayTipo", true);
     	}
     	
     	return "/reportes/reportesDireccion";
@@ -197,24 +209,36 @@ public class ReporteController {
     	model.addAttribute("estado", estado);
     	model.addAttribute("unidadAdministrativa", unidadAdministrativa);
     	
+    	Boolean p = false;
+    	
     	if (permisos != null) {
     		List<String> listaPermisos = new ArrayList<String>(Arrays.asList(permisos));
     		
     		if (listaPermisos.contains("vacacion")) {
     			model.addAttribute("vacacion", true);
+    			p = true;
     		}
     		
     		if (listaPermisos.contains("comision")) {
     			model.addAttribute("comision", true);
+    			p = true;
     		}
     		
     		if (listaPermisos.contains("licencia")) {
     			model.addAttribute("licencia", true);
+    			p = true;
     		}
     		
     		if (listaPermisos.contains("descuento")) {
     			model.addAttribute("descuento", true);
+    			p = true;
     		}
+    	}
+    	
+    	model.addAttribute("hayPermiso", p);
+    	
+    	if (tipo != null) {
+    		model.addAttribute("hayTipo", true);
     	}
     	
     	return "/reportes/reportesCoordinador";
