@@ -129,7 +129,7 @@ public class VacacionesController {
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 	    model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
 	    
-	    if(!this.mensaje.equals("")){
+	    if(!this.getMensaje().equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
 			else

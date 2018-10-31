@@ -63,7 +63,10 @@ public class LicenciasMedicasController {
 	@Autowired 
 	private ArchivoService archivoService;
 	
-	@Autowired CatalogoService catalogoService;
+	@Autowired 
+	private CatalogoService catalogoService;
+	
+	private String mensaje = "";
 	
 	@RequestMapping(value={"licenciasPropias"}, method = RequestMethod.GET)
     public String obtieneLicencias(String fechaInicioBusca1, String fechaFinBusca1, String idEstatus, Model model, HttpSession session) {
@@ -87,6 +90,13 @@ public class LicenciasMedicasController {
 		System.out.println("Haciendo la consulta "+lista.size());
 		model.addAttribute("licenciasMedicas",lista);
 		model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
+		if(!this.getMensaje().equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
     	return "/licenciasMedicas/licenciasPropias"; 
     }
 	
@@ -118,6 +128,13 @@ public class LicenciasMedicasController {
     	String claveUsuario = parts[1];
 		model.addAttribute("usuario",usuarioService.buscaUsuario(claveUsuario));
 		System.out.println("recuperando datos "+claveUsuario);
+		if(!this.getMensaje().equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
     	return "/licenciasMedicas/solicitudLicencia";
     	 
     }
@@ -149,7 +166,14 @@ public class LicenciasMedicasController {
     	System.out.println("idUnidad para buscar "+idUnidad);
 		//String idUnidad="13";
 		model.addAttribute("licencias",licenciaMedicaService.obtenerLicenciasPorUnidad(idUnidad, claveUsuario, nombre, apellidoPaterno, apellidoMaterno));
-    	return "/licenciasMedicas/solicitudLicenciaEmpleados";
+		if(!this.getMensaje().equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
+		return "/licenciasMedicas/solicitudLicenciaEmpleados";
     	 
     }
 	
@@ -184,6 +208,13 @@ public class LicenciasMedicasController {
 		model.addAttribute("licenciasMedicas",lista);
 		model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 		model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
+		if(!this.getMensaje().equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
     	return "/licenciasMedicas/licenciasEmpleados"; 
     }
 	
@@ -253,22 +284,25 @@ public class LicenciasMedicasController {
     public String registraLicencia(String fechaInicio, String fechaFin, Integer dias, String claveUsuario1, String padecimiento ) {
 	System.out.println("Datos para la insercion claveUsuario "+claveUsuario1+" fechaInicio "+fechaInicio+" fechaFin "+fechaFin
 			+" dias "+dias+" padecimiento "+padecimiento);
-	licenciaMedicaService.AgregaLicenciaMedica(new LicenciaMedicaAux(null,null,null, null, null, fechaInicio, fechaFin, dias, padecimiento), claveUsuario1);
-	return "/licenciasMedicas/solicitudLicenciaEmpleados";
+	LicenciaMedica licencia= new LicenciaMedica();
+	licencia=licenciaMedicaService.AgregaLicenciaMedica(new LicenciaMedicaAux(null,null,null, null, null, fechaInicio, fechaFin, dias, padecimiento), claveUsuario1);
+	System.out.println("mensaje recuperado "+licencia.getMensaje());
+	this.mensaje=licencia.getMensaje();
+	return "redirect:/licenciasMedicas/solicitudLicenciasEmpleados";
 	}
 	
 	@PostMapping("/actualizaArchivo")
     public String registraVacaciones(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idLicencia ){
     	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario+" idLicencia "+idLicencia);
     	Integer idArchivoAux=null;
-    	
+    	LicenciaMedica licencia= new LicenciaMedica();
     	//Vacaciones vacaciones= new Vacaciones();
     	Archivo archivoDto=new Archivo();
     	//vacaciones.setIdDetalle(idDetalle);
     	if(archivo!=null && !archivo.isEmpty()){
 	    	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
 	    		archivoService.actualizaArchivo(archivo, claveUsuario, "licenciasMedicas",idArchivo,"licenciaMedica-");
-	    		licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivo,1,null,null,null,null), claveUsuario);
+	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivo,1,null,null,null,null), claveUsuario);
 	    		//archivoService.guardaArchivo(archivo, claveUsuario, "licenciasMedicas");
 	    		//archivoDto.setIdArchivo(idArchivo);
 	    		//vacaciones.setIdArchivo(archivoDto);
@@ -278,11 +312,13 @@ public class LicenciasMedicasController {
 	    		//archivoDto.setIdArchivo(idArchivoAux);
 	    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "licenciasMedicas","licenciaMedica-");
 	    		System.out.println("IDArchivo recuperado "+idArchivoAux);
-	    		licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivoAux,1,null,null,null,null), claveUsuario);
+	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivoAux,1,null,null,null,null), claveUsuario);
 	    		//vacaciones.setIdArchivo(archivoDto);
 	    		//vacacionesService.modificaVacaciones(vacaciones);
 	    	}
     	}
+    	System.out.println("mensaje recuperado "+licencia.getMensaje());
+    	this.mensaje=licencia.getMensaje();
     	//this.mensaje=archivoDto.getMensaje();
     	return"redirect:/licenciasMedicas/licenciasEmpleados";
     	}
@@ -313,18 +349,30 @@ public class LicenciasMedicasController {
 	@PostMapping("rechaza")
     public String rechazaVacaciones(Integer idLicencia,String claveUsuario, Integer idArchivo) {
     	System.out.println("idLicencia "+idLicencia+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
-    	licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia, null,null, idArchivo, 3,null,null,null,null), claveUsuario);
+    	LicenciaMedica licencia= new LicenciaMedica();
+    	licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia, null,null, idArchivo, 3,null,null,null,null), claveUsuario);
    // 	vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), idSolicitud);
+    	this.mensaje=licencia.getMensaje();
+    	System.out.println("mensaje recuperado "+licencia.getMensaje());
     	return "redirect:/licenciasMedicas/licenciasEmpleados";
     }
 	
 	@PostMapping("acepta")
     public String aceptaVacaciones(Integer idLicencia,String claveUsuario, Integer idArchivo) {
     	System.out.println("idLicencia "+idLicencia+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
-    	licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia, null,null, idArchivo, 2,null,null,null,null), claveUsuario);
+    	LicenciaMedica licencia= new LicenciaMedica();
+    	licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia, null,null, idArchivo, 2,null,null,null,null), claveUsuario);
     	//fechaInicio=fechaInicio.substring(0,21);
-    	ParsePosition pos = new ParsePosition(4);
-    	
+    	//ParsePosition pos = new ParsePosition(4);
+    	this.mensaje=licencia.getMensaje();
+    	System.out.println("mensaje recuperado "+licencia.getMensaje());
     	return "redirect:/licenciasMedicas/licenciasEmpleados";
     }
+	
+	public String getMensaje() {
+		return mensaje == null ? "" : this.mensaje;
+	}
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
 }

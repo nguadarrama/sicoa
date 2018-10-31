@@ -1,5 +1,14 @@
 $(document).ready(function() {
-	
+	var elementExists = document.getElementById("archivo");
+	if(elementExists!=null && elementExists!=""){
+			document.getElementById("guardarArchivo").disabled = true;
+			document.getElementById("archivo").required = true;
+			if(document.getElementById("archivo").required == true){
+				$("#guardarArchivo").attr('disabled', false);
+			}else{
+				document.getElementById("guardarArchivo").disabled = true;
+			}
+	}
 	$('#vacacionesPropias').DataTable({
 	    "scrollY": "500px",
 	    "scrollCollapse": true

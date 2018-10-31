@@ -61,6 +61,25 @@
 					</ul>
 				</div>
 				<div class="tab-content">
+					<div class="form-group" th:if="${MENSAJE_EXCEPCION}">
+						<div class="alert alert-danger">
+							<span class="fa fa-exclamation-triangle"></span> <span
+								th:text="${MENSAJE_EXCEPCION}"></span>
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>
+					<div class="form-group" th:if="${MENSAJE}">
+						<div class="alert alert-success">
+							<span class="fa fa-check"></span> <span th:text="${MENSAJE}"></span>
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>
 					<div class="row tab-pane fade in active listaDeLicenciasEmpleados">
 						<div class="card" id="listaDeLicenciasEmpleados">
 							<div id="misVacaciones">
@@ -169,7 +188,7 @@
 												<td
 													th:text="${#dates.format(licencia.fechaInicio, 'dd-MM-yyyy')}"></td>
 												<td
-													th:text="${#dates.format(licencia.fechaInicio, 'dd-MM-yyyy')}"></td>
+													th:text="${#dates.format(licencia.fechaFin, 'dd-MM-yyyy')}"></td>
 												<td th:text="${licencia.idEstatus.estatus}"></td>
 												<td th:text="${licencia.dias}"></td>
 												<td class="col-md-3"><a
@@ -327,14 +346,14 @@
 						</div>
 						<div class="card">
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-4" sec:authorize="hasAuthority('2')">
 									<form th:action="@{/licenciasMedicas/actualizaArchivo}"
 										class="actualizaArchivo" method="post"
 										enctype="multipart/form-data">
 										<div class="col-md-4">
-											<label class="col-form-label">Archivo de licencias meedicas </label>
+											<label class="col-form-label">Archivo de licencias medicas </label>
 											<input type="file" name="archivo" id="archivo"
-												multiple="multiple" accept="application/pdf" />
+											accept="application/pdf" />
 										</div>
 										<div class="col-md-6">
 											<input id="claveUsuario" name="claveUsuario" type="text"
@@ -346,7 +365,7 @@
 												name="idLicencia" type="text" class="form-control"
 												required="required" th:readonly="true"
 												style="display: none;" /> <input type="submit"
-												class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+												class="btn btn-primary"  id="guardarArchivo" th:value="#{COMUN.GUARDAR}" />
 										</div>
 									</form>
 								</div>
