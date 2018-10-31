@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
+import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
 import mx.gob.segob.dgtic.web.mvc.util.Excel;
 
 /**
@@ -36,11 +37,15 @@ public class ReporteController {
 	@Autowired
 	private CatalogoService catalogoService;
 	
+	@Autowired
+	private EstatusService estatusService;
+	
 	@RequestMapping(value={"inicioDireccion"}, method = RequestMethod.GET)
     public String inicioReporteDireccion(Model model) {
 		
 		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
 		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
 		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
@@ -52,6 +57,7 @@ public class ReporteController {
 		
 		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
 		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
 		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
@@ -68,6 +74,7 @@ public class ReporteController {
 		
 		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
 		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
 		model.addAttribute("listaAsistencia", listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -177,6 +184,7 @@ public class ReporteController {
 		
 		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
 		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
+		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
 		model.addAttribute("listaAsistencia", listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
