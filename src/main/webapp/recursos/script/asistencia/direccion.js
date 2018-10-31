@@ -12,8 +12,8 @@ $(document).ready(function() {
 		$('#nombreHidden').val($('#nombre').val());
 		$('#paternoHidden').val($('#paterno').val());
 		$('#maternoHidden').val($('#materno').val());
-		$('#nivelHidden').val($('#nivel').val());
-		$('#tipoHidden').val($('#tipo').val());
+		$('#nivelHidden').val($('#nivel option:selected').val());
+		$('#tipoHidden').val($('#tipo option:selected').val());
 		$('#estadoHidden').val($('#estado').val());
 		$('#unidadAdministrativaHidden').val($('#unidadAdministrativa').val());
 		

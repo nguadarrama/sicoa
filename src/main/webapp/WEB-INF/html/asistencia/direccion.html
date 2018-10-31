@@ -115,18 +115,18 @@
 											<div class="col-md-2">
 												<label>
 													<p>Nivel</p>
-													<select class="form-control" name="nivel" th:autocomplete="off" >
+													<select class="form-control" id="nivel" name="nivel" th:autocomplete="off" >
 										            	<option></option>
-										            	<option id="nivel" th:each="n : ${listaNivel}" th:text="${n.nivel}" th:value="${n.nivel}" th:selected="${nivel == n.nivel}"></option>
+										            	<option th:each="n : ${listaNivel}" th:text="${n.nivel}" th:value="${n.nivel}" th:selected="${nivel == n.nivel}"></option>
 										            </select>
 												</label>
 											</div>
 											<div class="col-md-4">
 												<label>
 													<p>Tipo</p>
-													<select class="form-control" name="tipo" th:autocomplete="off" >
+													<select class="form-control" id="tipo" name="tipo" th:autocomplete="off" >
 										            	<option></option>
-										            	<option id="tipo" th:each="t : ${listaTipo}" th:text="${t.nombre}" th:value="${t.idTipoDia}" th:selected="${tipo == t.idTipoDia}"></option>
+										            	<option th:each="t : ${listaTipo}" th:text="${t.nombre}" th:value="${t.idTipoDia}" th:selected="${tipo == t.idTipoDia}"></option>
 										            </select>
 												</label>
 											</div>
