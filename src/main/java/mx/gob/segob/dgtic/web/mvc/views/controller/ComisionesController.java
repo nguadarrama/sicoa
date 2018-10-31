@@ -17,6 +17,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletOutputStream;
@@ -221,7 +222,7 @@ public class ComisionesController {
     String string = "" + session.getAttribute("usuario");
     String[] parts = string.split(": ");
     String claveUsuario = parts[1];
-    model.addAttribute("fechaRegistro", obtenerFechaActual());
+    model.addAttribute("fechaRegistro", obtenerFechaActual("dd-MM-yyyy"));
     model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario));
     model.addAttribute("listaResponsable",
         unidadAdministrativaService.consultaResponsable(claveUsuario));
@@ -258,14 +259,12 @@ public class ComisionesController {
     if (idResponsable != null && !idResponsable.trim().isEmpty()) {
       idResponsableAux = Integer.parseInt(idResponsable);
     }
-    Calendar now = Calendar.getInstance();
-    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
    
     System.out.println(
         "Datos claveUsuario " + claveUsuario + " responsable " + idResponsable + " fechaInicio "
             + fechaInicio + " fechaFin " + fechaFin + " dias " + dias + " comision " + comision);
     comisionService.agregarComision(new ComisionAux(null, null, idResponsableAux, null, null,
-        fechaInicio, fechaFin, dias, comision, df.format(now), Integer.valueOf(idHorario)), claveUsuario);
+        fechaInicio, fechaFin, dias, comision, obtenerFechaActual("dd/MM/yyyy"), Integer.valueOf(idHorario)), claveUsuario);
 
     return "redirect:/comisiones/solicitudComision";
 
@@ -324,7 +323,7 @@ public class ComisionesController {
   public String buscaUsuario(String claveUsuario, Model model) {
     System.out.println("Usuarioooooooooooooo " + claveUsuario);
 
-    model.addAttribute("fechaRegistro", obtenerFechaActual());
+    model.addAttribute("fechaRegistro", obtenerFechaActual("dd-MM-yyyy"));
     model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario));
     model.addAttribute("listaResponsable",
         unidadAdministrativaService.consultaResponsable(claveUsuario));
@@ -342,7 +341,7 @@ public class ComisionesController {
     System.out.println("ClaveUsuario con id: " + claveUsuario);
 
     model.addAttribute("comision", comisionService.obtieneComision(idComision));
-    model.addAttribute("fechaRegistro", obtenerFechaActual());
+    model.addAttribute("fechaRegistro", obtenerFechaActual("dd-MM-yyyy"));
     model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario));
     model.addAttribute("listaResponsable",
         unidadAdministrativaService.consultaResponsable(claveUsuario));
@@ -441,10 +440,11 @@ public class ComisionesController {
    * 
    * @return
    */
-  private String obtenerFechaActual() {
+  private String obtenerFechaActual(String format) {
     Calendar now = Calendar.getInstance();
-    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-    return df.format(now);
+    DateFormat df = new SimpleDateFormat(format);
+    Date d= now.getTime();
+    return df.format(d);
   }
 
 }
