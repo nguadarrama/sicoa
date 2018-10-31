@@ -120,7 +120,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	
 	@Override
 	public List<Asistencia> buscaAsistenciaEmpleadoRangoCoordinador(String cve_m_usuario, String nombre, String paterno,
-			String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal,
+			String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa, String cveCoordinador) {
 
 		List<Asistencia> listaAsistencia = new ArrayList<>();
@@ -161,7 +161,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	
 	@Override
 	public List<Asistencia> buscaAsistenciaEmpleadoRangoDireccion(String cve_m_usuario, String nombre, String paterno,
-			String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal,
+			String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa) {
 
 		List<Asistencia> listaAsistencia = new ArrayList<>();
@@ -569,7 +569,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	@Override
 	public List<Asistencia> buscaAsistenciaDireccionReporte(String cve_m_usuario, String nombre, String paterno,
-			String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal,
+			String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa, String[] p) {
 
 		List<Asistencia> listaAsistencia = new ArrayList<>();
@@ -618,19 +618,31 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	@Override
 	public List<Asistencia> buscaAsistenciaCoordinadorReporte(String cve_m_usuario, String nombre, String paterno,
-			String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal,
-			String unidadAdministrativa, String cveCoordinador, String[] permisos) {
+			String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal,
+			String unidadAdministrativa, String cveCoordinador, String[] p) {
 
 		
 		List<Asistencia> listaAsistencia = new ArrayList<>();
 		HttpResponse response;
+		StringBuilder permisos = new StringBuilder();
+		
+		if (p != null) {
+			permisos.append("&permisos=");
+			for (int i = 0; i < p.length; i++ ) {
+				permisos.append(p[i]);
+				
+				if (i < p.length - 1) {
+					permisos.append(",");
+				}
+			}
+		}
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(
 					AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_REPORTE_COORDINADOR 
 					+ "?claveEmpleado=" + cve_m_usuario + "&nombre=" + nombre + "&paterno=" + paterno + "&materno=" + materno + "&nivel=" + nivel
 					+ "&tipo=" + tipo + "&estado=" + estado + "&inicio=" + fechaInicial + "&fin=" + fechaFinal + "&unidad=" + unidadAdministrativa
-					+ "&permisos=" + permisos + "&cveCoordinador=" + cveCoordinador);
+					+ permisos + "&cveCoordinador=" + cveCoordinador);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

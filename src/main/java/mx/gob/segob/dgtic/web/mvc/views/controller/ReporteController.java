@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
+import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.util.Excel;
 
 /**
@@ -32,9 +33,14 @@ public class ReporteController {
 	@Autowired
 	private AsistenciaService asistenciaService;
 	
+	@Autowired
+	private CatalogoService catalogoService;
+	
 	@RequestMapping(value={"inicioDireccion"}, method = RequestMethod.GET)
     public String inicioReporteDireccion(Model model) {
 		
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
 		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
@@ -44,6 +50,8 @@ public class ReporteController {
 	@RequestMapping(value={"inicioCoordinador"}, method = RequestMethod.GET)
     public String inicioReporteCoordinador(Model model) {
 		
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
 		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
@@ -53,11 +61,13 @@ public class ReporteController {
 	//DIRECCIÓN
 	@RequestMapping(value={"reporteDireccion"}, method = RequestMethod.GET, params="busca")
     public String reporteDireccion(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
-    		String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos) {
+    		Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cve_m_usuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos);
 		
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
 		model.addAttribute("listaAsistencia", listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -95,7 +105,7 @@ public class ReporteController {
 	
 	@RequestMapping(value={"reporteDireccion"}, method = RequestMethod.GET, params="exporta")
     public ModelAndView exportaReporteDireccion(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
-    		String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
+    		Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
     		HttpServletResponse response) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cve_m_usuario, nombre, paterno, materno, 
@@ -160,11 +170,13 @@ public class ReporteController {
 	//COORDINADOR
 	@RequestMapping(value={"reporteCoordinador"}, method = RequestMethod.GET, params="busca")
     public String reporteCoordinador(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
-    		String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
+    		Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cve_m_usuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos);
 		
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
 		model.addAttribute("listaAsistencia", listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -202,7 +214,7 @@ public class ReporteController {
 	
 	@RequestMapping(value={"reporteCoordinador"}, method = RequestMethod.GET, params="exporta")
     public ModelAndView exportaReporteCoordinador(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
-    		String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
+    		Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
     		HttpServletResponse response, Authentication authentication) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cve_m_usuario, nombre, paterno, materno, 

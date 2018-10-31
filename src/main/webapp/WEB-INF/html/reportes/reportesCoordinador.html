@@ -64,7 +64,7 @@
 								<div class="card">
 								
 									<div class="asistenciaForm form-group">
-										<form id="buscarRango" th:action="@{/reportes/reporteDireccion}" method="get">
+										<form id="buscarRango" th:action="@{/reportes/reporteCoordinador}" method="get">
 											<div class="row">	
 												<div class="col-md-12">
 													<div class="row">	
@@ -95,13 +95,19 @@
 														<div class="col-md-2">
 															<label>
 																<p>Nivel</p>
-																<input th:value="${nivel}" type="text" class="form-control input-flag" id="nivel" name="nivel" />
+																<select class="form-control" name="nivel" th:autocomplete="off" >
+													            	<option></option>
+													            	<option id="nivel" th:each="n : ${listaNivel}" th:text="${n.nivel}" th:value="${n.nivel}" th:selected="${nivel == n.nivel}"></option>
+													            </select>
 															</label>
 														</div>
 														<div class="col-md-4">
 															<label>
 																<p>Tipo</p>
-																<input th:value="${tipo}" type="text" class="form-control input-flag" id="tipo" name="tipo" />
+																<select class="form-control" name="tipo" th:autocomplete="off" >
+													            	<option></option>
+													            	<option id="tipo" th:each="t : ${listaTipo}" th:text="${t.nombre}" th:value="${t.idTipoDia}" th:selected="${tipo == t.idTipoDia}"></option>
+													            </select>
 															</label>
 														</div>
 														<div class="col-md-2">

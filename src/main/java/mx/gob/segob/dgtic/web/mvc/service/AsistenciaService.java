@@ -14,10 +14,10 @@ public interface AsistenciaService {
 	public List<Asistencia> buscaAsistenciaEmpleadoRango (String claveEmpleado, String fechaInicio, String fechaFin);
 	
 	public List<Asistencia> buscaAsistenciaEmpleadoRangoCoordinador (String cve_m_usuario, String nombre, String paterno, 
-    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String cveCoordinador);
+    		String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String cveCoordinador);
 	
 	public List<Asistencia> buscaAsistenciaEmpleadoRangoDireccion (String cve_m_usuario, String nombre, String paterno, 
-    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa);
+    		String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa);
 	
 	public Asistencia buscaAsistenciaPorId(Integer id);
 	public Integer creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador);
@@ -28,8 +28,8 @@ public interface AsistenciaService {
 	public reporte formatoDescuento(FormatoIncidencia formatoIncidencia);
 	
 	public List<Asistencia> buscaAsistenciaDireccionReporte (String cve_m_usuario, String nombre, String paterno, 
-    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos);
+    		String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos);
 	
 	public List<Asistencia> buscaAsistenciaCoordinadorReporte (String cve_m_usuario, String nombre, String paterno, 
-    		String materno, String nivel, String tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String cveCoordinador, String[] permisos);
+    		String materno, String nivel, Integer tipo, String estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String cveCoordinador, String[] permisos);
 }
