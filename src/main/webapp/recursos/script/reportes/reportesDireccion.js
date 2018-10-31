@@ -1,11 +1,66 @@
 $(document).ready(function() {
 	
-	$("#buscarText").on("keyup", function() {
-	    var value = $(this).val().toLowerCase();
-	    $("#tableHorarios tr").filter(function() {
-	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-	    });
-	  });
+	$("#tipo").click(function() {
+		if(!$('#tipo').val()) { 
+			$("#checkVacacion").attr("disabled", false);
+			$("#checkComision").attr("disabled", false);
+			$("#checkLicencia").attr("disabled", false);
+			$("#checkDescuento").attr("disabled", false);
+		} else {
+			$("#checkVacacion").attr("disabled", true);
+			$("#checkComision").attr("disabled", true);
+			$("#checkLicencia").attr("disabled", true);
+			$("#checkDescuento").attr("disabled", true);
+		}
+	});
+	
+	$("#checkVacacion").click(function() {
+		if ($("#checkVacacion").is(':checked') || 
+			$("#checkComision").is(':checked') || 
+			$("#checkLicencia").is(':checked') || 
+			$("#checkDescuento").is(':checked')) {
+			
+    		$("#tipo").attr("disabled", true);
+		} else {
+			$("#tipo").attr("disabled", false);
+		}
+	});
+	
+	$("#checkComision").click(function() {
+		if ($("#checkVacacion").is(':checked') ||
+			$("#checkComision").is(':checked') || 
+			$("#checkLicencia").is(':checked') || 
+			$("#checkDescuento").is(':checked')) {
+			
+    		$("#tipo").attr("disabled", true);
+		} else {
+			$("#tipo").attr("disabled", false);
+		}
+	});
+	
+	$("#checkLicencia").click(function() {
+		if ($("#checkVacacion").is(':checked') ||
+			$("#checkComision").is(':checked') || 
+			$("#checkLicencia").is(':checked') || 
+			$("#checkDescuento").is(':checked')) {
+			
+    		$("#tipo").attr("disabled", true);
+		} else {
+			$("#tipo").attr("disabled", false);
+		}
+	});
+	
+	$("#checkDescuento").click(function() {
+		if ($("#checkVacacion").is(':checked') ||
+			$("#checkComision").is(':checked') || 
+			$("#checkLicencia").is(':checked') || 
+			$("#checkDescuento").is(':checked')) {
+			
+    		$("#tipo").attr("disabled", true);
+		} else {
+			$("#tipo").attr("disabled", false);
+		}
+	});
 	
     //fechas datepicker
     $('#validBeforeDatepicker,#validAfterDatepicker, #fecha').datepicker({
