@@ -14,33 +14,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Comision;
 import mx.gob.segob.dgtic.web.mvc.dto.ComisionAux;
-import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
-import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.GenerarReporteArchivoComision;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
-import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
 import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
-import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
-import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
-import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
-import mx.gob.segob.dgtic.web.mvc.dto.VacacionesAux;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.ComisionService;
@@ -270,15 +258,14 @@ public class ComisionesController {
     if (idResponsable != null && !idResponsable.trim().isEmpty()) {
       idResponsableAux = Integer.parseInt(idResponsable);
     }
-
-    LocalDateTime now = LocalDateTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+    Calendar now = Calendar.getInstance();
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+   
     System.out.println(
         "Datos claveUsuario " + claveUsuario + " responsable " + idResponsable + " fechaInicio "
             + fechaInicio + " fechaFin " + fechaFin + " dias " + dias + " comision " + comision);
     comisionService.agregarComision(new ComisionAux(null, null, idResponsableAux, null, null,
-        fechaInicio, fechaFin, dias, comision, now.format(formatter), Integer.valueOf(idHorario)), claveUsuario);
+        fechaInicio, fechaFin, dias, comision, df.format(now), Integer.valueOf(idHorario)), claveUsuario);
 
     return "redirect:/comisiones/solicitudComision";
 
@@ -455,9 +442,9 @@ public class ComisionesController {
    * @return
    */
   private String obtenerFechaActual() {
-    LocalDateTime now = LocalDateTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    return now.format(formatter);
+    Calendar now = Calendar.getInstance();
+    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+    return df.format(now);
   }
 
 }
