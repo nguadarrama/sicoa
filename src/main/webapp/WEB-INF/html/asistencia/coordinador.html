@@ -223,8 +223,9 @@
 														<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
 													</td> 
 													<td> 
-														<span th:if="${(asistencia.idTipoDia.idTipoDia != 1 and asistencia.idTipoDia.idTipoDia != 5 and asistencia.idTipoDia.idTipoDia != 7 
-																		and asistencia.idTipoDia.idTipoDia != 8) and asistencia.idEstatus.idEstatus != 2 and asistencia.idEstatus.idEstatus != 3}">
+														<span th:if="${(asistencia.idTipoDia.idTipoDia != 1 and asistencia.idTipoDia.idTipoDia != 5 and asistencia.idTipoDia.idTipoDia != 6 
+																		and asistencia.idTipoDia.idTipoDia != 7 and asistencia.idTipoDia.idTipoDia != 9) 
+																		and asistencia.idEstatus.idEstatus != 2 and asistencia.idEstatus.idEstatus != 3}">
 															<a th:href="@{/asistencia/buscaId/(id=${asistencia.idAsistencia})}" class="detalleBtn">Ver Detalle</a>
 														</span>
 													</td>
@@ -347,7 +348,7 @@
 									        <div class="form-group col-md-4">
 										        <label>
 													<p style="text-align: left">Adjuntar Archivo</p>
-													 <input type="file" name="archivo" id="archivo" multiple="multiple" />
+													 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" />
 												</label>
 										    </div>
 										    
@@ -443,7 +444,7 @@
 						        <div class="form-group col-md-4">
 							        <label>
 										<p>Adjuntar Archivo</p>
-										 <input type="file" name="archivo" id="archivo" multiple="multiple" />
+										 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" />
 									</label>
 							    </div>
 							    
@@ -532,14 +533,10 @@
 						        <div class="form-group col-md-4">
 							        <label>
 										<p>Adjuntar Archivo</p>
-										 <input type="file" name="archivo" id="archivo" multiple="multiple" />
+										 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" />
 									</label>
 							    </div>
 							    
-							    <div class="form-group col-md-4">
-									<a id="linkArchivo">Ver Archivo</a>
-						        </div>
-						        
 						        <input type="hidden" class="form-control" id="idAsistenciaHidden" name="idAsistenciaHidden" />
 						        <input type="hidden" class="form-control" id="idTipoDia" name="idTipoDia"/>
 						        <input type="hidden" class="form-control" id="numeroEmpleadoHidden" name="cve_m_usuario_hidden"/>
@@ -610,7 +607,7 @@
 						        <div class="form-group col-md-4">
 							        <label>
 										<p>Adjuntar Archivo</p>
-										 <input type="file" name="archivo" id="archivo" multiple="multiple" th:required="required" />
+										 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" th:required="required" />
 									</label>
 							    </div>
 							    

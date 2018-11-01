@@ -34,7 +34,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
-import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
@@ -251,19 +250,21 @@ public class AsistenciaController  {
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="justifica")
     public String creaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String nombreAutorizador) {
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivoSubido, String cve_m_usuario, String nombreAutorizador) {
     	
     	Integer resultadoProceso = 0;
-    	Integer idArchivo = null;
+    	Archivo archivo = null;
     	
     	try {
     		//guarda el archivo
-    		if (archivo.getSize() > 0) {
-    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, "asistencia_justificacion", "justificacion-");
+    		if (archivoSubido.getSize() > 0) {
+    			archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "asistencia_justificacion", "justificacion-");
     		}
     		
-    		//crea la incidencia y asocia el archivo
-    		resultadoProceso = asistenciaService.creaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
+    		if (archivo != null) {
+	    		//crea la incidencia y asocia el archivo
+	    		resultadoProceso = asistenciaService.creaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, archivo.getIdArchivo(), nombreAutorizador);
+    		} 
 
     	} catch(Exception e) {
     		new Exception("No se logró crear la incidencia " + e.getMessage());
@@ -299,19 +300,21 @@ public class AsistenciaController  {
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="descuenta")
     public String creaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivo, String cve_m_usuario, String nombreAutorizador) {
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivoSubido, String cve_m_usuario, String nombreAutorizador) {
     	
     	Integer resultadoProceso = 0;
-    	Integer idArchivo = null;
+    	Archivo archivo = null;
     	
     	try {
     		//guarda el archivo
-    		if (archivo.getSize() > 0) {
-    			idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario_hidden, "asistencia_descuento" , "descuento-");
+    		if (archivoSubido.getSize() > 0) {
+    			archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "asistencia_descuento" , "descuento-");
     		}
     		
-    		//crea la petición de descuento y asocia el archivo
-    		resultadoProceso = asistenciaService.creaDescuento(idAsistenciaHidden, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
+    		if (archivo != null) {
+	    		//crea la petición de descuento y asocia el archivo
+	    		resultadoProceso = asistenciaService.creaDescuento(idAsistenciaHidden, idTipoDia, idJustificacion, archivo.getIdArchivo(), nombreAutorizador);
+    		} 
 
     	} catch(Exception e) {
     		new Exception("No se logró crear la incidencia " + e.getMessage());
@@ -537,11 +540,11 @@ public class AsistenciaController  {
     }
     
     @RequestMapping(value={"coordinador/justificaMultiple"}, method = RequestMethod.POST, params = "justificacionMultipleGuarda")
-    public String creaIncidencias(Model model, Integer[] listaIdAsistencias, MultipartFile archivo, Integer selectJustificacion, String nombreAutorizador,
+    public String creaIncidencias(Model model, Integer[] listaIdAsistencias, MultipartFile archivoSubido, Integer selectJustificacion, String nombreAutorizador,
     		String cve_m_usuario_hidden_guarda_multiple, String fechaInicial_hidden_guarda_multiple, String fechaFinal_hidden_guarda_multiple, Authentication authentication) {
 
     	Integer resultadoProceso = 0;
-    	Integer idArchivo = null;
+    	Archivo archivo = null;
     	Integer idJustificacion = selectJustificacion;
     	
     	for (Integer idAsistencia : listaIdAsistencias) {
@@ -551,13 +554,13 @@ public class AsistenciaController  {
     		
     		try {
         		//guarda el archivo
-        		if (archivo.getSize() > 0) {
-        			if (idArchivo == null) {
-        				idArchivo = archivoService.guardaArchivo(archivo, cve_m_usuario, "asistencia_justificacion", "justificacion-");
-        			}
+        		if (archivoSubido.getSize() > 0) {
+    				archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "asistencia_justificacion", "justificacion-");
         			
-        			//crea la incidencia y asocia el archivo
-            		resultadoProceso = asistenciaService.creaIncidencia(idAsistencia, idTipoDia, idJustificacion, idArchivo, nombreAutorizador);
+    				if (archivo != null) {
+	        			//crea la incidencia y asocia el archivo
+	            		resultadoProceso = asistenciaService.creaIncidencia(idAsistencia, idTipoDia, idJustificacion, archivo.getIdArchivo(), nombreAutorizador);
+    				}
         		}
         	} catch(Exception e) {
         		new Exception("No se logró crear la incidencia " + e.getMessage());
