@@ -1031,7 +1031,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 		HttpResponse response;
 		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_DIA_FESTIVO);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_DIA_FESTIVO_ACTIVO);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

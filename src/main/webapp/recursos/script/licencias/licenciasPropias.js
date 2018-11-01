@@ -7,11 +7,21 @@ $(document).ready(function() {
 	$("#fechaInicio").datepicker({ 
 		dateFormat: 'yy-mm-dd',
 	       beforeShowDay: $.datepicker.noWeekends,
+	       onSelect: function() 
+	       { 
+	    	   var maxDate = $('#fechaInicio').datepicker('getDate');
+		        $("#fechaFin").datepicker("change", { minDate: maxDate });
+	       },
 	      
 	   });
 	$("#fechaFin").datepicker({ 
 			dateFormat: 'yy-mm-dd',
 	       beforeShowDay: $.datepicker.noWeekends,
+	       onSelect: function() 
+	       { 
+	    	   var maxDate = $('#fechaFin').datepicker('getDate');
+		        $("#fechaInicio").datepicker("change", { maxDate: maxDate });
+	       },
 	   });
 	$("#mostrarTabla").on('click', function(event){
 		event.preventDefault();

@@ -249,6 +249,22 @@ public class LicenciasMedicasController {
     	String claveUsuario = parts[1];
     	System.out.println("recuperando datos "+claveUsuario);
 		hmap.put("usuario",usuarioService.buscaUsuario(claveUsuario));
+		System.out.println("recuperando datos "+claveUsuario);
+		hmap.put("usuario",usuarioService.buscaUsuario(claveUsuario));
+		String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
+		String fechas=licenciaMedicaService.consultaDiasPorBloquear(claveUsuario);
+		if(!fechas.isEmpty() && fechas!=null){
+    		if(!cadena.isEmpty() && cadena!=null){
+    			cadena+=","+fechas;
+    		}else{
+    			cadena=fechas;
+    		}
+    	}
+		Periodo periodo= new Periodo();
+		periodo.setMensaje(cadena);
+		hmap.put("periodo",periodo);
+		
+		hmap.put("valores", licenciaMedicaService.buscaDiasLicenciaMedica(claveUsuario));
 		
     	//return "/licenciasMedicas/solicitudLicencia";
 		//hmap.put("licencia",licenciaMedicaService.buscaLicenciaMedica(idLicencia));
@@ -271,12 +287,23 @@ public class LicenciasMedicasController {
 //    	String claveUsuario = parts[1];
     	System.out.println("recuperando datos "+claveUsuario);
 		hmap.put("usuario",usuarioService.buscaUsuario(claveUsuario));
-//		String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
-//		Periodo periodo= new Periodo();
-//		periodo.setMensaje(cadena);
-//		hmap.put("periodo",periodo);
+		String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
+		String fechas=licenciaMedicaService.consultaDiasPorBloquear(claveUsuario);
+		if(!fechas.isEmpty() && fechas!=null){
+    		if(!cadena.isEmpty() && cadena!=null){
+    			cadena+=","+fechas;
+    		}else{
+    			cadena=fechas;
+    		}
+    	}
+		Periodo periodo= new Periodo();
+		periodo.setMensaje(cadena);
+		hmap.put("periodo",periodo);
+		System.out.println("claveUsuario para la consulta "+claveUsuario);
+		hmap.put("valores", licenciaMedicaService.buscaDiasLicenciaMedica(claveUsuario));
     	//return "/licenciasMedicas/solicitudLicencia";
 		//hmap.put("licencia",licenciaMedicaService.buscaLicenciaMedica(idLicencia));
+		licenciaMedicaService.consultaDiasPorBloquear(claveUsuario);
     	return hmap;
     }
 	
@@ -294,7 +321,7 @@ public class LicenciasMedicasController {
 	@PostMapping("/actualizaArchivo")
     public String registraVacaciones(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idLicencia ){
     	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario+" idLicencia "+idLicencia);
-    	Integer idArchivoAux=null;
+    	Archivo idArchivoAux=new Archivo();
     	LicenciaMedica licencia= new LicenciaMedica();
     	//Vacaciones vacaciones= new Vacaciones();
     	Archivo archivoDto=new Archivo();
@@ -312,7 +339,7 @@ public class LicenciasMedicasController {
 	    		//archivoDto.setIdArchivo(idArchivoAux);
 	    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "licenciasMedicas","licenciaMedica-");
 	    		System.out.println("IDArchivo recuperado "+idArchivoAux);
-	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivoAux,1,null,null,null,null), claveUsuario);
+	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivoAux.getIdArchivo(),1,null,null,null,null), claveUsuario);
 	    		//vacaciones.setIdArchivo(archivoDto);
 	    		//vacacionesService.modificaVacaciones(vacaciones);
 	    	}

@@ -13,30 +13,82 @@ $(document).ready(function() {
 	$("#fechaInicio").datepicker({ 
 		minDate: '-1m',
 		maxDate:'1m',
-	       beforeShowDay: $.datepicker.noWeekends,
+	       beforeShowDay: function(date){ 
+	    	   var array =$("#listaDiasFestivos").val();
+	    		//alert("LLegada "+array);
+	    		var disableddates=array.split(",");
+				show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
+				//No Weekends 
+				for (var i = 0; i < disableddates.length; i++) {
+					if (new Date(disableddates[i]).toString() == date.toString()) {
+						show = false;
+						}
+				//No Holidays 
+				} var display = [show,'',(show)?'':'Día no disponible por una de las siguientes razones: día festivo, fin de semana o vacaciones'];
+				//With Fancy hover tooltip! 
+				return display; 
+				},
 	       onSelect: function() 
 	       { 
 	    	   calcularDias();
+	    	   var maxDate = $('#fechaInicio').datepicker('getDate');
+		        $("#fechaFin").datepicker("change", { minDate: maxDate });
 	       },
 	   });
 	$("#fechaFin").datepicker({ 
 		minDate: '-1m',
 		maxDate:'1m',
-	       beforeShowDay: $.datepicker.noWeekends,
+	       beforeShowDay: function(date){ 
+	    	   var array =$("#listaDiasFestivos").val();
+	    		//alert("LLegada "+array);
+	    		var disableddates=array.split(",");
+				show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
+				//No Weekends 
+				for (var i = 0; i < disableddates.length; i++) {
+					if (new Date(disableddates[i]).toString() == date.toString()) {
+						show = false;
+						}
+				//No Holidays 
+				} var display = [show,'',(show)?'':'Día no disponible por una de las siguientes razones: día festivo, fin de semana o vacaciones'];
+				//With Fancy hover tooltip! 
+				return display; 
+				},
 	       onSelect: function() 
 	       { 
 	    	   calcularDias();
+	    	   var maxDate = $('#fechaFin').datepicker('getDate');
+		        $("#fechaInicio").datepicker("change", { maxDate: maxDate });
 	       },
 	   });
 	function diasLibres(dateFrom, dateTo) {
+		var array =$("#listaDiasFestivos").val();
+		//alert("LLegada "+array);
+		var disableddates=array.split(",");
 		  var from = moment(dateFrom, 'DD/MM/YYY'),
 		    to = moment(dateTo, 'DD/MM/YYY'),
 		    days = 0;
-		    
 		  while (!from.isAfter(to)) {
 		    // Si no es sabado ni domingo
 		    if (from.isoWeekday() !== 6 && from.isoWeekday() !== 7) {
-		      days++;
+		    	var bandera=false;
+		    	for (var i = 0; i < disableddates.length; i++) {
+		    		//alert(disableddates[i]+" ");
+		    		var nueva = moment(disableddates[i], 'MM-DD-YYY');
+		    		var nueva1=nueva.toString();
+		    		var from1=from.toString();
+					if (nueva1 === from1) {
+						//alert("dias que cumplen "+nueva+" "+from);
+						bandera=true;
+						}else{
+							//alert("dias que no cumplen "+nueva+" "+from);
+						}
+				}
+		      if(bandera==true){
+		    	  //alert("dia que cumplen "+days);
+		      }else{
+		    	  days++;
+		    	  //alert("dia que no cumplen "+days);
+		      }
 		    }
 		    from.add(1, 'days');
 		  }
@@ -92,7 +144,6 @@ $(document).ready(function() {
 		var href = $(this).attr('href');
 	 	var text = $(this).text();
 		$.get(href, function(hmap, status) {
-			//alert(hmap.usuario.fechaIngreso)
 			$(".actualizaLicencia #nombre").val(hmap.usuario.nombre);
 			$(".actualizaLicencia #apellidoPaterno").val(hmap.usuario.apellidoPaterno);
 			$(".actualizaLicencia #apellidoMaterno").val(hmap.usuario.apellidoMaterno);
@@ -100,11 +151,10 @@ $(document).ready(function() {
 			$(".actualizaLicencia #apellidoMaterno").val(hmap.usuario.apellidoMaterno);
 			$(".actualizaLicencia #idPuesto").val(hmap.usuario.idPuesto);
 			$(".actualizaLicencia #rfc").val(hmap.usuario.rfc);
-			//$(".actualizaLicencia #fechaInicio1").val(hmap.licencia.fechaInicio);
-			//$(".actualizaLicencia #fechaInicio2").val(hmap.licencia.fechaInicio);
-			//$(".actualizaLicencia #fechaFin1").val(hmap.licencia.fechaFin);
-			//$(".actualizaLicencia #fechaFin2").val(hmap.licencia.fechaFin);
+			$(".actualizaLicencia #listaDiasFestivos").val(hmap.periodo.mensaje);
 			$(".actualizaLicencia #idUnidadAdministrativa").val(hmap.usuario.nombreUnidad);
+			$(".actualizaLicencia #licenciasOtorgadas").val(hmap.valores.totalLicencias);
+			$(".actualizaLicencia #diasTotales").val(hmap.valores.diasTotales);
 			var today = new Date();
 			var dd = today.getDate();
 			var mm = today.getMonth()+1; //January is 0!
@@ -118,20 +168,6 @@ $(document).ready(function() {
 			} 
 			var today = dd+'-'+mm+'-'+yyyy;
 			$(".actualizaLicencia #idSolicitud").val(today);
-//			var str=;
-//			str.replace(",","");
-//			var today = new Date(str);
-//			var dd = today.getDate();
-//			var mm = today.getMonth()+1; //January is 0!
-//
-//			var yyyy = today.getFullYear();
-//			if(dd<10){
-//			    dd='0'+dd;
-//			} 
-//			if(mm<10){
-//			    mm='0'+mm;
-//			} 
-//			var today = dd+'-'+mm+'-'+yyyy;
 			$(".actualizaLicencia #fechaIngreso").val(hmap.usuario.fechaIngreso);
 			
 			
@@ -148,6 +184,7 @@ $(document).ready(function() {
 	 	var href = $(this).attr('href');
 	 	var text = $(this).text();
 		$.get(href, function(hmap, status) {
+			//alert(hmap.periodo.mensaje);
 			$(".actualizaLicencia #nombre").val(hmap.usuario.nombre);
 			$(".actualizaLicencia #apellidoPaterno").val(hmap.usuario.apellidoPaterno);
 			$(".actualizaLicencia #apellidoMaterno").val(hmap.usuario.apellidoMaterno);
@@ -155,7 +192,9 @@ $(document).ready(function() {
 			$(".actualizaLicencia #apellidoMaterno").val(hmap.usuario.apellidoMaterno);
 			$(".actualizaLicencia #idPuesto").val(hmap.usuario.idPuesto);
 			$(".actualizaLicencia #rfc").val(hmap.usuario.rfc);
-			//$(".actualizaLicencia #listaDiasFestivos").val(hmap.periodo.mensaje);
+			$(".actualizaLicencia #licenciasOtorgadas").val(hmap.valores.totalLicencias);
+			$(".actualizaLicencia #diasTotales").val(hmap.valores.diasTotales);
+			$(".actualizaLicencia #listaDiasFestivos").val(hmap.periodo.mensaje);
 			$(".actualizaLicencia #idUnidadAdministrativa").val(hmap.usuario.nombreUnidad);
 			var today = new Date();
 			var dd = today.getDate();

@@ -30,6 +30,7 @@ import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
+import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
@@ -41,13 +42,14 @@ public class ArchivoServiceImpl implements ArchivoService{
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
 	@Override
-	public Integer guardaArchivo(MultipartFile archivo, String claveUsuario, String accion, String nombreArchivo) {
+	public Archivo guardaArchivo(MultipartFile archivo, String claveUsuario, String accion, String nombreArchivo) {
 		HttpResponse response;
 		Archivo archivoResponse = null;
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		Archivo archivoDto = new Archivo();
+		Archivo archivoRespuesta = new Archivo();
 		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
@@ -94,17 +96,20 @@ public class ArchivoServiceImpl implements ArchivoService{
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
-			archivoResponse = gson.fromJson(dataJson, Archivo.class);		
-			
-		} 
-		
-		return archivoResponse.getIdArchivo();
+			archivoRespuesta = gson.fromJson(dataJson, Archivo.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al actualizar archivo : "+response.getStatusLine().getReasonPhrase());
+		}
+		return archivoRespuesta;
 	}
 
 	@Override
-	public void actualizaArchivo(MultipartFile archivo, String claveUsuario, String accion, Integer idArchivo,String nombreArchivo) {
+	public Archivo actualizaArchivo(MultipartFile archivo, String claveUsuario, String accion, Integer idArchivo,String nombreArchivo) {
 		HttpResponse response;
-		
+		Archivo archivoRespuesta = new Archivo();
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		Archivo archivoDto = new Archivo();
@@ -152,10 +157,19 @@ public class ArchivoServiceImpl implements ArchivoService{
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		
-		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {		
+
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
 			
-		} 
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			archivoRespuesta = gson.fromJson(dataJson, Archivo.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al actualizar archivo : "+response.getStatusLine().getReasonPhrase());
+		}
+		return archivoRespuesta;
 		
 	}
 

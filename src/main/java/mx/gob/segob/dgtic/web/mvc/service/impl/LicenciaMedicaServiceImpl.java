@@ -1,7 +1,11 @@
 package mx.gob.segob.dgtic.web.mvc.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -269,6 +273,106 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
 		}
 		return licenciaMedicaRespuesta;
+	}
+
+	@Override
+	public LicenciaMedica buscaDiasLicenciaMedica(String claveUsuario) {
+		LicenciaMedica licencia = new LicenciaMedica();
+		HttpResponse response;
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_DIAS_LICENCIA + "?claveUsuario=" + claveUsuario);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			licencia = gson.fromJson(dataJson, LicenciaMedica.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener vacaciones : "+response.getStatusLine().getReasonPhrase());
+		}
+		return licencia;
+	}
+
+	@Override
+	public String consultaDiasPorBloquear(String claveUsuario) {
+		List<LicenciaMedica> listaLicencias = new ArrayList<>();
+		HttpResponse response;
+		String apellidoPaterno="";
+		String apellidoMaterno="";
+		String idUnidad="";
+		String nombre="";
+		String idEstatus="";
+		try{
+			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_EMPLEADOS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&nombre="+nombre
+					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonArray dataJson = json.getAsJsonArray("data");
+			listaLicencias = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<LicenciaMedica>>(){}.getType());
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		String listaFechas="";
+		SimpleDateFormat sdfnuevo = new SimpleDateFormat("dd-MM-yyyy");
+		for(LicenciaMedica licenciaMedica: listaLicencias){
+			System.out.println("fechaInicio "+licenciaMedica.getFechaInicio()+" fechaFin "+licenciaMedica.getFechaFin());
+			Date fechaInicio=null;
+			Date fechaFin=null;
+			try{
+				fechaInicio=sdfnuevo.parse(licenciaMedica.getFechaInicio());
+			 fechaFin=sdfnuevo.parse(licenciaMedica.getFechaFin());
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			Calendar c1 = Calendar.getInstance();
+			//System.out.println("Fechas fecha inicial "+detalleVacacionDto.getFechaInicio()+" fecha final "+detalleVacacionDto.getFechaFin());
+		    c1.setTime(fechaInicio);
+		    Calendar c2 = Calendar.getInstance();
+		    c2.setTime(fechaFin);
+		    List<Date> listaFechasAux = new ArrayList<Date>();
+		    while (!c1.after(c2)) {
+		        listaFechasAux.add(c1.getTime());
+		        c1.add(Calendar.DAY_OF_MONTH, 1);
+		    }
+		    SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+		    String fecha=null;
+		    for (Iterator<Date> it = listaFechasAux.iterator(); it.hasNext();) {
+		        Date date = it.next();
+		        fecha = sdf1.format(date);
+		        listaFechas+=""+fecha+",";
+		    }
+			    
+		}
+			if(!listaFechas.isEmpty() && listaFechas!=null){
+			listaFechas=listaFechas.substring(0, (listaFechas.length()- 1));
+			}
+			System.out.println("Fecha de fechas desde el array "+listaFechas);
+		
+		//return listaFechas;
+		return listaFechas;
 	}
 
 }

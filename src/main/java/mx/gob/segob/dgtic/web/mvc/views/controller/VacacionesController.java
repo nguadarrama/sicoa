@@ -520,42 +520,43 @@ public class VacacionesController {
     @PostMapping("/vacacion/actualizaArchivo")
     public String registraVacaciones(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idDetalle ){
     	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario);
-    	Integer idArchivoAux=null;
+    	Archivo idArchivoAux=new Archivo();
     	Vacaciones vacaciones= new Vacaciones();
     	Archivo archivoDto=new Archivo();
     	vacaciones.setIdDetalle(idDetalle);
     	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
-    		archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo,"vacacion-");
+    		idArchivoAux=archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo,"vacacion-");
     		archivoDto.setIdArchivo(idArchivo);
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones);
     	}else{
     		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones","vacacion-");
-    		archivoDto.setIdArchivo(idArchivoAux);
+    		archivoDto.setIdArchivo(idArchivoAux.getIdArchivo());
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones);
     	}
-    	this.mensaje=archivoDto.getMensaje();
+    	this.mensaje=idArchivoAux.getMensaje();
     	return"redirect:/vacaciones/vacacionesPropias";
     	}
     @PostMapping("/vacacion/actualizaArchivoEmpleado")
     public String registraVacacionesEmpleado(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idDetalle ){
     	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario+" idDetalle "+idDetalle);
-    	Integer idArchivoAux=null;
+    	Archivo idArchivoAux=new Archivo();
     	Vacaciones vacaciones= new Vacaciones();
     	Archivo archivoDto=new Archivo();
     	vacaciones.setIdDetalle(idDetalle);
     	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
-    		archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo,"vacacion-");
+    		idArchivoAux=archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo,"vacacion-");
     		archivoDto.setIdArchivo(idArchivo);
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones);
     	}else{
     		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones","vacacion-");
-    		archivoDto.setIdArchivo(idArchivoAux);
+    		archivoDto.setIdArchivo(idArchivoAux.getIdArchivo());
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones);
     	}
+    	this.mensaje=idArchivoAux.getMensaje();
     	return"redirect:/vacaciones/vacacionesEmpleados";
     	}
     
@@ -568,7 +569,9 @@ public class VacacionesController {
     	usuario.setIdUsuario(Integer.parseInt(idUsuario));
     	Estatus estatus= new Estatus();
         estatus.setIdEstatus(3);
+        Vacaciones vacaciones= new Vacaciones();
     	vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), idSolicitud);
+    	this.mensaje=vacaciones.getMensaje();
     	return "redirect:/vacaciones/vacacionesEmpleados";
     }
     

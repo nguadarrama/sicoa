@@ -16,4 +16,6 @@ public interface LicenciaMedicaService {
 	public List<LicenciaMedica> obtenerLicenciasPorUnidad(String idUnidad, String claveUsuario, String nombre, String apellidoPaterno, 
 			String apellidoMaterno);
 	public LicenciaMedica modificaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario);
+	public LicenciaMedica buscaDiasLicenciaMedica(String claveUsuario);
+	public String consultaDiasPorBloquear(String claveUsuario);
 }

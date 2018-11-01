@@ -42,6 +42,8 @@ $(document).ready(function() {
 		onSelect: function() 
 	       { 
 	    	   calcularDias();
+	    	   var maxDate = $('#fechaInicio').datepicker('getDate');
+		        $("#fechaFin").datepicker("change", { minDate: maxDate });
 	       },
 	})
 	$("#fechaFin").datepicker({ 
@@ -61,6 +63,8 @@ $(document).ready(function() {
 		onSelect: function() 
 	       { 
 	    	   calcularDias();
+	    	   var maxDate = $('#fechaFin').datepicker('getDate');
+		        $("#fechaInicio").datepicker("change", { maxDate: maxDate });
 	       },
 		   })
 //	  function DisableSpecificDates(date) {
@@ -101,11 +105,21 @@ $(document).ready(function() {
 		
 		$("#fechaInicioBusca1").datepicker({
 				dateFormat: 'yy-mm-dd',
-		       beforeShowDay: $.datepicker.noWeekends 
+		       beforeShowDay: $.datepicker.noWeekends,
+		       onSelect: function() 
+		       { 
+		    	   var maxDate = $('#fechaInicioBusca1').datepicker('getDate');
+			        $("#fechaFinBusca1").datepicker("change", { minDate: maxDate });
+		       },
 		   });
 		$("#fechaFinBusca1").datepicker({ 
 			dateFormat: 'yy-mm-dd',
-		       beforeShowDay: $.datepicker.noWeekends 
+		       beforeShowDay: $.datepicker.noWeekends,
+		       onSelect: function() 
+		       { 
+		       var maxDate = $('#fechaFinBusca1').datepicker('getDate');
+        		$("#fechaInicioBusca1").datepicker("change", { maxDate: maxDate });
+		       },
 		   });
 //		$("#fechaInicio").datepicker({ 
 //			minDate: 1,

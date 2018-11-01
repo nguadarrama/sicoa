@@ -30,6 +30,8 @@ $(document).ready(function() {
 		onSelect: function() 
 	       { 
 	    	   calcularDias();
+	    	   var maxDate = $('#fechaInicio').datepicker('getDate');
+		        $("#fechaFin").datepicker("change", { minDate: maxDate });
 	       },
 	})
 	$("#fechaFin").datepicker({ 
@@ -50,6 +52,8 @@ $(document).ready(function() {
 		onSelect: function() 
 	       { 
 	    	   calcularDias();
+	    	   var maxDate = $('#fechaFin').datepicker('getDate');
+		        $("#fechaInicio").datepicker("change", { maxDate: maxDate });
 	       },
 		   })
 //	  function DisableSpecificDates(date) {
@@ -186,6 +190,7 @@ $(document).ready(function() {
 		});
 		
 		function diasLibres(dateFrom, dateTo) {
+			//alert(dateFrom)
 			  var from = moment(dateFrom, 'DD/MM/YYY'),
 			    to = moment(dateTo, 'DD/MM/YYY'),
 			    days = 0;
@@ -193,7 +198,27 @@ $(document).ready(function() {
 			  while (!from.isAfter(to)) {
 			    // Si no es sabado ni domingo
 			    if (from.isoWeekday() !== 6 && from.isoWeekday() !== 7) {
-			      days++;
+			    	var bandera=false;
+			    	for (var i = 0; i < disableddates.length; i++) {
+			    		//alert(disableddates[i]+" ");
+			    		var nueva = moment(disableddates[i], 'MM-DD-YYY');
+			    		var nueva1=nueva.toString();
+			    		var from1=from.toString();
+						if (nueva1 === from1) {
+							//alert("dias que cumplen "+nueva+" "+from);
+							bandera=true;
+							}else{
+								//alert("dias que no cumplen "+nueva+" "+from);
+								//days++;
+							}
+					//No Holidays 
+					}
+			      if(bandera==true){
+			    	  //alert("dia que cumplen "+days);
+			      }else{
+			    	  days++;
+			    	  //alert("dia que no cumplen "+days);
+			      }
 			    }
 			    from.add(1, 'days');
 			  }

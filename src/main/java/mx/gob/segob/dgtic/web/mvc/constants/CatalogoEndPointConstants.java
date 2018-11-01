@@ -98,6 +98,7 @@ public final class CatalogoEndPointConstants {
 		public static final String WEB_SERVICE_MODIFICA_DIA_FESTIVO = "/diaFestivo/modifica";
 		public static final String WEB_SERVICE_AGREGA_DIA_FESTIVO = "/diaFestivo/agrega";
 		public static final String WEB_SERVICE_ELIMINA_DIA_FESTIVO = "/diaFestivo/elimina";
+		public static final String WEB_SERVICE_INFO_DIA_FESTIVO_ACTIVO =  "/diaFestivo/obtieneDiasActivos";
 		
 		//PeriodoVacacion
 		public static final String WEB_SERVICE_OBTIENE_USUARIOS_VACACIONES = "/catalogo/obtenerUsuariosVacacionesPorFiltros";
