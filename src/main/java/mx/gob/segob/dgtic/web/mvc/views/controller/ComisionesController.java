@@ -495,7 +495,7 @@ public class ComisionesController {
     System.out.println("Datos archivo " + "" + " idArchivo " + idArchivo + " claveUsuario "
         + claveUsuario + " idComision " + idComisionArchivo);
     Comision comision = new Comision();
-    Integer idArchivoAux = null;
+    Archivo idArchivoAux = null;
     Archivo archivoDto = new Archivo();
     if (archivo != null && !archivo.isEmpty()) {
       if (idArchivo != null && !idArchivo.toString().isEmpty()) {
@@ -507,8 +507,8 @@ public class ComisionesController {
         // archivoDto.setIdArchivo(idArchivoAux);
         idArchivoAux =
             archivoService.guardaArchivo(archivo, claveUsuario, "comisiones", "comision-");
-        System.out.println("IDArchivo recuperado " + idArchivoAux);
-        comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo, null, null, idArchivoAux, 1, null, null, null, null, null, null), claveUsuario);
+        System.out.println("IDArchivo recuperado " + idArchivoAux.getIdArchivo());
+        comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo, null, null, idArchivoAux.getIdArchivo(), 1, null, null, null, null, null, null), claveUsuario);
       }
     }
     System.out.println("mensaje recuperado " + comision.getMensaje());
