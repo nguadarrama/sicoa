@@ -5,8 +5,52 @@ $(document).ready(function() {
 	    "scrollCollapse": true
 	  });
 
-	
+	$("#fechaInicio").datepicker({
+	format: 'dd-MM-yyyy',
+	beforeShowDay: $.datepicker.noWeekends,
+	minDate: '-0D',
+	maxDate: '12M',
+	zIndexOffset: 100000,
+	beforeShow: function () {
+        var $datePicker = $("#fechaInicio");
+        var zIndexModal = $datePicker.closest(".modal").css("z-index");
+        $datePicker.css("z-index", zIndexModal + 1);
+     },
+     onSelect: function() { 
+    	 var minDate = $('#fechaInicio').datepicker('getDate');
+	     $("#fechaFin").datepicker("change", { minDate: minDate });
+	 }   
+    }).attr('readonly', 'true').
+        keypress(function (event) {
+            if (event.keyCode == 8) {
+                event.preventDefault();
+            }
+        });
 
+	$("#fechaFin").datepicker({
+		format: 'dd-MM-yyyy',
+		beforeShowDay: $.datepicker.noWeekends,
+		minDate: '-0D',
+		maxDate: '12M',
+		zIndexOffset: 100000,
+		beforeShow: function () {
+	        var $datePicker = $("#fechaFin");
+	        var zIndexModal = $datePicker.closest(".modal").css("z-index");
+	        $datePicker.css("z-index", zIndexModal + 1);
+	     },
+	     onSelect: function() { 
+	    	 var maxDate = $('#fechaFin').datepicker('getDate');
+		     $("#fechaInicio").datepicker("change", { maxDate: maxDate });
+		 }   
+	    }).attr('readonly', 'true').
+	        keypress(function (event) {
+	            if (event.keyCode == 8) {
+	                event.preventDefault();
+	            }
+	        });
+
+	
+	
 	$('#tablePeriodos').on('click','.eBtn', function(event) { 					//botón edita
 		event.preventDefault();
 		var href = $(this).attr('href');
@@ -17,7 +61,12 @@ $(document).ready(function() {
 				$('.periodoForm #fechaInicio').val(periodo.fechaInicio);
 				$('.periodoForm #fechaFin').val(periodo.fechaFin);
 				$('.periodoForm #descripcion').val(periodo.descripcion);
-				$('.periodoForm #activo').val(periodo.activo);
+				if (periodo.activo) {
+					$('#activado').prop("checked", true);
+				} else {
+					$('#desactivado').prop("checked", true);
+				}
+				
 			});
 			
 			$('.periodoForm #periodoModal').modal();

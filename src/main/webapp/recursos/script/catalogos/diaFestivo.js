@@ -1,9 +1,24 @@
 $(document).ready(function() {
+	
 	$("#fecha").datepicker({
 		format: 'dd-MM-yyyy',
-		minDate: 1,
-		beforeShowDay: $.datepicker.noWeekends
-   });
+		beforeShowDay: $.datepicker.noWeekends,
+		minDate: '-0D',
+		maxDate: '12M',
+		zIndexOffset: 100000,
+		beforeShow: function () {
+                var $datePicker = $("#fecha");
+                var zIndexModal = $datePicker.closest(".modal").css("z-index");
+                $datePicker.css("z-index", zIndexModal + 1);
+            }
+        }).attr('readonly', 'true').
+            keypress(function (event) {
+                if (event.keyCode == 8) {
+                    event.preventDefault();
+                }
+            });
+	
+	
 	
 	$('#tableDiaFestivo').DataTable({
         "scrollY": "500px",
@@ -14,16 +29,29 @@ $(document).ready(function() {
 		event.preventDefault();
 		var href = $(this).attr('href');
 		var text = $(this).text();
-		
 			$.get(href, function(diaFestivo, status) {
 				$('#id').val(diaFestivo.idDiaFestivo);
 				$('#nombre').val(diaFestivo.nombre);
-//				$("#fecha").datepicker({
-//					format: 'dd-MM-yyyy',
-//					minDate: 1,
-//					beforeShowDay: $.datepicker.noWeekends 
-//			   });
-				$('#fecha').val(diaFestivo.fecha);
+				var d = new Date(diaFestivo.fecha);
+				$("#fechaM").datepicker({
+				format: 'dd-MM-yyyy',
+				beforeShowDay: $.datepicker.noWeekends,
+				minDate: '-0D',
+				maxDate: '12M',
+				zIndexOffset: 100000,
+				setDate: diaFestivo.fecha,
+				beforeShow: function () {
+		                var $datePicker = $("#fechaM");
+		                var zIndexModal = $datePicker.closest(".modal").css("z-index");
+		                $datePicker.css("z-index", zIndexModal + 1);
+		            }
+		        }).attr('readonly', 'true').
+		            keypress(function (event) {
+		                if (event.keyCode == 8) {
+		                    event.preventDefault();
+		                }
+		            });
+				$('#fechaM').datepicker('setDate', d);
 				if (diaFestivo.activo) {
 					$('#activado').prop("checked", true);
 				} else {

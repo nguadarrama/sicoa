@@ -117,7 +117,7 @@
 									    <div class="form-group">
 							                <div class='input-group date'>
 							                	<label for="fecha" class="col-form-label" th:text="FECHA"></label>
-							                    <input  type="date" class="form-control input-small input-calendar" id="fecha" name="fecha" autocomplete="off" th:required="required" size="100%"/>
+							                	<input type="text" name="fecha" class="form-control input-calendar" id="fechaM" required="required" autocomplete="off" th:readonly="true"/>							                 
 							                </div>
 							            </div>
 								        <div class="form-group">
@@ -162,7 +162,7 @@
 									    <div class="form-group">
 							                <div class='input-group date'>
 							                	<label for="fecha" class="col-form-label" th:text="FECHA"></label>
-							                    <input  type="date"  th:value="${#dates.createNow()}"  class="form-control input-small input-calendar" id="fecha" name="fecha" autocomplete="off" th:required="required" size="100%"/>
+							                	<input type="text" name="fecha" class="form-control input-calendar" id="fecha" required="required" autocomplete="off" th:readonly="true" /> 							                   
 							                </div>
 							            </div>
 								        <div class="form-group">
@@ -219,9 +219,8 @@
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/catalogos/diaFestivo.js}"></script>
-	         <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
+	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/moment.js}"></script>
-	        <!-- <script charset="utf-8" th:src="@{/recursos/assets/date-picker/style/jquery-ui.css}"></script> -->
 	        <link rel="stylesheet" th:href="@{/recursos/assets/date-picker/style/jquery-ui.css}" />	
 		</th:block>
 	</body>

@@ -315,14 +315,17 @@ public class CatalogoController {
 
 	   	@PostMapping("diaFestivo/modifica")
 	   	public String modificaDiaFestivo(Integer id, String nombre, String fecha,  Boolean activo) {
+	   		System.out.println("Datos nombre "+nombre+" fecha "+fecha+" activo "+activo);
+	   		SimpleDateFormat sdff = new SimpleDateFormat("dd/MM/yyyy");
 	   		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	   		Date dia = new Date();
+	   		Date dia = null;
 	   		try {
-	   			dia = sdf.parse(fecha);
+	   			dia = sdff.parse(fecha);
 	   		} catch (ParseException e) {
 	   			// TODO Auto-generated catch block
 	   			e.printStackTrace();
 	   		}
+	   		
 	   		DiaFestivo diaFest = new DiaFestivo(id, nombre, sdf.format(dia), activo, "");
 	   		diaFest = catalogoService.modificaDiaFestivo(diaFest);
 	   		this.mensaje = diaFest.getMensaje();
@@ -332,10 +335,11 @@ public class CatalogoController {
 	   	@PostMapping("diaFestivo/agrega")
 	   	public String agregaDiaFestivo( String nombre, String fecha,  Boolean activo) {
 	   		System.out.println("Datos nombre "+nombre+" fecha "+fecha+" activo "+activo);
+	   		SimpleDateFormat sdff = new SimpleDateFormat("dd/MM/yyyy");
 	   		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	   		Date dia = new Date();
+	   		Date dia = null;
 	   		try {
-	   			dia = sdf.parse(fecha);
+	   			dia = sdff.parse(fecha);
 	   		} catch (ParseException e) {
 	   			// TODO Auto-generated catch block
 	   			e.printStackTrace();
@@ -363,10 +367,22 @@ public class CatalogoController {
 	   	
 		@PostMapping("periodo/agrega")
 	   	public String periodoAgrega(Periodo periodo) {
-			Periodo p = new Periodo();	
-			 p = catalogoService.agregaPeriodoVacacional(periodo);
-		   		this.mensaje = p.getMensaje()== null ? ""  : p.getMensaje();
-		   		return "redirect:/catalogos/periodo";
+			SimpleDateFormat sdff = new SimpleDateFormat("dd/MM/yyyy");
+	   		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	   		Date inicio = null;
+	   		Date fin = null;
+	   		try {
+	   			inicio = sdff.parse(periodo.getFechaInicio());
+	   			fin = sdff.parse(periodo.getFechaFin());
+	   		} catch (ParseException e) {
+	   			// TODO Auto-generated catch block
+	   			e.printStackTrace();
+	   		}
+	   		periodo.setFechaInicio(sdf.format(inicio));
+	   		periodo.setFechaFin(sdf.format(fin));
+			periodo = catalogoService.agregaPeriodoVacacional(periodo);
+		   	this.mensaje = periodo.getMensaje()== null ? ""  : periodo.getMensaje();
+		   	return "redirect:/catalogos/periodo";
 	   	}
 	   	
 		@GetMapping ("periodo/modifica")
