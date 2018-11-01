@@ -1,7 +1,10 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,10 +145,17 @@ public class ReporteController {
         cabeceras.add("Unidad Administrativa");
         cabeceras.add("Nivel/Puesto");
         cabeceras.add("Estado");
+
+        if (permisos != null) {
+        	cabeceras.add("Fecha Inicio");
+        	cabeceras.add("Fecha Fin");
+        }
+        
         map.put("cabeceras", cabeceras);
         
         //Información registros (List<Object[]>)
         List<List<String>> asistencias = new ArrayList<List<String>>();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         
         for (Asistencia a : listaAsistencias) {
         	
@@ -154,7 +164,7 @@ public class ReporteController {
         	elementos.add(a.getUsuarioDto().getNombre() + " " + a.getUsuarioDto().getApellidoPaterno() + " " + a.getUsuarioDto().getApellidoMaterno());
         	elementos.add(a.getUsuarioDto().getNombreUnidad());
         	elementos.add(a.getUsuarioDto().getNivel() + "/" + a.getUsuarioDto().getClavePerfil().getDescripcion());
-			
+
 			String estatus = a.getIdEstatus().getEstatus();
 			
 			if (estatus != null) {
@@ -170,10 +180,16 @@ public class ReporteController {
 					estatus = "Descuento Rechazado";
 				} else if (estatus.equals("Rechazada") && !a.getIncidencia().getDescuento()) {
 					estatus = "Justificación Rechazada";
-				} 
+				}
 			}
-        	
-        	elementos.add(estatus);
+			
+			elementos.add(estatus);			
+
+			if (permisos != null) {
+				elementos.add(new SimpleDateFormat("dd-MM-yyyy").format(a.getFechaInicio()));
+	    		elementos.add(new SimpleDateFormat("dd-MM-yyyy").format(a.getFechaFin()));
+			}
+    		
         	asistencias.add(elementos);
         }
         
@@ -264,10 +280,17 @@ public class ReporteController {
         cabeceras.add("Unidad Administrativa");
         cabeceras.add("Nivel/Puesto");
         cabeceras.add("Estado");
+        
+        if (permisos != null) {
+        	cabeceras.add("Fecha Inicio");
+        	cabeceras.add("Fecha Fin");
+        }
+        
         map.put("cabeceras", cabeceras);
         
         //Información registros (List<Object[]>)
         List<List<String>> asistencias = new ArrayList<List<String>>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         
         for (Asistencia a : listaAsistencias) {
         	
@@ -292,10 +315,16 @@ public class ReporteController {
 					estatus = "Descuento Rechazado";
 				} else if (estatus.equals("Rechazada") && !a.getIncidencia().getDescuento()) {
 					estatus = "Justificación Rechazada";
-				} 
+				}
 			}
-        	
-        	elementos.add(estatus);
+			
+			elementos.add(estatus);	
+			
+			if (permisos != null) {
+				elementos.add(new SimpleDateFormat("dd-MM-yyyy").format(a.getFechaInicio()));
+	    		elementos.add(new SimpleDateFormat("dd-MM-yyyy").format(a.getFechaFin()));
+			}
+			
         	asistencias.add(elementos);
         }
         

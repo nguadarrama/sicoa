@@ -194,6 +194,8 @@
 														<th>U. A.</th>
 														<th>TIPO</th>
 														<th>ESTADO</th>
+														<th th:if="${hayPermiso}">FECHA INICIO</th>
+														<th th:if="${hayPermiso}">FECHA FIN</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -211,6 +213,10 @@
 															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
 															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
 														</td> 
+														<td th:if="${hayPermiso}" 
+															th:text="${asistencia.fechaInicio != null ? #dates.format(asistencia.fechaInicio, 'dd-MM-yyyy') : ''}"></td>
+														<td th:if="${hayPermiso}"
+															th:text="${asistencia.fechaFin != null ? #dates.format(asistencia.fechaFin, 'dd-MM-yyyy') : ''}"></td>
 													</tr>
 												</tbody>
 											</table>
@@ -225,6 +231,8 @@
 														<th>U. A.</th>
 														<th>TIPO</th>
 														<th>ESTADO</th>
+														<th th:if="${hayPermiso}">FECHA INICIO</th>
+														<th th:if="${hayPermiso}">FECHA FIN</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -242,6 +250,10 @@
 															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
 															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
 														</td> 
+														<td th:if="${hayPermiso}" 
+															th:text="${asistencia.fechaInicio != null ? #dates.format(asistencia.fechaInicio, 'dd-MM-yyyy') : ''}"></td>
+														<td th:if="${hayPermiso}"
+															th:text="${asistencia.fechaFin != null ? #dates.format(asistencia.fechaFin, 'dd-MM-yyyy') : ''}"></td>
 													</tr>
 												</tbody>
 											</table>

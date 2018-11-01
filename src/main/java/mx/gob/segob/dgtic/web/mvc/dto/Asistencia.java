@@ -1,6 +1,7 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class Asistencia {
 	private Integer idAsistencia;
@@ -10,6 +11,8 @@ public class Asistencia {
 	private TipoDia idTipoDia;
 	private Estatus idEstatus;
 	private Incidencia incidencia;
+	private Date fechaInicio;
+	private Date fechaFin;
 	
 	public Asistencia() {
 		
@@ -78,7 +81,21 @@ public class Asistencia {
 	public void setIncidencia(Incidencia incidencia) {
 		this.incidencia = incidencia;
 	}
+	public Date getFechaInicio() {
+	   return fechaInicio;
+    }
 	
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+	
+	public Date getFechaFin() {
+		return fechaFin;
+	}
+	
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
+	}
 	
 	
 }
