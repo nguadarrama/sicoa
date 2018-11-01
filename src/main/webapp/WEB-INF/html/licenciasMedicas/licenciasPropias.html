@@ -246,8 +246,10 @@
 									</div>
 								</div>
 								<div class="row">
-									<label> Selecciona fecha inicio y la fecha fin de la
-										licencia m&eacute;dica</label>
+									<div class="col-md-12">
+										<label><label>Selecciona fecha inicio y la fecha fin de la
+										licencia m&eacute;dica</label></label>
+									</div>
 									<div class="col-md-4">
 										<label> <label class="col-form-label">Fecha de
 												inicio </label> <input id="fechaInicio1" name="fechaInicio"
@@ -263,11 +265,10 @@
 										</label>
 									</div>
 									<div class="col-md-4">
-
 										<div class="row">
 											<div class="col-md-5">
-												<label class="col-form-label">D&iacute;as otorgados
-												</label>
+												<p class="col-form-label">D&iacute;as otorgados
+												</p>
 											</div>
 											<div class="col-md-7">
 												<input id="dias" name="dias" type="text"
@@ -275,10 +276,14 @@
 											</div>
 										</div>
 										<div class="row">
+										<div class="col-md-12">
 											<p>Motivo de la licencia</p>
-											<input id="padecimiento" name="padecimiento" type="text"
-												class="form-control" required="required" th:readonly="true" />
 										</div>
+										<div class="col-md-12">
+											<input id="padecimiento" name="padecimiento" type="text"
+												class="form-control" required="required" th:readonly="true"/>
+										</div>
+									</div>
 									</div>
 
 								</div>
