@@ -1,20 +1,55 @@
 $(document)
 		.ready(
 				function() {
-
-					$("#fechaInicio").datepicker({
-						beforeShowDay : $.datepicker.noWeekends,
-						onSelect : function() {
+					var array =$("#listaDiasFestivos").val();
+					//alert("LLegada "+array);
+					var disableddates=array.split(",");
+					//alert("LLegada "+disableddates);
+					
+					$("#fechaInicio").datepicker({ 
+						beforeShowDay: function(date){ 
+							show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
+						//No Weekends 
+						for (var i = 0; i < disableddates.length; i++) {
+							if (new Date(disableddates[i]).toString() == date.toString()) {
+								show = false;
+								}
+						//No Holidays 
+						} var  display = [show,'',(show)?'':'Día no disponible por una de las siguientes razones: día festivo, fin de semana o vacaciones'];
+						//With Fancy hover tooltip! 
+						return display; 
+						},
+						minDate: '-1M',
+						onSelect: function() 
+					       { 
 							validarFechas();
-						}
-					})
-					$("#fechaFin").datepicker({
-						beforeShowDay : $.datepicker.noWeekends,
-						onSelect : function() {
-							validarFechas();
+							var minDate = $('#fechaInicio').datepicker('getDate');
+					        $("#fechaFin").datepicker("change", { minDate: minDate });
+					       }
+					});
+					
+				$("#fechaFin").datepicker({ 
+					beforeShowDay: function(date){ 
+						show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
+					//No Weekends 
+					for (var i = 0; i < disableddates.length; i++) {
+						if (new Date(disableddates[i]).toString() == date.toString()) {
+							show = false;
+							}
+					//No Holidays 
+					} var display = [show,'',(show)?'':'Día no disponible por una de las siguientes razones: día festivo, fin de semana o vacaciones'];
+					//With Fancy hover tooltip! 
+					return display; 
+					},
+					maxDate:'1y',
+					onSelect: function() 
+				       { 
+						validarFechas();
+						var maxDate = $('#fechaFin').datepicker('getDate');
+				        $("#fechaInicio").datepicker("change", { maxDate: maxDate });
+				       }
+					   });
 
-						}
-					})
 
 					$('.aceptaBtn').on('click', function(event) { // botón
 																	// nuevo

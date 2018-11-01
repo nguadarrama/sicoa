@@ -7,7 +7,7 @@ public class Comision {
   private Integer idComision;
   private Usuario idUsuario;
   private Integer idResponsable;
-  private Integer idAarchivo;
+  private Archivo idArchivo;
   private Estatus idEstatus;
   private String fechaInicio;
   private String fechaFin;
@@ -28,14 +28,14 @@ public class Comision {
    * @param comision
    * @param fechaRegistro
    */
-  public Comision(Integer idComision, Usuario idUsuario, Integer idResponsable, Integer idAarchivo,
+  public Comision(Integer idComision, Usuario idUsuario, Integer idResponsable, Archivo idArchivo,
       Estatus idEstatus, String fechaInicio, String fechaFin, Integer dias, String comision,
       String fechaRegistro, Horario idHorario) {
     super();
     this.idComision = idComision;
     this.idUsuario = idUsuario;
     this.idResponsable = idResponsable;
-    this.idAarchivo = idAarchivo;
+    this.idArchivo = idArchivo;
     this.idEstatus = idEstatus;
     this.fechaInicio = fechaInicio;
     this.fechaFin = fechaFin;
@@ -96,14 +96,14 @@ public class Comision {
   /**
    * @return the idAarchivo
    */
-  public Integer getIdAarchivo() {
-    return idAarchivo;
+  public Archivo getIdArchivo() {
+    return idArchivo;
   }
   /**
    * @param idAarchivo the idAarchivo to set
    */
-  public void setIdAarchivo(Integer idAarchivo) {
-    this.idAarchivo = idAarchivo;
+  public void setIdAarchivo(Archivo idAarchivo) {
+    this.idArchivo = idAarchivo;
   }
   /**
    * @return the idEstatus

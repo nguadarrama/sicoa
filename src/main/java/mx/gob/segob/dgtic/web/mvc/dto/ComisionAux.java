@@ -6,7 +6,7 @@ public class ComisionAux {
   private Integer idComision;
   private Integer idUsuario;
   private Integer idResponsable;
-  private Integer idAarchivo;
+  private Integer idArchivo;
   private Integer idEstatus;
   private String fechaInicio;
   private String fechaFin;
@@ -30,13 +30,13 @@ public class ComisionAux {
    * @param fechaRegistro
    */
   public ComisionAux(Integer idComision, Integer idUsuario, Integer idResponsable,
-      Integer idAarchivo, Integer idEstatus, String fechaInicio, String fechaFin, Integer dias,
+      Integer idArchivo, Integer idEstatus, String fechaInicio, String fechaFin, Integer dias,
       String comision, String fechaRegistro, Integer idHorario) {
     super();
     this.idComision = idComision;
     this.idUsuario = idUsuario;
     this.idResponsable = idResponsable;
-    this.idAarchivo = idAarchivo;
+    this.idArchivo = idArchivo;
     this.idEstatus = idEstatus;
     this.fechaInicio = fechaInicio;
     this.fechaFin = fechaFin;
@@ -100,14 +100,14 @@ public class ComisionAux {
   /**
    * @return the idAarchivo
    */
-  public Integer getIdAarchivo() {
-    return idAarchivo;
+  public Integer getIdArchivo() {
+    return idArchivo;
   }
   /**
    * @param idAarchivo the idAarchivo to set
    */
-  public void setIdAarchivo(Integer idAarchivo) {
-    this.idAarchivo = idAarchivo;
+  public void setIdArchivo(Integer idAarchivo) {
+    this.idArchivo = idAarchivo;
   }
   
   

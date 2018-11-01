@@ -5,11 +5,18 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
@@ -24,13 +31,17 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Comision;
 import mx.gob.segob.dgtic.web.mvc.dto.ComisionAux;
 import mx.gob.segob.dgtic.web.mvc.dto.GenerarReporteArchivoComision;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
+import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
+import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedicaAux;
 import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
+import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.ComisionService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
@@ -63,6 +74,9 @@ public class ComisionesController {
 
   @Autowired
   private CatalogoService catalogoService;
+  
+  @Autowired 
+  private ArchivoService archivoService;
 
   private String mensaje = "";
 
@@ -147,7 +161,7 @@ public class ComisionesController {
     model.addAttribute("listaUnidades",
         unidadAdministrativaService.obtenerUnidadesAdministrativas());
     List<Comision> comisiones = comisionService.obtenerListaComisionesPorFiltrosEmpleados(
-        claveUsuarioLider, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus);
+        claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus);
     System.out.println("Tamaño " + comisiones.size());
     if (comisiones.size() > 0) {
       model.addAttribute("comisionesEmpleados", comisiones);
@@ -185,6 +199,8 @@ public class ComisionesController {
         "Objeto Estatus: " + ReflectionToStringBuilder.toString(comisiones.getIdEstatus()));
     System.out.println(
         "Objeto Horario: " + ReflectionToStringBuilder.toString(comisiones.getIdHorario()));
+    System.out.println(
+        "Objeto Archivo: " + ReflectionToStringBuilder.toString(comisiones.getIdArchivo()));
     hmap.put("comision", comisiones);
     
 
@@ -226,8 +242,18 @@ public class ComisionesController {
     model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario));
     model.addAttribute("listaResponsable",
         unidadAdministrativaService.consultaResponsable(claveUsuario));
-    model.addAttribute("listaHorarios",
-        catalogoService.obtieneHorarios());
+    model.addAttribute("listaHorarios", catalogoService.obtieneHorarios());
+    String cadena = catalogoService.obtieneDiaFestivoParaBloquear();
+    System.out.println("Dias festivos para bloquear " + cadena);
+    model.addAttribute("listaDiasFestivos", cadena);
+
+    if (!this.getMensaje().equals("")) {
+      if (this.mensaje.contains("correctamente"))
+        model.addAttribute("MENSAJE", this.mensaje);
+      else
+        model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+    }
+    this.mensaje = "";
 
     System.out.println("Registrar comision usuario: " + claveUsuario);
     return "/comisiones/solicitudComision";
@@ -263,9 +289,11 @@ public class ComisionesController {
     System.out.println(
         "Datos claveUsuario " + claveUsuario + " responsable " + idResponsable + " fechaInicio "
             + fechaInicio + " fechaFin " + fechaFin + " dias " + dias + " comision " + comision);
-    comisionService.agregarComision(new ComisionAux(null, null, idResponsableAux, null, null,
+    Comision comisionRespuesta = comisionService.agregarComision(new ComisionAux(null, null, idResponsableAux, null, 1,
         fechaInicio, fechaFin, dias, comision, obtenerFechaActual("dd/MM/yyyy"), Integer.valueOf(idHorario)), claveUsuario);
-
+    System.out.println("Mensaje obtenido "+comisionRespuesta.getMensaje());
+    this.mensaje=comisionRespuesta.getMensaje();
+    
     return "redirect:/comisiones/solicitudComision";
 
   }
@@ -307,6 +335,8 @@ public class ComisionesController {
       else
         model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
     }
+    model.addAttribute("listaHorarios",
+        catalogoService.obtieneHorarios());
     this.mensaje = "";
     return "/comisiones/solicitudComisionesEmpleados";
 
@@ -327,6 +357,11 @@ public class ComisionesController {
     model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario));
     model.addAttribute("listaResponsable",
         unidadAdministrativaService.consultaResponsable(claveUsuario));
+    model.addAttribute("listaHorarios",
+        catalogoService.obtieneHorarios());
+    String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
+    System.out.println("Dias festivos para bloquear "+cadena);
+    model.addAttribute("listaDiasFestivos", cadena);
 
     System.out.println("Registrar comision usuario: " + claveUsuario);
     return "/comisiones/solicitudComision";
@@ -347,6 +382,9 @@ public class ComisionesController {
         unidadAdministrativaService.consultaResponsable(claveUsuario));
     model.addAttribute("listaHorarios",
         catalogoService.obtieneHorarios());
+    String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
+    System.out.println("Dias festivos para bloquear "+cadena);
+    model.addAttribute("listaDiasFestivos", cadena);
 
     System.out.println("Registrar comision usuario: " + claveUsuario);
     return "/comisiones/modificarComisionEmpleados";
@@ -425,6 +463,75 @@ public class ComisionesController {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+  
+  @RequestMapping(value = "/descargaArchivo", method = RequestMethod.GET)
+  public void getFile(Integer idArchivo, HttpServletRequest request, HttpServletResponse response) throws IOException{
+      System.out.println("id del archivo "+idArchivo);
+      Archivo archivo= new Archivo();
+      archivo=archivoService.consultaArchivo(idArchivo);
+      System.out.println("archivo retornado "+archivo.getUrl());
+      String nombrecompleto=archivo.getUrl()+archivo.getNombre();
+      //String nombreArchivo=nombrecompleto.replace('/','\\');
+      String nombreArchivo=nombrecompleto;
+      System.out.println("nombre de archivo "+nombreArchivo);
+      File file = new File(nombreArchivo);
+      InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+      String mimeType= URLConnection.guessContentTypeFromStream(inputStream);
+      if(mimeType==null){
+          mimeType="application/pdf";
+      }
+      
+      response.setContentType(mimeType);
+      response.setContentLength((int)file.length());
+      response.setHeader("Content-Disposition", String.format("attachment; filename\"%s\"",file.getName()));
+      FileCopyUtils.copy(inputStream, response.getOutputStream());
+  }
+  
+  @PostMapping("comision/actualizaArchivo")
+  public String actualizaArchivoComision(@RequestParam MultipartFile archivo, Integer idArchivo,
+      String claveUsuario, Integer idComisionArchivo) {
+
+    System.out.println("Datos archivo " + "" + " idArchivo " + idArchivo + " claveUsuario "
+        + claveUsuario + " idComision " + idComisionArchivo);
+    Comision comision = new Comision();
+    Integer idArchivoAux = null;
+    Archivo archivoDto = new Archivo();
+    if (archivo != null && !archivo.isEmpty()) {
+      if (idArchivo != null && !idArchivo.toString().isEmpty()) {
+        archivoService.actualizaArchivo(archivo, claveUsuario, "comisiones", idArchivo,
+            "comision-");
+         comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo, null, null, idArchivo, 1, null, null, null, null, null, null), claveUsuario);
+      } else {
+        // idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones");
+        // archivoDto.setIdArchivo(idArchivoAux);
+        idArchivoAux =
+            archivoService.guardaArchivo(archivo, claveUsuario, "comisiones", "comision-");
+        System.out.println("IDArchivo recuperado " + idArchivoAux);
+        comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo, null, null, idArchivoAux, 1, null, null, null, null, null, null), claveUsuario);
+      }
+    }
+    System.out.println("mensaje recuperado " + comision.getMensaje());
+    this.mensaje = comision.getMensaje();
+    return "redirect:/comisiones/comisionesEmpleados";
+  }
+  
+  @PostMapping("acepta")
+  public String aceptaVacaciones(Integer idComision,String claveUsuario, Integer idArchivo) {
+      System.out.println("idLicencia "+idComision+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
+      Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComision, null, null, idArchivo, 2, null, null, null, null, null, null), claveUsuario);
+      this.mensaje=comision.getMensaje();
+      System.out.println("mensaje recuperado "+comision.getMensaje());
+      return "redirect:/comisiones/comisionesEmpleados";
+  }
+  
+  @PostMapping("rechaza")
+  public String rechazaVacaciones(Integer idComision,String claveUsuario, Integer idArchivo) {
+      System.out.println("idLicencia "+idComision+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
+      Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComision, null, null, idArchivo, 3, null, null, null, null, null, null), claveUsuario);
+      this.mensaje=comision.getMensaje();
+      System.out.println("mensaje recuperado "+comision.getMensaje());
+      return "redirect:/comisiones/comisionesEmpleados";
   }
 
   public String getMensaje() {

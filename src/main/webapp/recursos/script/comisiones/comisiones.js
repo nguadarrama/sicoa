@@ -101,41 +101,47 @@ $(document).ready(function() {
 					$('.actualizaVacacion #comision').val(hmap.comision.comision);
 					$('.actualizaVacacion #idHorario').val(hmap.horario);
 //					$('.actualizaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
-					$('.actualizaArchivo #idArchivo').val(hmap.comision.idArchivo);
-					$('.actualizaArchivo #idComision').val(hmap.comision.idComision);
+					$('.actualizaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
+					$('.actualizaArchivo #idComisionArchivo').val(hmap.comision.idComision);
 					$('.actualizaArchivo #claveUsuario').val(hmap.comision.idUsuario.claveUsuario);
+					$('.actualizaArchivo #idEstatusArchivo').val(hmap.comision.idEstatus.idEstatus);
+					$('.actualizaArchivoPropio #idArchivoPropio').val(hmap.comision.idArchivo.idArchivo);
+					$('.actualizaArchivoPropio #idComisionArchivoPropio').val(hmap.comision.idComision);
+					$('.actualizaArchivoPropio #claveUsuarioPropio').val(hmap.comision.idUsuario.claveUsuario);
+					$('.actualizaArchivoPropio #idEstatusArchivoPropio').val(hmap.comision.idEstatus.idEstatus);
 					$('.formModificar #claveUsuarioEditar').val(hmap.comision.idUsuario.claveUsuario);
 					$('.formModificar #idComisionEditar').val(hmap.comision.idComision);
 					if(hmap.comision.idEstatus.idEstatus=='2' || hmap.comision.idEstatus.idEstatus=='3'){
-						$('.rechazaVacacion #rechazaVacacion').css("display","none");
-						$('.aceptaVacacion #aceptaVacacion').css("display","none");
+						$('.rechazaComision').css("display","none");
+						$('.aceptaComision').css("display","none");
 						$('.formModificar #botonEditar').css("display","none");
 					}else{
 						
 					}
 					//alert(hmap.vacacion.idArchivo.idArchivo);
-//					if(hmap.comision.idArchivo.idArchivo!=null && hmap.comision.idArchivo.idArchivo!=""){
-					if(hmap.comision.idArchivo!=null && hmap.comision.idArchivo!=""){
-//						$('.descargaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
-						$('.descargaArchivo #idArchivo').val(hmap.comision.idArchivo);
-						$('.descargaArchivo').css("display","inline");
-						$('.rechazaVacacion').css("display","inline");
-						$('.aceptaVacacion').css("display","inline");
-						//alert(hmap.vacacion.idArchivo.idArchivo);
+					if(hmap.comision.idArchivo.idArchivo!=null && hmap.comision.idArchivo.idArchivo!=""){
+						$('.descargaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
+						$('.actualizaArchivo').css("display","inline");
+						$('.rechazaComision').css("display","inline");
+						$('.aceptaComision').css("display","inline");
+						$('.actualizaArchivoPropio').css("display","none");
 					}else{
-						$('.descargaArchivo').css("display","none");
-						$('.rechazaVacacion').css("display","none");
-						$('.aceptaVacacion').css("display","none");
+						$('.actualizaArchivo').css("display","none");
+						$('.rechazaComision').css("display","none");
+						$('.aceptaComision').css("display","none");
+						$('.actualizaArchivoPropio').css("display","inline");
+						$("#descargar").css("display","none");
+						
 					}
+					$(".aceptaComision #idComision").val(hmap.comision.idComision);
+					$(".aceptaComision #idArchivo").val(hmap.comision.idArchivo.idArchivo);
+					$(".aceptaComision #claveUsuario").val(hmap.comision.idUsuario.claveUsuario);
+					$(".rechazaComision #idComision").val(hmap.comision.idComision);
+					$(".rechazaComision #idArchivo").val(hmap.comision.idArchivo.idArchivo);
+					$(".rechazaComision #claveUsuario").val(hmap.comision.idUsuario.claveUsuario);
 					$('.actualizaVacacion #dias').val(hmap.comision.dias);
-					$('.aceptaVacacion #idSolicitud').val(hmap.comision.idComision);
-					$('.aceptaVacacion #fechaInicio').val(hmap.comision.fechaInicio);
-					$('.aceptaVacacion #fechaFin').val(hmap.comision.fechaFin);
 					$('#id').val(hmap.comision.idUsuario.idUsuario);
 					$('#idUsuario').val(hmap.comision.idUsuario.idUsuario);
-					$('.rechazaVacacion #idSolicitud').val(hmap.comision.idComision);
-//					$('.rechazaVacacion #idVacacion').val(hmap.comision.idVacacion.idVacacion);
-					$('.rechazaVacacion #dias').val(hmap.comision.dias);
 					//alert(hmap.responsable);
 					if(hmap.responsable!=null && hmap.responsable!=""){
 					$('.actualizaVacacion #responsable').val(hmap.responsable.nombre+" "+hmap.responsable.apellidoPaterno+" "+hmap.responsable.apellidoMaterno);
@@ -218,97 +224,23 @@ $(document).ready(function() {
 			$('#aceptarModal').modal(); 
 		});
 		
-//		$('.rechazaBtn').on('click', function(event) {					//botón nuevo
-//			$('#rechazarModal').modal();
-//			
-//		});
+		$('#fechaInicio').val($('#validBeforeDatepicker').val());
+		$('#fechaFin').val($('#validAfterDatepicker').val());
 		
-		$('.rechazaBtn').on('click', function(event) {			    //botón elimina
-			event.preventDefault();
-			var href = $(this).attr('href');
-			$('#rechazarModal #rechazaModal').attr('href', href);
-			$('#rechazarModal').modal();
-		});
-		
-//		$('.aceptaModal').on('click', function(event) {			    //botón elimina
-//			event.preventDefault();
-//			var href = $(this).attr('href');
-//			
-//			$('#aceptarModal #aceptaModal').attr('href', href);
-//			$('#aceptarModal').modal();
-//		});
-		
-	/*$('.eBtn').on('click', function(event) { 					//botón edita
-		event.preventDefault();
-		var href = $(this).attr('href');
-		var text = $(this).text();
-		
-			$.get(href, function(horario, status) {
-				$('.horarioForm #id').val(horario.idHorario);
-				$('.horarioForm #horaEntrada').val(horario.horaEntrada);
-				$('.horarioForm #horaSalida').val(horario.horaSalida);
-				$('.horarioForm #activo').val(horario.activo);
-			});
-			
-			$('.horarioForm #horarioModal').modal();
-	});*/
-	
-	
-	
-//	$('.eliminaBtn').on('click', function(event) {			    //botón elimina
-//		event.preventDefault();
-//		var href = $(this).attr('href');
-//		
-//		$('#eliminarModal #delRef').attr('href', href);
-//		$('#eliminarModal').modal();
-//	});
-//	
-//	$("#buscarText").on("keyup", function() {
-//	    var value = $(this).val().toLowerCase();
-//	    $("#tableHorarios tr").filter(function() {
-//	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//	    });
-//	  });
-//	
-//	$('.filterable .btn-filter').click(function(){
-//        var $panel = $(this).parents('.filterable'),
-//        $filters = $panel.find('.filters input'),
-//        $tbody = $panel.find('.table tbody');
-//        if ($filters.prop('disabled') == true) {
-//            $filters.prop('disabled', false);
-//            $filters.first().focus();
-//        } else {
-//            $filters.val('').prop('disabled', true);
-//            $tbody.find('.no-result').remove();
-//            $tbody.find('tr').show();
-//        }
-//    });
-//
-//    $('.filterable .filters input').keyup(function(e){
-//        /* Ignore tab key */
-//        var code = e.keyCode || e.which;
-//        if (code == '9') return;
-//        /* Useful DOM data and selectors */
-//        var $input = $(this),
-//        inputContent = $input.val().toLowerCase(),
-//        $panel = $input.parents('.filterable'),
-//        column = $panel.find('.filters th').index($input.parents('th')),
-//        $table = $panel.find('.table'),
-//        $rows = $table.find('tbody tr');
-//        /* Dirtiest filter function ever ;) */
-//        var $filteredRows = $rows.filter(function(){
-//            var value = $(this).find('td').eq(column).text().toLowerCase();
-//            return value.indexOf(inputContent) === -1;
-//        });
-//        /* Clean previous no-result if exist */
-//        $table.find('tbody .no-result').remove();
-//        /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
-//        $rows.show();
-//        $filteredRows.hide();
-//        /* Prepend no-result row if all rows are filtered */
-//        if ($filteredRows.length === $rows.length) {
-//            $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No encontrado</td></tr>'));
-//        }
-//    });
-	
+	    //validaciones para datepicker
+	    $('#validarFechas').validate({ 
+	        rules: { 
+	            fechaInicio1: { 
+	                dpCompareDate: "notAfter #fechaFin1"
+	            },
+			    fechaFin1: { 
+			        dpCompareDate: "notBefore #fechaInicio1"
+			    } 
+	        },
+	    	messages: {
+	    		fechaInicial: 'Ingresa fecha menor ó igual a la Fecha Final',
+	    		fechaFinal: 'Ingresa fecha mayor ó igual a la Fecha Inicial'
+	    	}
+	    			
+	    });
 }); 

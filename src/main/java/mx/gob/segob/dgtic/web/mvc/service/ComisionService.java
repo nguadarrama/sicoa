@@ -6,6 +6,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.ComisionAux;
 import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.GenerarReporteArchivoComision;
 import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
+import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedicaAux;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 
@@ -23,9 +24,11 @@ public interface ComisionService {
 
   public Comision obtieneComision(String idComision);
 
-  public void agregarComision(ComisionAux comision, String claveUsuario);
+  public Comision agregarComision(ComisionAux comision, String claveUsuario);
 
   public void modificaComisiones(ComisionAux comision, String claveUsuario);
+  
+  public Comision modificaComisionEstatusArchivo(ComisionAux comisionAux, String claveUsuario);
 
   public void eliminaComisiones(String idComision);
   

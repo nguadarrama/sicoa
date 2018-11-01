@@ -18,6 +18,7 @@ public class ComisionEndPointConstants {
   public static final String WEB_SERVICE_BUSCA_COMISION = "/comisiones/buscaComision";
   public static final String WEB_SERVICE_MODIFICA_COMISION = "/comisiones/modificaComision";
   public static final String WEB_SERVICE_ELIMINA_COMISION = "/comisiones/eliminaComision";
+  public static final String WEB_SERVICE_MODIFICA_COMISION_ESTATUS_ARCHIVO = "/comisiones/modificaComisionEstatusArchivo";
   
   public static final String WEB_SERVICE_GENERA_REPORTE = "/comisiones/generarReporte";
 
