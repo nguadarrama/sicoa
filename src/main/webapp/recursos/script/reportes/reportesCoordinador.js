@@ -62,10 +62,27 @@ $(document).ready(function() {
 		}
 	});
 	
-    //fechas datepicker
-    $('#validBeforeDatepicker,#validAfterDatepicker, #fecha').datepicker({
+	//fechas datepicker
+    $('#validAfterDatepicker, #fecha').datepicker({
     	beforeShowDay: $.datepicker.noWeekends, //desactiva sábado y domingo del calendario
-    	dateFormat: 'yy-mm-dd'
+    	dateFormat: 'yy-mm-dd',
+    	onSelect: function() 
+	       { 
+    		var maxDate = $('#validAfterDatepicker').datepicker('getDate');
+	    		$("#validBeforeDatepicker").datepicker("change", { maxDate: maxDate });
+	       },
+    	
+    });
+    
+    $('#validBeforeDatepicker, #fecha').datepicker({
+    	beforeShowDay: $.datepicker.noWeekends, //desactiva sábado y domingo del calendario
+    	dateFormat: 'yy-mm-dd',
+    	onSelect: function() 
+	       { 
+    		var minDate = $('#validBeforeDatepicker').datepicker('getDate');
+	    		$("#validAfterDatepicker").datepicker("change", { minDate: minDate });
+	       },
+    	
     });
     
     //validaciones para datepicker
