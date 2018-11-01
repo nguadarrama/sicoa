@@ -145,11 +145,6 @@ public class ReporteController {
         cabeceras.add("Unidad Administrativa");
         cabeceras.add("Nivel/Puesto");
         cabeceras.add("Estado");
-
-        if (permisos != null) {
-        	cabeceras.add("Fecha Inicio");
-        	cabeceras.add("Fecha Fin");
-        }
         
         map.put("cabeceras", cabeceras);
         
@@ -184,12 +179,6 @@ public class ReporteController {
 			}
 			
 			elementos.add(estatus);			
-
-			if (permisos != null) {
-				elementos.add(new SimpleDateFormat("dd-MM-yyyy").format(a.getFechaInicio()));
-	    		elementos.add(new SimpleDateFormat("dd-MM-yyyy").format(a.getFechaFin()));
-			}
-    		
         	asistencias.add(elementos);
         }
         
@@ -281,11 +270,6 @@ public class ReporteController {
         cabeceras.add("Nivel/Puesto");
         cabeceras.add("Estado");
         
-        if (permisos != null) {
-        	cabeceras.add("Fecha Inicio");
-        	cabeceras.add("Fecha Fin");
-        }
-        
         map.put("cabeceras", cabeceras);
         
         //Información registros (List<Object[]>)
@@ -319,12 +303,6 @@ public class ReporteController {
 			}
 			
 			elementos.add(estatus);	
-			
-			if (permisos != null) {
-				elementos.add(new SimpleDateFormat("dd-MM-yyyy").format(a.getFechaInicio()));
-	    		elementos.add(new SimpleDateFormat("dd-MM-yyyy").format(a.getFechaFin()));
-			}
-			
         	asistencias.add(elementos);
         }
         
