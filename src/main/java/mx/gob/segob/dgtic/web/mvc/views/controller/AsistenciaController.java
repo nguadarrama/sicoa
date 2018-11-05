@@ -308,7 +308,7 @@ public class AsistenciaController  {
     	try {
     		//guarda el archivo
     		if (archivoSubido.getSize() > 0) {
-    			archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "asistencia_descuento" , "descuento-");
+    			archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "descuento" , "descuento-");
     		}
     		
     		if (archivo != null) {
@@ -555,7 +555,7 @@ public class AsistenciaController  {
     		try {
         		//guarda el archivo
         		if (archivoSubido.getSize() > 0) {
-    				archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "asistencia_justificacion", "justificacion-");
+    				archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "justificacion", "justificacion-");
         			
     				if (archivo != null) {
 	        			//crea la incidencia y asocia el archivo
