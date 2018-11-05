@@ -338,7 +338,7 @@ public class LicenciasMedicasController {
 	    		//idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones");
 	    		//archivoDto.setIdArchivo(idArchivoAux);
 	    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "licenciasMedicas","licenciaMedica-");
-	    		System.out.println("IDArchivo recuperado "+idArchivoAux);
+	    		System.out.println("IDArchivo recuperado "+idArchivoAux.getIdArchivo());
 	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivoAux.getIdArchivo(),1,null,null,null,null), claveUsuario);
 	    		//vacaciones.setIdArchivo(archivoDto);
 	    		//vacacionesService.modificaVacaciones(vacaciones);

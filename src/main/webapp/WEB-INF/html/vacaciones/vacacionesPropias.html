@@ -338,7 +338,7 @@
 						</div>
 						<div class="card">
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<form th:action="@{/vacaciones/vacacion/actualizaArchivo}"
 										class="actualizaArchivo" method="post"
 										enctype="multipart/form-data">
@@ -362,12 +362,24 @@
 										</div>
 									</form>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-4 text-center">
+									<form th:action="@{/vacaciones/descargaArchivo}"
+										class="descargaArchivo" method="get">
+										<!-- <label class="col-form-label">Descarga Archivo</label> -->
+										<!-- <input type="file" name="archivo" id="archivo" multiple="multiple"/> -->
+										<input id="idArchivo" name="idArchivo" type="text"
+											class="form-control input-calendar" required="required"
+											th:readonly="true" style="display: none;" /> <input
+											type="submit" class="btn btn-primary"
+											value="Descarga archivo" />
+									</form>
+								</div>
+								<div class="col-md-2">
 
 									<p class="text-center">
-										<button type="button" id="miBotonCancelar"
+										<input type="button" id="miBotonCancelar"
 											class="btn btn-secondary" data-dismiss="modal"
-											th:text="#{COMUN.CANCELAR}"></button>
+											value="Cancelar" />
 									</p>
 								</div>
 							</div>

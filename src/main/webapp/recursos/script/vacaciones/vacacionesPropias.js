@@ -173,17 +173,17 @@ $(document).ready(function() {
 					}else{
 						
 					}
-					//alert(hmap.vacacion.idArchivo.idArchivo);
+					alert(hmap.vacacion.idArchivo.idArchivo);
 					if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
 						$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 						$('.descargaArchivo').css("display","inline");
-						$('.rechazaVacacion').css("display","inline");
-						$('.aceptaVacacion').css("display","inline");
+						//$('.rechazaVacacion').css("display","inline");
+						//$('.aceptaVacacion').css("display","inline");
 						//alert(hmap.vacacion.idArchivo.idArchivo);
 					}else{
 						$('.descargaArchivo').css("display","none");
-						$('.rechazaVacacion').css("display","none");
-						$('.aceptaVacacion').css("display","none");
+						//$('.rechazaVacacion').css("display","none");
+						//$('.aceptaVacacion').css("display","none");
 					}
 					$('.actualizaVacacion #dias').val(hmap.vacacion.dias);
 					$('.aceptaVacacion #idSolicitud').val(hmap.vacacion.idDetalle);

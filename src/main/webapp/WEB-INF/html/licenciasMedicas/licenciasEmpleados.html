@@ -380,7 +380,7 @@
 										</div>
 									</form>
 								</div>
-								<div class="col-md-3">
+								<div class="col-md-3 text-center">
 									<form th:action="@{/licenciasMedicas/descargaArchivo}"
 										class="actualizaArchivo" method="get">
 											<input id="idArchivo" name="idArchivo" type="text"
@@ -396,7 +396,7 @@
 												value="Descargar archivo" />
 									</form>
 								</div>
-								<div class="col-md-2" sec:authorize="hasAuthority('1')">
+								<div class="col-md-2 text-center" sec:authorize="hasAuthority('1')">
 									<form th:action="@{/licenciasMedicas/acepta}" method="post"
 										class="aceptaLicencia">
 										<input id="idLicencia" name="idLicencia" type="text"
@@ -412,7 +412,7 @@
 											th:value="Aceptar"></input>
 									</form>
 								</div>
-								<div class="col-md-2" sec:authorize="hasAuthority('1')">
+								<div class="col-md-2 text-center" sec:authorize="hasAuthority('1')">
 									<form th:action="@{/licenciasMedicas/rechaza}" method="post"
 										class="rechazaLicencia">
 										<input id="idLicencia" name="idLicencia" type="text"
@@ -427,6 +427,13 @@
 											class="btn btn-danger" data-dismiss="modal"
 											th:value="Rechazar"></input>
 									</form>
+								</div>
+								<div class="col-md-2 text-center">
+									<p class="text-center">
+										<input type="button" id="miBotonCancelar"
+											class="btn btn-secondary" data-dismiss="modal"
+											value="Cancelar" />
+									</p>
 								</div>
 							</div>
 						</div>

@@ -346,18 +346,22 @@
 						</div>
 						<div class="card">
 							<div class="row">
-								<div class="col-md-8 text-center"
+								<div class="col-md-12">
+									<label class="col-form-label">Adjunta Formato de Vacaciones </label> 
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-5"
 									sec:authorize="hasAuthority('2')">
 									<form
 										th:action="@{/vacaciones/vacacion/actualizaArchivoEmpleado}"
 										class="actualizaArchivo" method="post"
 										enctype="multipart/form-data">
-										<div class="col-md-6">
-											<label class="col-form-label">Adjunta Formato de
-												Vacaciones </label> <input type="file" name="archivo" id="archivo"
+										<div class="col-md-8">
+											<input type="file" name="archivo" id="archivo"
 												accept="application/pdf"  />
 										</div>
-										<div class="col-md-6 ">
+										<div class="col-md-4 text-right ">
 											<input id="claveUsuario" name="claveUsuario" type="text"
 												class="form-control" required="required" th:readonly="true"
 												style="display: none;" /> <input id="idArchivo"
@@ -371,8 +375,7 @@
 										</div>
 									</form>
 								</div>
-								<div class="col-md-4 text-center"
-									sec:authorize="hasAuthority('1')">
+								<div class="col-md-3 text-center">
 									<form th:action="@{/vacaciones/descargaArchivo}"
 										class="descargaArchivo" method="get">
 										<!-- <label class="col-form-label">Descarga Archivo</label> -->
@@ -381,10 +384,10 @@
 											class="form-control input-calendar" required="required"
 											th:readonly="true" style="display: none;" /> <input
 											type="submit" class="btn btn-primary"
-											value="Descarga formato" />
+											value="Descarga archivo" />
 									</form>
 								</div>
-								<div class="col-md-2" sec:authorize="hasAuthority('1')">
+								<div class="col-md-2 text-center" sec:authorize="hasAuthority('1')">
 									<form th:action="@{/vacaciones/vacacion/acepta}" method="get"
 										class="aceptaVacacion">
 										<input id="idSolicitud" name="idSolicitud" type="text"
@@ -397,12 +400,12 @@
 										<input id="fechaInicio" name="fechaInicio" type="text"
 											class="form-control" required="required" th:readonly="true"
 											style="display: none;" />
-										<button type="submit" id="aceptaVacacion"
+										<input type="submit" id="aceptaVacacion"
 											class="btn btn-success" data-dismiss="modal"
-											th:text="Aceptar"></button>
+											th:text="Aceptar" />
 									</form>
 								</div>
-								<div class="col-md-2" sec:authorize="hasAuthority('1')">
+								<div class="col-md-2 text-center" sec:authorize="hasAuthority('1')">
 									<form th:action="@{/vacaciones/vacacion/rechaza}" method="get"
 										class="rechazaVacacion">
 										<input id="idSolicitud" name="idSolicitud" type="text"
@@ -415,16 +418,16 @@
 											style="display: none;" /> <input id="dias" name="dias"
 											type="text" class="form-control" required="required"
 											th:readonly="true" style="display: none;" />
-										<button type="submit" id="rechazaVacacion"
+										<input type="submit" id="rechazaVacacion"
 											class="btn btn-danger" data-dismiss="modal"
-											th:text="Rechazar"></button>
+											th:text="Rechazar" />
 									</form>
 								</div>
-								<div class="col-md-2">
+								<div class="col-md-2 text-center">
 									<p class="text-center">
-										<button type="button" id="miBotonCancelar"
+										<input type="button" id="miBotonCancelar"
 											class="btn btn-secondary" data-dismiss="modal"
-											th:text="#{COMUN.CANCELAR}"></button>
+											value="Cancelar" />
 									</p>
 								</div>
 							</div>
