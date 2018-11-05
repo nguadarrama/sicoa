@@ -111,28 +111,29 @@ $(document).ready(function() {
 					$('.actualizaArchivoPropio #idEstatusArchivoPropio').val(hmap.comision.idEstatus.idEstatus);
 					$('.formModificar #claveUsuarioEditar').val(hmap.comision.idUsuario.claveUsuario);
 					$('.formModificar #idComisionEditar').val(hmap.comision.idComision);
-					if(hmap.comision.idEstatus.idEstatus=='2' || hmap.comision.idEstatus.idEstatus=='3'){
+					$('.descargaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
+					if(hmap.comision.idArchivo.idArchivo==null || hmap.comision.idArchivo.idArchivo==""){
+						$('.actualizaArchivo').css("display","inline");
+						$('.rechazaComision').css("display","none");
+						$('.aceptaComision').css("display","none");
+						$('.actualizaArchivoPropio').css("display","none");
+						$("#descargar").css("display","none");
+//						$('.rechazaComision').css("display","inline");
+//						$('.aceptaComision').css("display","inline");
+//						$('.actualizaArchivoPropio').css("display","none");
+					}
+					if(hmap.comision.idEstatus.idEstatus=='2'){
+						$('.aceptaComision').css("display","none");
+						$('.formModificar #botonEditar').css("display","none");
+						$('.descargaArchivo').css("display","inline");
+					}else if (hmap.comision.idEstatus.idEstatus=='3'){
 						$('.rechazaComision').css("display","none");
 						$('.aceptaComision').css("display","none");
 						$('.formModificar #botonEditar').css("display","none");
-					}else{
-						
+						$('.actualizaArchivo').css("display","none");
+						$('.descargaArchivo').css("display","inline");
 					}
-					//alert(hmap.vacacion.idArchivo.idArchivo);
-					if(hmap.comision.idArchivo.idArchivo!=null && hmap.comision.idArchivo.idArchivo!=""){
-						$('.descargaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
-//						$('.actualizaArchivo').css("display","inline");
-						$('.rechazaComision').css("display","inline");
-						$('.aceptaComision').css("display","inline");
-						$('.actualizaArchivoPropio').css("display","none");
-					}else{
-//						$('.actualizaArchivo').css("display","none");
-						$('.rechazaComision').css("display","none");
-						$('.aceptaComision').css("display","none");
-						$('.actualizaArchivoPropio').css("display","inline");
-						$("#descargar").css("display","none");
-						
-					}
+					$('.descargaArchivo').css("display","inline");
 					$(".aceptaComision #idComision").val(hmap.comision.idComision);
 					$(".aceptaComision #idArchivo").val(hmap.comision.idArchivo.idArchivo);
 					$(".aceptaComision #claveUsuario").val(hmap.comision.idUsuario.claveUsuario);
