@@ -173,7 +173,7 @@ $(document).ready(function() {
 					}else{
 						
 					}
-					alert(hmap.vacacion.idArchivo.idArchivo);
+					//alert(hmap.vacacion.idArchivo.idArchivo);
 					if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
 						$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 						$('.descargaArchivo').css("display","inline");
