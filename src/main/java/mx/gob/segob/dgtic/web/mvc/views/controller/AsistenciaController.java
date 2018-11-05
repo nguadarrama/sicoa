@@ -771,9 +771,8 @@ public class AsistenciaController  {
     		Archivo archivoAsociado= new Archivo();
         	archivoAsociado = archivoService.consultaArchivo(idArchivo);
         	String nombrecompleto = archivoAsociado.getUrl() + archivoAsociado.getNombre();
-        	String nombreArchivo = nombrecompleto.replace('/','\\');
 
-        	File file = new File(nombreArchivo);
+        	File file = new File(nombrecompleto);
             InputStream inputStream;
             
 			try {

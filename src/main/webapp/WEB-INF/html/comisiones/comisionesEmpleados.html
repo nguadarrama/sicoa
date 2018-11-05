@@ -49,6 +49,24 @@
 							<li class="active"><a data-toggle="tab" href="#misSolicitudes">Comisiones de empleados</a></li>
 						</ul>
 				</div>
+								<div class="form-group" th:if="${MENSAJE_EXCEPCION}">
+						<div class="alert alert-danger">
+							<span class="fa fa-exclamation-triangle"></span>
+			      			<span th:text="${MENSAJE_EXCEPCION}"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div>
+					<div class="form-group" th:if="${MENSAJE}">
+						<div class="alert alert-success">
+							<span class="fa fa-check"></span>
+			      			<span th:text="${MENSAJE}"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div>
 				<div class="tab-content" >
 					<div class="row tab-pane fade in active misPropiasVacaciones" >
 						  <div class="card" id="misPropiasVacaciones">
@@ -64,7 +82,7 @@
 						    </div> -->
 						    <!-- <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion"> -->
 						    <div class="card">
-							<h3>Busca comisiones</h3>
+							<h3>Busca comisiones de empleados</h3>
 							<div class="asistenciaForm">      <!-- Formulario busqueda asistencia -->
 			      				<form th:action="@{/comisiones/comisionesEmpleados}" method="get" enctype="multipart/form-data">
 									<div class="row">
@@ -146,7 +164,7 @@
 									</thead>
 									<tbody>
 										<tr th:each="comision : ${comisionesEmpleados}">
-											<td th:text="${comision.idUsuario.idUsuario}"></td>
+											<td th:text="${comision.idUsuario.claveUsuario}"></td>
 											<td th:text="''+ ${comision.idUsuario.nombre} + ' ' + ${comision.idUsuario.apellidoPaterno} + ' ' + ${comision.idUsuario.apellidoMaterno}"></td>
 											<td th:text="${#dates.format(comision.fechaInicio, 'dd-MM-yyyy')}"></td>
 											<td th:text="${#dates.format(comision.fechaFin, 'dd-MM-yyyy')}"></td>
