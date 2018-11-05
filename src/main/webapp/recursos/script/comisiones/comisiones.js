@@ -121,12 +121,12 @@ $(document).ready(function() {
 					//alert(hmap.vacacion.idArchivo.idArchivo);
 					if(hmap.comision.idArchivo.idArchivo!=null && hmap.comision.idArchivo.idArchivo!=""){
 						$('.descargaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
-						$('.actualizaArchivo').css("display","inline");
+//						$('.actualizaArchivo').css("display","inline");
 						$('.rechazaComision').css("display","inline");
 						$('.aceptaComision').css("display","inline");
 						$('.actualizaArchivoPropio').css("display","none");
 					}else{
-						$('.actualizaArchivo').css("display","none");
+//						$('.actualizaArchivo').css("display","none");
 						$('.rechazaComision').css("display","none");
 						$('.aceptaComision').css("display","none");
 						$('.actualizaArchivoPropio').css("display","inline");
