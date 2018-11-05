@@ -578,6 +578,10 @@ public class VacacionesServiceImpl implements VacacionesService{
 			    while (!c1.after(c2)) {
 			        listaFechasAux.add(c1.getTime());
 			        c1.add(Calendar.DAY_OF_MONTH, 1);
+			        //System.out.println("Dia de la semana sabado "+c1.SATURDAY+" domingo "+c1.SUNDAY+" dia obtenido "+c1.get(Calendar.DAY_OF_WEEK) +" fecha "+c1.getTime()+" fechaMes "+(Calendar.DAY_OF_MONTH, 1));
+//			        if(c1.get(Calendar.DAY_OF_WEEK)==7 || c1.get(Calendar.DAY_OF_WEEK)==1){
+//			        	System.out.println("Es sabado o domingo");
+//			        }
 			    }
 			    SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
 			    String fecha=null;
