@@ -96,7 +96,7 @@
 											<label>
 												<label class="col-form-label">Dias Disponibles de Periodo</label>
 												<input type="number" id="diasDispobibles" th:field="*{vacacion.dias}" class="form-control" th:readonly="true" />
-												<input type="text" id="claveUsuario" name="claveUsuario" th:field="*{vacacion.idUsuario.claveUsuario}" class="form-control" th:readonly="true" th:readonly="true"/>
+												<input type="text" id="claveUsuario" name="claveUsuario" th:field="*{vacacion.idUsuario.claveUsuario}" class="form-control" th:readonly="true" style="display: none;" />
 											</label>
 										</div>
 										<div class="col-md-3">
@@ -119,18 +119,6 @@
 												<input type="number" name="diasPorPedir" id="diasPorPedir" class="form-control" th:readonly="true" />
 												<input type="text" name="idVacacion" id="idVacacion" class="form-control" th:readonly="true" th:field="*{vacacion.idVacacion}" style="display: none;" />
 											</label>
-										</div>
-										<div class="col-md-3" th:if="${listaResponsable!=null}">
-											<label for="responsable" class="col-form-label" th:text="Responsable"></label>
-									        	<select  class="form-control" 
-											       th:value="responsable" name="responsable" id="responsable" th:required="required">
-											      <option disabled="disabled" selected="selected" > Elige un responsable
-											      </option>
-											      <option th:each="responsable : ${listaResponsable}" th:value="${responsable.claveUsuario.idUsuario}" 
-											       th:text="${responsable.claveUsuario.nombre} + ' ' + ${responsable.claveUsuario.apellidoPaterno} + ' ' + ${responsable.claveUsuario.apellidoMaterno} ">
-											      </option>
-											    </select>
-											    
 										</div>
 										 <!-- <div class="col-md-3">
 											<label>
