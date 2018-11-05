@@ -322,7 +322,7 @@ public class ComisionesController {
     usuario = usuarioService.buscaUsuario(claveUsuarioAux);
     String idUnidad = "" + usuario.getIdUnidad();
     List<Comision> comisionesEmpleados = comisionService.obtenerComisionesPorUnidad(idUnidad,
-        "", nombre, apellidoPaterno, apellidoMaterno);
+        claveUsuario, nombre, apellidoPaterno, apellidoMaterno);
 
     if (comisionesEmpleados.size() > 0) {
       model.addAttribute("comisionesEmpleados", comisionesEmpleados);
