@@ -394,7 +394,7 @@
 						</div>
 						<div class="card">
 							<div class="row">
-								<div class="col-md-4" >
+								<div class="col-md-4" sec:authorize="hasAuthority('2')">
 									<form th:action="@{/comisiones/comision/actualizaArchivo}"
 										class="actualizaArchivo" method="post"
 										enctype="multipart/form-data">
@@ -435,7 +435,7 @@
 										</div>
 									</form>
 								</div>
-								<div class="col-md-2" >
+								<div class="col-md-2" sec:authorize="hasAuthority('1')">
 									<form th:action="@{/comisiones/acepta}" method="post"
 										class="aceptaComision">
 										<input id="idComision" name="idComision" type="text"
@@ -451,7 +451,7 @@
 											th:text="Aceptar"></button>
 									</form>
 								</div>
-								<div class="col-md-2" >
+								<div class="col-md-2" sec:authorize="hasAuthority('1')">
 									<form th:action="@{/comisiones/rechaza}" method="post"
 										class="rechazaComision">
 										<input id="idComision" name="idComision" type="text"
