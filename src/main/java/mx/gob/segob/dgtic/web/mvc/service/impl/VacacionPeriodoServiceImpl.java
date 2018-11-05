@@ -61,8 +61,6 @@ public class VacacionPeriodoServiceImpl implements VacacionPeriodoService{
 		} else {
 			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
 		}
-		for(VacacionPeriodo vacacion:listaUsuariosVacaciones )
-			System.out.println("Valor para la vista "+vacacion.getIdUsuario().getClaveUsuario());
 		return listaUsuariosVacaciones;
 	}
 

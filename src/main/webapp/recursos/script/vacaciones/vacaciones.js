@@ -56,29 +56,6 @@ $(document).ready(function() {
 		        $("#fechaInicio").datepicker("change", { maxDate: maxDate });
 	       },
 		   })
-//	  function DisableSpecificDates(date) {
-//
-//	   var m = date.getMonth();
-//	   var d = date.getDate();
-//	   var y = date.getFullYear();
-//	   var currentdate = (m + 1) + '-' + d + '-' + y ;
-//
-//	   for (var i = 0; i < disableddates.length; i++) {
-//
-//
-//	   if ($.inArray(currentdate, disableddates) != -1 ) {
-//	   return [false];
-//	   } 
-//	   }
-//	   var highlight = eventDates[date];
-//       if( highlight ) {
-//            return [true, "event", 'Tooltip text'];
-//       } else {
-//            return [true, '', ''];
-//       }
-//	  
-//	   return disableddates;
-//	  }
 	$('.descargaArchivo').css("display","none");
 	$("#actualizamosVacacion").css("display","none");
 	$('.actualizaVacacion #responsableAux').css("display","none");
@@ -100,20 +77,6 @@ $(document).ready(function() {
 			dateFormat: 'yy-mm-dd',
 		       beforeShowDay: $.datepicker.noWeekends 
 		   });
-//		$("#fechaInicio").datepicker({ 
-//			minDate: 1,
-//		       beforeShowDay: $.datepicker.noWeekends,
-//		       //beforeShowDay: DisableSpecificDates,
-//		       onSelect: function() 
-//		       { 
-//		    	   DisableSpecificDates();
-//		    	   calcularDias();
-//		       },
-//		   });
-//		$("#fechaInicio").on('click', function(event){
-//			alert();
-//			DisableSpecificDates();
-//		});
 		
 		function cambiarFile(){
 		    const input = document.getElementById('inputFileServer');
@@ -190,7 +153,7 @@ $(document).ready(function() {
 		});
 		
 		function diasLibres(dateFrom, dateTo) {
-			//alert(dateFrom)
+			//alert($("#claveUsuario").val())
 			  var from = moment(dateFrom, 'DD/MM/YYY'),
 			    to = moment(dateTo, 'DD/MM/YYY'),
 			    days = 0;
@@ -277,10 +240,6 @@ $(document).ready(function() {
 			$('#aceptarModal').modal(); 
 		});
 		
-//		$('.rechazaBtn').on('click', function(event) {					//botón nuevo
-//			$('#rechazarModal').modal();
-//			
-//		});
 		
 		$('.rechazaBtn').on('click', function(event) {			    //botón elimina
 			event.preventDefault();
@@ -288,86 +247,6 @@ $(document).ready(function() {
 			$('#rechazarModal #rechazaModal').attr('href', href);
 			$('#rechazarModal').modal();
 		});
-		
-//		$('.aceptaModal').on('click', function(event) {			    //botón elimina
-//			event.preventDefault();
-//			var href = $(this).attr('href');
-//			
-//			$('#aceptarModal #aceptaModal').attr('href', href);
-//			$('#aceptarModal').modal();
-//		});
-		
-	/*$('.eBtn').on('click', function(event) { 					//botón edita
-		event.preventDefault();
-		var href = $(this).attr('href');
-		var text = $(this).text();
-		
-			$.get(href, function(horario, status) {
-				$('.horarioForm #id').val(horario.idHorario);
-				$('.horarioForm #horaEntrada').val(horario.horaEntrada);
-				$('.horarioForm #horaSalida').val(horario.horaSalida);
-				$('.horarioForm #activo').val(horario.activo);
-			});
-			
-			$('.horarioForm #horarioModal').modal();
-	});*/
-	
-	
-	
-//	$('.eliminaBtn').on('click', function(event) {			    //botón elimina
-//		event.preventDefault();
-//		var href = $(this).attr('href');
-//		
-//		$('#eliminarModal #delRef').attr('href', href);
-//		$('#eliminarModal').modal();
-//	});
-//	
-//	$("#buscarText").on("keyup", function() {
-//	    var value = $(this).val().toLowerCase();
-//	    $("#tableHorarios tr").filter(function() {
-//	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//	    });
-//	  });
-//	
-//	$('.filterable .btn-filter').click(function(){
-//        var $panel = $(this).parents('.filterable'),
-//        $filters = $panel.find('.filters input'),
-//        $tbody = $panel.find('.table tbody');
-//        if ($filters.prop('disabled') == true) {
-//            $filters.prop('disabled', false);
-//            $filters.first().focus();
-//        } else {
-//            $filters.val('').prop('disabled', true);
-//            $tbody.find('.no-result').remove();
-//            $tbody.find('tr').show();
-//        }
-//    });
-//
-//    $('.filterable .filters input').keyup(function(e){
-//        /* Ignore tab key */
-//        var code = e.keyCode || e.which;
-//        if (code == '9') return;
-//        /* Useful DOM data and selectors */
-//        var $input = $(this),
-//        inputContent = $input.val().toLowerCase(),
-//        $panel = $input.parents('.filterable'),
-//        column = $panel.find('.filters th').index($input.parents('th')),
-//        $table = $panel.find('.table'),
-//        $rows = $table.find('tbody tr');
-//        /* Dirtiest filter function ever ;) */
-//        var $filteredRows = $rows.filter(function(){
-//            var value = $(this).find('td').eq(column).text().toLowerCase();
-//            return value.indexOf(inputContent) === -1;
-//        });
-//        /* Clean previous no-result if exist */
-//        $table.find('tbody .no-result').remove();
-//        /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
-//        $rows.show();
-//        $filteredRows.hide();
-//        /* Prepend no-result row if all rows are filtered */
-//        if ($filteredRows.length === $rows.length) {
-//            $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No encontrado</td></tr>'));
-//        }
-//    });
+
 	
 }); 

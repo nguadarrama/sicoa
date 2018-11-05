@@ -79,14 +79,16 @@
 											<label>
 												<label class="col-form-label">Periodo</label>
 												<input type="text" id="periodo" class="form-control" th:readonly="true" th:field="*{periodo.descripcion}" />
-												<input type="text" id="listaDiasFestivos" class="form-control" th:readonly="true" th:field="*{periodo.mensaje}" />
-												<input type="text" id="idPeriodo" name="idPeriodo" class="form-control" th:readonly="true" th:field="*{periodo.idPeriodo}"  style="display: none;" />
+												<input type="text" id="listaDiasFestivos" class="form-control" th:readonly="true" th:field="*{periodo.mensaje}" style="display: none;" />
+												<input type="text" id="idPeriodo" name="idPeriodo" class="form-control" th:readonly="true" th:field="*{periodo.idPeriodo}" style="display: none;" />
+												
 											</label>
 										</div>
 										<div class="col-md-3">
 											<label>
 												<label class="col-form-label">Dias Disponibles de Periodo</label>
 												<input type="number" id="diasDispobibles" th:field="*{vacacion.dias}" class="form-control" th:readonly="true" />
+												<input type="text" id="claveUsuario" name="claveUsuario" th:field="*{vacacion.idUsuario.claveUsuario}" class="form-control" style="display: none;"/>
 											</label>
 										</div>
 										<div class="col-md-3">
@@ -110,26 +112,6 @@
 												<input type="text" name="idVacacion" id="idVacacion" class="form-control" th:readonly="true" th:field="*{vacacion.idVacacion}" style="display: none;" />
 											</label>
 										</div>
-										<div class="col-md-3" th:if="${listaResponsable!=null}">
-											<label for="responsable" class="col-form-label" th:text="Responsable"></label>
-									        	<select  class="form-control" 
-											       th:value="responsable" name="responsable" id="responsable" th:required="required">
-											      <option disabled="disabled" selected="selected" > Elige un responsable
-											      </option>
-											      <option th:each="responsable : ${listaResponsable}" th:value="${responsable.claveUsuario.idUsuario}" 
-											       th:text="${responsable.claveUsuario.nombre} + ' ' + ${responsable.claveUsuario.apellidoPaterno} + ' ' + ${responsable.claveUsuario.apellidoMaterno} ">
-											      </option>
-											    </select>
-											    <form:select path="responsable.idUsuario">
-												    <form:options items="${listaResponsable}" itemValue="idUsuario" itemLabel="nombre"/>
-												</form:select>
-										</div>
-										<!-- <div class="col-md-3">
-											<label>
-												<label class="col-form-label">Archivo</label>
-												 <input type="file" name="archivo" id="archivo" multiple="multiple"/>
-											</label>
-										</div> -->
 									</div>
 									<div class="row">
 										<div class="col-md-12">

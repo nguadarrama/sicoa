@@ -89,6 +89,8 @@ public class VacacionesController {
 	
 	private String mensaje = "";
 	
+	private String global="";
+	
     @RequestMapping(value={"solicitudVacaciones"}, method = RequestMethod.GET)
     public String obtieneAsistencias(Model model, HttpSession session) {
     	System.out.print("Peticion de vacaciones");
@@ -334,7 +336,8 @@ public class VacacionesController {
     
     @RequestMapping(value={"vacacion/buscaUsuario"}, method = RequestMethod.GET)
     public String buscaUsuario(String claveUsuario, Model model) {
-	    System.out.println("Usuarioooooooooooooo "+claveUsuario);
+	    System.out.println("Usuarioooooooooooooo para buscar "+claveUsuario);
+	    global=claveUsuario;
     	Periodo periodo= new Periodo();
     	System.out.println("periodo.getIdPeriodo() "+claveUsuario);
     	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
@@ -366,19 +369,19 @@ public class VacacionesController {
 	    	 model.addAttribute("vacacion",null);
 	    }
 	    System.out.println("idPeriodo "+periodo.getIdPeriodo());
-	    String claveUsuarioAux= null;
-	    try{
-	    
-	    claveUsuarioAux=vacacionPeriodo.getIdUsuario().getClaveUsuario();
-	    }catch(Exception e){
-	    	e.printStackTrace();
-	    }
+//	    String claveUsuarioAux= null;
+//	    try{
+//	    
+//	    claveUsuarioAux=vacacionPeriodo.getIdUsuario().getClaveUsuario();
+//	    }catch(Exception e){
+//	    	e.printStackTrace();
+//	    }
 	    //claveUsuarioAux=vacacionPeriodo.getIdUsuario().getClaveUsuario();
-	    if(claveUsuarioAux!=null && !claveUsuarioAux.toString().isEmpty()){
-	    	model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuarioAux));
-	    }else{
-	    	model.addAttribute("listaResponsable",null);
-	    }
+//	    if(claveUsuarioAux!=null && !claveUsuarioAux.toString().isEmpty()){
+//	    	model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuarioAux));
+//	    }else{
+//	    	model.addAttribute("listaResponsable",null);
+//	    }
 //	    String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
 //	    System.out.println("Dias festivos para bloquear "+cadena);
 //	    model.addAttribute("listaDiasFestivos", cadena);
@@ -435,9 +438,10 @@ public class VacacionesController {
     	return "redirect:/vacaciones/solicitudVacaciones";
     }
     @PostMapping("/vacacion/guardaVacacion")
-    public String registraVacacionesEmpleado(@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer diasPorPedir, @RequestParam Integer idPeriodo, @RequestParam String idVacacion,Integer responsable, HttpSession session ) {
+    public String registraVacacionesEmpleado( String fechaInicio,  String fechaFin,  Integer diasPorPedir,  Integer idPeriodo,  String idVacacion,Integer responsable,  String claveUsuario, HttpSession session ) {
     	DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-    	System.out.println("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo);
+    	claveUsuario=global;
+    	System.out.println("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
     	System.out.println("responsable "+responsable);
     	Date fechaInicial = new Date();
     	Date fechaFinal = new Date();
@@ -449,9 +453,9 @@ public class VacacionesController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	 String string=""+ session.getAttribute("usuario");
-     	String[] parts = string.split(": ");
-     	String claveUsuario = parts[1];
+//    	 String string=""+ session.getAttribute("usuario");
+//     	String[] parts = string.split(": ");
+//     	String claveUsuario = parts[1];
      	VacacionPeriodo vacacion=new  VacacionPeriodo();
      	Archivo archivoDto = new Archivo();
      	vacacion.setIdVacacion(Integer.parseInt(idVacacion));

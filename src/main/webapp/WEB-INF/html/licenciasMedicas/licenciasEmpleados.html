@@ -335,19 +335,13 @@
 										</div>
 										<div class="col-md-12">
 											<input id="padecimiento" name="padecimiento" type="text"
-												class="form-control" required="required" />
+												class="form-control" required="required" th:readonly="true"  />
 										</div>
 										</div>
 									</div>
 
 								</div>
-								<div class="row">
-									<p class="text-center">
-										<button
-												type="button" class="btn btn-secondary" id="botonCancelar" data-dismiss="modal"
-												th:text="#{COMUN.CANCELAR}"></button>
-									</p>
-								</div>
+								
 							</form>
 						</div>
 						<div class="card">
@@ -430,9 +424,9 @@
 								</div>
 								<div class="col-md-2 text-center">
 									<p class="text-center">
-										<input type="button" id="miBotonCancelar"
-											class="btn btn-secondary" data-dismiss="modal"
-											value="Cancelar" />
+										<input
+												type="button" class="btn btn-secondary" id="botonCancelar" data-dismiss="modal"
+												value="Cancelar" />
 									</p>
 								</div>
 							</div>
