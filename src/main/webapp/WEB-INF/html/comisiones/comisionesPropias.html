@@ -116,8 +116,8 @@
 									</thead>
 									<tbody>
 										<tr th:each="Comision : ${comisiones}">
-											<td th:text="${#dates.format(Comision.fechaInicio, 'dd-MM-yyyy')}"></td>
-											<td th:text="${#dates.format(Comision.fechaFin, 'dd-MM-yyyy')}"></td>
+											<td th:text="${Comision.fechaInicio}"></td>
+											<td th:text="${Comision.fechaFin}"></td>
 											<td th:text="${Comision.idEstatus.estatus}"></td>
 											<td class="col-md-3">
 												<a th:href="@{/comisiones/comision/busca/(idComision=${Comision.idComision})}"  class="eBtn" id="botonLlamar" name="botonLlamar"> Ver Detalle </a>

@@ -1,5 +1,7 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Usuario {
@@ -117,7 +119,31 @@ public class Usuario {
 	}
 	
 	public String getFechaIngreso() {
-		return fechaIngreso;
+	  System.out.println("getFecha formateo ingreso: " + fechaIngreso);
+	  if(fechaIngreso.length()>13){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            date = sdf.parse(fechaIngreso);
+            fechaIngreso = sdf1.format(date);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }else if(fechaIngreso.length()>=10){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            date = sdf.parse(fechaIngreso);
+            fechaIngreso = sdf1.format(date);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    return fechaIngreso;
 	}
 	
 	public void setFechaIngreso(String fechaIngreso) {

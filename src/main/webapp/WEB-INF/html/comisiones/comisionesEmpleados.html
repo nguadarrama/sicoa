@@ -166,8 +166,8 @@
 										<tr th:each="comision : ${comisionesEmpleados}">
 											<td th:text="${comision.idUsuario.claveUsuario}"></td>
 											<td th:text="''+ ${comision.idUsuario.nombre} + ' ' + ${comision.idUsuario.apellidoPaterno} + ' ' + ${comision.idUsuario.apellidoMaterno}"></td>
-											<td th:text="${#dates.format(comision.fechaInicio, 'dd-MM-yyyy')}"></td>
-											<td th:text="${#dates.format(comision.fechaFin, 'dd-MM-yyyy')}"></td>
+											<td th:text="${comision.fechaInicio}"></td>
+											<td th:text="${comision.fechaFin}"></td>
 											<td th:text="${comision.idEstatus.estatus}"></td>
 											<td th:text="${comision.dias}"></td>
 											<td class="col-md-3">
@@ -349,7 +349,7 @@
 											<!-- <input id="responsable" name="responsable" type="text" class="form-control input-calendar" required="required" /> -->
 
 										</div>
-										<div class="row">
+										<div class="row" sec:authorize="hasAuthority('2')">
 											<p class="text-center">
 												<button type="submit" class="btn btn-secondary"
 													data-dismiss="modal">Descargar formato</button>

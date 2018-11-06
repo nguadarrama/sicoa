@@ -1,5 +1,7 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Comision {
@@ -121,7 +123,30 @@ public class Comision {
    * @return the fechaInicio
    */
   public String getFechaInicio() {
-    return fechaInicio;
+    if(fechaInicio.length()>13){
+      Date date = null;
+      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      try {
+          date = sdf.parse(fechaInicio);
+          fechaInicio = sdf1.format(date);
+      } catch (ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+      }
+  }else if(fechaInicio.length()>10){
+      Date date = null;
+      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      try {
+          date = sdf.parse(fechaInicio);
+          fechaInicio = sdf1.format(date);
+      } catch (ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+      }
+  }
+  return fechaInicio;
   }
   /**
    * @param fechaInicio the fechaInicio to set
@@ -133,7 +158,30 @@ public class Comision {
    * @return the fechaFin
    */
   public String getFechaFin() {
-    return fechaFin;
+    if(fechaFin.length()>13){
+      Date date = null;
+      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      try {
+          date = sdf.parse(fechaFin);
+          fechaFin = sdf1.format(date);
+      } catch (ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+      }
+  }else if(fechaFin.length()>10){
+      Date date = null;
+      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      try {
+          date = sdf.parse(fechaFin);
+          fechaFin = sdf1.format(date);
+      } catch (ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+      }
+  }
+  return fechaFin;
   }
   /**
    * @param fechaFin the fechaFin to set
@@ -169,7 +217,30 @@ public class Comision {
    * @return the fechaRegistro
    */
   public String getFechaRegistro() {
-    return fechaRegistro;
+    if(fechaRegistro.length()>13){
+      Date date = null;
+      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      try {
+          date = sdf.parse(fechaRegistro);
+          fechaRegistro = sdf1.format(date);
+      } catch (ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+      }
+  }else if(fechaRegistro.length()>10){
+      Date date = null;
+      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      try {
+          date = sdf.parse(fechaRegistro);
+          fechaRegistro = sdf1.format(date);
+      } catch (ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+      }
+  }
+  return fechaRegistro;
   }
   /**
    * @param fechaRegistro the fechaRegistro to set

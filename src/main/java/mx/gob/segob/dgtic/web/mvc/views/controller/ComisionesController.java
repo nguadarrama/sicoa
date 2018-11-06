@@ -192,6 +192,10 @@ public class ComisionesController {
     HashMap<String, Object> hmap = new HashMap<String, Object>();
     System.out.println("Id comision: " + idComision);
     Comision comisiones = comisionService.obtieneComision(idComision);
+    comisiones.getIdUsuario().setFechaIngreso(comisiones.getIdUsuario().getFechaIngreso());
+    comisiones.setFechaInicio(comisiones.getFechaInicio());
+    comisiones.setFechaFin(comisiones.getFechaFin());
+    comisiones.setFechaRegistro(comisiones.getFechaRegistro());
     System.out.println("Objeto comision: " + ReflectionToStringBuilder.toString(comisiones));
     System.out.println(
         "Objeto Usuario: " + ReflectionToStringBuilder.toString(comisiones.getIdUsuario()));
