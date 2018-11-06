@@ -26,7 +26,7 @@ public interface ComisionService {
 
   public Comision agregarComision(ComisionAux comision, String claveUsuario);
 
-  public void modificaComisiones(ComisionAux comision, String claveUsuario);
+  public Comision modificaComisiones(ComisionAux comision, String claveUsuario);
   
   public Comision modificaComisionEstatusArchivo(ComisionAux comisionAux, String claveUsuario);
 

@@ -207,33 +207,48 @@ public class ComisionServiceImpl implements ComisionService {
   }
 
   @Override
-  public void modificaComisiones(ComisionAux comisionAux, String claveUsuario) {
+  public Comision modificaComisiones(ComisionAux comisionAux, String claveUsuario) {
+    Comision comisionRespuesta = new Comision();
     Header header = new BasicHeader("Authorization", "Bearer %s");
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     HttpEntity httpEntity = new BasicHttpEntity();
     HttpResponse response;
-    //BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-    Usuario usuario= new Usuario();
-    usuario=usuarioService.buscaUsuario(claveUsuario);
-    System.out.println("IdUsuario recuperado "+usuario.getIdUsuario());
+    // BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+    Usuario usuario = new Usuario();
+    usuario = usuarioService.buscaUsuario(claveUsuario);
+    System.out.println("IdUsuario recuperado " + usuario.getIdUsuario());
     comisionAux.setIdUsuario(usuario.getIdUsuario());
     Map<String, Object> content = new HashMap<String, Object>();
     content.put("comision", comisionAux);
 
     try {
-        httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+      httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
     } catch (ClienteException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
     }
-    
-    try { //se consume recurso rest
-        response=ClienteRestUtil.getCliente().put(ComisionEndPointConstants.WEB_SERVICE_MODIFICA_COMISION, httpEntity, header);
+
+    try { // se consume recurso rest
+      response = ClienteRestUtil.getCliente()
+          .put(ComisionEndPointConstants.WEB_SERVICE_MODIFICA_COMISION, httpEntity, header);
     } catch (ClienteException e) {
-        logger.error(e.getMessage(), e);
-        throw new AuthenticationServiceException(e.getMessage(), e);
+      logger.error(e.getMessage(), e);
+      throw new AuthenticationServiceException(e.getMessage(), e);
     }
-}
+    if (HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+
+      JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+      JsonElement dataJson = json.get("data").getAsJsonObject();
+      comisionRespuesta = gson.fromJson(dataJson, Comision.class);
+    } else if (HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+      String mensaje = obtenerMensajeError(response);
+      throw new AuthenticationServiceException(mensaje);
+    } else {
+      throw new AuthenticationServiceException(
+          "Error al obtener el día Inhábil : " + response.getStatusLine().getReasonPhrase());
+    }
+    return comisionRespuesta;
+  }
   
 
   @Override

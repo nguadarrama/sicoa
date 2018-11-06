@@ -399,21 +399,8 @@ public class ComisionesController {
   public String modificarComisionesGuardado(String idComision, String fechaInicio, String fechaFin,
       String dias, String comision, String idResponsable, String claveUsuario, String idHorario, Model model, HttpSession session) {
     System.out.println("Comision a ser modificada con id: " + idComision);
-    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     System.out.println("fechaInicio " + fechaInicio + " fechaFin " + fechaFin + " diasPorPedir "
         + dias + " responsable " + idResponsable);
-    System.out.println("responsable " + idResponsable);
-    // Date fechaInicial = new Date();
-    // Date fechaFinal = new Date();
-    //
-    // try {
-    // fechaInicial = df.parse(fechaInicio);
-    // fechaFinal=df.parse(fechaFin);
-    // System.out.println("fechaInicio "+fechaInicial);
-    // } catch (ParseException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
     ComisionAux comisioPeticion = new ComisionAux();
     comisioPeticion.setIdComision(Integer.valueOf(idComision));
     comisioPeticion.setFechaInicio(fechaInicio);
@@ -423,12 +410,10 @@ public class ComisionesController {
     comisioPeticion.setIdResponsable(Integer.valueOf(idResponsable));
     comisioPeticion.setIdHorario(Integer.valueOf(idHorario));
     
-    System.out.println("ComisionAux: " + ReflectionToStringBuilder.toString(comisioPeticion));
-    comisionService.modificaComisiones(comisioPeticion, claveUsuario);
-//     System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir
-    // "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
-
-
+    System.out.println("ComisionAux front: " + ReflectionToStringBuilder.toString(comisioPeticion));
+    Comision comisionRespuesta = comisionService.modificaComisiones(comisioPeticion, claveUsuario);
+    this.mensaje=comisionRespuesta.getMensaje();
+    System.out.println("mensaje recuperado "+comisionRespuesta.getMensaje());
     return "redirect:/comisiones/comisionesEmpleados";
 
   }
