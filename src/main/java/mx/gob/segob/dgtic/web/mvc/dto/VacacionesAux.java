@@ -1,5 +1,7 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -9,21 +11,28 @@ public class VacacionesAux {
 
 		
 	private Integer idDetalle;
-	private Integer idUsuario;
-	private Integer idVacacion;
+	private Usuario idUsuario;
+	private  VacacionPeriodo idVacacion;
 	private Integer idResponsable;
-	private Integer idArchivo;
-	private Integer idEstatus;
+	private Archivo idArchivo;
+	private Estatus idEstatus;
 	private String fechaInicio;
 	private String fechaFin;
 	private Integer dias;
 	private String fechaRegistro;
     private String name;
+    private String mensaje;
     
-    public VacacionesAux(){
+    public String getMensaje() {
+		return mensaje;
+	}
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+	public VacacionesAux(){
     	
     }
-    public VacacionesAux(Integer idUsuario, Integer idVacacion, Integer idResponsable, Integer idEstatus, String fechaInicio, String fechaFin, 
+    public VacacionesAux(Usuario idUsuario, VacacionPeriodo idVacacion, Integer idResponsable, Estatus idEstatus, String fechaInicio, String fechaFin, 
     	Integer dias	){
     	this.idUsuario = idUsuario;
     	this.idVacacion=idVacacion;
@@ -40,16 +49,16 @@ public class VacacionesAux {
 	public void setIdDetalle(Integer idDetalle) {
 		this.idDetalle = idDetalle;
 	}
-	public Integer getIdUsuario() {
+	public Usuario getIdUsuario() {
 		return idUsuario;
 	}
-	public void setIdUsuario(Integer idUsuario) {
+	public void setIdUsuario(Usuario idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-	public Integer getIdVacacion() {
+	public VacacionPeriodo getIdVacacion() {
 		return idVacacion;
 	}
-	public void setIdVacacion(Integer idVacacion) {
+	public void setIdVacacion(VacacionPeriodo idVacacion) {
 		this.idVacacion = idVacacion;
 	}
 	public Integer getIdResponsable() {
@@ -58,25 +67,73 @@ public class VacacionesAux {
 	public void setIdResponsable(Integer idResponsable) {
 		this.idResponsable = idResponsable;
 	}
-	public Integer getIdArchivo() {
+	public Archivo getIdArchivo() {
 		return idArchivo;
 	}
-	public void setIdArchivo(Integer idArchivo) {
+	public void setIdArchivo(Archivo idArchivo) {
 		this.idArchivo = idArchivo;
 	}
-	public Integer getIdEstatus() {
+	public Estatus getIdEstatus() {
 		return idEstatus;
 	}
-	public void setIdEstatus(Integer idEstatus) {
+	public void setIdEstatus(Estatus idEstatus) {
 		this.idEstatus = idEstatus;
 	}
 	public String getFechaInicio() {
+		fechaInicio=fechaInicio.substring(0, 20);
+		if(fechaInicio.length()>13){
+			Date date = null;
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaInicio);
+				fechaInicio = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(fechaInicio.length()>10){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaInicio);
+				fechaInicio = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return fechaInicio;
 	}
 	public void setFechaInicio(String fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
 	public String getFechaFin() {
+		fechaFin=fechaFin.substring(0, 20);
+		if(fechaFin.length()>13){
+			Date date = null;
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaFin);
+				fechaFin = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(fechaFin.length()>10){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaInicio);
+				fechaFin = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return fechaFin;
 	}
 	public void setFechaFin(String fechaFin) {
@@ -89,6 +146,30 @@ public class VacacionesAux {
 		this.dias = dias;
 	}
 	public String getFechaRegistro() {
+		fechaRegistro=fechaRegistro.substring(0, 11);
+		if(fechaRegistro.length()>13){
+			Date date = null;
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaRegistro);
+				fechaRegistro = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(fechaRegistro.length()>10){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaRegistro);
+				fechaRegistro = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return fechaRegistro;
 	}
 	public void setFechaRegistro(String fechaRegistro) {

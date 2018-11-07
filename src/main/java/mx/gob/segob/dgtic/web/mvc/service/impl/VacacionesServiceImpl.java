@@ -47,6 +47,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionesAux;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
+import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import mx.gob.segob.dgtic.web.mvc.service.VacacionesService;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
@@ -58,6 +59,9 @@ public class VacacionesServiceImpl implements VacacionesService{
 	
 	@Autowired
 	UsuarioService usuarioService;
+	
+	@Autowired
+	private CatalogoService catalogoService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
@@ -90,8 +94,8 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 
 	@Override
-	public Vacaciones obtieneVacacion(String idVacacion) {
-		Vacaciones vacaciones = new Vacaciones();
+	public VacacionesAux obtieneVacacion(String idVacacion) {
+		VacacionesAux vacaciones = new VacacionesAux();
 		HttpResponse response;
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
@@ -107,7 +111,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
-			vacaciones = gson.fromJson(dataJson, Vacaciones.class);		
+			vacaciones = gson.fromJson(dataJson, VacacionesAux.class);		
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			
@@ -116,9 +120,46 @@ public class VacacionesServiceImpl implements VacacionesService{
 		} else {
 			throw new AuthenticationServiceException("Error al obtener vacaciones : "+response.getStatusLine().getReasonPhrase());
 		}
+		//System.out.println("Fecha recuperada fin "+vacaciones.getFechaFin());
+		vacaciones.setFechaInicio(vacaciones.getFechaInicio());
+		vacaciones.setFechaFin(vacaciones.getFechaFin());
+		vacaciones.setFechaRegistro(vacaciones.getFechaRegistro());
+		Usuario usua= null;
+		usua=vacaciones.getIdUsuario();
+		usua.setFechaIngreso(usua.getFechaIngreso());
+		vacaciones.setIdUsuario(usua);
 		
 		return vacaciones;
 	}
+//	private void conviertoFecha(String fecha){
+//		if(fecha.length()>13){
+//			Date date = new Date();
+//			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
+//			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+//		    try {
+//				try {
+//					date = sdf.parse(fecha);
+//				} catch (java.text.ParseException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				fecha = sdf1.format(date);
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}else if(fecha.length()>10){
+//			Date date = new Date();
+//			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+//			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+//		    try {
+//				date = sdf.parse(fecha);
+//				fecha = sdf1.format(date);
+//			} catch (java.text.ParseException e) {
+//				e.printStackTrace();
+//		}
+//		}
+//	}
 	
 	@Override
 	public void eliminaVacaciones(String idVacaciones) {
@@ -145,7 +186,8 @@ public class VacacionesServiceImpl implements VacacionesService{
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		Usuario usuario= new Usuario();
 		usuario=usuarioService.buscaUsuario(claveUsuario);
-		vacaciones.setIdUsuario(usuario.getIdUsuario());
+		usuario.setFechaIngreso(null);
+		vacaciones.setIdUsuario(usuario);
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("detalleVacacion", vacaciones);
 
@@ -599,6 +641,8 @@ public class VacacionesServiceImpl implements VacacionesService{
 			
 			return listaFechas;
 	}
+
+	
 	
 
 

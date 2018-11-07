@@ -1,11 +1,24 @@
 $(document).ready(function() {
 	
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+
+	var yyyy = today.getFullYear();
+	if(dd<10){
+	    dd='0'+dd;
+	} 
+	if(mm<10){
+	    mm='0'+mm;
+	} 
+	var today = dd+'-'+mm+'-'+yyyy;
+	$("#fechaSolicitud").val(today);
 	$('.collapse').collapse();
 //	$('#collapseOne').collapse({
 //		  toggle: false
 //		})
 	//$("#botonGuardarVacaciones").disabled = true;
-	document.getElementById("botonGuardarVacaciones").disabled=true;
+	//document.getElementById("botonGuardarVacaciones").disabled=true;
 		//document.getElementById("validacionDias").style.display = "none";
 	var array =$("#listaDiasFestivos").val();
 	//alert("LLegada "+array);
@@ -67,6 +80,13 @@ $(document).ready(function() {
 			event.preventDefault();
 			$("#actualizamosVacacion").css("display","none");
 			$(".misPropiasVacaciones").css("display","inline");
+		});
+		
+		$("#cerrarMensaje").on('click', function(event){
+			event.preventDefault();
+			//$("#actualizamosVacacion").css("display","none");
+			$("#mensajeError").css("display","none");
+			//alert("bien")
 		});
 		
 		$("#fechaInicioBusca1").datepicker({
@@ -188,7 +208,7 @@ $(document).ready(function() {
 			  return days;
 			}
 		function calcularDias(){
-			document.getElementById("botonGuardarVacaciones").disabled = true;
+			//document.getElementById("botonGuardarVacaciones").disabled = true;
 			var fechaInicio= $("#fechaInicio").val();
 			var fechaFin=$("#fechaFin").val();
 			//alert("Valor1 "+fechaInicio+" valor2 "+fechaFin);
@@ -217,10 +237,12 @@ $(document).ready(function() {
 						}else{
 							//$("#validacionDias").css("display","inline");
 							//alert("Error, los días no deben pasar del tope ");
+							$("#mensajeError").css("display","inline");
 							document.getElementById("botonGuardarVacaciones").disabled = true;
 						}
 					}else{
 						//alert("El número de días no es permitido");
+						$("#mensajeError").css("display","inline");
 						document.getElementById("botonGuardarVacaciones").disabled = true;
 						//$("#validacionDias").css("display","inline");
 					}

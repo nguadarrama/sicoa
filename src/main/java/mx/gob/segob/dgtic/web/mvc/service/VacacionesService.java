@@ -10,7 +10,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 
 public interface VacacionesService {
 	public List<Vacaciones> obtieneVacaciones();
-	public Vacaciones obtieneVacacion(String idVacacion);
+	public VacacionesAux obtieneVacacion(String idVacacion);
 	public void eliminaVacaciones(String idVacaciones);
 	public Vacaciones agregaVacaciones(VacacionesAux vacaciones, String claveUsuario);
 	public Vacaciones modificaVacaciones(Vacaciones vacaciones);
@@ -20,4 +20,6 @@ public interface VacacionesService {
 	public List<Vacaciones> consultaVacacionesPropiasPorFiltros(String claveUsuario, String idPeriodo, String idEstatus, String pfechaInicio, String pfechaFin );
 	public reporte generaReporte(GeneraReporteArchivo generaReporteArchivo);
 	public String recuperaDiasVacacioness(String claveUsuario);
+	
+	
 }

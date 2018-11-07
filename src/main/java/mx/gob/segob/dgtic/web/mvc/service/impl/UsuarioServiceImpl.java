@@ -109,7 +109,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		} else {
 			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
 		}
-		
+		usuario.setFechaIngreso(usuario.getFechaIngreso());
 		return usuario;
 	}
 

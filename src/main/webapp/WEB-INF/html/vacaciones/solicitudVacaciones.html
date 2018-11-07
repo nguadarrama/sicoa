@@ -76,6 +76,23 @@
 							</button>
 			          	</div>
 					</div>
+					<div class="form-group" th:if="${MENSAJE_ALERTA}">
+						<div class="alert alert-warning">
+							<span class="fa fa-exclamation-triangle"></span>
+			      			<span th:text="${MENSAJE_EXCEPCION}"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div>
+					<div class="form-group" id="mensajeError" style="display: none; ">
+						<div class="alert alert-danger text-center">
+			      			<span>Lo sentimos el n&uacute;mero de d&iacute;as excede los d&iacute;as disponibles del periodo, seleccione nuevamente</span>
+							<button type="button" class="close" id="cerrarMensaje">
+								<span aria-hidden="true">&times;</span>
+							</button>
+			          	</div>
+					</div>
 				<div class="tab-content">
 					<div class="row tab-pane fade in active" id="agregar">
 						
@@ -83,8 +100,71 @@
 							<h3>Agregar peticion de vacaciones</h3>
 							<div class="guardaVacaciones" >      <!-- Formulario busqueda asistencia -->
 			      				<form th:action="@{/vacaciones/vacacion/modifica}" method="post">
+			      					<div class="row">
+									<div class="col-md-2">
+										<label> <label class="col-form-label">Fecha de
+												Solicitud</label> <input id="fechaSolicitud" name="fechaSolicitud"
+											type="text" class="form-control" required="required"
+											th:readonly="true" />
+										</label>
+									</div>
+									<div class="col-md-5">
+										<label> <label class="col-form-label">Puesto</label>
+											<input id="idEstatus" name="idEstatus" type="text" th:field="*{usuario.idPuesto}"
+											class="form-control" required="required" th:readonly="true" />
+										</label>
+									</div>
+									<div class="col-md-5">
+										<label> <label class="col-form-label">Unidad Administrativa</label>
+											<input id="idEstatus" name="idEstatus" type="text" th:field="*{usuario.nombreUnidad}"
+											class="form-control" required="required" th:readonly="true" />
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-2">
+										<label> <label class="col-form-label">No.
+												Empleado</label> <input id="numeroEmpleado" name="numeroEmpleado"
+											type="text" class="form-control" required="required" th:field="*{usuario.claveUsuario}"
+											th:readonly="true" />
+										</label>
+									</div>
+									<div class="col-md-2">
+										<label> <label class="col-form-label">Fecha de
+												Ingreso</label> <input id="fechaIngreso" name="fechaIngreso"
+											type="text" class="form-control" required="required" th:field="*{usuario.fechaIngreso}"
+											th:readonly="true" />
+										</label>
+									</div>
+									<div class="col-md-2">
+										<label> <label class="col-form-label">RFC</label> <input
+											id="rfc" name="rfc" type="text" class="form-control" th:field="*{usuario.rfc}"
+											required="required" th:readonly="true" />
+										</label>
+									</div>
+									<div class="col-md-2">
+										<label> <label class="col-form-label">Nombre</label> <input
+											id="nombre" name="nombre" type="text" class="form-control" th:field="*{usuario.nombre}"
+											required="required" th:readonly="true" />
+										</label>
+									</div>
+									<div class="col-md-2">
+										<label> <label class="col-form-label">Apellido
+												Paterno</label> <input id="apellidoPaterno" name="apellidoPaterno" th:field="*{usuario.apellidoPaterno}"
+											type="text" class="form-control" required="required"
+											th:readonly="true" />
+										</label>
+									</div>
+									<div class="col-md-2">
+										<label> <label class="col-form-label">Apellido
+												Materno</label> <input id="apellidoMaterno" name="apellidoMaterno" th:field="*{usuario.apellidoMaterno}"
+											type="text" class="form-control" required="required"
+											th:readonly="true" />
+										</label>
+									</div>
+								</div>
 									<div class="row">
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<label>
 												<label class="col-form-label">Periodo</label>
 												<input type="text" id="periodo" class="form-control" th:readonly="true" th:field="*{periodo.descripcion}" />
@@ -92,9 +172,9 @@
 												<input type="text" id="idPeriodo" name="idPeriodo" class="form-control" th:readonly="true" th:field="*{periodo.idPeriodo}"  style="display: none;" />
 											</label>
 										</div>
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<label>
-												<label class="col-form-label">Dias Disponibles de Periodo</label>
+												<label class="col-form-label">Dias Disponibles</label>
 												<input type="number" id="diasDispobibles" th:field="*{vacacion.dias}" class="form-control" th:readonly="true" />
 												<input type="text" id="claveUsuario" name="claveUsuario" th:field="*{vacacion.idUsuario.claveUsuario}" class="form-control" th:readonly="true" style="display: none;" />
 											</label>
@@ -102,24 +182,25 @@
 										<div class="col-md-3">
 											<label>
 												<label class="col-form-label">Fecha de Inicio</label>
-												<input type="text" name="fechaInicio" class="form-control input-calendar" id="fechaInicio" required="required" autocomplete="off" th:readonly="true" />
+												<input type="text" name="fechaInicio" class="form-control input-calendar" id="fechaInicio" required="required" autocomplete="off" />
 											</label>
 										</div>
 										<div class="col-md-3">
 											<label>
 												<label class="col-form-label">Fecha de Fin</label>
-												<input type="text" name="fechaFin" class="form-control input-calendar" id="fechaFin" required="required" autocomplete="off" th:readonly="true" />
+												<input type="text" name="fechaFin" class="form-control input-calendar" id="fechaFin" required="required" autocomplete="off" />
+											</label>
+										</div>
+										<div class="col-md-2">
+											<label>
+												<label class="col-form-label">Dias por Pedir</label>
+												<input type="number" name="diasPorPedir" id="diasPorPedir" class="form-control" th:readonly="true" />
+												<input type="text" name="idVacacion" id="idVacacion" class="form-control" th:readonly="true" th:field="*{vacacion.idVacacion}" style="display: none;"  />
 											</label>
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-3">
-											<label>
-												<label class="col-form-label">Dias por Pedir</label>
-												<input type="number" name="diasPorPedir" id="diasPorPedir" class="form-control" th:readonly="true" />
-												<input type="text" name="idVacacion" id="idVacacion" class="form-control" th:readonly="true" th:field="*{vacacion.idVacacion}" style="display: none;" />
-											</label>
-										</div>
+										
 										 <!-- <div class="col-md-3">
 											<label>
 												<label class="col-form-label">Archivo</label>
