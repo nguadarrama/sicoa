@@ -24,6 +24,7 @@ public class GeneraReporteArchivo implements Serializable {
 	private String dias; 
 	private String responsable;
 	private String idVacacion;
+	private String fechaPeticion;
 	
 
 	/**
@@ -33,7 +34,9 @@ public class GeneraReporteArchivo implements Serializable {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public GeneraReporteArchivo(String idsolicitud,String idEstatus,String idPuesto,String unidadAdministrativa,String numeroEmpleado,String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio, String fechaFin, String dias, String responsable, String idVacacion){
+	public GeneraReporteArchivo(String idsolicitud,String idEstatus,String idPuesto,String unidadAdministrativa,String numeroEmpleado,
+			String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio, String fechaFin, 
+			String dias, String responsable, String idVacacion, String fechaPeticion){
 		super();
 		this.idsolicitud = idsolicitud;
 		this.idEstatus = idEstatus;
@@ -50,6 +53,13 @@ public class GeneraReporteArchivo implements Serializable {
 		this.responsable=responsable;
 		this.fechaInicio=fechaInicio;
 		this.idVacacion=idVacacion;
+		this.fechaPeticion=fechaPeticion;
+	}
+	public String getFechaPeticion() {
+		return fechaPeticion;
+	}
+	public void setFechaPeticion(String fechaPeticion) {
+		this.fechaPeticion = fechaPeticion;
 	}
 	public String getIdsolicitud() {
 		return idsolicitud;

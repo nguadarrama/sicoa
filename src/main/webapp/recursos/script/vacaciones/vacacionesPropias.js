@@ -172,6 +172,8 @@ $(document).ready(function() {
 						$('.aceptaVacacion #aceptaVacacion').css("display","none");
 					}else{
 						
+						$('.eliminaVacacion #idVacacionEliminar').val(hmap.vacacion.idDetalle);
+						$('#botonEliminarVacaciones').css("display","inline");
 					}
 					//alert(hmap.vacacion.idArchivo.idArchivo);
 					if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){

@@ -71,10 +71,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		List<Vacaciones> listaVacaciones = new ArrayList<Vacaciones>();
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		
 		try{
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_VACACONES, header);
 		} catch (ClienteException e) {
@@ -104,8 +101,6 @@ public class VacacionesServiceImpl implements VacacionesService{
 		VacacionesAux vacaciones = new VacacionesAux();
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
@@ -141,45 +136,14 @@ public class VacacionesServiceImpl implements VacacionesService{
 		
 		return vacaciones;
 	}
-//	private void conviertoFecha(String fecha){
-//		if(fecha.length()>13){
-//			Date date = new Date();
-//			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
-//			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
-//		    try {
-//				try {
-//					date = sdf.parse(fecha);
-//				} catch (java.text.ParseException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				fecha = sdf1.format(date);
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}else if(fecha.length()>10){
-//			Date date = new Date();
-//			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-//			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
-//		    try {
-//				date = sdf.parse(fecha);
-//				fecha = sdf1.format(date);
-//			} catch (java.text.ParseException e) {
-//				e.printStackTrace();
-//		}
-//		}
-//	}
 	
 	@Override
-	public void eliminaVacaciones(String idVacaciones, Authentication authentication) {
+	public Vacaciones eliminaVacaciones(Integer idVacaciones, Authentication authentication) {
 		HttpResponse response;
-		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		
+		Vacaciones vacacio= new Vacaciones();
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_ELIMINA_VACACIONES + "?id=" + idVacaciones, header);
@@ -187,15 +151,24 @@ public class VacacionesServiceImpl implements VacacionesService{
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+		}
+		return vacacio;
 	}
 	
 	@Override
 	public Vacaciones agregaVacaciones(VacacionesAux vacaciones, String claveUsuario, Authentication authentication) {
 		Vacaciones vacacio= new Vacaciones();
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HttpEntity httpEntity = new BasicHttpEntity();
@@ -234,42 +207,6 @@ public class VacacionesServiceImpl implements VacacionesService{
 		}
 				
 		return vacacio;
-//		HttpResponse response;
-//		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-//		
-//		Header header = new BasicHeader("Authorization", "Bearer %s");
-//		HttpEntity httpEntity = new BasicHttpEntity();
-//		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-//		
-//		Map<String, Object> content = new HashMap<String, Object>();
-//		content.put("detalleVacacion", vacaciones);
-//
-//		try {
-//			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-//		} catch (ClienteException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		
-//		try { //se consume recurso rest
-//			response =  ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_VACACIONES, httpEntity, header);
-//		} catch (ClienteException e) {
-//			logger.error(e.getMessage(), e);
-//			throw new AuthenticationServiceException(e.getMessage(), e);
-//		}
-//		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-//			
-//			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-//			JsonElement dataJson = json.get("data").getAsJsonObject();
-//			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
-//		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-//			String mensaje = obtenerMensajeError(response);					 
-//			throw new AuthenticationServiceException(mensaje);			
-//		} else {
-//			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
-//		}
-//				
-//		return vacacio;	
 	}
 	
 	@Override
@@ -278,8 +215,6 @@ public class VacacionesServiceImpl implements VacacionesService{
 		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
@@ -311,43 +246,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		} else {
 			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
 		}
-		return vacacio;
-//		HttpResponse response;
-//		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-//		
-//		Header header = new BasicHeader("Authorization", "Bearer %s");
-//		HttpEntity httpEntity = new BasicHttpEntity();
-//		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-//		
-//		Map<String, Object> content = new HashMap<String, Object>();
-//		content.put("detalleVacacion", vacaciones);
-//
-//		try {
-//			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-//		} catch (ClienteException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		
-//		try { //se consume recurso rest
-//			response =  ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_VACACIONES, httpEntity, header);
-//		} catch (ClienteException e) {
-//			logger.error(e.getMessage(), e);
-//			throw new AuthenticationServiceException(e.getMessage(), e);
-//		}
-//		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-//			
-//			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-//			JsonElement dataJson = json.get("data").getAsJsonObject();
-//			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
-//		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-//			String mensaje = obtenerMensajeError(response);					 
-//			throw new AuthenticationServiceException(mensaje);			
-//		} else {
-//			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
-//		}
-				
-		//return vacacio;	
+		return vacacio;	
 	}
 	
 	private String obtenerMensajeError(HttpResponse response){
@@ -362,8 +261,6 @@ public class VacacionesServiceImpl implements VacacionesService{
 	public VacacionPeriodo buscaVacacionPeriodoPorClaveUsuarioYPeriodo(String claveUsuario, Integer idPeriodo, Authentication authentication) {
 		VacacionPeriodo vacaciones = new VacacionPeriodo();
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		HttpResponse response;
@@ -415,10 +312,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		vacaciones.setIdDetalle(idDetalle);
-		
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
@@ -451,42 +345,6 @@ public class VacacionesServiceImpl implements VacacionesService{
 			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
 		}
 		return vacacio;
-//		HttpResponse response;
-//		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-//		
-//		Header header = new BasicHeader("Authorization", "Bearer %s");
-//		HttpEntity httpEntity = new BasicHttpEntity();
-//		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-//		
-//		Map<String, Object> content = new HashMap<String, Object>();
-//		content.put("detalleVacacion", vacaciones);
-//
-//		try {
-//			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-//		} catch (ClienteException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		
-//		try { //se consume recurso rest
-//			response =  ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_ACEPTAORECHAZA_VACACIONES, httpEntity, header);
-//		} catch (ClienteException e) {
-//			logger.error(e.getMessage(), e);
-//			throw new AuthenticationServiceException(e.getMessage(), e);
-//		}
-//		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-//			
-//			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-//			JsonElement dataJson = json.get("data").getAsJsonObject();
-//			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
-//		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-//			String mensaje = obtenerMensajeError(response);					 
-//			throw new AuthenticationServiceException(mensaje);			
-//		} else {
-//			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
-//		}
-				
-		//return vacacio;
 	}
 
 	@Override
@@ -495,10 +353,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		List<Vacaciones> listaVacaciones = new ArrayList<>();
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		
 		try{
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS+ "?claveUsuario="+claveUsuario+"&nombre="+nombre+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad+"&idEstatus="+idEstatus, header);
 		} catch (ClienteException e) {
@@ -528,10 +383,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		List<Vacaciones> listaVacaciones = new ArrayList<>();
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		
 		try{
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin, header);
 		} catch (ClienteException e) {
@@ -583,8 +435,6 @@ public class VacacionesServiceImpl implements VacacionesService{
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		reporte respuesta = new reporte();
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		Map<String, Object> content = new HashMap<String, Object>();
@@ -616,16 +466,14 @@ public class VacacionesServiceImpl implements VacacionesService{
 	@Override
 	public String recuperaDiasVacacioness(String claveUsuario, Authentication authentication) {
 			List<Vacaciones> listaVacaciones = new ArrayList<>();
+			HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+			Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 			String idEstatus="";
 			String idUnidad="";
 			String idPeriodo="";
 			String pfechaInicio="";
 			String pfechaFin="";
 			HttpResponse response;
-			HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-			//Se agrega el JWT a la cabecera para acceso al recurso rest
-			Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 			try{
 				response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin, header);
 			} catch (ClienteException e) {
@@ -648,30 +496,27 @@ public class VacacionesServiceImpl implements VacacionesService{
 			}
 			String listaFechas="";
 			for(Vacaciones vacaciones: listaVacaciones){
-				Date fechaInicio=vacaciones.getFechaInicio();
-				Date fechaFin=vacaciones.getFechaFin();
-				
-				Calendar c1 = Calendar.getInstance();
-				//System.out.println("Fechas fecha inicial "+detalleVacacionDto.getFechaInicio()+" fecha final "+detalleVacacionDto.getFechaFin());
-			    c1.setTime(fechaInicio);
-			    Calendar c2 = Calendar.getInstance();
-			    c2.setTime(fechaFin);
-			    List<Date> listaFechasAux = new ArrayList<Date>();
-			    while (!c1.after(c2)) {
-			        listaFechasAux.add(c1.getTime());
-			        c1.add(Calendar.DAY_OF_MONTH, 1);
-			        //System.out.println("Dia de la semana sabado "+c1.SATURDAY+" domingo "+c1.SUNDAY+" dia obtenido "+c1.get(Calendar.DAY_OF_WEEK) +" fecha "+c1.getTime()+" fechaMes "+(Calendar.DAY_OF_MONTH, 1));
-//			        if(c1.get(Calendar.DAY_OF_WEEK)==7 || c1.get(Calendar.DAY_OF_WEEK)==1){
-//			        	System.out.println("Es sabado o domingo");
-//			        }
-			    }
-			    SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
-			    String fecha=null;
-			    for (Iterator<Date> it = listaFechasAux.iterator(); it.hasNext();) {
-			        Date date = it.next();
-			        fecha = sdf1.format(date);
-			        listaFechas+=""+fecha+",";
-			    }
+				if(vacaciones.getIdEstatus().getIdEstatus()!=3){
+					Date fechaInicio=vacaciones.getFechaInicio();
+					Date fechaFin=vacaciones.getFechaFin();
+					
+					Calendar c1 = Calendar.getInstance();
+				    c1.setTime(fechaInicio);
+				    Calendar c2 = Calendar.getInstance();
+				    c2.setTime(fechaFin);
+				    List<Date> listaFechasAux = new ArrayList<Date>();
+				    while (!c1.after(c2)) {
+				        listaFechasAux.add(c1.getTime());
+				        c1.add(Calendar.DAY_OF_MONTH, 1);
+				    }
+				    SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+				    String fecha=null;
+				    for (Iterator<Date> it = listaFechasAux.iterator(); it.hasNext();) {
+				        Date date = it.next();
+				        fecha = sdf1.format(date);
+				        listaFechas+=""+fecha+",";
+				    }
+			}
 				    
 			}
 				if(!listaFechas.isEmpty() && listaFechas!=null){

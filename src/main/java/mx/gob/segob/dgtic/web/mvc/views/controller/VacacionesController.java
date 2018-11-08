@@ -95,16 +95,12 @@ public class VacacionesController {
     @RequestMapping(value={"solicitudVacaciones"}, method = RequestMethod.GET)
     public String obtieneAsistencias(Model model, HttpSession session, Authentication authentication) {
     	System.out.print("Peticion de vacaciones");
-	    
-	    //model.addAttribute("listaVacaciones", vacacionesService.obtieneVacaciones());
 	    String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
-    	
     	Periodo periodo= new Periodo();
     	System.out.println("periodo.getIdPeriodo() "+claveUsuario);
     	String cadena=catalogoService.obtieneDiaFestivoParaBloquear(authentication);
-	    
 	    model.addAttribute("listaDiasFestivos", cadena);
     	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario, authentication);
     	String fechas=vacacionesService.recuperaDiasVacacioness(claveUsuario, authentication);
@@ -131,15 +127,17 @@ public class VacacionesController {
 	    model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuario, authentication));
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 	    model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus(authentication));
-	    model.addAttribute("usuario",usuarioService.buscaUsuario(claveUsuario, authentication));
+	    model.addAttribute("usuario",usuarioService.buscaUsuario(claveUsuario,authentication));
 	    
 	    if(!this.getMensaje().equals("")){
-			if(this.mensaje.contains("correctamente"))
+			if(this.mensaje.contains("correctamente")){
 				model.addAttribute("MENSAJE", this.mensaje);
-			else
-				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
-			if(this.mensaje.contains("10"))
+			}else if(this.mensaje.contains("10")){
 				model.addAttribute("MENSAJE_ALERTA", this.mensaje);
+			}else{
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+			}
+			
 		}
 		this.mensaje = "";
     	//Periodo periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
@@ -158,7 +156,7 @@ public class VacacionesController {
 		//String claveResponsable=Integer.toString(vacaciones.getIdResponsable());
 		//System.out.println("claveResponsable "+claveResponsable);
 		if(vacaciones.getIdResponsable()!=null && !vacaciones.getIdResponsable().toString().isEmpty()){
-			hmap.put("responsable", usuarioService.buscaUsuarioPorId(Integer.toString(vacaciones.getIdResponsable()), authentication));
+			hmap.put("responsable", usuarioService.buscaUsuarioPorId(Integer.toString(vacaciones.getIdResponsable()),authentication));
 		}else{
 			hmap.put("responsable", null);
 		}
@@ -170,7 +168,7 @@ public class VacacionesController {
     @RequestMapping(value= "vacacion/generaArchivo",method = RequestMethod.GET)
 	public void  generaReporteVacaciones(String idSolicitud,String idEstatus,String idPuesto,String idUnidadAdministrativa,String numeroEmpleado,
 			String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio1, String fechaFin1, 
-			String dias, String responsable, String idVacacion, String responsableAux,HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+			String dias, String responsable, String idVacacion, String responsableAux,String fechaSolicitud ,HttpServletRequest request, HttpServletResponse response, Authentication authentication){
     		System.out.println("Datos para el archivo "+idSolicitud+" unidadAdministrativa "+idUnidadAdministrativa+" idPuesto "+idPuesto +" idUnidad "+idVacacion
     				+" fechaInicio "+fechaInicio1+" fechaFin "+fechaFin1+" responsableAux "+responsableAux +" responsable "+responsable);
     	try {
@@ -198,7 +196,7 @@ public class VacacionesController {
 				responsable=responsableAux;
 			}
 			
-			reporte archivo = vacacionesService.generaReporte(new GeneraReporteArchivo (idSolicitud, idEstatus, idPuesto, idUnidadAdministrativa, numeroEmpleado, fechaIngreso, rfc, nombre, apellidoPaterno, apellidoMaterno, fechaInicio1, fechaFin1, dias, responsable, idVacacion), authentication);
+			reporte archivo = vacacionesService.generaReporte(new GeneraReporteArchivo (idSolicitud, idEstatus, idPuesto, idUnidadAdministrativa, numeroEmpleado, fechaIngreso, rfc, nombre, apellidoPaterno, apellidoMaterno, fechaInicio1, fechaFin1, dias, responsable, idVacacion, fechaSolicitud), authentication);
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			if(mimeType == null){
@@ -219,7 +217,7 @@ public class VacacionesController {
     
     @RequestMapping(value={"vacacionesPropias"}, method = RequestMethod.GET)
     public String obtieneAsistenciasPropias(String idPeriodo, String idEstatus, String fechaInicioBusca1, String fechaFinBusca1 ,Model model, HttpSession session, Authentication authentication) {
-    	System.out.println("idEstatus "+idEstatus+" idPeriodo "+idPeriodo+" fechaInicio "+fechaInicioBusca1+" fechaFin "+fechaFinBusca1);
+    	System.out.println("idEstatus "+idEstatus+" idPeriodo "+idPeriodo+" fechaInicio "+fechaInicioBusca1+" fechaFin "+fechaFinBusca1 );
     	if(idEstatus==null){
     		idEstatus="";
     	}
@@ -246,12 +244,14 @@ public class VacacionesController {
     	}
     	model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus(authentication));
     	if(!this.getMensaje().equals("")){
-			if(this.mensaje.contains("correctamente"))
+			if(this.mensaje.contains("correctamente")){
 				model.addAttribute("MENSAJE", this.mensaje);
-			else
-				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
-			if(this.mensaje.contains("10"))
+			}else if(this.mensaje.contains("10")){
 				model.addAttribute("MENSAJE_ALERTA", this.mensaje);
+			}else{
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+			}
+			
 		}
 		this.mensaje = "";
     	return "/vacaciones/vacacionesPropias"; 
@@ -325,12 +325,14 @@ public class VacacionesController {
 	    
     	model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus(authentication));
     	if(!this.getMensaje().equals("")){
-			if(this.mensaje.contains("correctamente"))
+			if(this.mensaje.contains("correctamente")){
 				model.addAttribute("MENSAJE", this.mensaje);
-			else
+			}else if(this.mensaje.contains("10")){
+				model.addAttribute("MENSAJE_ALERTA", this.mensaje);
+			}else{
 				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
-			if(this.mensaje.contains("10"))
-				model.addAttribute("MENSAJE_ALERTA", this.mensaje);	
+			}
+			
 		}
 		this.mensaje = "";
     	return "/vacaciones/vacacionesEmpleados"; 
@@ -405,10 +407,9 @@ public class VacacionesController {
     }
     
     @PostMapping("/vacacion/modifica")
-    public String registraVacacioness(@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer diasPorPedir, @RequestParam Integer idPeriodo, @RequestParam String idVacacion,Integer responsable, HttpSession session,
-    		Authentication authentication) {
+    public String registraVacacioness(@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer diasPorPedir, @RequestParam Integer idPeriodo, @RequestParam String idVacacion ,Integer responsable, HttpSession session, Authentication authentication ) {
     	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-    	System.out.println("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" responsable "+responsable);
+    	System.out.println("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" responsable "+responsable+" idVacacion "+idVacacion);
     	//System.out.println("Archivo "+archivo+" idVacacion "+idVacacion);
     	System.out.println("responsable "+responsable);
     	Date fechaInicial = new Date();
@@ -443,8 +444,8 @@ public class VacacionesController {
      	estatus.setIdEstatus(1);
      	VacacionPeriodo vacacion1= new VacacionPeriodo();
      	vacacion1.setIdVacacion(Integer.parseInt(idVacacion));
-     	
-     	Vacaciones respuesta=vacacionesService.agregaVacaciones(new VacacionesAux(null,vacacion1, responsable, estatus, fechaInicio, fechaFin, diasPorPedir), claveUsuario, authentication);
+   
+     	Vacaciones respuesta=vacacionesService.agregaVacaciones(new VacacionesAux(null,vacacion1, responsable, estatus, fechaInicio, fechaFin, diasPorPedir), claveUsuario,authentication);
     	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
     	System.out.println("respuesta con mensaje "+respuesta.getMensaje());
     	
@@ -480,7 +481,6 @@ public class VacacionesController {
     	System.out.println("Mensaje obtenido "+vacaciones.getMensaje());
      	this.mensaje=vacaciones.getMensaje();
      	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
-     	
      	global="";
      	return "redirect:/vacaciones/solicitudVacacionesEmpleados";
     }
@@ -539,7 +539,7 @@ public class VacacionesController {
     }
     
     @PostMapping("/vacacion/actualizaArchivo")
-    public String registraVacaciones(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idDetalle, Authentication authentication){
+    public String registraVacaciones(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idDetalle, Authentication authentication ){
     	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario);
     	Archivo idArchivoAux=new Archivo();
     	Vacaciones vacaciones= new Vacaciones();
@@ -560,7 +560,7 @@ public class VacacionesController {
     	return"redirect:/vacaciones/vacacionesPropias";
     	}
     @PostMapping("/vacacion/actualizaArchivoEmpleado")
-    public String registraVacacionesEmpleado(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idDetalle, Authentication authentication){
+    public String registraVacacionesEmpleado(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idDetalle, Authentication authentication ){
     	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario+" idDetalle "+idDetalle);
     	Archivo idArchivoAux=new Archivo();
     	Vacaciones vacaciones= new Vacaciones();
@@ -618,6 +618,17 @@ public class VacacionesController {
         response.setHeader("Content-Disposition", String.format("attachment; filename\"%s\"",file.getName()));
         FileCopyUtils.copy(inputStream, response.getOutputStream());
     }
+    
+    @RequestMapping(value={"eliminaVacacion"}, method = RequestMethod.POST)
+    public String eliminaVacacion(Integer idVacacionEliminar, Authentication authentication) {
+	    System.out.println("id para eliminar "+idVacacionEliminar);
+	    Vacaciones vacaciones= new Vacaciones();
+	    vacaciones=vacacionesService.eliminaVacaciones(idVacacionEliminar, authentication);
+	    this.mensaje=vacaciones.getMensaje();
+	    return "redirect:/vacaciones/vacacionesPropias";
+	    
+    }
+    
 	public String getMensaje() {
 		return mensaje == null ? "" : this.mensaje;
 	}
