@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -66,11 +67,16 @@ public class VacacionesServiceImpl implements VacacionesService{
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
 	@Override
-	public List<Vacaciones> obtieneVacaciones() {
+	public List<Vacaciones> obtieneVacaciones(Authentication authentication) {
 		List<Vacaciones> listaVacaciones = new ArrayList<Vacaciones>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_VACACONES);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_VACACONES, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -94,14 +100,18 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 
 	@Override
-	public VacacionesAux obtieneVacacion(String idVacacion) {
+	public VacacionesAux obtieneVacacion(String idVacacion, Authentication authentication) {
 		VacacionesAux vacaciones = new VacacionesAux();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_VACACIONES + "?id=" + idVacacion);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_VACACIONES + "?id=" + idVacacion, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -162,13 +172,17 @@ public class VacacionesServiceImpl implements VacacionesService{
 //	}
 	
 	@Override
-	public void eliminaVacaciones(String idVacaciones) {
+	public void eliminaVacaciones(String idVacaciones, Authentication authentication) {
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_ELIMINA_VACACIONES + "?id=" + idVacaciones);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_ELIMINA_VACACIONES + "?id=" + idVacaciones, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -177,15 +191,18 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 	
 	@Override
-	public Vacaciones agregaVacaciones(VacacionesAux vacaciones, String claveUsuario) {
+	public Vacaciones agregaVacaciones(VacacionesAux vacaciones, String claveUsuario, Authentication authentication) {
 		Vacaciones vacacio= new Vacaciones();
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HttpEntity httpEntity = new BasicHttpEntity();
 		HttpResponse response;
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		Usuario usuario= new Usuario();
-		usuario=usuarioService.buscaUsuario(claveUsuario);
+		usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
 		usuario.setFechaIngreso(null);
 		vacaciones.setIdUsuario(usuario);
 		Map<String, Object> content = new HashMap<String, Object>();
@@ -256,11 +273,14 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 	
 	@Override
-	public Vacaciones modificaVacaciones(Vacaciones vacaciones) {
+	public Vacaciones modificaVacaciones(Vacaciones vacaciones, Authentication authentication) {
 		Vacaciones vacacio= new Vacaciones();
 		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		
@@ -339,9 +359,12 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 
 	@Override
-	public VacacionPeriodo buscaVacacionPeriodoPorClaveUsuarioYPeriodo(String claveUsuario, Integer idPeriodo) {
+	public VacacionPeriodo buscaVacacionPeriodoPorClaveUsuarioYPeriodo(String claveUsuario, Integer idPeriodo, Authentication authentication) {
 		VacacionPeriodo vacaciones = new VacacionPeriodo();
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		HttpResponse response;
 		Map<String, Object> content = new HashMap<String, Object>();
@@ -387,14 +410,16 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 	
 	@Override
-	public Vacaciones aceptaORechazaVacaciones(Vacaciones vacaciones,Integer idDetalle) {
+	public Vacaciones aceptaORechazaVacaciones(Vacaciones vacaciones,Integer idDetalle, Authentication authentication) {
 		Vacaciones vacacio= new Vacaciones();
 		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		vacaciones.setIdDetalle(idDetalle);
 		
-		
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		
@@ -466,13 +491,16 @@ public class VacacionesServiceImpl implements VacacionesService{
 
 	@Override
 	public List<Vacaciones> obtenerVacacionesPorFiltros(String claveUsuario, String nombre, String apellidoPaterno,
-			String apellidoMaterno, String idUnidad, String idEstatus) {
+			String apellidoMaterno, String idUnidad, String idEstatus, Authentication authentication) {
 		List<Vacaciones> listaVacaciones = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
-			
-			
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS+ "?claveUsuario="+claveUsuario+"&nombre="+nombre+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad+"&idEstatus="+idEstatus);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS+ "?claveUsuario="+claveUsuario+"&nombre="+nombre+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad+"&idEstatus="+idEstatus, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -496,11 +524,16 @@ public class VacacionesServiceImpl implements VacacionesService{
 
 	@Override
 	public List<Vacaciones> consultaVacacionesPropiasPorFiltros(String claveUsuario, String idPeriodo,
-			String idEstatus, String pfechaInicio, String pfechaFin) {
+			String idEstatus, String pfechaInicio, String pfechaFin, Authentication authentication) {
 		List<Vacaciones> listaVacaciones = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -545,11 +578,14 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 	
 	@Override
-	public reporte generaReporte(GeneraReporteArchivo generaReporteArchivo) {
+	public reporte generaReporte(GeneraReporteArchivo generaReporteArchivo, Authentication authentication) {
 		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		reporte respuesta = new reporte();
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("generaReporteArchivo", generaReporteArchivo);
@@ -578,7 +614,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 
 	@Override
-	public String recuperaDiasVacacioness(String claveUsuario) {
+	public String recuperaDiasVacacioness(String claveUsuario, Authentication authentication) {
 			List<Vacaciones> listaVacaciones = new ArrayList<>();
 			String idEstatus="";
 			String idUnidad="";
@@ -586,8 +622,12 @@ public class VacacionesServiceImpl implements VacacionesService{
 			String pfechaInicio="";
 			String pfechaFin="";
 			HttpResponse response;
+			HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+			//Se agrega el JWT a la cabecera para acceso al recurso rest
+			Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 			try{
-				response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin);
+				response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin, header);
 			} catch (ClienteException e) {
 				logger.error(e.getMessage(), e);
 				throw new AuthenticationServiceException(e.getMessage(), e);

@@ -6,15 +6,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
+import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -39,9 +43,13 @@ public class PeriodoServiceImpl implements PeriodoService{
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
 	@Override
-	public Periodo buscaPeriodoPorClaveUsuario(String claveUsuario) {
+	public Periodo buscaPeriodoPorClaveUsuario(String claveUsuario, Authentication authentication) {
 		Periodo periodo = new Periodo();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		System.out.println("usuario "+claveUsuario);
@@ -49,7 +57,7 @@ public class PeriodoServiceImpl implements PeriodoService{
 		String fechaInicial=null;
 		String fechaFinal=null;
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_PERFIL_POR_CLAVE_USUARIO + "?claveUsuario=" + claveUsuario);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_PERFIL_POR_CLAVE_USUARIO + "?claveUsuario=" + claveUsuario, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -90,12 +98,16 @@ public class PeriodoServiceImpl implements PeriodoService{
 	}
 
 	@Override
-	public List<Periodo> periodos() {
+	public List<Periodo> periodos(Authentication authentication) {
 		List<Periodo> listaPeriodo = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_PERIODOS);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_PERIODOS, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

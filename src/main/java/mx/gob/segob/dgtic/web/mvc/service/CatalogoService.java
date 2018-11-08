@@ -1,6 +1,9 @@
 package mx.gob.segob.dgtic.web.mvc.service;
 
 import java.util.List;
+
+import org.springframework.security.core.Authentication;
+
 import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
@@ -13,53 +16,50 @@ import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 public interface CatalogoService {
 	
 	//Catálogo horario
-	public List<Horario> obtieneHorarios();
-	public Horario modificaHorario(Horario horario);
-	public Horario agregaHorario(Horario horario);
-	public Horario guardaHorario(Horario horario);
-	public void borraHorario(Horario horario);
-	public Horario buscaHorario(Integer id);
-	public void eliminaHorario(Integer id);
-	public List<Perfil> obtienePerfiles();
-	public List<Horario> obtieneHorariosCat();
+	public List<Horario> obtieneHorarios(Authentication authentication);
+	public Horario modificaHorario(Horario horario, Authentication authentication);
+	public Horario agregaHorario(Horario horario, Authentication authentication);
+	public Horario guardaHorario(Horario horario, Authentication authentication);
+	public void borraHorario(Horario horario, Authentication authentication);
+	public Horario buscaHorario(Integer id, Authentication authentication);
+	public void eliminaHorario(Integer id, Authentication authentication);
+	public List<Perfil> obtienePerfiles(Authentication authentication);
+	public List<Horario> obtieneHorariosCat(Authentication authentication);
 	//Catálogo tipoDia
 	
-	public List<TipoDia> obtieneTipoDias();
-	public TipoDia buscaTipoDia(Integer id);
+	public List<TipoDia> obtieneTipoDias(Authentication authentication);
+	public TipoDia buscaTipoDia(Integer id, Authentication authentication);
 	
 	//Catálogo justificacion
-	public List<Justificacion> obtieneListaJ();
-	public List<Justificacion> obtieneJustificaciones();
-	public Justificacion modificaJustificacion(Justificacion justificacion);
-	public Justificacion agregaJustificacion(Justificacion justificacion);
-	public Justificacion buscaJustificacion(Integer id);
-	public void eliminaJustificacion(Integer id);
+	public List<Justificacion> obtieneListaJ(Authentication authentication);
+	public List<Justificacion> obtieneJustificaciones(Authentication authentication);
+	public Justificacion modificaJustificacion(Justificacion justificacion, Authentication authentication);
+	public Justificacion agregaJustificacion(Justificacion justificacion, Authentication authentication);
+	public Justificacion buscaJustificacion(Integer id, Authentication authentication);
+	public void eliminaJustificacion(Integer id, Authentication authentication);
 	//demás catálogos
 	
 	// Catálogo de periodo vacacional
-	public Periodo agregaPeriodoVacacional (Periodo periodo);
-	public void modificaPeriodoVacacional(Periodo periodo);
-	public List<Periodo> obtienePeriodos ();
-	public Periodo buscaPeriodo(Integer id);
-	public Periodo modificaEstatusPeriodo(Periodo periodo);
-	public List<Periodo> obtienePeriodosCat();
+	public Periodo agregaPeriodoVacacional (Periodo periodo, Authentication authentication);
+	public void modificaPeriodoVacacional(Periodo periodo, Authentication authentication);
+	public List<Periodo> obtienePeriodos (Authentication authentication);
+	public Periodo buscaPeriodo(Integer id, Authentication authentication);
+	public Periodo modificaEstatusPeriodo(Periodo periodo, Authentication authentication);
+	public List<Periodo> obtienePeriodosCat(Authentication authentication);
 	
 	//Catálogo Día Festivo
-	public DiaFestivo agregaDiaFestivo(DiaFestivo dia);
-	public DiaFestivo modificaDiaFestivo(DiaFestivo dia);
-	public List<DiaFestivo> obtieneDiaFestivo();
-	public DiaFestivo buscaDiaFestivo(Integer id);
-	public List<DiaFestivo> obtieneDiaFestivoCat();
+	public DiaFestivo agregaDiaFestivo(DiaFestivo dia, Authentication authentication);
+	public DiaFestivo modificaDiaFestivo(DiaFestivo dia, Authentication authentication);
+	public List<DiaFestivo> obtieneDiaFestivo(Authentication authentication);
+	public DiaFestivo buscaDiaFestivo(Integer id, Authentication authentication);
+	public List<DiaFestivo> obtieneDiaFestivoCat(Authentication authentication);
 	
 	// Catálogo Niveles
-	public List<Usuario> nivelesEmpleado();
-	public List<NivelOrganizacional> obtieneNiveles();
-	public NivelOrganizacional nivelAgrega(NivelOrganizacional nivel);
-	public NivelOrganizacional nivelBusca(Integer idNivel);
-	public NivelOrganizacional modificaNivel(NivelOrganizacional nivel);
-	public String obtieneDiaFestivoParaBloquear();
-	
-	
-	
+	public List<Usuario> nivelesEmpleado(Authentication authentication);
+	public List<NivelOrganizacional> obtieneNiveles(Authentication authentication);
+	public NivelOrganizacional nivelAgrega(NivelOrganizacional nivel, Authentication authentication);
+	public NivelOrganizacional nivelBusca(Integer idNivel, Authentication authentication);
+	public NivelOrganizacional modificaNivel(NivelOrganizacional nivel, Authentication authentication);
+	public String obtieneDiaFestivoParaBloquear(Authentication authentication);
 	
 }

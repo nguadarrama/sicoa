@@ -44,11 +44,11 @@ public class ReporteController {
 	private EstatusService estatusService;
 	
 	@RequestMapping(value={"inicioDireccion"}, method = RequestMethod.GET)
-    public String inicioReporteDireccion(Model model) {
+    public String inicioReporteDireccion(Model model, Authentication authentication) {
 		
-		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
 		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
@@ -56,11 +56,11 @@ public class ReporteController {
     }
 	
 	@RequestMapping(value={"inicioCoordinador"}, method = RequestMethod.GET)
-    public String inicioReporteCoordinador(Model model) {
+    public String inicioReporteCoordinador(Model model, Authentication authentication) {
 		
-		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
 		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
@@ -70,14 +70,14 @@ public class ReporteController {
 	//DIRECCIÓN
 	@RequestMapping(value={"reporteDireccion"}, method = RequestMethod.GET, params="busca")
     public String reporteDireccion(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
-    		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos) {
+    		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cve_m_usuario, nombre, paterno, materno, 
-				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos);
+				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos, authentication);
 		
-		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
 		model.addAttribute("listaAsistencia", listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -128,10 +128,10 @@ public class ReporteController {
 	@RequestMapping(value={"reporteDireccion"}, method = RequestMethod.GET, params="exporta")
     public ModelAndView exportaReporteDireccion(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
     		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
-    		HttpServletResponse response) {
+    		HttpServletResponse response, Authentication authentication) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cve_m_usuario, nombre, paterno, materno, 
-				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos);
+				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos, authentication);
     	
     	Map<String, Object> map = new HashMap<String, Object>();
         
@@ -197,11 +197,11 @@ public class ReporteController {
     		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cve_m_usuario, nombre, paterno, materno, 
-				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos);
+				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos, authentication);
 		
-		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
 		model.addAttribute("listaAsistencia", listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -255,7 +255,7 @@ public class ReporteController {
     		HttpServletResponse response, Authentication authentication) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cve_m_usuario, nombre, paterno, materno, 
-				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos);
+				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos, authentication);
     	
     	Map<String, Object> map = new HashMap<String, Object>();
         

@@ -1,15 +1,19 @@
 package mx.gob.segob.dgtic.web.mvc.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
+import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -34,11 +38,16 @@ public class EstatusServiceImpl implements EstatusService{
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
 	@Override
-	public List<Estatus> obtieneListaEstatus() {
+	public List<Estatus> obtieneListaEstatus(Authentication authentication) {
 		List<Estatus> listaEstatus = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_ESTATUS);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_ESTATUS, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -69,11 +78,16 @@ public class EstatusServiceImpl implements EstatusService{
 	}
 	
 	@Override
-	public List<Estatus> obtieneListaCompletaEstatus() {
+	public List<Estatus> obtieneListaCompletaEstatus(Authentication authentication) {
 		List<Estatus> listaEstatus = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_LISTA_ESTATUS);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_LISTA_ESTATUS, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -69,7 +70,7 @@ public class LicenciasMedicasController {
 	private String mensaje = "";
 	
 	@RequestMapping(value={"licenciasPropias"}, method = RequestMethod.GET)
-    public String obtieneLicencias(String fechaInicioBusca1, String fechaFinBusca1, String idEstatus, Model model, HttpSession session) {
+    public String obtieneLicencias(String fechaInicioBusca1, String fechaFinBusca1, String idEstatus, Model model, HttpSession session, Authentication authentication) {
 		String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
@@ -86,10 +87,10 @@ public class LicenciasMedicasController {
 			idEstatus="";
 		}
 		List<LicenciaMedica> lista= new ArrayList<>();
-		lista=licenciaMedicaService.obtenerListaLicenciaMedicaPorFiltros(claveUsuario, fechaInicioBusca1, fechaFinBusca1, idEstatus);
+		lista=licenciaMedicaService.obtenerListaLicenciaMedicaPorFiltros(claveUsuario, fechaInicioBusca1, fechaFinBusca1, idEstatus, authentication);
 		System.out.println("Haciendo la consulta "+lista.size());
 		model.addAttribute("licenciasMedicas",lista);
-		model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
+		model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus(authentication));
 		if(!this.getMensaje().equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
@@ -117,7 +118,7 @@ public class LicenciasMedicasController {
 //    }
 	
 	@RequestMapping(value={"solicitudLicencia"}, method = RequestMethod.GET)
-    public String solicitudLicencia(Model model, HttpSession session) {
+    public String solicitudLicencia(Model model, HttpSession session, Authentication authentication) {
 		
 		
 		//licenciaMedicaService.AgregaLicenciaMedica(new LicenciaMedica (null,null,idResponsableAux,null,null,fechaInicio,fechaFin,dias,padecimiento), claveUsuario);
@@ -126,7 +127,7 @@ public class LicenciasMedicasController {
 		String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
-		model.addAttribute("usuario",usuarioService.buscaUsuario(claveUsuario));
+		model.addAttribute("usuario",usuarioService.buscaUsuario(claveUsuario, authentication));
 		System.out.println("recuperando datos "+claveUsuario);
 		if(!this.getMensaje().equals("")){
 			if(this.mensaje.contains("correctamente"))
@@ -140,7 +141,7 @@ public class LicenciasMedicasController {
     }
 	
 	@RequestMapping(value={"solicitudLicenciasEmpleados"}, method = RequestMethod.GET)
-    public String agregaLicenciaEmpleados(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno ,Model model, HttpSession session) {
+    public String agregaLicenciaEmpleados(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno ,Model model, HttpSession session, Authentication authentication) {
 		
 		List<LicenciaMedica> lista= new ArrayList<>();
 		System.out.println("Haciendo la consulta de empleados claveUsuario "+claveUsuario+" nombre "+nombre+" apellidoPaterno "+apellidoPaterno
@@ -161,11 +162,11 @@ public class LicenciasMedicasController {
     	String[] parts = string.split(": ");
     	String claveUsuarioAux = parts[1];
     	Usuario usuario= new Usuario();
-    	usuario=usuarioService.buscaUsuario(claveUsuarioAux);
+    	usuario=usuarioService.buscaUsuario(claveUsuarioAux, authentication);
     	String idUnidad=""+usuario.getIdUnidad();
     	System.out.println("idUnidad para buscar "+idUnidad);
 		//String idUnidad="13";
-		model.addAttribute("licencias",licenciaMedicaService.obtenerLicenciasPorUnidad(idUnidad, claveUsuario, nombre, apellidoPaterno, apellidoMaterno));
+		model.addAttribute("licencias",licenciaMedicaService.obtenerLicenciasPorUnidad(idUnidad, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, authentication));
 		if(!this.getMensaje().equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
@@ -179,7 +180,7 @@ public class LicenciasMedicasController {
 	
 	@RequestMapping(value={"licenciasEmpleados"}, method = RequestMethod.GET)
     public String obtieneLicenciasPropias(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, 
-    		String idEstatus, String idUnidad, Model model, HttpSession session) {
+    		String idEstatus, String idUnidad, Model model, HttpSession session, Authentication authentication) {
 		
 		System.out.println("Datos claveUsuario "+ "nombre "+nombre+" apellidoPaterno "+apellidoPaterno+" idEstatus "
     		+idEstatus+" apellidoMaterno "+apellidoMaterno+" idUnidad "+idUnidad);
@@ -203,11 +204,11 @@ public class LicenciasMedicasController {
 		}
 		
 		List<LicenciaMedica> lista= new ArrayList<>();
-		lista=licenciaMedicaService.obtenerListaLicenciaMedicaEmpleados(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idEstatus, idUnidad);
+		lista=licenciaMedicaService.obtenerListaLicenciaMedicaEmpleados(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idEstatus, idUnidad, authentication);
 		System.out.println("Haciendo la consulta "+lista.size());
 		model.addAttribute("licenciasMedicas",lista);
-		model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
-		model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
+		model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
+		model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus(authentication));
 		if(!this.getMensaje().equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
@@ -221,7 +222,7 @@ public class LicenciasMedicasController {
 	//@RequestMapping(value={"busca"}, method = RequestMethod.POST)
 	@GetMapping("/busca")
 	@ResponseBody
-    public HashMap<String, Object>  obtieneLicenciasDeEmpleado(Integer idLicencia) {
+    public HashMap<String, Object>  obtieneLicenciasDeEmpleado(Integer idLicencia, Authentication authentication) {
 		HashMap<String, Object> hmap = new HashMap<String, Object>();
 		//List<LicenciaMedica> lista= new ArrayList<>();
 		//lista=licenciaMedicaService.obtenerListaLicenciaMedicaEmpleados(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idEstatus, idUnidad);
@@ -229,13 +230,13 @@ public class LicenciasMedicasController {
 		//model.addAttribute("licenciasMedicas",lista);
 		//model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas());
 		//model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
-		hmap.put("licencia",licenciaMedicaService.buscaLicenciaMedica(idLicencia));
+		hmap.put("licencia",licenciaMedicaService.buscaLicenciaMedica(idLicencia, authentication));
     	return hmap;
     }
 	
 	@GetMapping("/buscaDatos")
 	@ResponseBody
-    public HashMap<String, Object>  obtieneDatos( HttpSession session) {
+    public HashMap<String, Object>  obtieneDatos( HttpSession session, Authentication authentication) {
 		HashMap<String, Object> hmap = new HashMap<String, Object>();
 		
 		//List<LicenciaMedica> lista= new ArrayList<>();
@@ -248,11 +249,11 @@ public class LicenciasMedicasController {
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
     	System.out.println("recuperando datos "+claveUsuario);
-		hmap.put("usuario",usuarioService.buscaUsuario(claveUsuario));
+		hmap.put("usuario",usuarioService.buscaUsuario(claveUsuario, authentication));
 		System.out.println("recuperando datos "+claveUsuario);
-		hmap.put("usuario",usuarioService.buscaUsuario(claveUsuario));
-		String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
-		String fechas=licenciaMedicaService.consultaDiasPorBloquear(claveUsuario);
+		hmap.put("usuario",usuarioService.buscaUsuario(claveUsuario, authentication));
+		String cadena=catalogoService.obtieneDiaFestivoParaBloquear(authentication);
+		String fechas=licenciaMedicaService.consultaDiasPorBloquear(claveUsuario, authentication);
 		if(!fechas.isEmpty() && fechas!=null){
     		if(!cadena.isEmpty() && cadena!=null){
     			cadena+=","+fechas;
@@ -264,7 +265,7 @@ public class LicenciasMedicasController {
 		periodo.setMensaje(cadena);
 		hmap.put("periodo",periodo);
 		
-		hmap.put("valores", licenciaMedicaService.buscaDiasLicenciaMedica(claveUsuario));
+		hmap.put("valores", licenciaMedicaService.buscaDiasLicenciaMedica(claveUsuario, authentication));
 		
     	//return "/licenciasMedicas/solicitudLicencia";
 		//hmap.put("licencia",licenciaMedicaService.buscaLicenciaMedica(idLicencia));
@@ -273,7 +274,7 @@ public class LicenciasMedicasController {
 	
 	@GetMapping("/buscaDatosEmpleado")
 	@ResponseBody
-    public HashMap<String, Object>  obtieneDatosEmpleado( String claveUsuario, HttpSession session) {
+    public HashMap<String, Object>  obtieneDatosEmpleado( String claveUsuario, HttpSession session, Authentication authentication) {
 		HashMap<String, Object> hmap = new HashMap<String, Object>();
 		
 		//List<LicenciaMedica> lista= new ArrayList<>();
@@ -286,9 +287,9 @@ public class LicenciasMedicasController {
 //    	String[] parts = string.split(": ");
 //    	String claveUsuario = parts[1];
     	System.out.println("recuperando datos "+claveUsuario);
-		hmap.put("usuario",usuarioService.buscaUsuario(claveUsuario));
-		String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
-		String fechas=licenciaMedicaService.consultaDiasPorBloquear(claveUsuario);
+		hmap.put("usuario",usuarioService.buscaUsuario(claveUsuario, authentication));
+		String cadena=catalogoService.obtieneDiaFestivoParaBloquear(authentication);
+		String fechas=licenciaMedicaService.consultaDiasPorBloquear(claveUsuario, authentication);
 		if(!fechas.isEmpty() && fechas!=null){
     		if(!cadena.isEmpty() && cadena!=null){
     			cadena+=","+fechas;
@@ -300,26 +301,26 @@ public class LicenciasMedicasController {
 		periodo.setMensaje(cadena);
 		hmap.put("periodo",periodo);
 		System.out.println("claveUsuario para la consulta "+claveUsuario);
-		hmap.put("valores", licenciaMedicaService.buscaDiasLicenciaMedica(claveUsuario));
+		hmap.put("valores", licenciaMedicaService.buscaDiasLicenciaMedica(claveUsuario, authentication));
     	//return "/licenciasMedicas/solicitudLicencia";
 		//hmap.put("licencia",licenciaMedicaService.buscaLicenciaMedica(idLicencia));
-		licenciaMedicaService.consultaDiasPorBloquear(claveUsuario);
+		licenciaMedicaService.consultaDiasPorBloquear(claveUsuario, authentication);
     	return hmap;
     }
 	
 	@PostMapping("/agregaSolicitudLicencia")
-    public String registraLicencia(String fechaInicio, String fechaFin, Integer dias, String claveUsuario1, String padecimiento ) {
+    public String registraLicencia(String fechaInicio, String fechaFin, Integer dias, String claveUsuario1, String padecimiento, Authentication authentication ) {
 	System.out.println("Datos para la insercion claveUsuario "+claveUsuario1+" fechaInicio "+fechaInicio+" fechaFin "+fechaFin
 			+" dias "+dias+" padecimiento "+padecimiento);
 	LicenciaMedica licencia= new LicenciaMedica();
-	licencia=licenciaMedicaService.AgregaLicenciaMedica(new LicenciaMedicaAux(null,null,null, null, null, fechaInicio, fechaFin, dias, padecimiento), claveUsuario1);
+	licencia=licenciaMedicaService.AgregaLicenciaMedica(new LicenciaMedicaAux(null,null,null, null, null, fechaInicio, fechaFin, dias, padecimiento), claveUsuario1, authentication);
 	System.out.println("mensaje recuperado "+licencia.getMensaje());
 	this.mensaje=licencia.getMensaje();
 	return "redirect:/licenciasMedicas/solicitudLicenciasEmpleados";
 	}
 	
 	@PostMapping("/actualizaArchivo")
-    public String registraVacaciones(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idLicencia ){
+    public String registraVacaciones(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idLicencia, Authentication authentication){
     	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario+" idLicencia "+idLicencia);
     	Archivo idArchivoAux=new Archivo();
     	LicenciaMedica licencia= new LicenciaMedica();
@@ -328,8 +329,8 @@ public class LicenciasMedicasController {
     	//vacaciones.setIdDetalle(idDetalle);
     	if(archivo!=null && !archivo.isEmpty()){
 	    	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
-	    		archivoService.actualizaArchivo(archivo, claveUsuario, "licenciasMedicas",idArchivo,"licenciaMedica-");
-	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivo,1,null,null,null,null), claveUsuario);
+	    		archivoService.actualizaArchivo(archivo, claveUsuario, "licenciasMedicas",idArchivo,"licenciaMedica-", authentication);
+	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivo,1,null,null,null,null), claveUsuario, authentication);
 	    		//archivoService.guardaArchivo(archivo, claveUsuario, "licenciasMedicas");
 	    		//archivoDto.setIdArchivo(idArchivo);
 	    		//vacaciones.setIdArchivo(archivoDto);
@@ -337,9 +338,9 @@ public class LicenciasMedicasController {
 	    	}else{
 	    		//idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones");
 	    		//archivoDto.setIdArchivo(idArchivoAux);
-	    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "licenciasMedicas","licenciaMedica-");
+	    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "licenciasMedicas","licenciaMedica-", authentication);
 	    		System.out.println("IDArchivo recuperado "+idArchivoAux.getIdArchivo());
-	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivoAux.getIdArchivo(),1,null,null,null,null), claveUsuario);
+	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivoAux.getIdArchivo(),1,null,null,null,null), claveUsuario, authentication);
 	    		//vacaciones.setIdArchivo(archivoDto);
 	    		//vacacionesService.modificaVacaciones(vacaciones);
 	    	}
@@ -351,10 +352,10 @@ public class LicenciasMedicasController {
     	}
 	
 	@RequestMapping(value = "/descargaArchivo", method = RequestMethod.GET)
-    public void getFile(Integer idArchivo, HttpServletRequest request, HttpServletResponse response) throws IOException{
+    public void getFile(Integer idArchivo, HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
     	System.out.println("id del archivo "+idArchivo);
     	Archivo archivo= new Archivo();
-    	archivo=archivoService.consultaArchivo(idArchivo);
+    	archivo=archivoService.consultaArchivo(idArchivo, authentication);
     	System.out.println("archivo retornado "+archivo.getUrl());
     	String nombrecompleto=archivo.getUrl()+archivo.getNombre();
     	//String nombreArchivo=nombrecompleto.replace('/','\\');
@@ -374,10 +375,10 @@ public class LicenciasMedicasController {
     }
 	
 	@PostMapping("rechaza")
-    public String rechazaVacaciones(Integer idLicencia,String claveUsuario, Integer idArchivo) {
+    public String rechazaVacaciones(Integer idLicencia,String claveUsuario, Integer idArchivo, Authentication authentication) {
     	System.out.println("idLicencia "+idLicencia+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
     	LicenciaMedica licencia= new LicenciaMedica();
-    	licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia, null,null, idArchivo, 3,null,null,null,null), claveUsuario);
+    	licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia, null,null, idArchivo, 3,null,null,null,null), claveUsuario, authentication);
    // 	vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), idSolicitud);
     	this.mensaje=licencia.getMensaje();
     	System.out.println("mensaje recuperado "+licencia.getMensaje());
@@ -385,10 +386,10 @@ public class LicenciasMedicasController {
     }
 	
 	@PostMapping("acepta")
-    public String aceptaVacaciones(Integer idLicencia,String claveUsuario, Integer idArchivo) {
+    public String aceptaVacaciones(Integer idLicencia,String claveUsuario, Integer idArchivo, Authentication authentication) {
     	System.out.println("idLicencia "+idLicencia+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
     	LicenciaMedica licencia= new LicenciaMedica();
-    	licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia, null,null, idArchivo, 2,null,null,null,null), claveUsuario);
+    	licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia, null,null, idArchivo, 2,null,null,null,null), claveUsuario, authentication);
     	//fechaInicio=fechaInicio.substring(0,21);
     	//ParsePosition pos = new ParsePosition(4);
     	this.mensaje=licencia.getMensaje();

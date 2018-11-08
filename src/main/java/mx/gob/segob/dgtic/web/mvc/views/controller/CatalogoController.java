@@ -8,6 +8,7 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,8 +63,8 @@ public class CatalogoController {
 	 * @return La vista del menú de catálogos
 	 */
 	@RequestMapping(value = { "horario" }, method = RequestMethod.GET)
-	public String obtieneHorarios(Model model) {
-		model.addAttribute("listaHorarios", catalogoService.obtieneHorariosCat());
+	public String obtieneHorarios(Model model, Authentication authentication) {
+		model.addAttribute("listaHorarios", catalogoService.obtieneHorariosCat(authentication));
 		if(!this.mensaje.equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
@@ -76,12 +77,12 @@ public class CatalogoController {
 
 	@GetMapping("horario/busca")
 	@ResponseBody
-	public Horario buscaHorario(Integer id) {
-		return catalogoService.buscaHorario(id);
+	public Horario buscaHorario(Integer id, Authentication authentication) {
+		return catalogoService.buscaHorario(id, authentication);
 	}
 
 	@PostMapping("horario/modifica")
-	public String modificaHorario(String nombre, Integer id, String horaEntrada, String horaSalida, Boolean activo) {
+	public String modificaHorario(String nombre, Integer id, String horaEntrada, String horaSalida, Boolean activo, Authentication authentication) {
 		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
 		long milisegundosHoraEntrada = 0;
 		long milisegundosHoraSalida = 0;
@@ -96,13 +97,13 @@ public class CatalogoController {
 		Time SQLhoraEntrada = new Time(milisegundosHoraEntrada);
 		Time SQLhoraSalida = new Time(milisegundosHoraSalida);
 		Horario horario = new Horario(id, nombre, SQLhoraEntrada, SQLhoraSalida, activo, "");
-		horario = catalogoService.modificaHorario(horario);
+		horario = catalogoService.modificaHorario(horario, authentication);
 		this.mensaje  = horario.getMensaje();
 		return "redirect:/catalogos/horario";
 	}
 
 	@PostMapping("horario/agrega")
-	public String agregaHorario(Integer id, String nombre, String horaEntrada, String horaSalida, boolean activo) {
+	public String agregaHorario(Integer id, String nombre, String horaEntrada, String horaSalida, boolean activo, Authentication authentication) {
 		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
 		long milisegundosHoraEntrada = 0;
 		long milisegundosHoraSalida = 0;
@@ -117,15 +118,15 @@ public class CatalogoController {
 		Time SQLhoraEntrada = new Time(milisegundosHoraEntrada);
 		Time SQLhoraSalida = new Time(milisegundosHoraSalida);
 		Horario horario = new Horario(id, nombre, SQLhoraEntrada, SQLhoraSalida, activo, "");
-		horario = catalogoService.agregaHorario(horario);
+		horario = catalogoService.agregaHorario(horario, authentication);
 		this.mensaje  = horario.getMensaje();
 		return "redirect:/catalogos/horario";
 	}
 
 	@GetMapping("horario/elimina")
-	public String eliminaHorario(Integer id) {
+	public String eliminaHorario(Integer id, Authentication authentication) {
 
-		catalogoService.eliminaHorario(id);
+		catalogoService.eliminaHorario(id, authentication);
 
 		return "redirect:/catalogos/horario";
 	}
@@ -137,27 +138,27 @@ public class CatalogoController {
 	 * @return La vista del menú de catálogos
 	 */
 	@RequestMapping(value = { "tipoDia" }, method = RequestMethod.GET)
-	public String obtieneTipoDias(Model model) {
-		model.addAttribute("listaTipoDias", catalogoService.obtieneTipoDias());
+	public String obtieneTipoDias(Model model, Authentication authentication) {
+		model.addAttribute("listaTipoDias", catalogoService.obtieneTipoDias(authentication));
 		this.mensaje = "";
 		return "/catalogos/tipoDia";
 	}
 
 	@GetMapping("tipoDia/busca")
 	@ResponseBody
-	public TipoDia buscaTipoDia(Integer id) {
+	public TipoDia buscaTipoDia(Integer id, Authentication authentication) {
 
-		return catalogoService.buscaTipoDia(id);
+		return catalogoService.buscaTipoDia(id, authentication);
 	}
 
 	
 	@RequestMapping(value = { "usuario" }, method = RequestMethod.GET)
-	public String obtieneUsuarios(Model model) {
+	public String obtieneUsuarios(Model model, Authentication authentication) {
 
-		model.addAttribute("listaPerfiles", catalogoService.obtienePerfiles());
-		model.addAttribute("listaHorarios", catalogoService.obtieneHorarios());
-		model.addAttribute("listaUsuarios", usuarioService.obtieneUsuarios());
-		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas());
+		model.addAttribute("listaPerfiles", catalogoService.obtienePerfiles(authentication));
+		model.addAttribute("listaHorarios", catalogoService.obtieneHorarios(authentication));
+		model.addAttribute("listaUsuarios", usuarioService.obtieneUsuarios(authentication));
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 
 		return "/catalogos/usuario";
 	}
@@ -165,7 +166,7 @@ public class CatalogoController {
 	@PostMapping("/usuario/modifica")
 	public String modificaUsuario( Horario idHorario, String claveUsuario, String nombre,
 			String apellidoPaterno, String apellidoMaterno, String estatus, String reiniciarPassword, Integer unidadAdministrativa, 
-			String coordinador, String empleado, String director, String administrador) {
+			String coordinador, String empleado, String director, String administrador, Authentication authentication) {
 		System.out.println("claveUsuario "+claveUsuario+"unidadAdministrativa "+unidadAdministrativa +" coordinador "+coordinador+" empleado "+empleado+" director "+director+" administrador "+administrador
 				+" estatus "+estatus);
 		
@@ -189,16 +190,16 @@ public class CatalogoController {
 			System.out.println("valor clavePerfil posicion "+i+" " + clavePerfil[i]);
 		}
 		
-		perfilUsuarioService.guardaEliminaPerfilesUsuario(clavePerfil, claveUsuario);
+		perfilUsuarioService.guardaEliminaPerfilesUsuario(clavePerfil, claveUsuario, authentication);
 		
 		usuarioService.modificaUsuario(
-				new Usuario(null, idHorario, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, estatus));
-		unidadAdministrativaService.consultaRegistraUsuarioUnidadAdministrativa(unidadAdministrativa, claveUsuario);
+				new Usuario(null, idHorario, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, estatus), authentication);
+		unidadAdministrativaService.consultaRegistraUsuarioUnidadAdministrativa(unidadAdministrativa, claveUsuario, authentication);
 		char dato = reiniciarPassword.charAt(0);
 
 		if (((int) dato) == 83) {
 			System.out.println("valor reiniciarPassword1 " + reiniciarPassword);
-			usuarioService.reiniciaContrasenia(claveUsuario);
+			usuarioService.reiniciaContrasenia(claveUsuario, authentication);
 		}
 
 		return "redirect:/catalogos/usuario";
@@ -206,19 +207,19 @@ public class CatalogoController {
 
 	@GetMapping("usuario/busca")
 	@ResponseBody
-	public HashMap<String, Object> buscaUsuario(String id) {
+	public HashMap<String, Object> buscaUsuario(String id, Authentication authentication) {
 		//cargaUsuarioPerfil(id, model);
 		HashMap<String, Object> hmap = new HashMap<String, Object>();
-		hmap.put("usuario", usuarioService.buscaUsuario(id));
-		hmap.put("listaUsuarioPerfiles", perfilUsuarioService.recuperaPerfilesUsuario(id));
+		hmap.put("usuario", usuarioService.buscaUsuario(id, authentication));
+		hmap.put("listaUsuarioPerfiles", perfilUsuarioService.recuperaPerfilesUsuario(id, authentication));
 		//hmap.put("listaPerfiles", catalogoService.obtienePerfiles());
 		return hmap;
 	}
 	
 
 	@GetMapping("usuario/elimina")
-	public String eliminaUsuario(String id) {
-		usuarioService.eliminaUsuario(id);
+	public String eliminaUsuario(String id, Authentication authentication) {
+		usuarioService.eliminaUsuario(id, authentication);
 		return "redirect:/catalogos/usuario";
 	}
 	
@@ -230,8 +231,8 @@ public class CatalogoController {
 	 */
 
 	@RequestMapping(value = { "justificacion" }, method = RequestMethod.GET)
-	public String obtieneJustificaciones(Model model) {
-		model.addAttribute("listaJustificaciones", catalogoService.obtieneListaJ());
+	public String obtieneJustificaciones(Model model, Authentication authentication) {
+		model.addAttribute("listaJustificaciones", catalogoService.obtieneListaJ(authentication));
 		if(!this.mensaje.equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
@@ -245,30 +246,30 @@ public class CatalogoController {
 	
 	@GetMapping("justificacion/busca")
 	@ResponseBody
-	public Justificacion buscaJustificacion(Integer id) {
-		return catalogoService.buscaJustificacion(id);
+	public Justificacion buscaJustificacion(Integer id, Authentication authentication) {
+		return catalogoService.buscaJustificacion(id, authentication);
 	}
 
 	@PostMapping("justificacion/modifica")
-	public String modificaJustificacion(Integer id, String clave, String justificacion, Boolean activo) {
+	public String modificaJustificacion(Integer id, String clave, String justificacion, Boolean activo, Authentication authentication) {
 		Justificacion  justi  = new Justificacion(id, clave,justificacion, activo, "");
-		justi = catalogoService.modificaJustificacion(justi);
+		justi = catalogoService.modificaJustificacion(justi, authentication);
 		this.mensaje = justi.getMensaje();
 		return "redirect:/catalogos/justificacion";
 	}
 
 	@PostMapping("justificacion/agrega")
-	public String agregaJustificacion(Integer id, String clave, String justificacion, boolean activo) {
+	public String agregaJustificacion(Integer id, String clave, String justificacion, boolean activo, Authentication authentication) {
 		Justificacion  justi  = new Justificacion(id, clave,justificacion, activo, "");
-		justi = catalogoService.agregaJustificacion(justi);
+		justi = catalogoService.agregaJustificacion(justi, authentication);
 		this.mensaje = justi.getMensaje();
 		return "redirect:/catalogos/justificacion";
 	}
 
 	@GetMapping("justificacion/elimina")
-	public String eliminaJustificacion(Integer id) {
+	public String eliminaJustificacion(Integer id, Authentication authentication) {
 
-		catalogoService.eliminaJustificacion(id);
+		catalogoService.eliminaJustificacion(id, authentication);
 
 		return "redirect:/catalogos/justificacion";
 	}
@@ -280,9 +281,9 @@ public class CatalogoController {
 	+        * @return La vista del menú de catálogos^M
 	+        */
 	 @RequestMapping(value = { "periodo/agrega" }, method = RequestMethod.GET)
-     public String agregaPeriodoVacacional(Periodo periodo) {
+     public String agregaPeriodoVacacional(Periodo periodo, Authentication authentication) {
 		 Periodo p = new Periodo();	
-		 p = catalogoService.agregaPeriodoVacacional(periodo);
+		 p = catalogoService.agregaPeriodoVacacional(periodo, authentication);
 	   		this.mensaje = p.getMensaje()== null ? ""  : p.getMensaje();
 	   		return "redirect:/catalogos/periodo";
      }
@@ -294,8 +295,8 @@ public class CatalogoController {
 	   	 * @return La vista del menú de catálogos
 	   	 */
 	   	@RequestMapping(value = {"diaFestivo"}, method = RequestMethod.GET)
-	   	public String obtieneDiaFestivo(Model model) {
-	   		model.addAttribute("listaDiasFestivos", catalogoService.obtieneDiaFestivoCat());
+	   	public String obtieneDiaFestivo(Model model, Authentication authentication) {
+	   		model.addAttribute("listaDiasFestivos", catalogoService.obtieneDiaFestivoCat(authentication));
 	   		if(!this.mensaje.equals("")){
 				if(this.mensaje.contains("correctamente"))
 					model.addAttribute("MENSAJE", this.mensaje);
@@ -308,13 +309,13 @@ public class CatalogoController {
 
 	   	@GetMapping("diaFestivo/busca")
 	   	@ResponseBody
-	   	public DiaFestivo buscaDiaFestivo(Integer id) {
+	   	public DiaFestivo buscaDiaFestivo(Integer id, Authentication authentication) {
 	   		System.out.println("Hey");
-	   		return catalogoService.buscaDiaFestivo(id);
+	   		return catalogoService.buscaDiaFestivo(id, authentication);
 	   	}
 
 	   	@PostMapping("diaFestivo/modifica")
-	   	public String modificaDiaFestivo(Integer id, String nombre, String fecha,  Boolean activo) {
+	   	public String modificaDiaFestivo(Integer id, String nombre, String fecha,  Boolean activo, Authentication authentication) {
 	   		System.out.println("Datos nombre "+nombre+" fecha "+fecha+" activo "+activo);
 	   		SimpleDateFormat sdff = new SimpleDateFormat("dd/MM/yyyy");
 	   		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -327,13 +328,13 @@ public class CatalogoController {
 	   		}
 	   		
 	   		DiaFestivo diaFest = new DiaFestivo(id, nombre, sdf.format(dia), activo, "");
-	   		diaFest = catalogoService.modificaDiaFestivo(diaFest);
+	   		diaFest = catalogoService.modificaDiaFestivo(diaFest, authentication);
 	   		this.mensaje = diaFest.getMensaje();
 	   		return "redirect:/catalogos/diaFestivo";
 	   	}
 
 	   	@PostMapping("diaFestivo/agrega")
-	   	public String agregaDiaFestivo( String nombre, String fecha,  Boolean activo) {
+	   	public String agregaDiaFestivo( String nombre, String fecha,  Boolean activo, Authentication authentication) {
 	   		System.out.println("Datos nombre "+nombre+" fecha "+fecha+" activo "+activo);
 	   		SimpleDateFormat sdff = new SimpleDateFormat("dd/MM/yyyy");
 	   		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -346,15 +347,15 @@ public class CatalogoController {
 	   		}
 	   		
 	   		DiaFestivo diaFest = new DiaFestivo(null, nombre, sdf.format(dia), activo, "");
-	   		diaFest = catalogoService.agregaDiaFestivo(diaFest);
+	   		diaFest = catalogoService.agregaDiaFestivo(diaFest, authentication);
 	   		this.mensaje = diaFest.getMensaje();
 	   		
 	   		return "redirect:/catalogos/diaFestivo";
 	   	}
 	
 	   	@RequestMapping(value = { "periodo" }, method = RequestMethod.GET)
-		public String periodos(Model model) {
-			model.addAttribute("listaPeriodos", catalogoService.obtienePeriodosCat());
+		public String periodos(Model model, Authentication authentication) {
+			model.addAttribute("listaPeriodos", catalogoService.obtienePeriodosCat(authentication));
 			if(!this.mensaje.equals("")){
 				if(this.mensaje.contains("correctamente"))
 					model.addAttribute("MENSAJE", this.mensaje);
@@ -366,7 +367,7 @@ public class CatalogoController {
 		}
 	   	
 		@PostMapping("periodo/agrega")
-	   	public String periodoAgrega(Periodo periodo) {
+	   	public String periodoAgrega(Periodo periodo, Authentication authentication) {
 			SimpleDateFormat sdff = new SimpleDateFormat("dd/MM/yyyy");
 	   		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	   		Date inicio = null;
@@ -380,16 +381,16 @@ public class CatalogoController {
 	   		}
 	   		periodo.setFechaInicio(sdf.format(inicio));
 	   		periodo.setFechaFin(sdf.format(fin));
-			periodo = catalogoService.agregaPeriodoVacacional(periodo);
+			periodo = catalogoService.agregaPeriodoVacacional(periodo, authentication);
 		   	this.mensaje = periodo.getMensaje()== null ? ""  : periodo.getMensaje();
 		   	return "redirect:/catalogos/periodo";
 	   	}
 	   	
 		@GetMapping ("periodo/modifica")
-	   	public String periodoModifica(Periodo periodo) {
+	   	public String periodoModifica(Periodo periodo, Authentication authentication) {
 			Periodo p = new Periodo();
 			System.out.println("idRecibido: "+periodo.getIdPeriodo()+" activoRecibido: "+periodo.getActivo());
-	   		p = catalogoService.modificaEstatusPeriodo(periodo);
+	   		p = catalogoService.modificaEstatusPeriodo(periodo, authentication);
 	   		this.mensaje = p.getMensaje() == null ? ""  : p.getMensaje();
 	   		System.out.println("this.mensaje "+this.mensaje);
 	   		return "redirect:/catalogos/periodo";
@@ -397,16 +398,16 @@ public class CatalogoController {
 		
 		@GetMapping("periodo/busca")
 		@ResponseBody
-		public Periodo periodoBusca(Integer id) {
+		public Periodo periodoBusca(Integer id, Authentication authentication) {
 			System.out.println("Id a buscar: "+id);
-			return catalogoService.buscaPeriodo(id);
+			return catalogoService.buscaPeriodo(id, authentication);
 		}
 		
 		@RequestMapping(value = { "nivelOrganizacional" }, method = RequestMethod.GET)
-		public String inicioNivel(Model model) {
-			model.addAttribute("listaNiveles", catalogoService.obtieneNiveles()); // niveles en c_nivel_organizacional
-			model.addAttribute("listaUnidades", catalogoService.nivelesEmpleado()); // niveles de empleados en m_usuario
-			model.addAttribute("listaHorarios", catalogoService.obtieneHorarios()); // horarios en c_horario
+		public String inicioNivel(Model model, Authentication authentication) {
+			model.addAttribute("listaNiveles", catalogoService.obtieneNiveles(authentication)); // niveles en c_nivel_organizacional
+			model.addAttribute("listaUnidades", catalogoService.nivelesEmpleado(authentication)); // niveles de empleados en m_usuario
+			model.addAttribute("listaHorarios", catalogoService.obtieneHorarios(authentication)); // horarios en c_horario
 			if(!this.getMensaje().equals("")){
 				if(this.mensaje.contains("correctamente"))
 					model.addAttribute("MENSAJE", this.mensaje);
@@ -418,9 +419,9 @@ public class CatalogoController {
 		}
 		
 		@PostMapping("nivel/agrega")
-	   	public String nivelAgrega(NivelOrganizacional nivel) {
+	   	public String nivelAgrega(NivelOrganizacional nivel, Authentication authentication) {
 			NivelOrganizacional nv = new NivelOrganizacional();
-			nv = catalogoService.nivelAgrega(nivel);
+			nv = catalogoService.nivelAgrega(nivel, authentication);
 			System.out.println("CatalogoControler-.mensaje: "+nv.getMensaje());
 			this.mensaje = nv.getMensaje()== null ? ""  : nv.getMensaje();
 	   		return "redirect:/catalogos/nivelOrganizacional";
@@ -437,15 +438,15 @@ public class CatalogoController {
 		
 		@GetMapping("nivel/busca")
 		@ResponseBody
-		public NivelOrganizacional nivelBusca(Integer id) {
+		public NivelOrganizacional nivelBusca(Integer id, Authentication authentication) {
 			System.out.println("id a consultar: "+id);
-			 return catalogoService.nivelBusca(id);
+			 return catalogoService.nivelBusca(id, authentication);
 		}
 		
 		@PostMapping ("nivel/modifica")
-	   	public String nivelModifica(NivelOrganizacional nivel) {
+	   	public String nivelModifica(NivelOrganizacional nivel, Authentication authentication) {
 			NivelOrganizacional nv = new NivelOrganizacional();
-	   		nv = catalogoService.modificaNivel(nivel);
+	   		nv = catalogoService.modificaNivel(nivel, authentication);
 	   		this.mensaje = nv.getMensaje() == null ? "" :nv.getMensaje();
 	   		System.out.println("this.mensaje: "+this.mensaje);
 	   		return "redirect:/catalogos/nivelOrganizacional";

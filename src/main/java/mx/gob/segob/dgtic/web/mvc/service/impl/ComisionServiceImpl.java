@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -54,15 +55,20 @@ public class ComisionServiceImpl implements ComisionService {
 
   @Override
   public List<Comision> obtenerListaComisionesPorFiltros(String claveUsuario, String fechaInicio,
-      String fechaFin, String idEstatus) {
+      String fechaFin, String idEstatus, Authentication authentication) {
     List<Comision> listaComisiones = new ArrayList<>();
     HttpResponse response;
+    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+	//Se agrega el JWT a la cabecera para acceso al recurso rest
+	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+    
     try {
       logger.info("----USUARIO-------- {}", claveUsuario);
       response = ClienteRestUtil.getCliente()
           .get(ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_POR_FILTROS
               + "?claveUsuario=" + claveUsuario + "&idEstatus=" + idEstatus + "&fechaInicio="
-              + fechaInicio + "&fechaFin=" + fechaFin);
+              + fechaInicio + "&fechaFin=" + fechaFin, header);
     } catch (ClienteException e) {
       logger.error(e.getMessage(), e);
       throw new AuthenticationServiceException(e.getMessage(), e);
@@ -97,15 +103,19 @@ public class ComisionServiceImpl implements ComisionService {
   }
 
   @Override
-  public Comision obtieneComision(String idComision) {
+  public Comision obtieneComision(String idComision, Authentication authentication) {
     Comision comisiones = new Comision();
     HttpResponse response;
+    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+	//Se agrega el JWT a la cabecera para acceso al recurso rest
+	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 
     try { // se consume recurso rest
       response = ClienteRestUtil.getCliente()
-          .get(ComisionEndPointConstants.WEB_SERVICE_BUSCA_COMISION + "?id=" + idComision);
+          .get(ComisionEndPointConstants.WEB_SERVICE_BUSCA_COMISION + "?id=" + idComision, header);
     } catch (ClienteException e) {
       logger.error(e.getMessage(), e);
       throw new AuthenticationServiceException(e.getMessage(), e);
@@ -132,15 +142,20 @@ public class ComisionServiceImpl implements ComisionService {
   @Override
   public List<Comision> obtenerListaComisionesPorFiltrosEmpleados(String claveUsuario,
       String nombre, String apellidoPaterno, String apellidoMaterno, String idUnidad,
-      String idEstatus) {
+      String idEstatus, Authentication authentication) {
     List<Comision> listaComisiones = new ArrayList<>();
     HttpResponse response;
+    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+	//Se agrega el JWT a la cabecera para acceso al recurso rest
+	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+	
     try {
       response = ClienteRestUtil.getCliente()
           .get(ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_EMPLEADOS_POR_FILTROS
               + "?claveUsuario=" + claveUsuario + "&nombre=" + nombre + "&apellidoPaterno="
               + apellidoPaterno + "&apellidoMaterno=" + apellidoMaterno + "&idUnidad=" + idUnidad
-              + "&idEstatus=" + idEstatus);
+              + "&idEstatus=" + idEstatus, header);
     } catch (ClienteException e) {
       logger.error(e.getMessage(), e);
       throw new AuthenticationServiceException(e.getMessage(), e);
@@ -165,15 +180,18 @@ public class ComisionServiceImpl implements ComisionService {
   }
 
   @Override
-  public Comision agregarComision(ComisionAux comisionAux, String claveUsuario) {
+  public Comision agregarComision(ComisionAux comisionAux, String claveUsuario, Authentication authentication) {
     Comision comision= new Comision();
-    Header header = new BasicHeader("Authorization", "Bearer %s");
+    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+	//Se agrega el JWT a la cabecera para acceso al recurso rest
+	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     HttpEntity httpEntity = new BasicHttpEntity();
     HttpResponse response;
     //BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
     Usuario usuario= new Usuario();
-    usuario=usuarioService.buscaUsuario(claveUsuario);
+    usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
     comisionAux.setIdUsuario(usuario.getIdUsuario());
     Map<String, Object> content = new HashMap<String, Object>();
     content.put("comision", comisionAux);
@@ -207,15 +225,18 @@ public class ComisionServiceImpl implements ComisionService {
   }
 
   @Override
-  public Comision modificaComisiones(ComisionAux comisionAux, String claveUsuario) {
+  public Comision modificaComisiones(ComisionAux comisionAux, String claveUsuario, Authentication authentication) {
     Comision comisionRespuesta = new Comision();
-    Header header = new BasicHeader("Authorization", "Bearer %s");
+    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+	//Se agrega el JWT a la cabecera para acceso al recurso rest
+	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     HttpEntity httpEntity = new BasicHttpEntity();
     HttpResponse response;
     // BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
     Usuario usuario = new Usuario();
-    usuario = usuarioService.buscaUsuario(claveUsuario);
+    usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
     System.out.println("IdUsuario recuperado " + usuario.getIdUsuario());
     comisionAux.setIdUsuario(usuario.getIdUsuario());
     Map<String, Object> content = new HashMap<String, Object>();
@@ -252,14 +273,18 @@ public class ComisionServiceImpl implements ComisionService {
   
 
   @Override
-  public void eliminaComisiones(String idComision) {
+  public void eliminaComisiones(String idComision, Authentication authentication) {
     HttpResponse response;
 
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+	//Se agrega el JWT a la cabecera para acceso al recurso rest
+	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 
     try { // se consume recurso rest
       response = ClienteRestUtil.getCliente()
-          .get(ComisionEndPointConstants.WEB_SERVICE_ELIMINA_COMISION + "?id=" + idComision);
+          .get(ComisionEndPointConstants.WEB_SERVICE_ELIMINA_COMISION + "?id=" + idComision, header);
     } catch (ClienteException e) {
       logger.error(e.getMessage(), e);
       throw new AuthenticationServiceException(e.getMessage(), e);
@@ -269,12 +294,17 @@ public class ComisionServiceImpl implements ComisionService {
 
   @Override
   public List<Comision> obtenerComisionesPorUnidad(String idUnidad, String claveUsuario,
-      String nombre, String apellidoPaterno, String apellidoMaterno) {
+      String nombre, String apellidoPaterno, String apellidoMaterno, Authentication authentication) {
     List<Comision> listaComisiones = new ArrayList<>();
     HttpResponse response;
+    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+	//Se agrega el JWT a la cabecera para acceso al recurso rest
+	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+	
     try{
         response = ClienteRestUtil.getCliente().get(ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_POR_UNIDAD+ "?idUnidad="+idUnidad+"&claveUsuario="+claveUsuario+"&nombre="+nombre
-                +"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno);
+                +"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno, header);
     } catch (ClienteException e) {
         logger.error(e.getMessage(), e);
         throw new AuthenticationServiceException(e.getMessage(), e);
@@ -298,11 +328,14 @@ public class ComisionServiceImpl implements ComisionService {
   }
 
   @Override
-  public reporte generarReporte(GenerarReporteArchivoComision generaReporteArchivo) {
+  public reporte generarReporte(GenerarReporteArchivoComision generaReporteArchivo, Authentication authentication) {
     HttpResponse response;
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     reporte respuesta = new reporte();
-    Header header = new BasicHeader("Authorization", "Bearer %s");
+    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+	//Se agrega el JWT a la cabecera para acceso al recurso rest
+	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
     HttpEntity httpEntity = new BasicHttpEntity();
     Map<String, Object> content = new HashMap<String, Object>();
     content.put("generaReporteArchivo", generaReporteArchivo);
@@ -331,15 +364,18 @@ public class ComisionServiceImpl implements ComisionService {
   }
 
   @Override
-  public Comision modificaComisionEstatusArchivo(ComisionAux comisionAux, String claveUsuario) {
+  public Comision modificaComisionEstatusArchivo(ComisionAux comisionAux, String claveUsuario, Authentication authentication) {
     Comision comisionRespuesta= new Comision();
-    Header header = new BasicHeader("Authorization", "Bearer %s");
+    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+	//Se agrega el JWT a la cabecera para acceso al recurso rest
+	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     HttpEntity httpEntity = new BasicHttpEntity();
     HttpResponse response;
     //BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
     Usuario usuario= new Usuario();
-    usuario=usuarioService.buscaUsuario(claveUsuario);
+    usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
     System.out.println("IdUsuario recuperado "+usuario.getIdUsuario());
     comisionAux.setIdUsuario(usuario.getIdUsuario());
     Map<String, Object> content = new HashMap<String, Object>();

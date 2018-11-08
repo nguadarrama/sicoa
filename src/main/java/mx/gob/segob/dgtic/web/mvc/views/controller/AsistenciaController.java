@@ -97,7 +97,7 @@ public class AsistenciaController  {
 	@RequestMapping(value={"empleado/busca"}, method = RequestMethod.GET, params="busca")
     public String buscaListaAsistenciaEmpleadoRango(Model model, Authentication authentication, String fechaInicial, String fechaFinal) {
 
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRango(authentication.getName(), fechaInicial, fechaFinal);
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRango(authentication.getName(), fechaInicial, fechaFinal, authentication);
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -108,7 +108,7 @@ public class AsistenciaController  {
 	@RequestMapping(value="empleado/busca", method=RequestMethod.GET, params="exporta")
     public ModelAndView exportaExcelEmpleado(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String fechaInicial, String fechaFinal) {
         
-	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRango(authentication.getName(), fechaInicial, fechaFinal);
+	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRango(authentication.getName(), fechaInicial, fechaFinal, authentication);
 	    	
 	    	Map<String, Object> model = new HashMap<String, Object>();
 	        
@@ -160,9 +160,9 @@ public class AsistenciaController  {
     @RequestMapping(value={"coordinador"}, method = RequestMethod.GET)
     public String buscaListaAsistenciaCoordinador(Model model, Authentication authentication) {
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("inicio", true);
@@ -175,11 +175,11 @@ public class AsistenciaController  {
     		String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
 
 	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
-	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName());
+	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), authentication);
 	    	
-	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
 	    	model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
 	    	model.addAttribute("fechaInicial", fechaInicial);
@@ -206,7 +206,7 @@ public class AsistenciaController  {
     		String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
         
     	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
-    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName());
+    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), authentication);
     	
     	Map<String, Object> model = new HashMap<String, Object>();
         
@@ -258,23 +258,23 @@ public class AsistenciaController  {
     	try {
     		//guarda el archivo
     		if (archivoSubido.getSize() > 0) {
-    			archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "asistencia_justificacion", "justificacion-");
+    			archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "asistencia_justificacion", "justificacion-", authentication);
     		}
     		
     		if (archivo != null) {
 	    		//crea la incidencia y asocia el archivo
-	    		resultadoProceso = asistenciaService.creaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, archivo.getIdArchivo(), nombreAutorizador);
+	    		resultadoProceso = asistenciaService.creaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, archivo.getIdArchivo(), nombreAutorizador, authentication);
     		} 
 
     	} catch(Exception e) {
     		new Exception("No se logró crear la incidencia " + e.getMessage());
     	}
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
-    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication );
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -308,12 +308,12 @@ public class AsistenciaController  {
     	try {
     		//guarda el archivo
     		if (archivoSubido.getSize() > 0) {
-    			archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "descuento" , "descuento-");
+    			archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "descuento" , "descuento-", authentication);
     		}
     		
     		if (archivo != null) {
 	    		//crea la petición de descuento y asocia el archivo
-	    		resultadoProceso = asistenciaService.creaDescuento(idAsistenciaHidden, idTipoDia, idJustificacion, archivo.getIdArchivo(), nombreAutorizador);
+	    		resultadoProceso = asistenciaService.creaDescuento(idAsistenciaHidden, idTipoDia, idJustificacion, archivo.getIdArchivo(), nombreAutorizador, authentication);
     		} 
 
     	} catch(Exception e) {
@@ -321,11 +321,11 @@ public class AsistenciaController  {
     	}
     	
 		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
-    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication);
     	
-		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -376,7 +376,7 @@ public class AsistenciaController  {
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte archivo = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidad, fechaActual, codigoincidencia, ""));
+			reporte archivo = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidad, fechaActual, codigoincidencia, ""), authentication);
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
@@ -397,11 +397,11 @@ public class AsistenciaController  {
 		}
     	
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
-    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -429,7 +429,7 @@ public class AsistenciaController  {
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte archivo = asistenciaService.formatoDescuento(new FormatoIncidencia(nombre, "", fechaActual, "", cve_m_usuario));
+			reporte archivo = asistenciaService.formatoDescuento(new FormatoIncidencia(nombre, "", fechaActual, "", cve_m_usuario), authentication);
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
@@ -450,11 +450,11 @@ public class AsistenciaController  {
 		}
     	
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
-    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName());
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -487,7 +487,7 @@ public class AsistenciaController  {
     	
     	if (idAsistencias != null) {
 	    	for (Integer idAsistencia : idAsistencias) {
-	    		Asistencia asistenciaJustificar = asistenciaService.buscaAsistenciaPorId(idAsistencia);
+	    		Asistencia asistenciaJustificar = asistenciaService.buscaAsistenciaPorId(idAsistencia, authentication);
 	    		listaAsistenciaJustificar.add(asistenciaJustificar);
 	    		
 	    		//se obtiene el jefe del usuario
@@ -502,12 +502,12 @@ public class AsistenciaController  {
 	    		}
 	    	}
 	    	
-	    	List<Justificacion> listaJustificaciones = catalogoService.obtieneJustificaciones();
-	    	List<Usuario> listaJefes = usuarioService.obtieneListaJefes();
+	    	List<Justificacion> listaJustificaciones = catalogoService.obtieneJustificaciones(authentication);
+	    	List<Usuario> listaJefes = usuarioService.obtieneListaJefes(authentication);
 	    	
-	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
 	    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 	    	model.addAttribute("listaAsistenciaJustificar", listaAsistenciaJustificar);
 	    	model.addAttribute("listaJustificaciones", listaJustificaciones);
@@ -519,11 +519,11 @@ public class AsistenciaController  {
 	    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_lista_multiple);
     	} else {
     		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_lista_multiple, "", "", "",
-        			"", 0, 0, fechaInicial_hidden_lista_multiple, fechaFinal_hidden_lista_multiple, "", authentication.getName());
+        			"", 0, 0, fechaInicial_hidden_lista_multiple, fechaFinal_hidden_lista_multiple, "", authentication.getName(), authentication);
     		
-    		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-    		model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-    		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+    		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+    		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+    		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     		model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
 	    	model.addAttribute("fechaInicial", fechaInicial_hidden_lista_multiple);
@@ -548,18 +548,18 @@ public class AsistenciaController  {
     	Integer idJustificacion = selectJustificacion;
     	
     	for (Integer idAsistencia : listaIdAsistencias) {
-    		Asistencia asistencia = asistenciaService.buscaAsistenciaPorId(idAsistencia);
+    		Asistencia asistencia = asistenciaService.buscaAsistenciaPorId(idAsistencia, authentication);
     		Integer idTipoDia = asistencia.getIdTipoDia().getIdTipoDia();
     		String cve_m_usuario = asistencia.getUsuarioDto().getClaveUsuario();
     		
     		try {
         		//guarda el archivo
         		if (archivoSubido.getSize() > 0) {
-    				archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "justificacion", "justificacion-");
+    				archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "justificacion", "justificacion-", authentication);
         			
     				if (archivo != null) {
 	        			//crea la incidencia y asocia el archivo
-	            		resultadoProceso = asistenciaService.creaIncidencia(idAsistencia, idTipoDia, idJustificacion, archivo.getIdArchivo(), nombreAutorizador);
+	            		resultadoProceso = asistenciaService.creaIncidencia(idAsistencia, idTipoDia, idJustificacion, archivo.getIdArchivo(), nombreAutorizador, authentication);
     				}
         		}
         	} catch(Exception e) {
@@ -568,11 +568,11 @@ public class AsistenciaController  {
     	}
     	
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", 0, 0, 
-    			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName());
+    			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName(), authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<>());
     	model.addAttribute("fechaInicial", fechaInicial_hidden_guarda_multiple);
@@ -600,7 +600,7 @@ public class AsistenciaController  {
     	
     	//obtiene la asistencia del primer checkbox seleccionado
     	if (listaIdAsistencias != null) {
-    		asistencia = asistenciaService.buscaAsistenciaPorId(listaIdAsistencias[0]);
+    		asistencia = asistenciaService.buscaAsistenciaPorId(listaIdAsistencias[0], authentication);
     		idTipoDia = asistencia.getIdTipoDia().getIdTipoDia();
     		nombre = asistencia.getUsuarioDto().getNombre() + " " + asistencia.getUsuarioDto().getApellidoPaterno() + " " + asistencia.getUsuarioDto().getApellidoPaterno();
     		unidadAdministrativa = asistencia.getUsuarioDto().getNombreUnidad();
@@ -631,7 +631,7 @@ public class AsistenciaController  {
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte formatoJustificacion = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidadAdministrativa, fechaActual, codigoincidencia, ""));
+			reporte formatoJustificacion = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidadAdministrativa, fechaActual, codigoincidencia, ""), authentication);
 			InputStream targetStream = new ByteArrayInputStream(formatoJustificacion.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
@@ -652,7 +652,7 @@ public class AsistenciaController  {
 		}
     	
     	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", 0, 0, 
-    			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName());
+    			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName(), authentication);
    	
     	model.addAttribute("listaAsistencia", listaAsistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<>());
@@ -667,11 +667,11 @@ public class AsistenciaController  {
     
     //DIRECCIÓN
     @RequestMapping(value={"direccion"}, method = RequestMethod.GET)
-    public String buscaListaAsistenciaDireccion(Model model) {
+    public String buscaListaAsistenciaDireccion(Model model, Authentication authentication) {
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("inicio", true);
@@ -684,11 +684,11 @@ public class AsistenciaController  {
     		String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
 
 	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombre, paterno, materno, nivel, 
-	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa);
+	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication);
 	    	
-	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
 	    	model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("fechaInicial", fechaInicial);
 	    	model.addAttribute("fechaFinal", fechaFinal);
@@ -710,7 +710,7 @@ public class AsistenciaController  {
         
     	if (!cve_m_usuario.isEmpty() && !fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
 	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombre, paterno, materno, nivel, 
-	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa);
+	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication);
 	    	
 	    	Map<String, Object> model = new HashMap<String, Object>();
 	        
@@ -757,19 +757,20 @@ public class AsistenciaController  {
     @RequestMapping(value={"direccion/dictamina_Incidencia_Descuento"}, method = RequestMethod.POST) //permite aprobar o rechazar justificaciones y descuentos
     public String dictaminaIncidenciaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
     		String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
-    		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion, String nombre, String unidad, HttpServletResponse response) {
+    		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion, String nombre, String unidad, HttpServletResponse response,
+    		Authentication authentication) {
     	
     	Integer resultadoProceso = 0;
 
     	//se lleva a cabo la dictaminación
     	if (!dictaminacion.equals("Ver Archivo")) {
-	    	resultadoProceso = asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
+	    	resultadoProceso = asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion, authentication);
     	} else { //se muestra el archivo asociado de la petición
-    		Asistencia asistencia = asistenciaService.buscaAsistenciaPorId(idAsistenciaHidden);
+    		Asistencia asistencia = asistenciaService.buscaAsistenciaPorId(idAsistenciaHidden, authentication);
     		Integer idArchivo = asistencia.getIncidencia().getIdArchivo().getIdArchivo();    		
 
     		Archivo archivoAsociado= new Archivo();
-        	archivoAsociado = archivoService.consultaArchivo(idArchivo);
+        	archivoAsociado = archivoService.consultaArchivo(idArchivo, authentication);
         	String nombrecompleto = archivoAsociado.getUrl() + archivoAsociado.getNombre();
 
         	File file = new File(nombrecompleto);
@@ -794,11 +795,11 @@ public class AsistenciaController  {
     	}
     	
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
-    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden);
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -827,16 +828,16 @@ public class AsistenciaController  {
     @RequestMapping(value={"direccion/dictamina_Incidencia_Descuento"}, method = RequestMethod.POST, params="descargaArchivoJustificacionDescuento") //permite aprobar o rechazar justificaciones y descuentos
     public String descargaArchivoJustificacionDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
     		String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
-    		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
+    		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion, Authentication authentication) {
 
-    	asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
+    	asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion, authentication);
     	
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
-    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden);
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -855,18 +856,18 @@ public class AsistenciaController  {
     @RequestMapping(value={"direccion/dictaminaDescuento"}, method = RequestMethod.POST)
     public String dictaminaDescuento(Model model, String cve_m_usuario, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
     		String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
-    		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion) {
+    		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion, Authentication authentication ) {
     	
     	Integer resultadoProceso = 0;
 
-    	resultadoProceso = asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion);
+    	resultadoProceso = asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion, authentication);
     	
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombreHidden, paternoHidden, maternoHidden,
-    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden);
+    			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias());
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles());
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus());
+    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -895,21 +896,21 @@ public class AsistenciaController  {
     
     @GetMapping("buscaId")
     @ResponseBody
-    public AsistenciaJustificacion buscaAsistenciaPorId(Integer id) {
+    public AsistenciaJustificacion buscaAsistenciaPorId(Integer id, Authentication authentication) {
     	
     	AsistenciaJustificacion asistenciaJustificacion = new AsistenciaJustificacion(); 
-    	asistenciaJustificacion.setAsistencia(asistenciaService.buscaAsistenciaPorId(id));
-    	asistenciaJustificacion.setListaJustificacion(catalogoService.obtieneJustificaciones());
-    	asistenciaJustificacion.setListaAutorizador(usuarioService.obtieneListaJefes());
+    	asistenciaJustificacion.setAsistencia(asistenciaService.buscaAsistenciaPorId(id, authentication));
+    	asistenciaJustificacion.setListaJustificacion(catalogoService.obtieneJustificaciones(authentication));
+    	asistenciaJustificacion.setListaAutorizador(usuarioService.obtieneListaJefes(authentication));
     	
     	return asistenciaJustificacion;
     }
     
     @RequestMapping(value={"archivo"}, method = RequestMethod.GET)
-    public void download(HttpServletResponse response, Integer id) {
+    public void download(HttpServletResponse response, Integer id, Authentication authentication) {
     	
     	AsistenciaJustificacion asistenciaJustificacion = new AsistenciaJustificacion(); 
-    	asistenciaJustificacion.setAsistencia(asistenciaService.buscaAsistenciaPorId(id));
+    	asistenciaJustificacion.setAsistencia(asistenciaService.buscaAsistenciaPorId(id, authentication));
     	
     	String rutaArchivo = 
     			asistenciaJustificacion.getAsistencia().getIncidencia().getIdArchivo().getUrl() 

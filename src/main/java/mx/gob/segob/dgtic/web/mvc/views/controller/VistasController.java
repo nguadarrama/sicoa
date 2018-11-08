@@ -10,6 +10,7 @@ package mx.gob.segob.dgtic.web.mvc.views.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,17 +52,17 @@ public class VistasController {
      * @return La vista de home
      */
     @RequestMapping(value={"","home"}, method = RequestMethod.GET)
-    public String index(HttpSession session, Model model){ 
+    public String index(HttpSession session, Model model, Authentication authentication){ 
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
     	//model.addAttribute("bandera", false);
     	Usuario usuario=null;
-    	usuario=usuarioService.buscaUsuario(claveUsuario);
+    	usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
     	if(usuario.getPrimeraVez().equals("Y") || usuario.getPrimeraVez().equals("S")){
     		return "/cambiaContrasenia";
     	}else{
-    		model.addAttribute("top",dashService.getDash(usuario.getIdUsuario()));
+    		model.addAttribute("top",dashService.getDash(usuario.getIdUsuario(), authentication));
     		return "home"; 
 	   	}
     }   
@@ -93,13 +94,13 @@ public class VistasController {
     	return "cambiaContrasenia1";
     }
     @GetMapping("/home")
-    public String home(HttpSession session, Model model){ 
+    public String home(HttpSession session, Model model, Authentication authentication){ 
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
     	Usuario usuario=null;
-    	usuario=usuarioService.buscaUsuario(claveUsuario);
-    	model.addAttribute("top",dashService.getDash(usuario.getIdUsuario()));
+    	usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
+    	model.addAttribute("top",dashService.getDash(usuario.getIdUsuario(), authentication));
     	return "home";
     }
     @GetMapping("/mensajeConfirmacion")

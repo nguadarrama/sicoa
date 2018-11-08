@@ -16,6 +16,7 @@ import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -44,11 +45,16 @@ public class UnidadAdministrativaServiceImpl implements UnidadAdministrativaServ
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
 	@Override
-	public List<UsuarioUnidadAdministrativa> obtenerListaUnidadAdministrativa() {
+	public List<UsuarioUnidadAdministrativa> obtenerListaUnidadAdministrativa(Authentication authentication) {
 		List<UsuarioUnidadAdministrativa> listaUnidadAdministrativa = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_UNIDAD_ADMINISTRATIVA);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_UNIDAD_ADMINISTRATIVA, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -79,8 +85,8 @@ public class UnidadAdministrativaServiceImpl implements UnidadAdministrativaServ
 	}
 
 	@Override
-	public void consultaRegistraUsuarioUnidadAdministrativa(Integer idUnidad, String claveUsuario) {
-HttpResponse response;
+	public void consultaRegistraUsuarioUnidadAdministrativa(Integer idUnidad, String claveUsuario, Authentication authentication) {
+		HttpResponse response;
 		UnidadAdministrativa unidadAdministrativa= new UnidadAdministrativa();
 		Usuario usuario = new Usuario();
 		usuario.setClaveUsuario(claveUsuario);
@@ -91,7 +97,10 @@ HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		
@@ -115,11 +124,16 @@ HttpResponse response;
 	}
 
 	@Override
-	public List<UsuarioUnidadAdministrativa> consultaResponsable(String claveUsuario) {
+	public List<UsuarioUnidadAdministrativa> consultaResponsable(String claveUsuario, Authentication authentication) {
 		List<UsuarioUnidadAdministrativa> listaUsuarioUnidadAdministrativa = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_CONSULTA_RESPONSABLE+ "?id=" + claveUsuario);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_CONSULTA_RESPONSABLE+ "?id=" + claveUsuario, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -142,11 +156,16 @@ HttpResponse response;
 	}
 
 	@Override
-	public List<UsuarioUnidadAdministrativa> obtenerUnidadesAdministrativas() {
+	public List<UsuarioUnidadAdministrativa> obtenerUnidadesAdministrativas(Authentication authentication) {
 		List<UsuarioUnidadAdministrativa> listaUnidadAdministrativa = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_UNIDADES_ADMINISTRATIVAS);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_UNIDADES_ADMINISTRATIVAS, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

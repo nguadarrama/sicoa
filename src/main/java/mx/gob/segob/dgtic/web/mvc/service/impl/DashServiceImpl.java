@@ -1,11 +1,17 @@
 package mx.gob.segob.dgtic.web.mvc.service.impl;
 
+import java.util.HashMap;
+
 import javax.ws.rs.core.Response.Status;
+
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
+import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,14 +32,18 @@ public class DashServiceImpl implements DashService{
 	private static final Logger logger = LoggerFactory.getLogger(DashServiceImpl.class);
 	
 	@Override
-	public DashBoardDto getDash (Integer id){
+	public DashBoardDto getDash (Integer id, Authentication authentication){
 		DashBoardDto dash = new DashBoardDto();
 		HttpResponse response;
+	    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(AsistenciaEndPointConstants.WEB_SERVICE_DASH_TOP + "?id=" + id);
+			response = ClienteRestUtil.getCliente().get(AsistenciaEndPointConstants.WEB_SERVICE_DASH_TOP + "?id=" + id, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

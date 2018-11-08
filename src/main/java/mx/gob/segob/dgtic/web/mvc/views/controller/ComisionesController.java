@@ -3,6 +3,7 @@ package mx.gob.segob.dgtic.web.mvc.views.controller;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -93,12 +94,12 @@ public class ComisionesController {
    */
   @RequestMapping(value = {"comisionesPropias"}, method = RequestMethod.GET)
   public String obtieneComisiones(String idUsuario, String fechaInicioBusca1, String fechaFinBusca1,
-      String idEstatus, Model model, HttpSession session) {
+      String idEstatus, Model model, HttpSession session, Authentication authentication) {
 
     String string = "" + session.getAttribute("usuario");
     String[] parts = string.split(": ");
     String claveUsuario = parts[1];
-    Usuario usuario = usuarioService.buscaUsuario(claveUsuario);
+    Usuario usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
     idUsuario = String.valueOf(usuario.getIdUsuario());
 
     System.out.println("-----Peticion comisiones: ------------ " + idUsuario + " "
@@ -106,10 +107,10 @@ public class ComisionesController {
 
     List<Comision> lista = new ArrayList<>();
     lista = comisionService.obtenerListaComisionesPorFiltros(idUsuario, fechaInicioBusca1,
-        fechaFinBusca1, idEstatus);
+        fechaFinBusca1, idEstatus, authentication);
     System.out.println("-----Consulta comisiones: ------------ " + lista.size());
     model.addAttribute("comisiones", lista);
-    model.addAttribute("listaEstatus", estatusService.obtieneListaEstatus());
+    model.addAttribute("listaEstatus", estatusService.obtieneListaEstatus(authentication));
     return "/comisiones/comisionesPropias";
 
   }
@@ -130,7 +131,7 @@ public class ComisionesController {
   @RequestMapping(value = {"comisionesEmpleados"}, method = RequestMethod.GET)
   public String obtieneComisionesEmpleados(String claveUsuario, String nombre,
       String apellidoPaterno, String apellidoMaterno, String idUnidad, String idEstatus,
-      Model model, HttpSession session) {
+      Model model, HttpSession session, Authentication authentication) {
     System.out.println("Datos para comisionesEmpleados claveUsuario " + claveUsuario + " nombre "
         + nombre + " apellidoPaterno " + apellidoPaterno + " apellidoMaterno " + apellidoMaterno
         + " idUnidad " + idUnidad + " idEstatus " + idEstatus);
@@ -142,7 +143,7 @@ public class ComisionesController {
     String[] parts = string.split(": ");
     String claveUsuarioLider = parts[1];
     List<PerfilUsuario> listaPerfilUsuario = new ArrayList<>();
-    listaPerfilUsuario = perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider);
+    listaPerfilUsuario = perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider, authentication);
     Boolean usuarioBoolean = false;
     for (PerfilUsuario perfilUsuario : listaPerfilUsuario) {
       if (perfilUsuario.getClavePerfil().equals('2')) {
@@ -153,15 +154,15 @@ public class ComisionesController {
         + " claveUsuario " + claveUsuario);
     Usuario usuarioAux = new Usuario();
     if (usuarioBoolean == false) {
-      usuarioAux = usuarioService.buscaUsuario(claveUsuarioLider);
+      usuarioAux = usuarioService.buscaUsuario(claveUsuarioLider, authentication);
       idUnidad = "" + usuarioAux.getIdUnidad();
     } else if (idUnidad == null) {
       idUnidad = "";
     }
     model.addAttribute("listaUnidades",
-        unidadAdministrativaService.obtenerUnidadesAdministrativas());
+        unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
     List<Comision> comisiones = comisionService.obtenerListaComisionesPorFiltrosEmpleados(
-        claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus);
+        claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus, authentication);
     System.out.println("Tamaño " + comisiones.size());
     if (comisiones.size() > 0) {
       model.addAttribute("comisionesEmpleados", comisiones);
@@ -169,7 +170,7 @@ public class ComisionesController {
       model.addAttribute("comisionesEmpleados", null);
     }
 
-    model.addAttribute("listaEstatus", estatusService.obtieneListaEstatus());
+    model.addAttribute("listaEstatus", estatusService.obtieneListaEstatus(authentication));
     if (!this.mensaje.equals("")) {
       if (this.mensaje.contains("correctamente"))
         model.addAttribute("MENSAJE", this.mensaje);
@@ -188,10 +189,10 @@ public class ComisionesController {
    */
   @GetMapping("comision/busca")
   @ResponseBody
-  public HashMap<String, Object> buscaUsuario(String idComision) {
+  public HashMap<String, Object> buscaUsuario(String idComision, Authentication authentication ) {
     HashMap<String, Object> hmap = new HashMap<String, Object>();
     System.out.println("Id comision: " + idComision);
-    Comision comisiones = comisionService.obtieneComision(idComision);
+    Comision comisiones = comisionService.obtieneComision(idComision, authentication);
     comisiones.getIdUsuario().setFechaIngreso(comisiones.getIdUsuario().getFechaIngreso());
     comisiones.setFechaInicio(comisiones.getFechaInicio());
     comisiones.setFechaFin(comisiones.getFechaFin());
@@ -211,14 +212,14 @@ public class ComisionesController {
     if (comisiones.getIdResponsable() != null
         && !comisiones.getIdResponsable().toString().isEmpty()) {
       hmap.put("responsable",
-          usuarioService.buscaUsuarioPorId(Integer.toString(comisiones.getIdResponsable())));
+          usuarioService.buscaUsuarioPorId(Integer.toString(comisiones.getIdResponsable()), authentication));
     } else {
       hmap.put("responsable", null);
     }
 
     if (comisiones.getIdHorario() != null && comisiones.getIdHorario().getIdHorario() != null
         && !comisiones.getIdHorario().getIdHorario().toString().isEmpty()) {
-      Horario horario = catalogoService.buscaHorario(comisiones.getIdHorario().getIdHorario());
+      Horario horario = catalogoService.buscaHorario(comisiones.getIdHorario().getIdHorario(), authentication);
       System.out.println(
           "Horario en string: " + horario.getHoraEntrada().toString() + " - " + horario.getHoraSalida().toString());
       hmap.put("horario",
@@ -237,17 +238,17 @@ public class ComisionesController {
    * @return
    */
   @RequestMapping(value = {"solicitudComision"}, method = RequestMethod.GET)
-  public String solicitudComisiones(Model model, HttpSession session) {
+  public String solicitudComisiones(Model model, HttpSession session, Authentication authentication) {
 
     String string = "" + session.getAttribute("usuario");
     String[] parts = string.split(": ");
     String claveUsuario = parts[1];
     model.addAttribute("fechaRegistro", obtenerFechaActual("dd-MM-yyyy"));
-    model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario));
+    model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario, authentication));
     model.addAttribute("listaResponsable",
-        unidadAdministrativaService.consultaResponsable(claveUsuario));
-    model.addAttribute("listaHorarios", catalogoService.obtieneHorarios());
-    String cadena = catalogoService.obtieneDiaFestivoParaBloquear();
+        unidadAdministrativaService.consultaResponsable(claveUsuario, authentication));
+    model.addAttribute("listaHorarios", catalogoService.obtieneHorarios(authentication));
+    String cadena = catalogoService.obtieneDiaFestivoParaBloquear(authentication);
     System.out.println("Dias festivos para bloquear " + cadena);
     model.addAttribute("listaDiasFestivos", cadena);
 
@@ -279,7 +280,7 @@ public class ComisionesController {
    */
   @RequestMapping(value = {"agregarComision"}, method = RequestMethod.POST)
   public String agregarComision(String claveUsuario, String idResponsable, String fechaInicio,
-      String fechaFin, Integer dias, String comision, String idHorario, Model model, HttpSession session) {
+      String fechaFin, Integer dias, String comision, String idHorario, Model model, HttpSession session, Authentication authentication) {
 
     System.out.println(
         "Datos claveUsuario " + claveUsuario + " responsable " + idResponsable + " fechaInicio "
@@ -294,7 +295,7 @@ public class ComisionesController {
         "Datos claveUsuario " + claveUsuario + " responsable " + idResponsable + " fechaInicio "
             + fechaInicio + " fechaFin " + fechaFin + " dias " + dias + " comision " + comision);
     Comision comisionRespuesta = comisionService.agregarComision(new ComisionAux(null, null, idResponsableAux, null, 1,
-        fechaInicio, fechaFin, dias, comision, obtenerFechaActual("dd/MM/yyyy"), Integer.valueOf(idHorario)), claveUsuario);
+        fechaInicio, fechaFin, dias, comision, obtenerFechaActual("dd/MM/yyyy"), Integer.valueOf(idHorario)), claveUsuario, authentication);
     System.out.println("Mensaje obtenido "+comisionRespuesta.getMensaje());
     this.mensaje=comisionRespuesta.getMensaje();
     
@@ -315,7 +316,7 @@ public class ComisionesController {
    */
   @RequestMapping(value = {"solicitudComisionEmpleados"}, method = RequestMethod.GET)
   public String SolitudComisionesEmpleados(String claveUsuario, String nombre,
-      String apellidoPaterno, String apellidoMaterno, Model model, HttpSession session) {
+      String apellidoPaterno, String apellidoMaterno, Model model, HttpSession session, Authentication authentication) {
     System.out.println("claveUsuario " + claveUsuario + " nombre " + nombre + " apellidoPaterno "
         + apellidoPaterno + " apellidoMaterno " + apellidoMaterno);
     String string = "" + session.getAttribute("usuario");
@@ -323,10 +324,10 @@ public class ComisionesController {
     String claveUsuarioAux = parts[1];
     System.out.println("Datos para comisiones empleados");
     Usuario usuario = new Usuario();
-    usuario = usuarioService.buscaUsuario(claveUsuarioAux);
+    usuario = usuarioService.buscaUsuario(claveUsuarioAux, authentication);
     String idUnidad = "" + usuario.getIdUnidad();
     List<Comision> comisionesEmpleados = comisionService.obtenerComisionesPorUnidad(idUnidad,
-        claveUsuario, nombre, apellidoPaterno, apellidoMaterno);
+        claveUsuario, nombre, apellidoPaterno, apellidoMaterno, authentication);
 
     if (comisionesEmpleados.size() > 0) {
       model.addAttribute("comisionesEmpleados", comisionesEmpleados);
@@ -340,7 +341,7 @@ public class ComisionesController {
         model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
     }
     model.addAttribute("listaHorarios",
-        catalogoService.obtieneHorarios());
+        catalogoService.obtieneHorarios(authentication));
     this.mensaje = "";
     return "/comisiones/solicitudComisionesEmpleados";
 
@@ -354,16 +355,16 @@ public class ComisionesController {
    * @return
    */
   @RequestMapping(value = {"comision/buscaUsuario"}, method = RequestMethod.GET)
-  public String buscaUsuario(String claveUsuario, Model model) {
+  public String buscaUsuario(String claveUsuario, Model model, Authentication authentication) {
     System.out.println("Usuarioooooooooooooo " + claveUsuario);
 
     model.addAttribute("fechaRegistro", obtenerFechaActual("dd-MM-yyyy"));
-    model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario));
+    model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario, authentication));
     model.addAttribute("listaResponsable",
-        unidadAdministrativaService.consultaResponsable(claveUsuario));
+        unidadAdministrativaService.consultaResponsable(claveUsuario, authentication));
     model.addAttribute("listaHorarios",
-        catalogoService.obtieneHorarios());
-    String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
+        catalogoService.obtieneHorarios(authentication));
+    String cadena=catalogoService.obtieneDiaFestivoParaBloquear(authentication);
     System.out.println("Dias festivos para bloquear "+cadena);
     model.addAttribute("listaDiasFestivos", cadena);
 
@@ -375,18 +376,18 @@ public class ComisionesController {
 
   @RequestMapping(value = {"modificarComision"}, method = RequestMethod.GET)
   public String modificarComisiones(String idComision, String claveUsuario, Model model,
-      HttpSession session) {
+      HttpSession session, Authentication authentication) {
     System.out.println("Comision con id: " + idComision);
     System.out.println("ClaveUsuario con id: " + claveUsuario);
 
-    model.addAttribute("comision", comisionService.obtieneComision(idComision));
+    model.addAttribute("comision", comisionService.obtieneComision(idComision, authentication));
     model.addAttribute("fechaRegistro", obtenerFechaActual("dd-MM-yyyy"));
-    model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario));
+    model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario, authentication));
     model.addAttribute("listaResponsable",
-        unidadAdministrativaService.consultaResponsable(claveUsuario));
+        unidadAdministrativaService.consultaResponsable(claveUsuario, authentication));
     model.addAttribute("listaHorarios",
-        catalogoService.obtieneHorarios());
-    String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
+        catalogoService.obtieneHorarios(authentication));
+    String cadena=catalogoService.obtieneDiaFestivoParaBloquear(authentication);
     System.out.println("Dias festivos para bloquear "+cadena);
     model.addAttribute("listaDiasFestivos", cadena);
 
@@ -397,7 +398,7 @@ public class ComisionesController {
 
   @RequestMapping(value = {"modificarComisionGuardado"}, method = RequestMethod.GET)
   public String modificarComisionesGuardado(String idComision, String fechaInicio, String fechaFin,
-      String dias, String comision, String idResponsable, String claveUsuario, String idHorario, Model model, HttpSession session) {
+      String dias, String comision, String idResponsable, String claveUsuario, String idHorario, Model model, HttpSession session, Authentication authentication) {
     System.out.println("Comision a ser modificada con id: " + idComision);
     System.out.println("fechaInicio " + fechaInicio + " fechaFin " + fechaFin + " diasPorPedir "
         + dias + " responsable " + idResponsable);
@@ -411,7 +412,7 @@ public class ComisionesController {
     comisioPeticion.setIdHorario(Integer.valueOf(idHorario));
     
     System.out.println("ComisionAux front: " + ReflectionToStringBuilder.toString(comisioPeticion));
-    Comision comisionRespuesta = comisionService.modificaComisiones(comisioPeticion, claveUsuario);
+    Comision comisionRespuesta = comisionService.modificaComisiones(comisioPeticion, claveUsuario, authentication);
     this.mensaje=comisionRespuesta.getMensaje();
     System.out.println("mensaje recuperado "+comisionRespuesta.getMensaje());
     return "redirect:/comisiones/comisionesEmpleados";
@@ -422,7 +423,7 @@ public class ComisionesController {
   public void generarReporteComisiones(String idComision, String idUnidadAdministrativa,
       String nombre, String apellidoPaterno, String apellidoMaterno, String fechaInicio1,
       String fechaFin1, String idHorario, String comision, HttpServletRequest request,
-      HttpServletResponse response) {
+      HttpServletResponse response, Authentication authentication) {
 
     System.out.println("Datos para el archivo " + idComision + " unidadAdministrativa "
         + idUnidadAdministrativa + " nombre " + nombre + " apellidoPaterno " + apellidoPaterno
@@ -434,7 +435,7 @@ public class ComisionesController {
       System.out.println("Datos " + nombre);
       reporte archivo =
           comisionService.generarReporte(new GenerarReporteArchivoComision(nombreCompleto,
-              idUnidadAdministrativa, comision, fechaInicio1, fechaFin1, idHorario));
+              idUnidadAdministrativa, comision, fechaInicio1, fechaFin1, idHorario), authentication);
 
       InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
       String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
@@ -455,10 +456,10 @@ public class ComisionesController {
   }
   
   @RequestMapping(value = "/descargaArchivo", method = RequestMethod.GET)
-  public void getFile(Integer idArchivo, HttpServletRequest request, HttpServletResponse response) throws IOException{
+  public void getFile(Integer idArchivo, HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
       System.out.println("id del archivo "+idArchivo);
       Archivo archivo= new Archivo();
-      archivo=archivoService.consultaArchivo(idArchivo);
+      archivo=archivoService.consultaArchivo(idArchivo, authentication);
       System.out.println("archivo retornado "+archivo.getUrl());
       String nombrecompleto=archivo.getUrl()+archivo.getNombre();
       //String nombreArchivo=nombrecompleto.replace('/','\\');
@@ -479,7 +480,7 @@ public class ComisionesController {
   
   @PostMapping("comision/actualizaArchivo")
   public String actualizaArchivoComision(@RequestParam MultipartFile archivo, Integer idArchivo,
-      String claveUsuario, Integer idComisionArchivo) {
+      String claveUsuario, Integer idComisionArchivo, Authentication authentication) {
 
     System.out.println("Datos archivo " + "" + " idArchivo " + idArchivo + " claveUsuario "
         + claveUsuario + " idComision " + idComisionArchivo);
@@ -489,15 +490,15 @@ public class ComisionesController {
     if (archivo != null && !archivo.isEmpty()) {
       if (idArchivo != null && !idArchivo.toString().isEmpty()) {
         archivoService.actualizaArchivo(archivo, claveUsuario, "comisiones", idArchivo,
-            "comision-");
-         comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo, null, null, idArchivo, 1, null, null, null, null, null, null), claveUsuario);
+            "comision-", authentication);
+         comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo, null, null, idArchivo, 1, null, null, null, null, null, null), claveUsuario, authentication);
       } else {
         // idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones");
         // archivoDto.setIdArchivo(idArchivoAux);
         idArchivoAux =
-            archivoService.guardaArchivo(archivo, claveUsuario, "comisiones", "comision-");
+            archivoService.guardaArchivo(archivo, claveUsuario, "comisiones", "comision-", authentication);
         System.out.println("IDArchivo recuperado " + idArchivoAux.getIdArchivo());
-        comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo, null, null, idArchivoAux.getIdArchivo(), 1, null, null, null, null, null, null), claveUsuario);
+        comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo, null, null, idArchivoAux.getIdArchivo(), 1, null, null, null, null, null, null), claveUsuario, authentication);
       }
     }
     System.out.println("mensaje recuperado " + comision.getMensaje());
@@ -506,18 +507,18 @@ public class ComisionesController {
   }
   
   @PostMapping("acepta")
-  public String aceptaVacaciones(Integer idComision,String claveUsuario, Integer idArchivo) {
+  public String aceptaVacaciones(Integer idComision,String claveUsuario, Integer idArchivo, Authentication authentication) {
       System.out.println("idLicencia "+idComision+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
-      Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComision, null, null, idArchivo, 2, null, null, null, null, null, null), claveUsuario);
+      Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComision, null, null, idArchivo, 2, null, null, null, null, null, null), claveUsuario, authentication);
       this.mensaje=comision.getMensaje();
       System.out.println("mensaje recuperado "+comision.getMensaje());
       return "redirect:/comisiones/comisionesEmpleados";
   }
   
   @PostMapping("rechaza")
-  public String rechazaVacaciones(Integer idComision,String claveUsuario, Integer idArchivo) {
+  public String rechazaVacaciones(Integer idComision,String claveUsuario, Integer idArchivo, Authentication authentication) {
       System.out.println("idLicencia "+idComision+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
-      Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComision, null, null, idArchivo, 3, null, null, null, null, null, null), claveUsuario);
+      Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComision, null, null, idArchivo, 3, null, null, null, null, null, null), claveUsuario, authentication);
       this.mensaje=comision.getMensaje();
       System.out.println("mensaje recuperado "+comision.getMensaje());
       return "redirect:/comisiones/comisionesEmpleados";

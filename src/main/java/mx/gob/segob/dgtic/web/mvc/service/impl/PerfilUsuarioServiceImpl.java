@@ -16,6 +16,7 @@ import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -39,12 +40,17 @@ public class PerfilUsuarioServiceImpl implements PerfilUsuarioService{
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
 	@Override
-	public List<PerfilUsuario> recuperaPerfilesUsuario(String claveUsuario) {
+	public List<PerfilUsuario> recuperaPerfilesUsuario(String claveUsuario, Authentication authentication) {
+		
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		List<PerfilUsuario> listaUsuarioPerfil = new ArrayList<>();
 		HttpResponse response;
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_PERFILES_USUARIO+ "?id=" + claveUsuario);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_PERFILES_USUARIO+ "?id=" + claveUsuario, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -67,8 +73,11 @@ public class PerfilUsuarioServiceImpl implements PerfilUsuarioService{
 	}
 
 	@Override
-	public void guardaEliminaPerfilesUsuario(Integer[] clavePerfil, String claveUsuario) {
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+	public void guardaEliminaPerfilesUsuario(Integer[] clavePerfil, String claveUsuario, Authentication authentication) {
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		PerfilUsuario perfilUsuario = new PerfilUsuario();

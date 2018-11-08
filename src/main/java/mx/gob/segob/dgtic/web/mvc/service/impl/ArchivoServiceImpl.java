@@ -16,6 +16,7 @@ import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,15 +43,19 @@ public class ArchivoServiceImpl implements ArchivoService{
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
 	@Override
-	public Archivo guardaArchivo(MultipartFile archivo, String claveUsuario, String accion, String nombreArchivo) {
+	public Archivo guardaArchivo(MultipartFile archivo, String claveUsuario, String accion, String nombreArchivo, Authentication authentication) {
 		HttpResponse response;
 		Archivo archivoResponse = null;
+
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		Archivo archivoDto = new Archivo();
 		Archivo archivoRespuesta = new Archivo();
-		Header header = new BasicHeader("Authorization", "Bearer %s");
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		String ruta="/documentos/sicoa/"+claveUsuario+"/"+accion+"/";
@@ -107,13 +112,16 @@ public class ArchivoServiceImpl implements ArchivoService{
 	}
 
 	@Override
-	public Archivo actualizaArchivo(MultipartFile archivo, String claveUsuario, String accion, Integer idArchivo,String nombreArchivo) {
+	public Archivo actualizaArchivo(MultipartFile archivo, String claveUsuario, String accion, Integer idArchivo,String nombreArchivo, Authentication authentication) {
 		HttpResponse response;
 		Archivo archivoRespuesta = new Archivo();
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		Archivo archivoDto = new Archivo();
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		String ruta="/documentos/sicoa/"+claveUsuario+"/"+accion+"/";
@@ -174,14 +182,18 @@ public class ArchivoServiceImpl implements ArchivoService{
 	}
 
 	@Override
-	public Archivo consultaArchivo(Integer idArchivo) {
+	public Archivo consultaArchivo(Integer idArchivo, Authentication authentication) {
 		Archivo archivo = new Archivo();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_ARCHIVO + "?id=" + idArchivo);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_ARCHIVO + "?id=" + idArchivo, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

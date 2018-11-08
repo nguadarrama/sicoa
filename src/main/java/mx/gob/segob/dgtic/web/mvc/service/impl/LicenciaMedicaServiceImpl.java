@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -56,12 +57,17 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	
 	@Override
 	public List<LicenciaMedica> obtenerListaLicenciaMedicaPorFiltros(String claveUsuario, String fechaInicio,
-			String fechaFin, String idEstatus) {
+			String fechaFin, String idEstatus, Authentication authentication) {
 		
 		List<LicenciaMedica> listaLicencias = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
-			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_POR_FILTROS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&fechaInicio="+fechaInicio+"&fechaFin="+fechaFin);
+			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_POR_FILTROS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&fechaInicio="+fechaInicio+"&fechaFin="+fechaFin, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -93,12 +99,17 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 
 	@Override
 	public List<LicenciaMedica> obtenerListaLicenciaMedicaEmpleados(String claveUsuario, String nombre,
-			String apellidoPaterno, String apellidoMaterno, String idEstatus, String idUnidad) {
+			String apellidoPaterno, String apellidoMaterno, String idEstatus, String idUnidad, Authentication authentication) {
 		List<LicenciaMedica> listaLicencias = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
 			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_EMPLEADOS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&nombre="+nombre
-					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad);
+					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -121,15 +132,18 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	}
 
 	@Override
-	public LicenciaMedica AgregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario) {
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+	public LicenciaMedica AgregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario, Authentication authentication) {
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HttpEntity httpEntity = new BasicHttpEntity();
 		HttpResponse response;
 		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		Usuario usuario= new Usuario();
-		usuario=usuarioService.buscaUsuario(claveUsuario);
+		usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
 		System.out.println("id del usuario "+usuario.getIdUsuario());
 		licenciaMedica.setIdUsuario(usuario.getIdUsuario());
 		licenciaMedica.setIdEstatus(1);
@@ -165,14 +179,18 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	}
 
 	@Override
-	public LicenciaMedica buscaLicenciaMedica(Integer idLicencia) {
+	public LicenciaMedica buscaLicenciaMedica(Integer idLicencia, Authentication authentication) {
 		LicenciaMedica licencia = new LicenciaMedica();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_BUSCA_LICENCIA + "?id=" + idLicencia);
+			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_BUSCA_LICENCIA + "?id=" + idLicencia, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -197,12 +215,17 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 
 	@Override
 	public List<LicenciaMedica> obtenerLicenciasPorUnidad(String idUnidad,String claveUsuario, String nombre,
-			String apellidoPaterno, String apellidoMaterno) {
+			String apellidoPaterno, String apellidoMaterno, Authentication authentication) {
 		List<LicenciaMedica> listaLicencias = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
 		try{
 			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_POR_UNIDAD+ "?idUnidad="+idUnidad+"&claveUsuario="+claveUsuario+"&nombre="+nombre
-					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno);
+					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -234,15 +257,18 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	}
 
 	@Override
-	public LicenciaMedica modificaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario) {
+	public LicenciaMedica modificaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario, Authentication authentication) {
 		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HttpEntity httpEntity = new BasicHttpEntity();
 		HttpResponse response;
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		Usuario usuario= new Usuario();
-		usuario=usuarioService.buscaUsuario(claveUsuario);
+		usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
 		System.out.println("IdUsuario recuperado "+usuario.getIdUsuario());
 		licenciaMedica.setIdUsuario(usuario.getIdUsuario());
 		Map<String, Object> content = new HashMap<String, Object>();
@@ -276,14 +302,18 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	}
 
 	@Override
-	public LicenciaMedica buscaDiasLicenciaMedica(String claveUsuario) {
+	public LicenciaMedica buscaDiasLicenciaMedica(String claveUsuario, Authentication authentication) {
 		LicenciaMedica licencia = new LicenciaMedica();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_DIAS_LICENCIA + "?claveUsuario=" + claveUsuario);
+			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_DIAS_LICENCIA + "?claveUsuario=" + claveUsuario, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -304,17 +334,21 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	}
 
 	@Override
-	public String consultaDiasPorBloquear(String claveUsuario) {
+	public String consultaDiasPorBloquear(String claveUsuario, Authentication authentication) {
 		List<LicenciaMedica> listaLicencias = new ArrayList<>();
 		HttpResponse response;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		String apellidoPaterno="";
 		String apellidoMaterno="";
 		String idUnidad="";
 		String nombre="";
 		String idEstatus="";
+		
 		try{
 			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_EMPLEADOS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&nombre="+nombre
-					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad);
+					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
