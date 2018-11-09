@@ -20,7 +20,7 @@ $(document)
 						//With Fancy hover tooltip! 
 						return display; 
 						},
-						minDate: '-1M',
+						minDate: '0d',
 						onSelect: function() 
 					       { 
 							validarFechas();

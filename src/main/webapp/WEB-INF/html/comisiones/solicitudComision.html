@@ -72,7 +72,7 @@
 						<div class="card" >
 				<form  th:action="@{/comisiones/agregarComision}"  method="get" class="guardaComision" id = "formRegistroComision">
 					<div class="row">
-						<h2 class="ico-solicitudes"><span class="input-clock"></span>Solicitud de comisi&oacute;n </h2>
+						<h2 class="ico-solicitudes"><span class="input-clock"></span>Solicitud de comisi&oacute;n propias</h2>
 					</div>
 					<div class="row">
 						<div class="col-md-6">
@@ -142,13 +142,13 @@
 									<div class="col-md-4 fechas">
 											<label>
 													<label class="col-form-label">Fecha de inicio </label>
-													<input id="fechaInicio" name="fechaInicio" type="text" class="form-control input-calendar" th:required="required" th:readonly="true" />
+													<input id="fechaInicio" name="fechaInicio" type="text" class="form-control input-calendar" th:required="required"  />
 											</label>
 									</div>
 									<div class="col-md-4 fechas">
 											<label>
 													<label class="col-form-label">Fecha de fin </label>
-													<input id="fechaFin" name="fechaFin" type="text" class="form-control input-calendar" th:required="required" th:readonly="true" />
+													<input id="fechaFin" name="fechaFin" type="text" class="form-control input-calendar" th:required="required"  />
 											</label>
 									</div>
 									<div class="col-md-4">
@@ -192,7 +192,7 @@
 					</div>
 					<div class="row">
 								<p class="text-center">
-												<a th:href="@{/comisiones/comisionesEmpleados}"><button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button></a>
+												<a th:href="@{/comisiones/comisionesPropias}"><button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button></a>
 								    			<input type="submit" id="botonGuardarComisiones" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
 											</p>
 							</div>

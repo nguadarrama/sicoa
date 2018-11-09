@@ -37,8 +37,6 @@ import mx.gob.segob.dgtic.web.mvc.dto.Comision;
 import mx.gob.segob.dgtic.web.mvc.dto.ComisionAux;
 import mx.gob.segob.dgtic.web.mvc.dto.GenerarReporteArchivoComision;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
-import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
-import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedicaAux;
 import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
@@ -47,7 +45,6 @@ import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.ComisionService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
 import mx.gob.segob.dgtic.web.mvc.service.PerfilUsuarioService;
-import mx.gob.segob.dgtic.web.mvc.service.PeriodoService;
 import mx.gob.segob.dgtic.web.mvc.service.UnidadAdministrativaService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 
@@ -69,9 +66,6 @@ public class ComisionesController {
 
   @Autowired
   private UnidadAdministrativaService unidadAdministrativaService;
-
-  @Autowired
-  private PeriodoService periodoService;
 
   @Autowired
   private CatalogoService catalogoService;
@@ -369,8 +363,7 @@ public class ComisionesController {
     model.addAttribute("listaDiasFestivos", cadena);
 
     System.out.println("Registrar comision usuario: " + claveUsuario);
-    return "/comisiones/solicitudComision";
-    // return "/comisiones/registraComisionesEmpleados";
+     return "/comisiones/registraComisionesEmpleados";
 
   }
 
@@ -462,7 +455,6 @@ public class ComisionesController {
       archivo=archivoService.consultaArchivo(idArchivo, authentication);
       System.out.println("archivo retornado "+archivo.getUrl());
       String nombrecompleto=archivo.getUrl()+archivo.getNombre();
-      //String nombreArchivo=nombrecompleto.replace('/','\\');
       String nombreArchivo=nombrecompleto;
       System.out.println("nombre de archivo "+nombreArchivo);
       File file = new File(nombreArchivo);

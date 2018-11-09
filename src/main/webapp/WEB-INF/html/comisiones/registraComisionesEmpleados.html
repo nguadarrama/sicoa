@@ -41,12 +41,12 @@
 		<th:block layout:fragment="content"  th:remove="tag">
 		<div class="main-page">
 			<div class="container">
-				<h1 class="ico-solicitudes"><span class="input-clock"></span> Vacaciones</h1>
+				<h1 class="ico-solicitudes"><span class="input-clock"></span> Comisiones</h1>
 				<hr/>
 				
 				<div class="row">
 						<ul class="nav nav-tabs">
-							<li class="active"><a data-toggle="tab" href="#agregar">Peticion de vacaciones</a></li>
+							<li class="active"><a data-toggle="tab" href="#agregar">Peticion de comisiones</a></li>
 						</ul>
 				</div>
 				<div class="form-group" th:if="${MENSAJE_EXCEPCION}">
@@ -69,82 +69,135 @@
 					</div>
 				<div class="tab-content">
 					<div class="row tab-pane fade in active" id="agregar">
+						<div class="card" >
+				<form  th:action="@{/comisiones/agregarComision}"  method="get" class="guardaComision" id = "formRegistroComision">
+					<div class="row">
+						<h2 class="ico-solicitudes"><span class="input-clock"></span>Solicitud de comisi&oacute;n de empleados</h2>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<label>
+									<label class="col-form-label">Fecha de solicitud</label>
+									<input id="idSolicitud" name="idSolicitud" type="text" class="form-control" required="required" th:readonly="true" style="display: none;"/>
+									<input id="fechaSolicitud" name="fechaSolicitud" type="text" class="form-control" th:value="${fechaRegistro}"  required="required"  th:readonly="true"  />
+									<input type="text" id="listaDiasFestivos" name="listaDiasFestivos" class="form-control" th:readonly="true" th:value="${listaDiasFestivos}" style="display: none;"/>
+							</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<label>
+									<label class="col-form-label">Nombre</label>
+									<input id="nombre" name="nombre" type="text" class="form-control" required="required" th:field="*{usuario.nombre}" th:readonly="true" />
+							</label>
+						</div>
+						<div class="col-md-2">
+							<label>
+									<label class="col-form-label">Apellido paterno</label>
+									<input id="apellidoPaterno" name="apellidoPaterno" type="text" class="form-control" th:field="*{usuario.apellidoPaterno}" required="required" th:readonly="true" />
+							</label>
+						</div>
+						<div class="col-md-2">
+							<label>
+									<label class="col-form-label">Apellido materno</label>
+									<input id="apellidoMaterno" name="apellidoMaterno" type="text" class="form-control" th:field="*{usuario.apellidoMaterno}" required="required" th:readonly="true" />
+							</label>
+						</div>
+						<div class="col-md-2">
+							<label>
+									<label class="col-form-label">No. Empleado</label>
+									<input id="claveUsuario" name="claveUsuario" type="text" class="form-control" th:field="*{usuario.claveUsuario}" required="required" th:readonly="true" />
+							</label>
+						</div>
+						<div class="col-md-2">
+							<label>
+									<label class="col-form-label">Fecha de ingreso</label>
+									<input id="fechaIngreso" name="fechaIngreso" type="text" class="form-control" th:field="*{usuario.fechaIngreso}" required="required" th:readonly="true" />
+							</label>
+						</div>
+						<div class="col-md-2">
+							<label>
+									<label class="col-form-label">RFC</label>
+									<input id="rfc" name="rfc" type="text" class="form-control" th:field="*{usuario.rfc}" required="required" th:readonly="true" />
+							</label>
+						</div>
 						
-						<div class="card" th:if="${periodo != null}">
-							<h3>Agregar peticion de vacaciones</h3>
-							<div class="guardaVacaciones" >      <!-- Formulario busqueda asistencia -->
-			      				<form th:action="@{/vacaciones/vacacion/guardaVacacion}" method="post">
-									<div class="row">
-										<div class="col-md-3">
+					</div>
+					<div class="row">
+					 	<div class="col-md-6">
+							<label>
+									<label class="col-form-label">Puesto</label>
+									<input id="idPuesto" name="idPuesto" type="text" class="form-control" th:field="*{usuario.idPuesto}" required="required" th:readonly="true" />
+							</label>
+						</div>
+						<div class="col-md-6">
+							<label>
+									<label class="col-form-label">Unidad administrativa</label>
+									<input id="idUnidadAdministrativa" name="idUnidadAdministrativa" th:field="*{usuario.nombreUnidad}" type="text" class="form-control" required="required" th:readonly="true" />
+							</label>
+						</div>
+					</div>
+					<div class="row">
+					<label> Selecciona fecha inicio y la fecha fin de la comisi&oacute;n </label>
+									<div class="col-md-4 fechas">
 											<label>
-												<label class="col-form-label">Periodo</label>
-												<input type="text" id="periodo" class="form-control" th:readonly="true" th:field="*{periodo.descripcion}" />
-												<!-- <input type="text" id="listaDiasFestivos" class="form-control" th:readonly="true" th:field="*{listaDiasFestivos}" /> -->
-												<input type="text" id="idPeriodo" name="idPeriodo" class="form-control" th:readonly="true" th:field="*{periodo.idPeriodo}"  style="display: none;" />
+													<label class="col-form-label">Fecha de inicio </label>
+													<input id="fechaInicio" name="fechaInicio" type="text" class="form-control input-calendar" th:required="required"  />
 											</label>
-										</div>
-										<div class="col-md-3">
-											<label>
-												<label class="col-form-label">Dias Disponibles de Periodo</label>
-												<input type="number" id="diasDispobibles" th:field="*{vacacion.dias}" class="form-control" th:readonly="true" />
-											</label>
-										</div>
-										<div class="col-md-3">
-											<label>
-												<label class="col-form-label">Fecha de Inicio</label>
-												<input type="text" name="fechaInicio" class="form-control input-calendar" id="fechaInicio" required="required" autocomplete="off" />
-											</label>
-										</div>
-										<div class="col-md-3">
-											<label>
-												<label class="col-form-label">Fecha de Fin</label>
-												<input type="text" name="fechaFin" class="form-control input-calendar" id="fechaFin" required="required" autocomplete="off"  />
-											</label>
-										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-3">
+									<div class="col-md-4 fechas">
 											<label>
-												<label class="col-form-label">Dias por Pedir</label>
-												<input type="number" name="diasPorPedir" id="diasPorPedir" class="form-control" th:readonly="true" />
-												<input type="text" name="idVacacion" id="idVacacion" class="form-control" th:readonly="true" th:field="*{vacacion.idVacacion}" style="display: none;" />
+													<label class="col-form-label">Fecha de fin </label>
+													<input id="fechaFin" name="fechaFin" type="text" class="form-control input-calendar" th:required="required"  />
 											</label>
-										</div>
-										<div class="col-md-3" th:if="${listaResponsable!=null}">
-											<label for="responsable" class="col-form-label" th:text="Responsable"></label>
+									</div>
+									<div class="col-md-4">
+											<label>
+													<label class="col-form-label">D&iacute;as </label>
+													<input id="dias" name="dias" type="text" class="form-control"  th:readonly="true" />
+											</label>
+									</div>
+							
+					</div>
+					<div class ="row">
+									<div class="col-md-4">
+											<label>
+										        <label for="horario" class="col-form-label" th:text="Horario"></label>
 									        	<select  class="form-control" 
-											       th:value="responsable" name="responsable" id="responsable" th:required="required">
-											      <option disabled="disabled" selected="selected" > Elige un responsable
+											       th:value="horario" name="idHorario" id="idHorario" th:required="required">
+											      <option th:each="horario : ${listaHorarios}" th:value="${horario.idHorario}" 
+											       th:text="${horario.horaEntrada} + ' - ' + ${horario.horaSalida}">
 											      </option>
+											    </select>
+											</label>
+									</div>
+									<div class="col-md-4">
+											<label>
+													<label class="col-form-label">Motivo de comisi&oacute;n</label>
+													<input id="comision" name="comision" type="text" class="form-control" th:required="required"/>
+											</label>
+									</div>
+									<div class="col-md-4">
+											<label>
+										        <label for="responsable" class="col-form-label" th:text="Responsable"></label>
+									        	<select  class="form-control" 
+											       th:value="responsable" name="idResponsable" id="idResponsable" th:required="required">
 											      <option th:each="responsable : ${listaResponsable}" th:value="${responsable.claveUsuario.idUsuario}" 
 											       th:text="${responsable.claveUsuario.nombre} + ' ' + ${responsable.claveUsuario.apellidoPaterno} + ' ' + ${responsable.claveUsuario.apellidoMaterno} ">
 											      </option>
 											    </select>
-											    <form:select path="responsable.idUsuario">
-												    <form:options items="${listaResponsable}" itemValue="idUsuario" itemLabel="nombre"/>
-												</form:select>
-										</div>
-										<!-- <div class="col-md-3">
-											<label>
-												<label class="col-form-label">Archivo</label>
-												 <input type="file" name="archivo" id="archivo" multiple="multiple"/>
 											</label>
-										</div> -->
 									</div>
-									<div class="row">
-										<div class="col-md-12">
-											<p class="text-right">
-											<a href="javascript:window.history.back();"><button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button></a>
-								    			<input type="submit" id="botonGuardarVacaciones" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+
+					</div>
+					<div class="row">
+								<p class="text-center">
+												<a th:href="@{/comisiones/solicitudComisionEmpleados}"><button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button></a>
+								    			<input type="submit" id="botonGuardarComisiones" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
 											</p>
-										</div>
-									</div>
-								</form>
 							</div>
-						</div>
-						<div class="card" th:if="${periodo == null}">
-						<label>No hay periodos disponibles para tus vacaciones</label>
-						</div>
+					</form>
+					</div>
 					</div>
 				</div>
 			</div>
@@ -198,7 +251,7 @@
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/dataTables-1.10.12/js/dataTables.bootstrap.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
-	        <script charset="utf-8" th:src="@{/recursos/script/comisiones/comisiones.js}"></script>	 
+	        <script charset="utf-8" th:src="@{/recursos/script/comisiones/solicitudComision.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/moment.js}"></script>
 	        <!-- <script charset="utf-8" th:src="@{/recursos/assets/date-picker/style/jquery-ui.css}"></script> -->

@@ -136,7 +136,7 @@
 						
 				<div class="row tab-pane fade in active" id="actualizamosVacacion" style="display: none; ">
 						<div class="card">
-							<form th:action="@{/comisiones/comision/generarArchivo}"
+							<form th:action="@{/comisiones/descargaArchivo}" 
 								method="get" class="actualizaVacacion" id="validarFechas"
 								enctype="multipart/form-data">
 								<div class="row">
@@ -151,6 +151,12 @@
 											type="text" class="form-control" required="required"
 											th:readonly="true" /> <input id="idComision"
 											name="idComision" type="text" class="form-control"
+											required="required" th:readonly="true" style="display: none;" />
+											<input id="idArchivoPropio"
+											name="idArchivo" type="text" class="form-control"
+											required="required" th:readonly="true" style="display: none;" />
+											<input id="claveUsuario"
+											name="claveUsuario" type="text" class="form-control"
 											required="required" th:readonly="true" style="display: none;" />
 										</label>
 									</div>
@@ -300,8 +306,9 @@
 										</div>
 										<div class="row">
 											<p class="text-center">
-												<button type="submit" class="btn btn-secondary"
-													data-dismiss="modal">Descargar formato</button>
+												<input type="submit"
+												class="btn btn-secundary" id="descargar"
+												value="Descargar archivo" />
 
 											</p>
 										</div>
@@ -333,33 +340,6 @@
 											</p>
 							</div> -->
 
-						</div>
-						<div class="card">
-							<div class="row">
-								<div class="col-md-4"      >
-									<form th:action="@{/comisiones/comision/actualizaArchivo}"
-										class="actualizaArchivoPropio" method="post"
-										enctype="multipart/form-data">
-										<div class="col-md-4">
-											<label class="col-form-label">Archivo de comisiones </label>
-											<input type="file" name="archivo" id="archivo"
-												multiple="multiple" />
-										</div>
-										<div class="col-md-6">
-											<input id="claveUsuarioPropio" name="claveUsuario" type="text"
-												class="form-control" required="required" th:readonly="true"
-												style="display: none;" /> <input id="idArchivoPropio"
-												name="idArchivo" type="text"
-												class="form-control input-calendar" required="required"
-												th:readonly="true" style="display: none;" /> <input
-												id="idComisionArchivoPropio" name="idComisionArchivo" type="text"
-												class="form-control" required="required" th:readonly="true"
-												style="display: none;" /><input type="submit"
-												class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
-										</div>
-									</form>
-								</div>
-							</div>
 						</div>
 
 

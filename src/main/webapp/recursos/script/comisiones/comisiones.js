@@ -84,7 +84,6 @@ $(document).ready(function() {
 			var href = $(this).attr('href');
 			var text = $(this).text();
 				$.get(href, function(hmap, status) {
-					//alert(hmap.vacacion.idVacacion.idVacacion),
 					$('.actualizaVacacion #numeroEmpleado').val(hmap.comision.idUsuario.claveUsuario);
 					$('.actualizaVacacion #nombre').val(hmap.comision.idUsuario.nombre);
 					$('.actualizaVacacion #apellidoPaterno').val(hmap.comision.idUsuario.apellidoPaterno);
@@ -100,15 +99,15 @@ $(document).ready(function() {
 					$('.actualizaVacacion #fechaFin1').val(hmap.comision.fechaFin);
 					$('.actualizaVacacion #comision').val(hmap.comision.comision);
 					$('.actualizaVacacion #idHorario').val(hmap.horario);
-//					$('.actualizaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
+					$('.actualizaVacacion #idArchivoPropio').val(hmap.comision.idArchivo.idArchivo);
 					$('.actualizaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
 					$('.actualizaArchivo #idComisionArchivo').val(hmap.comision.idComision);
 					$('.actualizaArchivo #claveUsuario').val(hmap.comision.idUsuario.claveUsuario);
 					$('.actualizaArchivo #idEstatusArchivo').val(hmap.comision.idEstatus.idEstatus);
-					$('.actualizaArchivoPropio #idArchivoPropio').val(hmap.comision.idArchivo.idArchivo);
-					$('.actualizaArchivoPropio #idComisionArchivoPropio').val(hmap.comision.idComision);
-					$('.actualizaArchivoPropio #claveUsuarioPropio').val(hmap.comision.idUsuario.claveUsuario);
-					$('.actualizaArchivoPropio #idEstatusArchivoPropio').val(hmap.comision.idEstatus.idEstatus);
+//					$('.actualizaArchivoPropio #idArchivoPropio').val(hmap.comision.idArchivo.idArchivo);
+//					$('.actualizaArchivoPropio #idComisionArchivoPropio').val(hmap.comision.idComision);
+//					$('.actualizaArchivoPropio #claveUsuarioPropio').val(hmap.comision.idUsuario.claveUsuario);
+//					$('.actualizaArchivoPropio #idEstatusArchivoPropio').val(hmap.comision.idEstatus.idEstatus);
 					$('.formModificar #claveUsuarioEditar').val(hmap.comision.idUsuario.claveUsuario);
 					$('.formModificar #idComisionEditar').val(hmap.comision.idComision);
 					$('.descargaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
@@ -177,8 +176,6 @@ $(document).ready(function() {
 			document.getElementById("botonGuardarVacaciones").disabled = true;
 			var fechaInicio= $("#fechaInicio").val();
 			var fechaFin=$("#fechaFin").val();
-			//alert("variable "+fechaInicio);
-			//alert("variable2 "+fechaFin);
 			if(fechaInicio!=null && fechaInicio!=""){
 				if(fechaFin!=null && fechaFin!=""){	
 					var x = fechaInicio.split("/");

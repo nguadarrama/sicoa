@@ -80,7 +80,6 @@
 	                        <ul class="dropdown-menu" role="menu">
 	                            <li><a  th:href="@{/comisiones/comisionesPropias}"  th:text="#{COMISIONES_PROPIAS}"></a></li>
 	                            <li><a sec:authorize="hasAuthority('1') or hasAuthority('2')" th:href="@{/comisiones/comisionesEmpleados}" th:text="#{COMISIONES_EMPLEADOS}"></a></li>
-	                            <li><a  th:href="@{/comisiones/solicitudComision}" th:text="#{SOLICITUD_COMISIONES}"></a></li>
 	                            <li><a  sec:authorize="hasAuthority('2')" th:href="@{/comisiones/solicitudComisionEmpleados}" th:text="#{SOLICITUD_COMISIONES_EMPLEADOS}"></a></li>
 	                        </ul>
 	                    </li>
