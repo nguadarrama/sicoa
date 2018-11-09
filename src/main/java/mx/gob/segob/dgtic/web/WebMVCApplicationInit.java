@@ -98,6 +98,10 @@ public class WebMVCApplicationInit extends AbstractAnnotationConfigDispatcherSer
 	        Dynamic filterRegis = servletContext.addFilter("EncodingFilter", EncodingFilter.class);
 	        filterRegis.addMappingForUrlPatterns(null, false, "/*");
 	        filterRegis.setInitParameter("encoding", "UTF-8");
+	        filterRegis.setInitParameter("allow", "GET,PUT,POST,DELETE,OPTIONS");
+	        filterRegis.setInitParameter("allow", "*");
+	        filterRegis.setInitParameter("EncodingFilter", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+	        filterRegis.setInitParameter("allowCredentials", "true");
 	        
 	        //Se configura la seguridad de cookie
 	        servletContext.getSessionCookieConfig().setHttpOnly(true);

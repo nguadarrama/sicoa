@@ -12,7 +12,11 @@ $(document).ready(function() {
 				$('.justificacionForm #id').val(justificacion.idJustificacion);
 				$('.justificacionForm #clave').val(justificacion.clave);
 				$('.justificacionForm #justificacion').val(justificacion.justificacion);
-				$('.justificacionForm #activo').val(justificacion.activo);
+				if (justificacion.activo) {
+					$('.justificacionForm #activo').prop("checked", true);
+				} else {
+					$('.justificacionForm #desactivado').prop("checked", true);
+				}
 			});
 			
 			$('.justificacionForm #justificacionModal').modal();

@@ -10,6 +10,7 @@ package mx.gob.segob.dgtic.web.mvc.views.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import mx.gob.segob.dgtic.web.config.security.service.AutenticacionService;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.service.DashService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
+import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
 
 
 /**
@@ -69,13 +71,13 @@ public class VistasController {
 
 
     @PostMapping("/cambiaContrasenia")
-    public String cambiaContrasenia(HttpSession session,String accesoClave, String aC1, String accesoClave2, Model model){
+    public String cambiaContrasenia(HttpSession session,String accesoClave, String aC1, String accesoClave2, Model model, Authentication authentication) throws AuthenticationServiceException, ClienteException{
     	
     	
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
-    	Boolean response=autenticacionService.cambiaContrasenia(claveUsuario, aC1);
+    	Boolean response=autenticacionService.cambiaContrasenia(claveUsuario, aC1, authentication);
     	System.out.println("clave antigua "+accesoClave +" nueva1 "+aC1 +" accesoClave2 "+accesoClave2);
     	
     	if(response==true){
@@ -108,13 +110,14 @@ public class VistasController {
     	return "mensajeConfirmacion";
     }
     @PostMapping("/cambiaContrasenia1")
-    public String cambiaContrasenia1(HttpSession session, String aC1, String accesoClave2, Model model){
+    public String cambiaContrasenia1(HttpSession session, String aC1, String accesoClave2, Model model, Authentication authentication) throws AuthenticationServiceException, ClienteException{
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
     	
-    	Boolean response=autenticacionService.cambiaContrasenia(claveUsuario, aC1);
+    	Boolean response=autenticacionService.cambiaContrasenia(claveUsuario, aC1, authentication);
     	System.out.println("cambia contraseña 1 "+aC1 );
+    	System.out.println("Response "+response );
     	if(response==true){
     		return"redirect:/login";
         	}else{
@@ -122,35 +125,4 @@ public class VistasController {
         	}
     }
     
-    ///
-    //Vista de demo
-    //
-    ///
-    /**
-     * Vista donde se ubica el demo de formularios. Path : {contextoAplicacion}/demo/formularios
-     * @return La vista de demo de formularios
-     */
-    @RequestMapping(value={"demo/formularios"}, method = RequestMethod.GET)
-    public String demoFormulario(){ return "/demo/demoFormularios"; }
-    
-    /**
-     * Vista donde se ubica el demo de la tabla. Path : {contextoAplicacion}/demo/tabla
-     * @return La vista de demo de la tabla
-     */
-    @RequestMapping(value={"demo/tabla"}, method = RequestMethod.GET)
-    public String demoTabla(){ return "/demo/demoTabla"; }
-    
-    /**
-     * Vista donde se ubica el demo de validaciones. Path : {contextoAplicacion}/demo/jqueryValidator
-     * @return La vista de demo de validaciones
-     */
-    @RequestMapping(value={"demo/jqueryValidator"}, method = RequestMethod.GET)
-    public String demoValidaciones(){ return "/demo/demoJqueryValidator"; }
-    
-    /**
-     * Vista donde se ubica el demo de ajax. Path : {contextoAplicacion}/demo/ajax
-     * @return La vista de demo de ajax
-     */
-    @RequestMapping(value={"demo/ajax"}, method = RequestMethod.GET)
-    public String demoAjax(){ return "/demo/demoAjax"; }
 }

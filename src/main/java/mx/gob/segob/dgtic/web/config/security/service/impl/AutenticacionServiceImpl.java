@@ -21,6 +21,7 @@ import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -222,17 +223,17 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({ "unused", "unchecked" })
 	@Override
-	public Boolean cambiaContrasenia(String usuario, String contrasenia) {
+	public Boolean cambiaContrasenia(String usuario, String contrasenia, Authentication authentication) {
+		
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 		HttpResponse response;
 		Boolean respuesta=false;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		
-		
-		Header header = new BasicHeader("Authorization", "Bearer %s");
+		System.out.println("token  -----------  " + detalles.get("_token").toString() );
+		Header header = new BasicHeader("Authorization", "Bearer "+ detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("usuario", usuario);
@@ -244,20 +245,21 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(AuthenticationEndPointConstants.WEB_SERVICE_CONTRASENIA, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		
+		System.out.println("********************************** "+HttpResponseUtil.getStatus(response));
+		System.out.println(Status.OK.getStatusCode());
 		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()){
 			respuesta=true;	
+			this.logout(detalles.get("_token").toString());
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)){
 			respuesta=false;	
 			String mensaje = obtenerMensajeError(response);					 
-			//throw new AuthenticationServiceException(mensaje);			
+			//throw new AuthenticationServiceException(mensaje);	cambia contraseña		
 		} else {
 			respuesta=false;	
 			//throw new AuthenticationServiceException("Error al actualizar el password : "+response.getStatusLine().getReasonPhrase());

@@ -109,9 +109,7 @@
 										</div>
 							          		<label for="idHorario" class="col-form-label" th:text="NUEVO_HORARIO_LABORAL"></label>
 							          		<select  class="form-control" required="required" 
-											       name="idHorario" id="idHorario">
-											      <option disabled="disabled" selected="selected" > Elige un nuevo horario
-											      </option>
+											       name="idHorario" id="idHorario">											     
 											      <option th:each="horario : ${listaHorarios}" th:value="${horario.idHorario}" 
 											       th:text="'Hora Entrada '+${horario.horaEntrada}+ ' - '+' Hora Salida '+${horario.horaSalida}">
 											      </option>
@@ -147,9 +145,7 @@
 								        <div class="form-group">
 							          		<label for="idHorario" class="col-form-label" th:text="HORARIO"></label>
 							          		<select  class="form-control" required="required" 
-											       th:value="Nivel" name="idHorario" id="idHorario">
-											      <option disabled="disabled" selected="selected" > Elige un Horario
-											      </option>
+											       th:value="Nivel" name="idHorario" id="idHorario">											     
 											      <option th:each="horario : ${listaHorarios}" th:value="${horario.idHorario}" 
 											       th:text="'Hora Entrada '+${horario.horaEntrada}+ ' - '+' Hora Salida '+${horario.horaSalida}">
 											      </option>
@@ -158,9 +154,7 @@
 								        <div class="form-group">
 											<label for="nivel" class="col-form-label" th:text="NIVEL_ORGANIZACIONAL"></label>
 									    	<select  class="form-control" required="required" 
-											       th:value="Nivel" name="nivel" id="nivel">
-											      <option disabled="disabled" selected="selected" > Elige un Nivel Organizacional
-											      </option>
+											       th:value="Nivel" name="nivel" id="nivel">											      
 											      <option th:each="nivel : ${listaUnidades}" th:value="${nivel.nivel}" 
 											       th:text="${nivel.nivel}">
 											      </option>

@@ -129,6 +129,7 @@ public class ClienteRestUtil {
 		try {
 			String jsonContent = gson.toJson(content);
 			entityContent = new StringEntity(jsonContent);
+			entityContent.setContentEncoding("UTF-8");
 			entityContent.setContentType(ContentType.APPLICATION_JSON.getMimeType());
 		} catch (UnsupportedEncodingException e) {
 			throw new ClienteException("No se puede convertir el contenido a JSON : "+e.getMessage(), e);

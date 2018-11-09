@@ -9,6 +9,7 @@ package mx.gob.segob.dgtic.web.config.security.service;
 
 import org.apache.http.HttpResponse;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 
 import mx.gob.segob.dgtic.web.mvc.dto.UsuarioSesion;
 
@@ -57,7 +58,7 @@ public interface AutenticacionService {
 	void logout(String tokenAcceso) throws AuthenticationServiceException;
 
 	
-	Boolean cambiaContrasenia(String usuario, String contrasenia)
+	Boolean cambiaContrasenia(String usuario, String contrasenia, Authentication authentication)
 			throws AuthenticationServiceException;
 	
 
