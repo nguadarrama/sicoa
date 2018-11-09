@@ -527,6 +527,34 @@ public class VacacionesServiceImpl implements VacacionesService{
 			return listaFechas;
 	}
 
+	@Override
+	public Vacaciones cancelaVacaciones(Integer idDetalle, Authentication authentication) {
+		HttpResponse response;
+		Vacaciones vacacio= new Vacaciones();
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_CANCELA_VACACIONES + "?id=" + idDetalle, header);
+		} catch (ClienteException e) {
+			logger.error(e.getMessage(), e);
+			throw new AuthenticationServiceException(e.getMessage(), e);
+		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			vacacio = gson.fromJson(dataJson, Vacaciones.class);		
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+		}
+		return vacacio;
+	}
+
 	
 	
 

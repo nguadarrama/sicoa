@@ -65,6 +65,7 @@ public final class CatalogoEndPointConstants {
 		public static final String WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS = "/catalogo/consultaVacacionesPropiasPorFiltros";
 		public static final String WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS = "/catalogo/obtenerVacacionesPorFiltros";
 		public static final String WEB_SERVICE_GENERA_REPORTE = "/catalogo/generaReporte";
+		public static final String WEB_SERVICE_CANCELA_VACACIONES = "/catalogo/cancelaVacaciones";
 		
 		
 		//Periodo

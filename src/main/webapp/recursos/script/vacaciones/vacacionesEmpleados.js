@@ -14,16 +14,6 @@ $(document).ready(function() {
 	    "scrollCollapse": true
 	  });
 	$('.collapse').collapse();
-//	$('#collapseOne').collapse({
-//		  toggle: false
-//		})
-	//$("#botonGuardarVacaciones").disabled = true;
-	//document.getElementById("botonGuardarVacaciones").disabled=true;
-		//document.getElementById("validacionDias").style.display = "none";
-	//var array =$("#listaDiasFestivos").val();
-	//alert("LLegada "+array);
-	//var disableddates=array.split(",");
-	//alert("LLegada "+disableddates);
 	
 	$("#fechaInicio").datepicker({ 
 		beforeShowDay: function(date){ 
@@ -153,9 +143,16 @@ $(document).ready(function() {
 					$('.actualizaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 					$('.actualizaArchivo #idDetalle').val(hmap.vacacion.idDetalle);
 					$('.actualizaArchivo #claveUsuario').val(hmap.vacacion.idUsuario.claveUsuario);
+					if(hmap.vacacion.idEstatus.idEstatus!='3'){
+						$('.cancelaVacacion #idVacacionCancelar').val(hmap.vacacion.idDetalle);
+						$('.cancelaVacacion').css("display","inline");
+					}else{
+						$('.cancelaVacacion').css("display","none");
+					}
 					if(hmap.vacacion.idEstatus.idEstatus=='2' || hmap.vacacion.idEstatus.idEstatus=='3'){
 						$('.rechazaVacacion #rechazaVacacion').css("display","none");
 						$('.aceptaVacacion #aceptaVacacion').css("display","none");
+						$('.actualizaArchivo').css("display","none");
 					}else{
 						
 					}

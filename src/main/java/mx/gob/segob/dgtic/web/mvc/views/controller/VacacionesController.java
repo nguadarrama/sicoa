@@ -629,6 +629,16 @@ public class VacacionesController {
 	    
     }
     
+    @RequestMapping(value={"cancelaVacacion"}, method = RequestMethod.POST)
+    public String cancelaVacacion(Integer idVacacionCancelar, Authentication authentication) {
+	    System.out.println("id para cancelar "+idVacacionCancelar);
+	    Vacaciones vacaciones= new Vacaciones();
+	    vacaciones=vacacionesService.cancelaVacaciones(idVacacionCancelar, authentication);
+	    this.mensaje=vacaciones.getMensaje();
+	    return "redirect:/vacaciones/vacacionesPropias";
+	    
+    }
+    
 	public String getMensaje() {
 		return mensaje == null ? "" : this.mensaje;
 	}

@@ -24,6 +24,7 @@ public interface VacacionesService {
 			String pfechaInicio, String pfechaFin, Authentication authentication );
 	public reporte generaReporte(GeneraReporteArchivo generaReporteArchivo, Authentication authentication);
 	public String recuperaDiasVacacioness(String claveUsuario, Authentication authentication);
+	public Vacaciones cancelaVacaciones(Integer idDetalle, Authentication authentication);
 	
 	
 }
