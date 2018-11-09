@@ -266,7 +266,9 @@ public class VacacionesController {
     	System.out.println("Datos para vacacionesPropias");
     	Usuario usuario= new Usuario();
     	usuario=usuarioService.buscaUsuario(claveUsuarioAux, authentication);
+    	
     	String idUnidad=""+usuario.getIdUnidad();
+    	System.out.println("id de la unidad administrativa "+idUnidad);
     	List<VacacionPeriodo> conVacaciones= new ArrayList<>();
     	conVacaciones=vacacionPeriodoService.obtenerUsuariosVacacionesPorFiltros(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, authentication);
     	if(conVacaciones.size()>0){

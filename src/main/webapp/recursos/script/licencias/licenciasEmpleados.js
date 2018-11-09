@@ -73,6 +73,10 @@ $(document).ready(function() {
 					$(".rechazaLicencia").css("display","none");
 					$("#descargar").css("display","none");
 				}
+				if(hmap.licencia.idEstatus.idEstatus=="2" || hmap.licencia.idEstatus.idEstatus=="3"){
+					$(".actualizaArchivo").css("display","none");
+					
+				}
 				//alert(hmap.licencia.idEstatus.idEstatus);
 				if(hmap.licencia.idEstatus.idEstatus!="1"){
 					$(".aceptaLicencia").css("display","none");
