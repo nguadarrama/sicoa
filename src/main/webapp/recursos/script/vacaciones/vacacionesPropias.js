@@ -121,20 +121,6 @@ $(document).ready(function() {
         		$("#fechaInicioBusca1").datepicker("change", { maxDate: maxDate });
 		       },
 		   });
-//		$("#fechaInicio").datepicker({ 
-//			minDate: 1,
-//		       beforeShowDay: $.datepicker.noWeekends,
-//		       //beforeShowDay: DisableSpecificDates,
-//		       onSelect: function() 
-//		       { 
-//		    	   DisableSpecificDates();
-//		    	   calcularDias();
-//		       },
-//		   });
-//		$("#fechaInicio").on('click', function(event){
-//			alert();
-//			DisableSpecificDates();
-//		});
 		
 		function cambiarFile(){
 		    const input = document.getElementById('inputFileServer');
@@ -170,6 +156,7 @@ $(document).ready(function() {
 					if(hmap.vacacion.idEstatus.idEstatus=='2' || hmap.vacacion.idEstatus.idEstatus=='3'){
 						$('.rechazaVacacion #rechazaVacacion').css("display","none");
 						$('.aceptaVacacion #aceptaVacacion').css("display","none");
+						$('.actualizaArchivo').css("display","none");
 					}else{
 						
 						$('.eliminaVacacion #idVacacionEliminar').val(hmap.vacacion.idDetalle);
