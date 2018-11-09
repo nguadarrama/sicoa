@@ -391,17 +391,16 @@ public class ComisionesController {
 
   @RequestMapping(value = {"modificarComisionGuardado"}, method = RequestMethod.GET)
   public String modificarComisionesGuardado(String idComision, String fechaInicio, String fechaFin,
-      String dias, String comision, String idResponsable, String claveUsuario, String idHorario, Model model, HttpSession session, Authentication authentication) {
+      String dias, String comision, String claveUsuario, String idHorario, Model model, HttpSession session, Authentication authentication) {
     System.out.println("Comision a ser modificada con id: " + idComision);
     System.out.println("fechaInicio " + fechaInicio + " fechaFin " + fechaFin + " diasPorPedir "
-        + dias + " responsable " + idResponsable);
+        + dias);
     ComisionAux comisioPeticion = new ComisionAux();
     comisioPeticion.setIdComision(Integer.valueOf(idComision));
     comisioPeticion.setFechaInicio(fechaInicio);
     comisioPeticion.setFechaFin(fechaFin);
     comisioPeticion.setDias(Integer.valueOf(dias));
     comisioPeticion.setComision(comision);
-    comisioPeticion.setIdResponsable(Integer.valueOf(idResponsable));
     comisioPeticion.setIdHorario(Integer.valueOf(idHorario));
     
     System.out.println("ComisionAux front: " + ReflectionToStringBuilder.toString(comisioPeticion));
