@@ -16,6 +16,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -259,7 +260,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 		//motivo de incidencia
 		TipoDia tipoDia = new TipoDia();
-		tipoDia.setIdTipoDia(idTipoDia);
+		tipoDia.setIdTipoDia(null);
 		
 		//la asistencia con incidencia que se quiere justificar
 		Asistencia asistencia = new Asistencia();
@@ -473,17 +474,31 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//se dictamina
 		Estatus estatus = new Estatus();
 		
-		if (dictaminacion.equals("Autorizar")) {
-			estatus.setIdEstatus(2); //validada
-		} else if (dictaminacion.equals("Rechazar")) {
-			estatus.setIdEstatus(3); //rechazada
-		}
-				
 		//se crea la incidencia con la información 
 		Incidencia incidencia = new Incidencia();
 		incidencia.setJustificacion(justificacion);
 		incidencia.setTipoDia((tipoDia));
 		incidencia.setIdAsistencia(asistencia);
+		
+		if (dictaminacion.equals("Autorizar")) {
+			if (esDescuento(asistencia.getIdAsistencia(), authentication)) {
+				estatus.setIdEstatus(2);
+				incidencia.setDescuento(true);
+			} else { //si la incidencia es justificación, entonces la convierte en descuento y queda pendiente
+				estatus.setIdEstatus(2); //validada
+				incidencia.setDescuento(false);
+			}
+		} else if (dictaminacion.equals("Rechazar")) {
+			//si la incidencia es descuento, entonces la valida
+			if (esDescuento(asistencia.getIdAsistencia(), authentication)) {
+				estatus.setIdEstatus(3);
+				incidencia.setDescuento(true);
+			} else { //si la incidencia es justificación, entonces la convierte en descuento y queda pendiente
+				estatus.setIdEstatus(1);
+				incidencia.setDescuento(true);
+			}
+		}
+		
 		incidencia.setEstatus(estatus);
 		
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
@@ -713,6 +728,42 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		}
 		
 		return listaAsistencia;
+	}
+	
+	private boolean esDescuento(Integer idIncidencia, Authentication authentication) {
+		Incidencia incidencia = new Incidencia();
+		HttpResponse response = null;
+		boolean esDescuento = false;
+		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+		//Se agrega el JWT a la cabecera para acceso al recurso rest
+		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
+		try { //se consume recurso rest
+			response = ClienteRestUtil.getCliente().get("/catalogo/buscaIncidenciaPorIdAsistencia?id=" + idIncidencia, header);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			incidencia = gson.fromJson(dataJson, Incidencia.class);	
+			
+			if (incidencia.getDescuento() != null && incidencia.getDescuento()) { //es descuento
+				esDescuento = true;
+			}
+			
+		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+			String mensaje = obtenerMensajeError(response);					 
+			throw new AuthenticationServiceException(mensaje);			
+		} else {
+			throw new AuthenticationServiceException("Error al obtener la incidencia : "+response.getStatusLine().getReasonPhrase());
+		}
+		
+		return esDescuento;
 	}
 
 }
