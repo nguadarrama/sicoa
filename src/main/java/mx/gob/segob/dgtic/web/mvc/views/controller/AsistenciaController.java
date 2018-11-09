@@ -175,7 +175,7 @@ public class AsistenciaController  {
     		String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
 
 	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
-	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), authentication);
+	    			tipo, estado, fechaInicial, fechaFinal, "", authentication.getName(), authentication);
 	    	
 	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
 	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
