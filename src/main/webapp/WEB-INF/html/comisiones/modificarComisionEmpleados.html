@@ -160,17 +160,6 @@
 													<input id="comision" name="comision" type="text" th:value="${comision.comision}" class="form-control" th:required="required"/>
 											</label>
 									</div>
-									<div class="col-md-4">
-											<label>
-										        <label for="responsable" class="col-form-label" th:text="Responsable"></label>
-									        	<select  class="form-control" 
-											       th:value="responsable" name="idResponsable" id="idResponsable" th:required="required">
-											      <option th:each="responsable : ${listaResponsable}" th:value="${responsable.claveUsuario.idUsuario}" 
-											       th:text="${responsable.claveUsuario.nombre} + ' ' + ${responsable.claveUsuario.apellidoPaterno} + ' ' + ${responsable.claveUsuario.apellidoMaterno} ">
-											      </option>
-											    </select>
-											</label>
-									</div>
 
 					</div>
 					<div class="row">
