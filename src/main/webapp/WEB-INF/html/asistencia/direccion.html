@@ -151,7 +151,14 @@
 										<div class="row">
 											<div class="col-md-4">
 							                	<p>Unidad Administrativa</p>
-							                    <input th:value="${unidadAdministrativa}" type="text" class="form-control input-flag" id="unidadAdministrativa" name="unidadAdministrativa"/>
+							                    <select class="form-control" id="unidadAdministrativa" name="unidadAdministrativa" th:autocomplete="off" >
+									            	<option></option>
+									            	<option th:each="u : ${listaUnidadAdministrativa}" 
+									            		th:text="${u.idUnidad.nombre}" 
+									            		th:value="${u.idUnidad.idUnidad}" 
+									            		th:selected="${unidadAdministrativa == u.idUnidad.idUnidad}">
+									            	</option>
+									            </select>
 								            </div>
 										</div>										
 								        <div class="row">
