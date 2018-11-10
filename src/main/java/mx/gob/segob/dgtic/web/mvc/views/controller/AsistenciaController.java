@@ -706,7 +706,7 @@ public class AsistenciaController  {
 	    	model.addAttribute("nivel", nivel);
 	    	model.addAttribute("tipo", tipo);
 	    	model.addAttribute("estado", estado);
-	    	model.addAttribute("unidadAdministrativa", Integer.parseInt(unidadAdministrativa));
+	    	model.addAttribute("unidadAdministrativa", !unidadAdministrativa.isEmpty() ? Integer.parseInt(unidadAdministrativa) : 0);
 	    	
 	    	return "/asistencia/direccion";
     }
