@@ -369,7 +369,16 @@
 											class="btn btn-primary" th:value="Editar" /></a>
 									</form>
 									<form class="formCancelar"
-										th:action="@{/comisiones/modificarComision}" method="get">
+										th:action="@{/comisiones/cancelarComision}" method="post" sec:authorize="hasAuthority('2')">
+										<input id="idComisionCancelar" name="idComisionCancelar" type="text"
+											class="form-control" required="required" th:readonly="true"
+											style="display: none;" />
+										<input id="claveUsuarioCancelar" name="claveUsuarioCancelar" type="text"
+											class="form-control" required="required" th:readonly="true"
+											style="display: none;" />
+									    <input id="idArchivoCancelar" name="idArchivoCancelar" type="text"
+											class="form-control" required="required" th:readonly="true"
+											style="display: none;" />
 										<a><input type="submit" id="botonCancelar"
 											class="btn btn-danger" th:value="#{COMUN.CANCELAR}" /></a>
 									</form>
@@ -378,7 +387,7 @@
 						</div>
 						<div class="card">
 							<div class="row">
-								<div class="col-md-4" sec:authorize="hasAuthority('2')">
+								<div class="col-md-4" >
 									<form th:action="@{/comisiones/comision/actualizaArchivo}"
 										class="actualizaArchivo" method="post"
 										enctype="multipart/form-data">

@@ -498,7 +498,7 @@ public class ComisionesController {
   }
   
   @PostMapping("acepta")
-  public String aceptaVacaciones(Integer idComision,String claveUsuario, Integer idArchivo, Authentication authentication) {
+  public String aceptarComisiones(Integer idComision,String claveUsuario, Integer idArchivo, Authentication authentication) {
       System.out.println("idLicencia "+idComision+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
       Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComision, null, null, idArchivo, 2, null, null, null, null, null, null), claveUsuario, authentication);
       this.mensaje=comision.getMensaje();
@@ -507,9 +507,19 @@ public class ComisionesController {
   }
   
   @PostMapping("rechaza")
-  public String rechazaVacaciones(Integer idComision,String claveUsuario, Integer idArchivo, Authentication authentication) {
+  public String rechazarComisiones(Integer idComision,String claveUsuario, Integer idArchivo, Authentication authentication) {
       System.out.println("idLicencia "+idComision+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
       Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComision, null, null, idArchivo, 3, null, null, null, null, null, null), claveUsuario, authentication);
+      this.mensaje=comision.getMensaje();
+      System.out.println("mensaje recuperado "+comision.getMensaje());
+      return "redirect:/comisiones/comisionesEmpleados";
+  }
+  
+  @PostMapping("cancelarComision")
+  public String cancelarComision(Integer idComisionCancelar,String claveUsuarioCancelar, Integer idArchivoCancelar,Authentication authentication) {
+      System.out.println("CancelarComision");
+      System.out.println("idComision "+idComisionCancelar+" claveUsuario "+claveUsuarioCancelar);
+      Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionCancelar, null, null, idArchivoCancelar, 6, null, null, null, null, null, null), claveUsuarioCancelar, authentication);
       this.mensaje=comision.getMensaje();
       System.out.println("mensaje recuperado "+comision.getMensaje());
       return "redirect:/comisiones/comisionesEmpleados";

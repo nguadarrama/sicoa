@@ -110,6 +110,9 @@ $(document).ready(function() {
 //					$('.actualizaArchivoPropio #idEstatusArchivoPropio').val(hmap.comision.idEstatus.idEstatus);
 					$('.formModificar #claveUsuarioEditar').val(hmap.comision.idUsuario.claveUsuario);
 					$('.formModificar #idComisionEditar').val(hmap.comision.idComision);
+					$('.formCancelar #claveUsuarioCancelar').val(hmap.comision.idUsuario.claveUsuario);
+					$('.formCancelar #idComisionCancelar').val(hmap.comision.idComision);
+					$('.formCancelar #idArchivoCancelar').val(hmap.comision.idArchivo.idArchivo);
 					$('.descargaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
 					if(hmap.comision.idArchivo.idArchivo==null || hmap.comision.idArchivo.idArchivo==""){
 						$('.actualizaArchivo').css("display","inline");
@@ -121,16 +124,25 @@ $(document).ready(function() {
 //						$('.aceptaComision').css("display","inline");
 //						$('.actualizaArchivoPropio').css("display","none");
 					}
+					$('.formCancelar').css("display","none");
 					if(hmap.comision.idEstatus.idEstatus=='2'){
 						$('.aceptaComision').css("display","none");
 						$('.formModificar #botonEditar').css("display","none");
 						$('.descargaArchivo').css("display","inline");
-					}else if (hmap.comision.idEstatus.idEstatus=='3'){
+						$('.formCancelar').css("display","inline");
+					}else if(hmap.comision.idEstatus.idEstatus=='3'){
 						$('.rechazaComision').css("display","none");
 						$('.aceptaComision').css("display","none");
 						$('.formModificar #botonEditar').css("display","none");
 						$('.actualizaArchivo').css("display","none");
 						$('.descargaArchivo').css("display","inline");
+						$('.formCancelar').css("display","none");
+					} else if(hmap.comision.idEstatus.idEstatus=='6') {
+						$('.aceptaComision').css("display","none");
+						$('.formModificar #botonEditar').css("display","none");
+						$('.descargaArchivo').css("display","inline");
+						$('.rechazaComision').css("display","none");
+						$('.actualizaArchivo').css("display","none");
 					}
 					$('.descargaArchivo').css("display","inline");
 					$(".aceptaComision #idComision").val(hmap.comision.idComision);
