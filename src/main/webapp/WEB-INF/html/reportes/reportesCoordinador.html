@@ -210,6 +210,9 @@
 															<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Pendiente</span>
 															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
 															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
+															<span th:if="${asistencia.idTipoDia.idTipoDia == 5}">Aprobada</span>
+															<span th:if="${asistencia.idTipoDia.idTipoDia == 6}">Aprobada</span>
+															<span th:if="${asistencia.idTipoDia.idTipoDia == 7}">Aprobada</span>
 														</td> 
 													</tr>
 												</tbody>
