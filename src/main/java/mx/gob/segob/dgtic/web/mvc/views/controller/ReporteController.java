@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
+import mx.gob.segob.dgtic.web.mvc.dto.UsuarioUnidadAdministrativa;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
+import mx.gob.segob.dgtic.web.mvc.service.UnidadAdministrativaService;
 import mx.gob.segob.dgtic.web.mvc.util.Excel;
 
 /**
@@ -43,12 +45,16 @@ public class ReporteController {
 	@Autowired
 	private EstatusService estatusService;
 	
+	@Autowired
+	private UnidadAdministrativaService unidadAdministrativaService;
+	
 	@RequestMapping(value={"inicioDireccion"}, method = RequestMethod.GET)
     public String inicioReporteDireccion(Model model, Authentication authentication) {
 		
 		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
 		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
 		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
@@ -61,6 +67,7 @@ public class ReporteController {
 		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
 		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
 		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
@@ -78,6 +85,7 @@ public class ReporteController {
 		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
 		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
 		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute("listaAsistencia", listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -88,7 +96,7 @@ public class ReporteController {
     	model.addAttribute("nivel", nivel);
     	model.addAttribute("tipo", tipo);
     	model.addAttribute("estado", estado);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativa);
+    	model.addAttribute("unidadAdministrativa", !unidadAdministrativa.isEmpty() ? Integer.parseInt(unidadAdministrativa) : 0);
     	
     	Boolean p = false;
     	
@@ -202,6 +210,7 @@ public class ReporteController {
 		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
 		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
 		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute("listaAsistencia", listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -212,7 +221,6 @@ public class ReporteController {
     	model.addAttribute("nivel", nivel);
     	model.addAttribute("tipo", tipo);
     	model.addAttribute("estado", estado);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativa);
     	
     	Boolean p = false;
     	
