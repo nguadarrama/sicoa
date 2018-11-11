@@ -66,13 +66,15 @@ $(document).ready(function() {
 						asistenciaJustificacion.asistencia.usuarioDto.apellidoPaterno + ' ' + 
 						asistenciaJustificacion.asistencia.usuarioDto.apellidoMaterno;
 			
+			var fecha = new Date(asistenciaJustificacion.asistencia.entrada);
+			
 			$('.justificaForm #puestoModal').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
 			$('.justificaForm #unidadModal').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
 			$('.justificaForm #cve_m_usuarioModal').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
 			$('.justificaForm #nombreModal').val(nombre);
 			$('.justificaForm #fechaIngresoModal').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
 			$('.justificaForm #RFCModal').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
-			$('.justificaForm #fechaModal').val(asistenciaJustificacion.asistencia.entrada);
+			$('.justificaForm #fechaModal').val(fecha.getDate() + '/' + fecha.getMonth() + '/' + fecha.getFullYear());
 			$('.justificaForm #tipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
 			$('.justificaForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			$('.justificaForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
