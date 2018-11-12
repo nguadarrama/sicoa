@@ -12,7 +12,7 @@ public interface UsuarioService {
 	public List<Usuario> obtieneUsuarios(Authentication authentication);
 	public Usuario buscaUsuario(String claveUsuario, Authentication authentication);
 	public void eliminaUsuario(String claveUsuario, Authentication authentication);
-	public void modificaUsuario(Usuario usuario, Authentication authentication);
+	public Integer modificaUsuario(Usuario usuario, Authentication authentication);
 	public void reiniciaContrasenia(String claveUsuario, Authentication authentication);
 	public Usuario buscaUsuarioPorId(String idUsuario, Authentication authentication);
 	public List<Usuario> obtieneListaJefes(Authentication authentication);

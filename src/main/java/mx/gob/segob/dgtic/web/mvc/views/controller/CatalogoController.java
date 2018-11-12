@@ -159,7 +159,13 @@ public class CatalogoController {
 		model.addAttribute("listaHorarios", catalogoService.obtieneHorarios(authentication));
 		model.addAttribute("listaUsuarios", usuarioService.obtieneUsuarios(authentication));
 		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
-
+		if(!this.mensaje.equals("")){
+			if(this.mensaje.contains("correctamente"))
+				model.addAttribute("MENSAJE", this.mensaje);
+			else
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+		}
+		this.mensaje = "";
 		return "/catalogos/usuario";
 	}
 
@@ -171,6 +177,7 @@ public class CatalogoController {
 				+" estatus "+estatus);
 		
 		Integer clavePerfil[]= new Integer[4]; 
+		Integer result = 0;
 		
 		if(coordinador!=null && !coordinador.trim().isEmpty()){
 			clavePerfil[2]=Integer.parseInt(coordinador);
@@ -190,13 +197,17 @@ public class CatalogoController {
 			System.out.println("valor clavePerfil posicion "+i+" " + clavePerfil[i]);
 		}
 		
-		perfilUsuarioService.guardaEliminaPerfilesUsuario(clavePerfil, claveUsuario, authentication);
 		
-		usuarioService.modificaUsuario(
+		result += perfilUsuarioService.guardaEliminaPerfilesUsuario(clavePerfil, claveUsuario, authentication);
+		result += usuarioService.modificaUsuario(
 				new Usuario(null, idHorario, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, estatus), authentication);
-		unidadAdministrativaService.consultaRegistraUsuarioUnidadAdministrativa(unidadAdministrativa, claveUsuario, authentication);
+		result += unidadAdministrativaService.consultaRegistraUsuarioUnidadAdministrativa(unidadAdministrativa, claveUsuario, authentication);
 		char dato = reiniciarPassword.charAt(0);
-
+		if(result == 0)
+			this.mensaje = "Se han modificado correctamente los datos del usuario.";
+		else
+			this.mensaje = "Se generó un error al modificar, intenta nuevamente.";
+			
 		if (((int) dato) == 83) {
 			System.out.println("valor reiniciarPassword1 " + reiniciarPassword);
 			usuarioService.reiniciaContrasenia(claveUsuario, authentication);

@@ -144,34 +144,33 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public void modificaUsuario(Usuario usuario, Authentication authentication) {
+	public Integer modificaUsuario(Usuario usuario, Authentication authentication) {
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("usuario", usuario);
-
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_USUARIO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+			return 0;
+		}
+			return 1;
 		
 	}
 	

@@ -441,7 +441,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 			HttpResponse response;
 			Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 			HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
+			
 			//Se agrega el JWT a la cabecera para acceso al recurso rest
 			Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 			HttpEntity httpEntity = new BasicHttpEntity();
