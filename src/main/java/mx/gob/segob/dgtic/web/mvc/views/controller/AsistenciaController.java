@@ -902,8 +902,11 @@ public class AsistenciaController  {
     @ResponseBody
     public AsistenciaJustificacion buscaAsistenciaPorId(Integer id, Authentication authentication) {
     	
+    	Asistencia asistencia = asistenciaService.buscaAsistenciaPorId(id, authentication);
+    	asistencia.getUsuario().setFechaIngreso(asistencia.getUsuario().getFechaIngreso());
+    	
     	AsistenciaJustificacion asistenciaJustificacion = new AsistenciaJustificacion(); 
-    	asistenciaJustificacion.setAsistencia(asistenciaService.buscaAsistenciaPorId(id, authentication));
+    	asistenciaJustificacion.setAsistencia(asistencia);
     	asistenciaJustificacion.setListaJustificacion(catalogoService.obtieneJustificaciones(authentication));
     	asistenciaJustificacion.setListaAutorizador(usuarioService.obtieneListaJefes(authentication));
     	

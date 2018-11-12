@@ -30,7 +30,7 @@ $(document).ready(function() {
 			$('.justificaForm #nombreModal').val(nombre);
 			$('.justificaForm #fechaIngresoModal').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
 			$('.justificaForm #RFCModal').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
-			$('.justificaForm #fechaModal').val(fecha.getDate() + '/' + fecha.getMonth() + '/' + fecha.getFullYear());
+			$('.justificaForm #fechaModal').val(fecha.getDate() + '-' + fecha.getMonth() + '-' + fecha.getFullYear());
 			$('.justificaForm #tipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
 			$('.justificaForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			$('.justificaForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
