@@ -34,6 +34,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
 import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedicaAux;
+import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
@@ -42,6 +43,7 @@ import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
 import mx.gob.segob.dgtic.web.mvc.service.LicenciaMedicaService;
+import mx.gob.segob.dgtic.web.mvc.service.PerfilUsuarioService;
 import mx.gob.segob.dgtic.web.mvc.service.UnidadAdministrativaService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 
@@ -66,6 +68,9 @@ public class LicenciasMedicasController {
 	
 	@Autowired 
 	private CatalogoService catalogoService;
+	
+	@Autowired
+	private PerfilUsuarioService perfilUsuarioService;
 	
 	private String mensaje = "";
 	
@@ -199,10 +204,27 @@ public class LicenciasMedicasController {
 		if(idEstatus==null || idEstatus.trim().isEmpty()){
 			idEstatus="";
 		}
-		if(idUnidad==null || idUnidad.trim().isEmpty()){
-			idUnidad="";
-		}
+		String string=""+ session.getAttribute("usuario");
+    	String[] parts = string.split(": ");
+    	String claveUsuarioLider = parts[1];
+    	List<PerfilUsuario> listaPerfilUsuario= new ArrayList<>();
+    	listaPerfilUsuario=perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider, authentication);
+    	Boolean usuario= false;
+    	for(PerfilUsuario perfilUsuario: listaPerfilUsuario){
+    		if(perfilUsuario.getClavePerfil().equals('2')){
+    			usuario=true;
+    		}
+    	}
+    	System.out.println("Bandera para determinar si es empleado o no "+usuario+" claveUsuario "+claveUsuario);
+    	Usuario usuarioAux= new Usuario();
+    	if(usuario==false){
+    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
+    		idUnidad=""+usuarioAux.getIdUnidad();
+    	}else if(idUnidad==null){
+    			idUnidad="";
+    	}
 		
+		System.out.println("idUnidad "+idUnidad);
 		List<LicenciaMedica> lista= new ArrayList<>();
 		lista=licenciaMedicaService.obtenerListaLicenciaMedicaEmpleados(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idEstatus, idUnidad, authentication);
 		System.out.println("Haciendo la consulta "+lista.size());

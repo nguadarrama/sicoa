@@ -96,7 +96,7 @@
 				<div class="tab-content">
 					<div class="row tab-pane fade in active" id="agregar">
 						
-						<div class="card" th:if="${periodo != null}">
+						<div class="card" th:if="${vacacion != null}">
 							<h3>Agregar peticion de vacaciones</h3>
 							<div class="guardaVacaciones" >      <!-- Formulario busqueda asistencia -->
 			      				<form th:action="@{/vacaciones/vacacion/modifica}" method="post">
@@ -220,7 +220,7 @@
 								</form>
 							</div>
 						</div>
-						<div class="card" th:if="${periodo == null}">
+						<div class="card" th:if="${vacacion == null}">
 						<label>No hay periodos disponibles para tus vacaciones</label>
 						</div>
 					</div>
