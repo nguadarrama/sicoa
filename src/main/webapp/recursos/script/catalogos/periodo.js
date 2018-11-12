@@ -8,7 +8,7 @@ $(document).ready(function() {
 	$("#fechaInicio").datepicker({
 	format: 'dd-MM-yyyy',
 	beforeShowDay: $.datepicker.noWeekends,
-	minDate: '-0D',
+//	minDate: '-0D',
 	maxDate: '12M',
 	zIndexOffset: 100000,
 	beforeShow: function () {
@@ -20,7 +20,7 @@ $(document).ready(function() {
     	 var minDate = $('#fechaInicio').datepicker('getDate');
 	     $("#fechaFin").datepicker("change", { minDate: minDate });
 	 }   
-    }).attr('readonly', 'true').
+    }).attr('required', 'required').
         keypress(function (event) {
             if (event.keyCode == 8) {
                 event.preventDefault();
@@ -31,7 +31,7 @@ $(document).ready(function() {
 		format: 'dd-MM-yyyy',
 		beforeShowDay: $.datepicker.noWeekends,
 		minDate: '-0D',
-		maxDate: '12M',
+//		maxDate: '12M',
 		zIndexOffset: 100000,
 		beforeShow: function () {
 	        var $datePicker = $("#fechaFin");
@@ -42,7 +42,7 @@ $(document).ready(function() {
 	    	 var maxDate = $('#fechaFin').datepicker('getDate');
 		     $("#fechaInicio").datepicker("change", { maxDate: maxDate });
 		 }   
-	    }).attr('readonly', 'true').
+	    }).attr('required', 'required').
 	        keypress(function (event) {
 	            if (event.keyCode == 8) {
 	                event.preventDefault();

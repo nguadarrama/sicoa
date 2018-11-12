@@ -43,7 +43,6 @@ public class Periodo {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else if(fechaInicio.length()>10){
@@ -54,7 +53,6 @@ public class Periodo {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -74,7 +72,6 @@ public class Periodo {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else if(fechaFin.length()>10){
@@ -85,7 +82,6 @@ public class Periodo {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

@@ -11,7 +11,7 @@ $(document).ready(function() {
                 var zIndexModal = $datePicker.closest(".modal").css("z-index");
                 $datePicker.css("z-index", zIndexModal + 1);
             }
-        }).attr('readonly', 'true').
+        }).attr('required', 'required').
             keypress(function (event) {
                 if (event.keyCode == 8) {
                     event.preventDefault();
