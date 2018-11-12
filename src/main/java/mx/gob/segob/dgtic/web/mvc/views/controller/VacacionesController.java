@@ -229,11 +229,17 @@ public class VacacionesController {
     @RequestMapping(value={"vacacionesPropias"}, method = RequestMethod.GET)
     public String obtieneAsistenciasPropias(String idPeriodo, String idEstatus, String fechaInicioBusca1, String fechaFinBusca1 ,Model model, HttpSession session, Authentication authentication) {
     	System.out.println("idEstatus "+idEstatus+" idPeriodo "+idPeriodo+" fechaInicio "+fechaInicioBusca1+" fechaFin "+fechaFinBusca1 );
-    	if(idEstatus==null){
+    	if(idEstatus==null || idEstatus.toString().isEmpty()){
     		idEstatus="";
     	}
-    	if(idPeriodo==null){
+    	if(idPeriodo==null || idPeriodo.toString().isEmpty()){
     		idPeriodo="";
+    	}
+    	if(fechaInicioBusca1==null || fechaInicioBusca1.toString().isEmpty()){
+    		fechaInicioBusca1="";
+    	}
+    	if(fechaFinBusca1==null || fechaFinBusca1.toString().isEmpty()){
+    		fechaFinBusca1="";
     	}
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
@@ -303,10 +309,24 @@ public class VacacionesController {
     @RequestMapping(value={"vacacionesEmpleados"}, method = RequestMethod.GET)
     public String obtieneVacacionesEmpleados(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, String idUnidad, String idEstatus, Model model,HttpSession session, Authentication authentication) {
     	System.out.println("Datos para vacacionesEmpleados claveUsuario "+claveUsuario+" nombre "+nombre+" apellidoPaterno "+apellidoPaterno+" apellidoMaterno "+apellidoMaterno+" idUnidad "+idUnidad+" idEstatus "+idEstatus );
-    	if(idEstatus==null){
-    		idEstatus="";
-    		System.out.println("idestatus en controller "+idEstatus);
-    	}
+    	if(nombre==null || nombre.trim().isEmpty()){
+			nombre="";
+		}
+		if(claveUsuario==null || claveUsuario.trim().isEmpty()){
+			claveUsuario="";
+		}
+		if(apellidoPaterno==null || apellidoPaterno.trim().isEmpty()){
+			apellidoPaterno="";
+		}
+		if(apellidoMaterno==null || apellidoMaterno.trim().isEmpty()){
+			apellidoMaterno="";
+		}
+		if(idEstatus==null || idEstatus.trim().isEmpty()){
+			idEstatus="";
+		}
+		if(idUnidad==null || idUnidad.trim().isEmpty()){
+			idUnidad="";
+		}
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuarioLider = parts[1];
@@ -314,18 +334,28 @@ public class VacacionesController {
     	listaPerfilUsuario=perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider, authentication);
     	Boolean usuario= false;
     	for(PerfilUsuario perfilUsuario: listaPerfilUsuario){
-    		if(perfilUsuario.getClavePerfil().equals('2')){
-    			usuario=true;
+    		if(idUnidad==null || idUnidad.toString().isEmpty()){
+    			System.out.println("Entrando al if "+perfilUsuario.getClavePerfil().getClavePerfil());
+	    		if(perfilUsuario.getClavePerfil().getClavePerfil().toString().equals("2")){
+	    			System.out.println("Entrando al if "+perfilUsuario.getClavePerfil().getClavePerfil());
+	    			usuario=true;
+	    			Usuario usuarioAux= new Usuario();
+	    	    	if(usuario==true){
+	    	    		
+	    	    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
+	    	    		idUnidad=""+usuarioAux.getIdUnidad();
+	    	    	}else if(idUnidad==null){
+	    	    			idUnidad="";
+	    	    	}
+	    		}
+	    		if(perfilUsuario.getClavePerfil().getClavePerfil().toString().equals("1")){
+	    			idUnidad="";
+	    		}
     		}
+    		System.out.println("valor para idUnidad "+idUnidad);
     	}
     	System.out.println("Bandera para determinar si es empleado o no "+usuario+" claveUsuario "+claveUsuario);
-    	Usuario usuarioAux= new Usuario();
-    	if(usuario==false){
-    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
-    		idUnidad=""+usuarioAux.getIdUnidad();
-    	}else if(idUnidad==null){
-    			idUnidad="";
-    	}
+    	
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 	    List<Vacaciones> vacaciones = new ArrayList<>();
 	    vacaciones=vacacionesService.obtenerVacacionesPorFiltros(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus, authentication);

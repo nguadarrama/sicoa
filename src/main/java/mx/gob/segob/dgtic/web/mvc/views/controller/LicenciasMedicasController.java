@@ -211,18 +211,27 @@ public class LicenciasMedicasController {
     	listaPerfilUsuario=perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider, authentication);
     	Boolean usuario= false;
     	for(PerfilUsuario perfilUsuario: listaPerfilUsuario){
-    		if(perfilUsuario.getClavePerfil().equals('2')){
-    			usuario=true;
+    		if(idUnidad==null || idUnidad.toString().isEmpty()){
+    			System.out.println("Entrando al if "+perfilUsuario.getClavePerfil().getClavePerfil());
+	    		if(perfilUsuario.getClavePerfil().getClavePerfil().toString().equals("2")){
+	    			System.out.println("Entrando al if "+perfilUsuario.getClavePerfil().getClavePerfil());
+	    			usuario=true;
+	    			Usuario usuarioAux= new Usuario();
+	    	    	if(usuario==true){
+	    	    		
+	    	    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
+	    	    		idUnidad=""+usuarioAux.getIdUnidad();
+	    	    	}else if(idUnidad==null){
+	    	    			idUnidad="";
+	    	    	}
+	    		}
+	    		if(perfilUsuario.getClavePerfil().getClavePerfil().toString().equals("1")){
+	    			idUnidad="";
+	    		}
     		}
+    		
     	}
     	System.out.println("Bandera para determinar si es empleado o no "+usuario+" claveUsuario "+claveUsuario);
-    	Usuario usuarioAux= new Usuario();
-    	if(usuario==false){
-    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
-    		idUnidad=""+usuarioAux.getIdUnidad();
-    	}else if(idUnidad==null){
-    			idUnidad="";
-    	}
 		
 		System.out.println("idUnidad "+idUnidad);
 		List<LicenciaMedica> lista= new ArrayList<>();
