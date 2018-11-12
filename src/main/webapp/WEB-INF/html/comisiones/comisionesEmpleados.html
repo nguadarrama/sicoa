@@ -89,25 +89,29 @@
 										<div class="col-md-3">
 											<label>
 												<p>No. de Empleado</p>
-												<input id="claveUsuario" name="claveUsuario" type="text" class="form-control" />
+												<input id="claveUsuario" name="claveUsuario" type="text" class="form-control" pattern="^[A-Za-z0-9][A-Za-z0-9]*$"
+												title="El campo no debe contener espacios ni caracteres especiales."/>
 											</label>
 										</div>
 										<div class="col-md-3">
 											<label>
 												<p>Nombre</p>
-												<input id="nombre" name="nombre" type="text" class="form-control input-user" />
+												<input id="nombre" name="nombre" type="text" class="form-control input-user" pattern="^[A-Za-z][A-Za-z0-9]*$"
+												title="El campo no debe contener espacios ni caracteres especiales."/>
 											</label>
 										</div>
 										<div class="col-md-3">
 											<label>
 												<p>Apellido Paterno</p>
-												<input id="apellidoPaterno" name="apellidoPaterno" type="text" class="form-control" />
+												<input id="apellidoPaterno" name="apellidoPaterno" type="text" class="form-control" pattern="^[A-Za-z][A-Za-z0-9]*$"
+												title="El campo no debe contener espacios ni caracteres especiales." />
 											</label>
 										</div>
 										<div class="col-md-3">
 											<label>
 												<p>Apellido Materno</p>
-												<input id="apellidoMaterno" name="apellidoMaterno" type="text" class="form-control" />
+												<input id="apellidoMaterno" name="apellidoMaterno" type="text" class="form-control" pattern="^[A-Za-z][A-Za-z0-9]*$"
+												title="El campo no debe contener espacios ni caracteres especiales." />
 											</label>
 										</div>
 									</div>

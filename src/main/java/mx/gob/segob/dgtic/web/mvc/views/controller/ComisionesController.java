@@ -139,20 +139,23 @@ public class ComisionesController {
     List<PerfilUsuario> listaPerfilUsuario = new ArrayList<>();
     listaPerfilUsuario = perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider, authentication);
     Boolean usuarioBoolean = false;
+    
     for (PerfilUsuario perfilUsuario : listaPerfilUsuario) {
-      if (perfilUsuario.getClavePerfil().equals('2')) {
+      System.out.println("perfil usuario:" + perfilUsuario.getClavePerfil().getClavePerfil());
+      if (perfilUsuario.getClavePerfil().getClavePerfil().equals('2')) {
         usuarioBoolean = true;
       }
     }
-    System.out.println("Bandera para determinar si es empleado o no " + usuarioBoolean
-        + " claveUsuario " + claveUsuario);
+    System.out.println("Bandera para determinar si es Coordinador o no " + usuarioBoolean);
     Usuario usuarioAux = new Usuario();
-    if (usuarioBoolean == false) {
+    if (usuarioBoolean) {
       usuarioAux = usuarioService.buscaUsuario(claveUsuarioLider, authentication);
-      idUnidad = "" + usuarioAux.getIdUnidad();
-    } else if (idUnidad == null) {
+      idUnidad = idUnidad != null ? "" + usuarioAux.getIdUnidad() : "";
+    } else {
       idUnidad = "";
     }
+    
+    System.out.println("idUnidad: " + idUnidad);
     model.addAttribute("listaUnidades",
         unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
     List<Comision> comisiones = comisionService.obtenerListaComisionesPorFiltrosEmpleados(
