@@ -153,8 +153,8 @@ public class ComisionServiceImpl implements ComisionService {
     try {
       response = ClienteRestUtil.getCliente()
           .get(ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_EMPLEADOS_POR_FILTROS
-              + "?claveUsuario=" + claveUsuario + "&nombre=" + nombre + "&apellidoPaterno="
-              + apellidoPaterno + "&apellidoMaterno=" + apellidoMaterno + "&idUnidad=" + idUnidad
+              + "?claveUsuario=" + removerEspacios(claveUsuario) + "&nombre=" + removerEspacios(nombre) + "&apellidoPaterno="
+              + removerEspacios(apellidoPaterno) + "&apellidoMaterno=" + removerEspacios(apellidoMaterno) + "&idUnidad=" + idUnidad
               + "&idEstatus=" + idEstatus, header);
     } catch (ClienteException e) {
       logger.error(e.getMessage(), e);
@@ -294,36 +294,42 @@ public class ComisionServiceImpl implements ComisionService {
 
   @Override
   public List<Comision> obtenerComisionesPorUnidad(String idUnidad, String claveUsuario,
-      String nombre, String apellidoPaterno, String apellidoMaterno, Authentication authentication) {
+      String nombre, String apellidoPaterno, String apellidoMaterno,
+      Authentication authentication) {
     List<Comision> listaComisiones = new ArrayList<>();
     HttpResponse response;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	//Se agrega el JWT a la cabecera para acceso al recurso rest
-	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-	
-    try{
-        response = ClienteRestUtil.getCliente().get(ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_POR_UNIDAD+ "?idUnidad="+idUnidad+"&claveUsuario="+claveUsuario+"&nombre="+nombre
-                +"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno, header);
+    // Se agrega el JWT a la cabecera para acceso al recurso rest
+    Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+
+    try {
+      response = ClienteRestUtil.getCliente().get(
+          ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_POR_UNIDAD + "?idUnidad="
+              + idUnidad + "&claveUsuario=" + removerEspacios(claveUsuario) + "&nombre=" + removerEspacios(nombre)
+              + "&apellidoPaterno=" + removerEspacios(apellidoPaterno) + "&apellidoMaterno=" + removerEspacios(apellidoMaterno),
+          header);
     } catch (ClienteException e) {
-        logger.error(e.getMessage(), e);
-        throw new AuthenticationServiceException(e.getMessage(), e);
+      logger.error(e.getMessage(), e);
+      throw new AuthenticationServiceException(e.getMessage(), e);
     }
-    
-    if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-        
-        JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-        JsonArray dataJson = json.getAsJsonArray("data");
-        listaComisiones = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Comision>>(){}.getType());
-        
-    } else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-        
-        String mensaje = obtenerMensajeError(response);                  
-        throw new AuthenticationServiceException(mensaje);          
+
+    if (HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+
+      JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+      JsonArray dataJson = json.getAsJsonArray("data");
+      listaComisiones = new Gson().fromJson(dataJson.toString(),
+          new TypeToken<ArrayList<Comision>>() {}.getType());
+
+    } else if (HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+
+      String mensaje = obtenerMensajeError(response);
+      throw new AuthenticationServiceException(mensaje);
     } else {
-        throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
+      throw new AuthenticationServiceException(
+          "Error al obtener vacaciones por filtros: " + response.getStatusLine().getReasonPhrase());
     }
-    System.out.println("Recuperados "+listaComisiones.size());
+    System.out.println("Recuperados " + listaComisiones.size());
     return listaComisiones;
   }
 
@@ -406,6 +412,13 @@ public class ComisionServiceImpl implements ComisionService {
         throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
     }
     return comisionRespuesta;
+  }
+  
+  private String removerEspacios(String string) {
+    if(string != null && !string.isEmpty()) {
+      return string.replace(" ", "_");
+    }
+    return string;
   }
 
 }
