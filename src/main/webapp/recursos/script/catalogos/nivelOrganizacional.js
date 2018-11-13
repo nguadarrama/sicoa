@@ -15,7 +15,7 @@ $(document).ready(function() {
 			$.get(href, function(nivel, status) {
 				$('.nivelForm #idNivel').val(nivel.idNivel);
 				$('.nivelForm #nivel').val(nivel.nivel);
-				$('.nivelForm #idHorario').val(nivel.horario);
+				$('.nivelForm #idHorario').val(nivel.idHorario);
 				$('.nivelForm #horario').val(nivel.idHorario);
 			});
 			
