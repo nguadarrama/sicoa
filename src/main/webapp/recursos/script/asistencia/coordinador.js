@@ -79,6 +79,7 @@ $(document).ready(function() {
 			$('.justificaForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			$('.justificaForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('.justificaForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
+			$('.justificaForm #fechaIncidenciaHidden').val($('#fechaModal').val());
 			idAsistencia = asistenciaJustificacion.asistencia.idAsistencia;
 			
 			//select justificación

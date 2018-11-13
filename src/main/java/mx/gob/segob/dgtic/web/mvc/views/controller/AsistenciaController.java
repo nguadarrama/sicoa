@@ -377,7 +377,7 @@ public class AsistenciaController  {
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte archivo = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidad, fechaActual, codigoincidencia, ""), authentication);
+			reporte archivo = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidad, fechaActual, codigoincidencia, "", ""), authentication);
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
@@ -420,7 +420,8 @@ public class AsistenciaController  {
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="formatoDescuento")
     public String descargaFormatoDescuento(Model model, String nombre, String unidad, String nombreAutorizador, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cve_m_usuario, HttpServletResponse response) {
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cve_m_usuario, HttpServletResponse response,
+    		String fechaIncidenciaHidden) {
     	
     	//fecha actual para el reporte
     	Date fechaHoy = new Date();
@@ -428,7 +429,7 @@ public class AsistenciaController  {
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte archivo = asistenciaService.formatoDescuento(new FormatoIncidencia(nombre, "", fechaActual, "", cve_m_usuario), authentication);
+			reporte archivo = asistenciaService.formatoDescuento(new FormatoIncidencia(nombre, "", fechaActual, "", cve_m_usuario, fechaIncidenciaHidden), authentication);
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
@@ -628,7 +629,7 @@ public class AsistenciaController  {
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte formatoJustificacion = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidadAdministrativa, fechaActual, codigoincidencia, ""), authentication);
+			reporte formatoJustificacion = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidadAdministrativa, fechaActual, codigoincidencia, "", ""), authentication);
 			InputStream targetStream = new ByteArrayInputStream(formatoJustificacion.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
