@@ -23,7 +23,7 @@ $(document).ready(function() {
 			$('.justificaForm #nombre').val(nombre);
 			$('.justificaForm #fechaIngreso').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
 			$('.justificaForm #RFC').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
-			$('.justificaForm #fecha').val(fecha.getDate() + '-' + fecha.getMonth() + '-' + fecha.getFullYear());
+			$('.justificaForm #fecha').val(("0" + fecha.getDate()).slice(-2) + '-' + ("0" + fecha.getMonth()).slice(-2) + '-' + fecha.getFullYear());
 			$('.justificaForm #tipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
 			$('.justificaForm #idTipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			$('.justificaForm #estado').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
