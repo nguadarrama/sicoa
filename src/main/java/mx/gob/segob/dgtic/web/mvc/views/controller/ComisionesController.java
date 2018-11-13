@@ -296,7 +296,7 @@ public class ComisionesController {
     System.out.println("Mensaje obtenido "+comisionRespuesta.getMensaje());
     this.mensaje=comisionRespuesta.getMensaje();
     
-    return "redirect:/comisiones/solicitudComision";
+    return "redirect:/comisiones/solicitudComisionEmpleados";
 
   }
 
