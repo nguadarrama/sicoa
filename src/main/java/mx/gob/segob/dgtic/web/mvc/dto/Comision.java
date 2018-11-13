@@ -3,6 +3,7 @@ package mx.gob.segob.dgtic.web.mvc.dto;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Comision {
 
@@ -125,7 +126,7 @@ public class Comision {
   public String getFechaInicio() {
     if(fechaInicio.length()>13){
       Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
       SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
       try {
           date = sdf.parse(fechaInicio);
@@ -160,7 +161,7 @@ public class Comision {
   public String getFechaFin() {
     if(fechaFin.length()>13){
       Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
       SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
       try {
           date = sdf.parse(fechaFin);
@@ -219,7 +220,7 @@ public class Comision {
   public String getFechaRegistro() {
     if(fechaRegistro.length()>13){
       Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
       SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
       try {
           date = sdf.parse(fechaRegistro);
