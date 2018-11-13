@@ -210,11 +210,11 @@
 										</thead>
 										<tbody>
 											<tr th:each="asistencia : ${listaAsistencia}">
-												<td id="idAsistencia" th:text="${asistencia.usuario.nivel}"></td>
-												<td th:text="${asistencia.usuario.claveUsuario}"></td>
-												<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
-												<td th:text="${asistencia.usuario.idPuesto}"></td>
-												<td th:text="${asistencia.usuario.nombreUnidad}"></td>
+												<td id="idAsistencia" th:text="${asistencia.usuarioDto.nivel}"></td>
+												<td th:text="${asistencia.usuarioDto.claveUsuario}"></td>
+												<td th:text="${asistencia.usuarioDto.nombre + ' ' + asistencia.usuarioDto.apellidoPaterno + ' ' + asistencia.usuarioDto.apellidoMaterno}"></td>
+												<td th:text="${asistencia.usuarioDto.idPuesto}"></td>
+												<td th:text="${asistencia.usuarioDto.nombreUnidad}"></td>
 												<td th:text="${asistencia.entrada}"></td>
 												<td th:text="${asistencia.idTipoDia.nombre}"></td>
 												<td>
@@ -251,11 +251,11 @@
 											</thead>
 											<tbody>
 												<tr th:each="asistencia : ${listaAsistencia}">
-													<td id="idAsistencia" th:text="${asistencia.usuario.nivel}"></td>
-													<td th:text="${asistencia.usuario.claveUsuario}"></td>
-													<td th:text="${asistencia.usuario.nombre + ' ' + asistencia.usuario.apellidoPaterno + ' ' + asistencia.usuario.apellidoMaterno}"></td>
-													<td th:text="${asistencia.usuario.idPuesto}"></td>
-													<td th:text="${asistencia.usuario.nombreUnidad}"></td>
+													<td id="idAsistencia" th:text="${asistencia.usuarioDto.nivel}"></td>
+													<td th:text="${asistencia.usuarioDto.claveUsuario}"></td>
+													<td th:text="${asistencia.usuarioDto.nombre + ' ' + asistencia.usuarioDto.apellidoPaterno + ' ' + asistencia.usuarioDto.apellidoMaterno}"></td>
+													<td th:text="${asistencia.usuarioDto.idPuesto}"></td>
+													<td th:text="${asistencia.usuarioDto.nombreUnidad}"></td>
 													<td th:text="${asistencia.entrada}"></td>
 													<td th:text="${asistencia.idTipoDia.nombre}"></td>
 													<td>
