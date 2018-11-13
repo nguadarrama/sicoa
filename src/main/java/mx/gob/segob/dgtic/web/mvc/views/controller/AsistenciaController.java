@@ -894,7 +894,7 @@ public class AsistenciaController  {
     public AsistenciaJustificacion buscaAsistenciaPorId(Integer id, Authentication authentication) {
     	
     	Asistencia asistencia = asistenciaService.buscaAsistenciaPorId(id, authentication);
-    	asistencia.getUsuario().setFechaIngreso(asistencia.getUsuario().getFechaIngreso());
+    	asistencia.getUsuarioDto().setFechaIngreso(asistencia.getUsuarioDto().getFechaIngreso());
     	
     	AsistenciaJustificacion asistenciaJustificacion = new AsistenciaJustificacion(); 
     	asistenciaJustificacion.setAsistencia(asistencia);
