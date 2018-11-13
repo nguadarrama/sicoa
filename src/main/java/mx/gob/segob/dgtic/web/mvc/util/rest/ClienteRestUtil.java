@@ -128,18 +128,18 @@ public class ClienteRestUtil {
 		StringEntity entityContent = null;
 		try {
 			String jsonContent = gson.toJson(content);
-			jsonContent = jsonContent.replaceAll("Á", "AA")
-			.replaceAll("É", "EE")
-			.replaceAll("Í", "II")
-			.replaceAll("Ó", "OO")
-			.replaceAll("Ú", "UU")
-			.replaceAll("á", "aa")
-			.replaceAll("é", "ee")
-			.replaceAll("í", "ii")
-			.replaceAll("ó", "oo")
-			.replaceAll("ú", "uu")
-			.replaceAll("ñ", "nn")
-			.replaceAll("Ñ", "NN");
+			jsonContent = jsonContent.replaceAll("Á", "AAA")
+			.replaceAll("É", "EEE")
+			.replaceAll("Í", "III")
+			.replaceAll("Ó", "OOO")
+			.replaceAll("Ú", "UUU")
+			.replaceAll("á", "aaa")
+			.replaceAll("é", "eee")
+			.replaceAll("í", "iii")
+			.replaceAll("ó", "ooo")
+			.replaceAll("ú", "uuu")
+			.replaceAll("ñ", "nnn")
+			.replaceAll("Ñ", "NNN");
 			entityContent = new StringEntity(jsonContent);
 			entityContent.setContentEncoding("UTF-8");
 			entityContent.setContentType(ContentType.APPLICATION_JSON.getMimeType());
