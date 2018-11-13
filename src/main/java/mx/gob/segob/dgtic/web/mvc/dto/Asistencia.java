@@ -1,7 +1,6 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class Asistencia {
 	private Integer idAsistencia;
@@ -11,10 +10,6 @@ public class Asistencia {
 	private TipoDia idTipoDia;
 	private Estatus idEstatus;
 	private Incidencia incidencia;
-	
-	public Asistencia() {
-		
-	}
 	
 	public Integer getIdAsistencia() {
 		return idAsistencia;

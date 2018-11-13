@@ -43,6 +43,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
+import mx.gob.segob.dgtic.web.mvc.util.AsistenciaBusquedaUtil;
 import mx.gob.segob.dgtic.web.mvc.util.FormatoIncidencia;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
@@ -129,7 +130,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
-	public List<Asistencia> buscaAsistenciaEmpleadoRangoCoordinador(String cve_m_usuario, String nombre, String paterno,
+	public List<Asistencia> buscaAsistenciaEmpleadoRangoCoordinador(String cveMUsuario, String nombre, String paterno,
 			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa, String cveCoordinador, Authentication authentication) {
 
@@ -142,12 +143,30 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
+		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
+		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
+		asistenciaBusquedaUtil.setNombre(nombre);
+		asistenciaBusquedaUtil.setPaterno(paterno);
+		asistenciaBusquedaUtil.setMaterno(materno);
+		asistenciaBusquedaUtil.setNivel(nivel);
+		asistenciaBusquedaUtil.setTipo(tipo);
+		asistenciaBusquedaUtil.setEstado(estado);
+		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
+		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
+		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
+		asistenciaBusquedaUtil.setCveUsuarioLogeado(cveCoordinador);
+		
+		HttpEntity httpEntity = new BasicHttpEntity();
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("asistenciaBusqueda", asistenciaBusquedaUtil);
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			e1.printStackTrace();
+		}
+		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(
-					AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_RANGO_COORDINADOR 
-					+ "?claveEmpleado=" + cve_m_usuario + "&nombre=" + nombre + "&paterno=" + paterno + "&materno=" + materno + "&nivel=" + nivel
-					+ "&tipo=" + tipo + "&estado=" + estado + "&inicio=" + fechaInicial + "&fin=" + fechaFinal + "&unidad=" + unidadAdministrativa
-					+ "&cveCoordinador=" + cveCoordinador, header);
+			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_RANGO_COORDINADOR, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -174,7 +193,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
-	public List<Asistencia> buscaAsistenciaEmpleadoRangoDireccion(String cve_m_usuario, String nombre, String paterno,
+	public List<Asistencia> buscaAsistenciaEmpleadoRangoDireccion(String cveMUsuario, String nombre, String paterno,
 			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa, Authentication authentication) {
 
@@ -187,12 +206,29 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
+		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
+		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
+		asistenciaBusquedaUtil.setNombre(nombre);
+		asistenciaBusquedaUtil.setPaterno(paterno);
+		asistenciaBusquedaUtil.setMaterno(materno);
+		asistenciaBusquedaUtil.setNivel(nivel);
+		asistenciaBusquedaUtil.setTipo(tipo);
+		asistenciaBusquedaUtil.setEstado(estado);
+		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
+		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
+		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
+		
+		HttpEntity httpEntity = new BasicHttpEntity();
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("asistenciaBusqueda", asistenciaBusquedaUtil);
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			e1.printStackTrace();
+		}
+		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(
-					AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_RANGO_DIRECCION 
-					+ "?claveEmpleado=" + cve_m_usuario + "&nombre=" + nombre + "&paterno=" + paterno + "&materno=" + materno + "&nivel=" + nivel
-					+ "&tipo=" + tipo + "&estado=" + estado + "&inicio=" + fechaInicial + "&fin=" + fechaFinal + "&unidad=" + unidadAdministrativa,
-					header);
+			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO_RANGO_DIRECCION, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

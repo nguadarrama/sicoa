@@ -36,7 +36,6 @@ import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
-import mx.gob.segob.dgtic.web.mvc.dto.UsuarioUnidadAdministrativa;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
@@ -77,15 +76,12 @@ public class AsistenciaController  {
 	
 	//JUSTIFICACION
 	private String MENSAJE_REGISTRO_JUSTIFICACION = "La justificación ha quedado registrada";
-	private String MENSAJE_AUTORIZA_JUSTIFICACION = "La justificación ha sido aceptada";
-	private String MENSAJE_RECHAZA_JUSTIFICACION  = "La justificación ha sido rechazada";
 	
 	//DESCUENTO
 	private String MENSAJE_REGISTRO_DESCUENTO     = "La incidencia ha sido marcada para enviar a descuento";
 	private String MENSAJE_AUTORIZA_DESCUENTO     = "Esta incidencia será enviada a descuento";
 	private String MENSAJE_RECHAZA_DESCUENTO      = "El descuento ha sido aceptado";
 	
-	private String MENSAJE = "Operación registrada correctamente.";
 	private String MENSAJE_EXCEPCION = "No se registró la operación.";
 	
 	//EMPLEADO
@@ -115,13 +111,13 @@ public class AsistenciaController  {
         
 	    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRango(authentication.getName(), fechaInicial, fechaFinal, authentication);
 	    	
-	    	Map<String, Object> model = new HashMap<String, Object>();
+	    	Map<String, Object> model = new HashMap<>();
 	        
 	    	//nombre de la hoja
 	        model.put("nombreHoja", "asistencia");
 	        
 	        //nombres columnas
-	        List<String> cabeceras = new ArrayList<String>();
+	        List<String> cabeceras = new ArrayList<>();
 	        cabeceras.add("Id Asistencia");
 	        cabeceras.add("Entrada");
 	        cabeceras.add("Id Status");
@@ -131,7 +127,7 @@ public class AsistenciaController  {
 	        model.put("cabeceras", cabeceras);
 	        
 	        //Información registros (List<Object[]>)
-	        List<List<String>> asistencias = new ArrayList<List<String>>();
+	        List<List<String>> asistencias = new ArrayList<>();
 	        
 	        for (Asistencia a : listaAsistencia) {
 	        	
@@ -213,13 +209,13 @@ public class AsistenciaController  {
     	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
     			tipo, estado, fechaInicial, fechaFinal, "", authentication.getName(), authentication);
     	
-    	Map<String, Object> model = new HashMap<String, Object>();
+    	Map<String, Object> model = new HashMap<>();
         
     	//nombre de la hoja
         model.put("nombreHoja", "asistencia");
         
         //nombres columnas
-        List<String> cabeceras = new ArrayList<String>();
+        List<String> cabeceras = new ArrayList<>();
         cabeceras.add("Id Asistencia");
         cabeceras.add("Entrada");
         cabeceras.add("Id Status");
@@ -229,7 +225,7 @@ public class AsistenciaController  {
         model.put("cabeceras", cabeceras);
         
         //Información registros (List<Object[]>)
-        List<List<String>> asistencias = new ArrayList<List<String>>();
+        List<List<String>> asistencias = new ArrayList<>();
         
         for (Asistencia a : listaAsistencia) {
         	
@@ -395,9 +391,7 @@ public class AsistenciaController  {
 	        ServletOutputStream stream = response.getOutputStream();
 	        stream.flush();
 	        response.flushBuffer();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
     	
@@ -448,9 +442,7 @@ public class AsistenciaController  {
 	        ServletOutputStream stream = response.getOutputStream();
 	        stream.flush();
 	        response.flushBuffer();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
     	
@@ -650,9 +642,7 @@ public class AsistenciaController  {
 	        ServletOutputStream stream = response.getOutputStream();
 	        stream.flush();
 	        response.flushBuffer();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
     	
@@ -718,13 +708,13 @@ public class AsistenciaController  {
     	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombre, paterno, materno, nivel, 
     			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication);
     	
-    	Map<String, Object> model = new HashMap<String, Object>();
+    	Map<String, Object> model = new HashMap<>();
         
     	//nombre de la hoja
         model.put("nombreHoja", "asistencia");
         
         //nombres columnas
-        List<String> cabeceras = new ArrayList<String>();
+        List<String> cabeceras = new ArrayList<>();
         cabeceras.add("Id Asistencia");
         cabeceras.add("Entrada");
         cabeceras.add("Id Status");
@@ -734,7 +724,7 @@ public class AsistenciaController  {
         model.put("cabeceras", cabeceras);
         
         //Información registros (List<Object[]>)
-        List<List<String>> asistencias = new ArrayList<List<String>>();
+        List<List<String>> asistencias = new ArrayList<>();
         
         for (Asistencia a : listaAsistencia) {
         	
