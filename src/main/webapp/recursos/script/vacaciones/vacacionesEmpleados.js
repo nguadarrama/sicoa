@@ -154,7 +154,7 @@ $(document).ready(function() {
 						$('.aceptaVacacion #aceptaVacacion').css("display","none");
 						$('.actualizaArchivo').css("display","none");
 					}else{
-						
+						$('.actualizaArchivo').css("display","inline");
 					}
 					//alert(hmap.vacacion.idArchivo.idArchivo);
 					if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){

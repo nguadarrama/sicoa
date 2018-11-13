@@ -45,7 +45,6 @@ $(document).ready(function() {
 		 	var text = $(this).text();
 			$.get(href, function(hmap, status) {
 				//alert(hmap.licencia.idArchivo.idArchivo),
-				
 				$(".actualizaLicencia #nombre").val(hmap.licencia.idUsuario.nombre);
 				$(".actualizaLicencia #apellidoPaterno").val(hmap.licencia.idUsuario.apellidoPaterno);
 				$(".actualizaLicencia #apellidoMaterno").val(hmap.licencia.idUsuario.apellidoMaterno);
@@ -76,6 +75,8 @@ $(document).ready(function() {
 				if(hmap.licencia.idEstatus.idEstatus=="2" || hmap.licencia.idEstatus.idEstatus=="3"){
 					$(".actualizaArchivo").css("display","none");
 					
+				}else{
+					$(".actualizaArchivo").css("display","inline");
 				}
 				//alert(hmap.licencia.idEstatus.idEstatus);
 				if(hmap.licencia.idEstatus.idEstatus!="1"){

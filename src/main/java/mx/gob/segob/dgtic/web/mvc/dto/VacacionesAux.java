@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -80,10 +81,12 @@ public class VacacionesAux {
 		this.idEstatus = idEstatus;
 	}
 	public String getFechaInicio() {
-		fechaInicio=fechaInicio.substring(0, 20);
+//		System.out.println("fechaInicio "+fechaInicio);
+//		fechaInicio=fechaInicio.substring(0, 21);
+//		System.out.println("fechaInicio "+fechaInicio);
 		if(fechaInicio.length()>13){
 			Date date = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 		    try {
 				date = sdf.parse(fechaInicio);
@@ -110,10 +113,10 @@ public class VacacionesAux {
 		this.fechaInicio = fechaInicio;
 	}
 	public String getFechaFin() {
-		fechaFin=fechaFin.substring(0, 20);
+		//fechaFin=fechaFin.substring(0, 21);
 		if(fechaFin.length()>13){
 			Date date = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 		    try {
 				date = sdf.parse(fechaFin);
@@ -127,7 +130,7 @@ public class VacacionesAux {
 			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 		    try {
-				date = sdf.parse(fechaInicio);
+				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -146,10 +149,12 @@ public class VacacionesAux {
 		this.dias = dias;
 	}
 	public String getFechaRegistro() {
-		fechaRegistro=fechaRegistro.substring(0, 11);
+		System.out.println("Fecha registro "+fechaRegistro);
+		fechaRegistro=fechaRegistro.substring(0, 12);
+		System.out.println("Fecha registro "+fechaRegistro);
 		if(fechaRegistro.length()>13){
 			Date date = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 		    try {
 				date = sdf.parse(fechaRegistro);
@@ -160,7 +165,7 @@ public class VacacionesAux {
 			}
 		}else if(fechaRegistro.length()>10){
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy" , new Locale("es_ES"));
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 		    try {
 				date = sdf.parse(fechaRegistro);

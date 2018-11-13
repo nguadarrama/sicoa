@@ -209,7 +209,13 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		} else {
 			throw new AuthenticationServiceException("Error al obtener vacaciones : "+response.getStatusLine().getReasonPhrase());
 		}
-		
+		licencia.setFechaInicio(licencia.getFechaInicio());
+		licencia.setFechaFin(licencia.getFechaFin());
+		licencia.setFechaRegistro(licencia.getFechaRegistro());
+		Usuario usua= null;
+		usua=licencia.getIdUsuario();
+		usua.setFechaIngreso(usua.getFechaIngreso());
+		licencia.setIdUsuario(usua);
 		return licencia;
 	}
 

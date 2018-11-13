@@ -158,7 +158,7 @@ $(document).ready(function() {
 						$('.aceptaVacacion #aceptaVacacion').css("display","none");
 						$('.actualizaArchivo').css("display","none");
 					}else{
-						
+						$('.actualizaArchivo').css("display","inline");
 						$('.eliminaVacacion #idVacacionEliminar').val(hmap.vacacion.idDetalle);
 						$('#botonEliminarVacaciones').css("display","inline");
 					}

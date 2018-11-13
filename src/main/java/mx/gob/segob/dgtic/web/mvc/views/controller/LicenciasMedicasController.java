@@ -221,8 +221,6 @@ public class LicenciasMedicasController {
 	    	    		
 	    	    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
 	    	    		idUnidad=""+usuarioAux.getIdUnidad();
-	    	    	}else if(idUnidad==null){
-	    	    			idUnidad="";
 	    	    	}
 	    		}
 	    		if(perfilUsuario.getClavePerfil().getClavePerfil().toString().equals("1")){

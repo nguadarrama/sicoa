@@ -294,12 +294,14 @@ public class VacacionesController {
     		model.addAttribute("usuariosConVacaciones",null);
     	}
     	if(!this.getMensaje().equals("")){
-			if(this.mensaje.contains("correctamente"))
+			if(this.mensaje.contains("correctamente")){
 				model.addAttribute("MENSAJE", this.mensaje);
-			else
-				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
-			if(this.mensaje.contains("10"))
+			}else if(this.mensaje.contains("10")){
 				model.addAttribute("MENSAJE_ALERTA", this.mensaje);
+			}else{
+				model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+			}
+			
 		}
 		this.mensaje = "";
     	//model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
@@ -344,8 +346,6 @@ public class VacacionesController {
 	    	    		
 	    	    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
 	    	    		idUnidad=""+usuarioAux.getIdUnidad();
-	    	    	}else if(idUnidad==null){
-	    	    			idUnidad="";
 	    	    	}
 	    		}
 	    		if(perfilUsuario.getClavePerfil().getClavePerfil().toString().equals("1")){
@@ -689,7 +689,7 @@ public class VacacionesController {
 	    Vacaciones vacaciones= new Vacaciones();
 	    vacaciones=vacacionesService.cancelaVacaciones(idVacacionCancelar, authentication);
 	    this.mensaje=vacaciones.getMensaje();
-	    return "redirect:/vacaciones/vacacionesPropias";
+	    return "redirect:/vacaciones/vacacionesEmpleados";
 	    
     }
     

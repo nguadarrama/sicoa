@@ -3,6 +3,7 @@ package mx.gob.segob.dgtic.web.mvc.dto;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class LicenciaMedica {
 
@@ -169,6 +170,30 @@ public class LicenciaMedica {
 		this.padecimiento = padecimiento;
 	}
 	public String getFechaRegistro() {
+		fechaRegistro=fechaRegistro.substring(0, 12);
+		if(fechaRegistro.length()>13){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaRegistro);
+				fechaRegistro = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(fechaRegistro.length()>10){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		    try {
+				date = sdf.parse(fechaRegistro);
+				fechaRegistro = sdf1.format(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return fechaRegistro;
 	}
 	public void setFechaRegistro(String fechaRegistro) {

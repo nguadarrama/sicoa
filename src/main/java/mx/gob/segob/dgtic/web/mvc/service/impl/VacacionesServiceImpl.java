@@ -522,7 +522,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 				if(!listaFechas.isEmpty() && listaFechas!=null){
 				listaFechas=listaFechas.substring(0, (listaFechas.length()- 1));
 				}
-				System.out.println("Fecha de fechas desde el array "+listaFechas);
+				//System.out.println("Fecha de fechas desde el array "+listaFechas);
 			
 			return listaFechas;
 	}
