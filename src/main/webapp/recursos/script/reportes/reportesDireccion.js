@@ -62,25 +62,33 @@ $(document).ready(function() {
 		}
 	});
 	
-	//fechas datepicker
+	//fecha final
     $('#validAfterDatepicker, #fecha').datepicker({
     	beforeShowDay: $.datepicker.noWeekends, //desactiva sábado y domingo del calendario
     	dateFormat: 'yy-mm-dd',
     	onSelect: function() 
 	       { 
     		var maxDate = $('#validAfterDatepicker').datepicker('getDate');
-	    		$("#validBeforeDatepicker").datepicker("change", { maxDate: maxDate });
+    		var minDate = $('#validAfterDatepicker').datepicker('getDate');
+    		minDate.setMonth(maxDate.getMonth() - 3);
+    		$("#validBeforeDatepicker").datepicker("change", { minDate: minDate });
+    		$("#validBeforeDatepicker").datepicker("change", { maxDate: maxDate });
 	       },
     	
     });
     
+    //fecha inicial
     $('#validBeforeDatepicker, #fecha').datepicker({
     	beforeShowDay: $.datepicker.noWeekends, //desactiva sábado y domingo del calendario
     	dateFormat: 'yy-mm-dd',
     	onSelect: function() 
 	       { 
     		var minDate = $('#validBeforeDatepicker').datepicker('getDate');
-	    		$("#validAfterDatepicker").datepicker("change", { minDate: minDate });
+    		var maxDate = $('#validBeforeDatepicker').datepicker('getDate');
+    		maxDate.setMonth(maxDate.getMonth() + 3);
+    		
+    		$("#validAfterDatepicker").datepicker("change", { minDate: minDate });
+    		$("#validAfterDatepicker").datepicker("change", { maxDate: maxDate });
 	       },
     	
     });
