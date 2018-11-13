@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.http.Header;
@@ -16,11 +15,9 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -324,7 +321,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("incidencia", incidencia);
@@ -332,7 +328,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -659,7 +654,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 
 	@Override
-	public List<Asistencia> buscaAsistenciaDireccionReporte(String cve_m_usuario, String nombre, String paterno,
+	public List<Asistencia> buscaAsistenciaDireccionReporte(String cveMUsuario, String nombre, String paterno,
 			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa, String[] p, Authentication authentication) {
 
@@ -672,7 +667,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		if (p != null) {
-			permisos.append("&permisos=");
 			for (int i = 0; i < p.length; i++ ) {
 				permisos.append(p[i]);
 				
@@ -682,11 +676,30 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			}
 		}
 		
+		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
+		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
+		asistenciaBusquedaUtil.setNombre(nombre);
+		asistenciaBusquedaUtil.setPaterno(paterno);
+		asistenciaBusquedaUtil.setMaterno(materno);
+		asistenciaBusquedaUtil.setNivel(nivel);
+		asistenciaBusquedaUtil.setTipo(tipo);
+		asistenciaBusquedaUtil.setEstado(estado);
+		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
+		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
+		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
+		asistenciaBusquedaUtil.setPermisos(permisos.toString());
+		
+		HttpEntity httpEntity = new BasicHttpEntity();
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("asistenciaBusqueda", asistenciaBusquedaUtil);
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			e1.printStackTrace();
+		}
+		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(
-					AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_REPORTE_DIRECCION
-					+ "?claveEmpleado=" + cve_m_usuario + "&nombre=" + nombre + "&paterno=" + paterno + "&materno=" + materno + "&nivel=" + nivel
-					+ "&tipo=" + tipo + "&estado=" + estado + "&inicio=" + fechaInicial + "&fin=" + fechaFinal + "&unidad=" + unidadAdministrativa + permisos, header);
+			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_REPORTE_DIRECCION, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -712,7 +725,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 
 	@Override
-	public List<Asistencia> buscaAsistenciaCoordinadorReporte(String cve_m_usuario, String nombre, String paterno,
+	public List<Asistencia> buscaAsistenciaCoordinadorReporte(String cveMUsuario, String nombre, String paterno,
 			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
 			String unidadAdministrativa, String cveCoordinador, String[] p, Authentication authentication) {
 
@@ -726,7 +739,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		if (p != null) {
-			permisos.append("&permisos=");
 			for (int i = 0; i < p.length; i++ ) {
 				permisos.append(p[i]);
 				
@@ -736,12 +748,31 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			}
 		}
 		
+		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
+		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
+		asistenciaBusquedaUtil.setNombre(nombre);
+		asistenciaBusquedaUtil.setPaterno(paterno);
+		asistenciaBusquedaUtil.setMaterno(materno);
+		asistenciaBusquedaUtil.setNivel(nivel);
+		asistenciaBusquedaUtil.setTipo(tipo);
+		asistenciaBusquedaUtil.setEstado(estado);
+		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
+		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
+		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
+		asistenciaBusquedaUtil.setCveUsuarioLogeado(cveCoordinador);
+		asistenciaBusquedaUtil.setPermisos(permisos.toString());
+		
+		HttpEntity httpEntity = new BasicHttpEntity();
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("asistenciaBusqueda", asistenciaBusquedaUtil);
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			e1.printStackTrace();
+		}
+		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(
-					AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_REPORTE_COORDINADOR 
-					+ "?claveEmpleado=" + cve_m_usuario + "&nombre=" + nombre + "&paterno=" + paterno + "&materno=" + materno + "&nivel=" + nivel
-					+ "&tipo=" + tipo + "&estado=" + estado + "&inicio=" + fechaInicial + "&fin=" + fechaFinal + "&unidad=" + unidadAdministrativa
-					+ permisos + "&cveCoordinador=" + cveCoordinador, header);
+			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_REPORTE_COORDINADOR, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

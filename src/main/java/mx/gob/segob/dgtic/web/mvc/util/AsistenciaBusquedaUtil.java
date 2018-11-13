@@ -12,6 +12,7 @@ public class AsistenciaBusquedaUtil {
 	String fechaFinal;
 	String unidadAdministrativa;
 	String cveUsuarioLogeado;
+	String permisos;
 	
 	public String getCveMusuario() {
 		return cveMusuario;
@@ -79,5 +80,10 @@ public class AsistenciaBusquedaUtil {
 	public void setCveUsuarioLogeado(String cveUsuarioLogeado) {
 		this.cveUsuarioLogeado = cveUsuarioLogeado;
 	}
-	
+	public String getPermisos() {
+		return permisos;
+	}
+	public void setPermisos(String permisos) {
+		this.permisos = permisos;
+	}
 }
