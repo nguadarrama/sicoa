@@ -95,15 +95,17 @@ $(document).ready(function() {
     $('#buscarRango').validate({ 
         rules: { 
             fechaInicial: { 
+            	required: true,
                 dpCompareDate: "notAfter #validAfterDatepicker"
             },
-		    fechaFinal: { 
+		    fechaFinal: {
+		    	required: true,
 		        dpCompareDate: "notBefore #validBeforeDatepicker"
 		    } 
         },
     	messages: {
-    		fechaInicial: 'Ingresa fecha menor ó igual a la Fecha Final',
-    		fechaFinal: 'Ingresa fecha mayor ó igual a la Fecha Inicial'
+    		fechaInicial: 'Campo obligatorio',
+    		fechaFinal: 'Campo obligatorio'
     	}
     			
     });
