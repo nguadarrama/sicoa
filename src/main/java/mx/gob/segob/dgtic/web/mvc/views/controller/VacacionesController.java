@@ -505,7 +505,7 @@ public class VacacionesController {
     	
     	this.mensaje=respuesta.getMensaje();
     	
-    	return "redirect:/vacaciones/solicitudVacaciones";
+    	return "redirect:/vacaciones/vacacionesPropias";
     }
     @PostMapping("/vacacion/guardaVacacion")
     public String registraVacacionesEmpleado( String fechaInicio,  String fechaFin,  Integer diasPorPedir,  Integer idPeriodo,  String idVacacion,Integer responsable,  String claveUsuario, HttpSession session, Authentication authentication) {

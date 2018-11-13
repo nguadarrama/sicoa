@@ -153,11 +153,13 @@ $(document).ready(function() {
 					$('.actualizaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 					$('.actualizaArchivo #idDetalle').val(hmap.vacacion.idDetalle);
 					$('.actualizaArchivo #claveUsuario').val(hmap.vacacion.idUsuario.claveUsuario);
-					if(hmap.vacacion.idEstatus.idEstatus=='2' || hmap.vacacion.idEstatus.idEstatus=='3'){
+					if(hmap.vacacion.idEstatus.idEstatus!='1'){
 						$('.rechazaVacacion #rechazaVacacion').css("display","none");
 						$('.aceptaVacacion #aceptaVacacion').css("display","none");
 						$('.actualizaArchivo').css("display","none");
-					}else{
+					}
+					//alert(hmap.vacacion.idEstatus.idEstatus)
+					if(hmap.vacacion.idEstatus.idEstatus=='1'){
 						$('.actualizaArchivo').css("display","inline");
 						$('.eliminaVacacion #idVacacionEliminar').val(hmap.vacacion.idDetalle);
 						$('#botonEliminarVacaciones').css("display","inline");
