@@ -619,7 +619,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("generaReporteArchivo", generaReporteArchivo);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);

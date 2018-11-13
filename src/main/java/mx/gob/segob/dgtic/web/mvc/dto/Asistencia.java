@@ -19,14 +19,6 @@ public class Asistencia {
 		this.idAsistencia = idAsistencia;
 	}
 
-	public Usuario getUsuario() {
-		return usuarioDto;
-	}
-
-	public void setUsuario(Usuario usuarioDto) {
-		this.usuarioDto = usuarioDto;
-	}
-
 	public Timestamp getEntrada() {
 		return entrada;
 	}
