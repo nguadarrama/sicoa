@@ -1,10 +1,8 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
-import mx.gob.segob.dgtic.web.mvc.dto.UsuarioUnidadAdministrativa;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
@@ -101,7 +98,7 @@ public class ReporteController {
     	Boolean p = false;
     	
     	if (permisos != null) {
-    		List<String> listaPermisos = new ArrayList<String>(Arrays.asList(permisos));
+    		List<String> listaPermisos = new ArrayList<>(Arrays.asList(permisos));
     		
     		if (listaPermisos.contains("vacacion")) {
     			model.addAttribute("vacacion", true);
@@ -141,13 +138,13 @@ public class ReporteController {
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cve_m_usuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos, authentication);
     	
-    	Map<String, Object> map = new HashMap<String, Object>();
+    	Map<String, Object> map = new HashMap<>();
         
     	//nombre de la hoja
     	map.put("nombreHoja", "Reporte");
         
         //nombres columnas
-        List<String> cabeceras = new ArrayList<String>();
+        List<String> cabeceras = new ArrayList<>();
         cabeceras.add("No. Empleado");
         cabeceras.add("Nombre");
         cabeceras.add("Unidad Administrativa");
@@ -157,8 +154,7 @@ public class ReporteController {
         map.put("cabeceras", cabeceras);
         
         //Información registros (List<Object[]>)
-        List<List<String>> asistencias = new ArrayList<List<String>>();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        List<List<String>> asistencias = new ArrayList<>();
         
         for (Asistencia a : listaAsistencias) {
         	
@@ -225,7 +221,7 @@ public class ReporteController {
     	Boolean p = false;
     	
     	if (permisos != null) {
-    		List<String> listaPermisos = new ArrayList<String>(Arrays.asList(permisos));
+    		List<String> listaPermisos = new ArrayList<>(Arrays.asList(permisos));
     		
     		if (listaPermisos.contains("vacacion")) {
     			model.addAttribute("vacacion", true);
@@ -265,7 +261,7 @@ public class ReporteController {
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cve_m_usuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos, authentication);
     	
-    	Map<String, Object> map = new HashMap<String, Object>();
+    	Map<String, Object> map = new HashMap<>();
         
     	//nombre de la hoja
     	map.put("nombreHoja", "Reporte");
@@ -281,8 +277,7 @@ public class ReporteController {
         map.put("cabeceras", cabeceras);
         
         //Información registros (List<Object[]>)
-        List<List<String>> asistencias = new ArrayList<List<String>>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<List<String>> asistencias = new ArrayList<>();
         
         for (Asistencia a : listaAsistencias) {
         	
