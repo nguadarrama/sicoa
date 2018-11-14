@@ -645,7 +645,7 @@ public class VacacionesController {
     	Estatus estatus= new Estatus();
         estatus.setIdEstatus(3);
         Vacaciones vacaciones= new Vacaciones();
-    	vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), idSolicitud, authentication);
+        vacaciones=vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), idSolicitud, authentication);
     	this.mensaje=vacaciones.getMensaje();
     	return "redirect:/vacaciones/vacacionesEmpleados";
     }
