@@ -41,6 +41,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
+import mx.gob.segob.dgtic.web.mvc.service.BaseService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.ComisionService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
@@ -50,7 +51,7 @@ import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 
 @Controller
 @RequestMapping(value = "comisiones", method = RequestMethod.GET)
-public class ComisionesController {
+public class ComisionesController extends BaseService {
 
   @Autowired
   private ComisionService comisionService;
@@ -74,7 +75,7 @@ public class ComisionesController {
   private ArchivoService archivoService;
 
   private String mensaje = "";
-
+  
   /**
    * Comisiones propias
    * 
@@ -87,23 +88,21 @@ public class ComisionesController {
    * @return
    */
   @RequestMapping(value = {"comisionesPropias"}, method = RequestMethod.GET)
-  public String obtieneComisiones(String idUsuario, String fechaInicioBusca1, String fechaFinBusca1,
+  public String obtieneComisiones(String fechaInicioBusca1, String fechaFinBusca1,
       String idEstatus, Model model, HttpSession session, Authentication authentication) {
 
     String string = "" + session.getAttribute("usuario");
     String[] parts = string.split(": ");
     String claveUsuario = parts[1];
     Usuario usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
-    idUsuario = String.valueOf(usuario.getIdUsuario());
 
-    System.out.println("-----Peticion comisiones: ------------ " + idUsuario + " "
-        + fechaInicioBusca1 + " " + fechaFinBusca1 + " " + idEstatus);
+    logger.info("Peticion de comisiones: idUsuario: {} fechaInicioBusca1: {} fechaFinBusca1: {} idEstatus: {}", 
+        new Object[] { usuario.getIdUsuario(), fechaInicioBusca1, fechaFinBusca1, idEstatus});
 
-    List<Comision> lista = new ArrayList<>();
-    lista = comisionService.obtenerListaComisionesPorFiltros(idUsuario, fechaInicioBusca1,
+    List<Comision> listaComisiones = comisionService.obtenerListaComisionesPorFiltros(String.valueOf(usuario.getIdUsuario()), fechaInicioBusca1,
         fechaFinBusca1, idEstatus, authentication);
-    System.out.println("-----Consulta comisiones: ------------ " + lista.size());
-    model.addAttribute("comisiones", lista);
+    logger.info("Numero de comisiones obtenidas: {}", listaComisiones.size());
+    model.addAttribute("comisiones", listaComisiones);
     model.addAttribute("listaEstatus", estatusService.obtieneListaEstatus(authentication));
     return "/comisiones/comisionesPropias";
 

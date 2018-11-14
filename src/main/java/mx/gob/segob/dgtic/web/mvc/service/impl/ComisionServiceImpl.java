@@ -64,7 +64,6 @@ public class ComisionServiceImpl implements ComisionService {
 	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
     
     try {
-      logger.info("----USUARIO-------- {}", claveUsuario);
       response = ClienteRestUtil.getCliente()
           .get(ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_POR_FILTROS
               + "?claveUsuario=" + claveUsuario + "&idEstatus=" + idEstatus + "&fechaInicio="
