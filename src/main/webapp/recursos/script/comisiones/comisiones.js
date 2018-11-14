@@ -124,12 +124,18 @@ $(document).ready(function() {
 //						$('.aceptaComision').css("display","inline");
 //						$('.actualizaArchivoPropio').css("display","none");
 					}
-					$('.formCancelar').css("display","none");
-					if(hmap.comision.idEstatus.idEstatus=='2'){
+					if(hmap.comision.idEstatus.idEstatus=='1') {
+						$('.aceptaComision').css("display","inline");
+						$('.rechazaComision').css("display","inline");
+						$('.formCancelar').css("display","none");
+				   } else if(hmap.comision.idEstatus.idEstatus=='2'){
 						$('.aceptaComision').css("display","none");
+						$('.rechazaComision').css("display","none");
+						$('.actualizaArchivo').css("display","none");
 						$('.formModificar #botonEditar').css("display","none");
 						$('.descargaArchivo').css("display","inline");
 						$('.formCancelar').css("display","inline");
+						$('.row #botonDescargarFormato').css("display","none");
 					}else if(hmap.comision.idEstatus.idEstatus=='3'){
 						$('.rechazaComision').css("display","none");
 						$('.aceptaComision').css("display","none");
@@ -137,6 +143,7 @@ $(document).ready(function() {
 						$('.actualizaArchivo').css("display","none");
 						$('.descargaArchivo').css("display","inline");
 						$('.formCancelar').css("display","none");
+						$('.row #botonDescargarFormato').css("display","none");
 					} else if(hmap.comision.idEstatus.idEstatus=='6') {
 						$('.aceptaComision').css("display","none");
 						$('.formModificar #botonEditar').css("display","none");
