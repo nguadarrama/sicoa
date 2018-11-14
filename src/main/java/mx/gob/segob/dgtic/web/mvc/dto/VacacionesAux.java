@@ -150,7 +150,7 @@ public class VacacionesAux {
 	}
 	public String getFechaRegistro() {
 		System.out.println("Fecha registro "+fechaRegistro);
-		fechaRegistro=fechaRegistro.substring(0, 12);
+		fechaRegistro=fechaRegistro.substring(0, 11);
 		System.out.println("Fecha registro "+fechaRegistro);
 		if(fechaRegistro.length()>13){
 			Date date = null;

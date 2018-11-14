@@ -157,6 +157,7 @@ $(document).ready(function() {
 						$('.rechazaVacacion #rechazaVacacion').css("display","none");
 						$('.aceptaVacacion #aceptaVacacion').css("display","none");
 						$('.actualizaArchivo').css("display","none");
+						$('#descarga').css("display","none");
 					}
 					//alert(hmap.vacacion.idEstatus.idEstatus)
 					if(hmap.vacacion.idEstatus.idEstatus=='1'){

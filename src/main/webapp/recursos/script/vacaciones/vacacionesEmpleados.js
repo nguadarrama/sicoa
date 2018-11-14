@@ -143,31 +143,75 @@ $(document).ready(function() {
 					$('.actualizaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 					$('.actualizaArchivo #idDetalle').val(hmap.vacacion.idDetalle);
 					$('.actualizaArchivo #claveUsuario').val(hmap.vacacion.idUsuario.claveUsuario);
-					if(hmap.vacacion.idEstatus.idEstatus!='3'){
+					alert(hmap.vacacion.idEstatus.idEstatus+" "+hmap.vacacion.idArchivo.idArchivo)
+//					if(hmap.vacacion.idEstatus.idEstatus!='3'){
+//						$('.cancelaVacacion #idVacacionCancelar').val(hmap.vacacion.idDetalle);
+//						$('.cancelaVacacion').css("display","inline");
+//					}else{
+//						$('.cancelaVacacion').css("display","none");
+//					}
+//					if(hmap.vacacion.idEstatus.idEstatus=='2' || hmap.vacacion.idEstatus.idEstatus=='3'){
+//						$('.rechazaVacacion #rechazaVacacion').css("display","none");
+//						$('.aceptaVacacion #aceptaVacacion').css("display","none");
+//						$('.actualizaArchivo').css("display","none");
+//					}
+					if(hmap.vacacion.idEstatus.idEstatus=='1'){
+						$('#descarga').css("display","inline");
+						$('.cancelaVacacion').css("display","none");
+						$('.actualizaArchivo1').css("display","inline");
+						if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
+							$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
+							$('.descargaArchivo').css("display","inline");
+							$('.rechazaVacacion').css("display","inline");
+							$('.aceptaVacacion').css("display","inline");
+							//alert(hmap.vacacion.idArchivo.idArchivo);
+						}else{
+							$('.descargaArchivo').css("display","none");
+							$('.rechazaVacacion').css("display","none");
+							$('.aceptaVacacion').css("display","none");
+						}	
+					}
+					if(hmap.vacacion.idEstatus.idEstatus=='2'){
+						$('.actualizaArchivo1').css("display","none");
+						if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
+							$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
+							$('.descargaArchivo').css("display","inline");
+						}
 						$('.cancelaVacacion #idVacacionCancelar').val(hmap.vacacion.idDetalle);
 						$('.cancelaVacacion').css("display","inline");
-					}else{
-						$('.cancelaVacacion').css("display","none");
+						$('#descarga').css("display","none");
 					}
-					if(hmap.vacacion.idEstatus.idEstatus=='2' || hmap.vacacion.idEstatus.idEstatus=='3'){
-						$('.rechazaVacacion #rechazaVacacion').css("display","none");
-						$('.aceptaVacacion #aceptaVacacion').css("display","none");
-						$('.actualizaArchivo').css("display","none");
-					}else{
-						$('.actualizaArchivo').css("display","inline");
+					if(hmap.vacacion.idEstatus.idEstatus=='3'){
+						$('.actualizaArchivo1').css("display","inline");
+						if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
+							$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
+							$('.descargaArchivo').css("display","inline");
+							$('.cancelaVacacion').css("display","none");
+							$('#descarga').css("display","none");
+						}
 					}
-					//alert(hmap.vacacion.idArchivo.idArchivo);
-					if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
+					if(hmap.vacacion.idEstatus.idEstatus=='4'){
+						$('.actualizaArchivo1').css("display","none");
 						$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 						$('.descargaArchivo').css("display","inline");
-						$('.rechazaVacacion').css("display","inline");
-						$('.aceptaVacacion').css("display","inline");
-						//alert(hmap.vacacion.idArchivo.idArchivo);
-					}else{
-						$('.descargaArchivo').css("display","none");
+						$('.actualizaArchivo').css("display","none");
+						$('#descarga').css("display","none");
+						$('.cancelaVacacion').css("display","none");
 						$('.rechazaVacacion').css("display","none");
 						$('.aceptaVacacion').css("display","none");
 					}
+					//alert(hmap.vacacion.idArchivo.idArchivo);
+//					if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
+//						$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
+//						$('.descargaArchivo').css("display","inline");
+//						$('.rechazaVacacion').css("display","inline");
+//						$('.aceptaVacacion').css("display","inline");
+//						//alert(hmap.vacacion.idArchivo.idArchivo);
+//					}else{
+//						$('.descargaArchivo').css("display","none");
+//						$('.rechazaVacacion').css("display","none");
+//						$('.aceptaVacacion').css("display","none");
+//					}
 					$('.actualizaVacacion #dias').val(hmap.vacacion.dias);
 					$('.aceptaVacacion #idSolicitud').val(hmap.vacacion.idDetalle);
 					$('.aceptaVacacion #fechaInicio').val(hmap.vacacion.fechaInicio);
