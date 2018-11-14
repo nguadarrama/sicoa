@@ -53,7 +53,7 @@ $(document).ready(function() {
 			if(hmap.licencia.idArchivo.idArchivo!=null && hmap.licencia.idArchivo.idArchivo!=""){
 			$(".actualizaArchivo #idArchivo").val(hmap.licencia.idArchivo.idArchivo);
 			}else{
-				$(".actualizaArchivo").css("display","none");
+				$(".actualizaArchivo1").css("display","none");
 			}
 			$(".actualizaArchivo #idLicencia").val(hmap.licencia.idLicencia);
 			$(".actualizaArchivo #claveUsuario").val(hmap.licencia.idUsuario.claveUsuario);

@@ -170,7 +170,7 @@ public class LicenciaMedica {
 		this.padecimiento = padecimiento;
 	}
 	public String getFechaRegistro() {
-		fechaRegistro=fechaRegistro.substring(0, 12);
+		//fechaRegistro=fechaRegistro.substring(0, 12);
 		if(fechaRegistro.length()>13){
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
