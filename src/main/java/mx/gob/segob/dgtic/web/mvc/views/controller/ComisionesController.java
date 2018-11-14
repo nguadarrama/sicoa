@@ -76,6 +76,9 @@ public class ComisionesController extends BaseService {
 
   private String mensaje = "";
   
+  private static final String ETIQUETA_USUARIO = "usuario";
+  private static final String ETIQUETA_COMISIONES = "comisiones";
+  
   /**
    * Comisiones propias
    * 
@@ -91,7 +94,7 @@ public class ComisionesController extends BaseService {
   public String obtieneComisiones(String fechaInicioBusca1, String fechaFinBusca1,
       String idEstatus, Model model, HttpSession session, Authentication authentication) {
 
-    String string = "" + session.getAttribute("usuario");
+    String string = "" + session.getAttribute(ETIQUETA_USUARIO);
     String[] parts = string.split(": ");
     String claveUsuario = parts[1];
     Usuario usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
@@ -102,7 +105,7 @@ public class ComisionesController extends BaseService {
     List<Comision> listaComisiones = comisionService.obtenerListaComisionesPorFiltros(String.valueOf(usuario.getIdUsuario()), fechaInicioBusca1,
         fechaFinBusca1, idEstatus, authentication);
     logger.info("Numero de comisiones obtenidas: {}", listaComisiones.size());
-    model.addAttribute("comisiones", listaComisiones);
+    model.addAttribute(ETIQUETA_COMISIONES, listaComisiones);
     model.addAttribute("listaEstatus", estatusService.obtieneListaEstatus(authentication));
     return "/comisiones/comisionesPropias";
 
@@ -132,7 +135,7 @@ public class ComisionesController extends BaseService {
       idEstatus = "";
       System.out.println("idestatus en controller " + idEstatus);
     }
-    String string = "" + session.getAttribute("usuario");
+    String string = "" + session.getAttribute(ETIQUETA_USUARIO);
     String[] parts = string.split(": ");
     String claveUsuarioLider = parts[1];
     List<PerfilUsuario> listaPerfilUsuario = new ArrayList<>();
@@ -167,7 +170,8 @@ public class ComisionesController extends BaseService {
     }
 
     model.addAttribute("listaEstatus", estatusService.obtieneListaEstatus(authentication));
-    if (!this.mensaje.equals("")) {
+    logger.info("Mensaje {}", getMensaje());
+    if (!this.getMensaje().equals("")) {
       if (this.mensaje.contains("correctamente"))
         model.addAttribute("MENSAJE", this.mensaje);
       else

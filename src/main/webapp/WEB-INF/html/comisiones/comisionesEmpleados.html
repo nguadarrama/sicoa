@@ -398,7 +398,7 @@
 										<div class="col-md-4">
 											<label class="col-form-label">Archivo de comisiones </label>
 											<input type="file" name="archivo" id="archivo"
-												 accept="application/pdf" />
+												 th:required="true" accept="application/pdf" />
 										</div>
 										<div class="col-md-6">
 											<input id="claveUsuario" name="claveUsuario" type="text"
@@ -432,7 +432,7 @@
 										</div>
 									</form>
 								</div>
-								<div class="col-md-2" >
+								<div class="col-md-2" sec:authorize="hasAuthority('1')">
 									<form th:action="@{/comisiones/acepta}" method="post"
 										class="aceptaComision">
 										<input id="idComision" name="idComision" type="text"
