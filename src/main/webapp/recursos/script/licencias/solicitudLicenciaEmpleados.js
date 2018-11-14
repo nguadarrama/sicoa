@@ -9,7 +9,7 @@ $(document).ready(function() {
 		$(".tablaLicencias").css("display","inline");
 		
 	});
-	document.getElementById("botonGuardarLicencia").disabled=true;
+	//document.getElementById("botonGuardarLicencia").disabled=true;
 	$("#fechaInicio").datepicker({ 
 		minDate: '-1m',
 		maxDate:'1m',

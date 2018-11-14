@@ -143,7 +143,7 @@ $(document).ready(function() {
 					$('.actualizaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 					$('.actualizaArchivo #idDetalle').val(hmap.vacacion.idDetalle);
 					$('.actualizaArchivo #claveUsuario').val(hmap.vacacion.idUsuario.claveUsuario);
-					alert(hmap.vacacion.idEstatus.idEstatus+" "+hmap.vacacion.idArchivo.idArchivo)
+					//alert(hmap.vacacion.idEstatus.idEstatus+" "+hmap.vacacion.idArchivo.idArchivo)
 //					if(hmap.vacacion.idEstatus.idEstatus!='3'){
 //						$('.cancelaVacacion #idVacacionCancelar').val(hmap.vacacion.idDetalle);
 //						$('.cancelaVacacion').css("display","inline");
