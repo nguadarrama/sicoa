@@ -136,7 +136,7 @@ public class ReporteController {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cve_m_usuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos, authentication);
-    	
+		
     	Map<String, Object> map = new HashMap<>();
         
     	//nombre de la hoja
@@ -170,19 +170,21 @@ public class ReporteController {
 			String estatus = a.getIdEstatus().getEstatus();
 			
 			if (estatus != null) {
-				if (estatus.equals("Validada") && a.getIncidencia().getDescuento()) {
-					estatus = "Descuento Aprobado";
-				} else if (estatus.equals("Validada") && !a.getIncidencia().getDescuento()) {
-					estatus = "Justificación Aprobada";
-				} else if (estatus.equals("Pendiente") && a.getIncidencia().getDescuento()) {
-					estatus = "Descuento Pendiente";
-				} else if (estatus.equals("Pendiente") && !a.getIncidencia().getDescuento()) {
-					estatus = "Justificación Pendiente";
-				} else if (estatus.equals("Rechazada") && a.getIncidencia().getDescuento()) {
-					estatus = "Descuento Rechazado";
-				} else if (estatus.equals("Rechazada") && !a.getIncidencia().getDescuento()) {
-					estatus = "Justificación Rechazada";
-				}
+				if (a.getIdTipoDia().getIdTipoDia() != 5 && a.getIdTipoDia().getIdTipoDia() != 6 && a.getIdTipoDia().getIdTipoDia() != 7) {
+					if (estatus.equals("Validada") && a.getIncidencia().getDescuento()) {
+						estatus = "Descuento Aprobado";
+					} else if (estatus.equals("Validada") && !a.getIncidencia().getDescuento()) {
+						estatus = "Justificación Aprobada";
+					} else if (estatus.equals("Pendiente") && a.getIncidencia().getDescuento()) {
+						estatus = "Descuento Pendiente";
+					} else if (estatus.equals("Pendiente") && !a.getIncidencia().getDescuento()) {
+						estatus = "Justificación Pendiente";
+					} else if (estatus.equals("Rechazada") && a.getIncidencia().getDescuento()) {
+						estatus = "Descuento Rechazado";
+					} else if (estatus.equals("Rechazada") && !a.getIncidencia().getDescuento()) {
+						estatus = "Justificación Rechazada";
+					}
+				} 
 			}
 			
 			elementos.add(estatus);			
@@ -297,19 +299,21 @@ public class ReporteController {
 			String estatus = a.getIdEstatus().getEstatus();
 			
 			if (estatus != null) {
-				if (estatus.equals("Validada") && a.getIncidencia().getDescuento()) {
-					estatus = "Descuento Aprobado";
-				} else if (estatus.equals("Validada") && !a.getIncidencia().getDescuento()) {
-					estatus = "Justificación Aprobada";
-				} else if (estatus.equals("Pendiente") && a.getIncidencia().getDescuento()) {
-					estatus = "Descuento Pendiente";
-				} else if (estatus.equals("Pendiente") && !a.getIncidencia().getDescuento()) {
-					estatus = "Justificación Pendiente";
-				} else if (estatus.equals("Rechazada") && a.getIncidencia().getDescuento()) {
-					estatus = "Descuento Rechazado";
-				} else if (estatus.equals("Rechazada") && !a.getIncidencia().getDescuento()) {
-					estatus = "Justificación Rechazada";
-				}
+				if (a.getIdTipoDia().getIdTipoDia() != 5 && a.getIdTipoDia().getIdTipoDia() != 6 && a.getIdTipoDia().getIdTipoDia() != 7) {
+					if (estatus.equals("Validada") && a.getIncidencia().getDescuento()) {
+						estatus = "Descuento Aprobado";
+					} else if (estatus.equals("Validada") && !a.getIncidencia().getDescuento()) {
+						estatus = "Justificación Aprobada";
+					} else if (estatus.equals("Pendiente") && a.getIncidencia().getDescuento()) {
+						estatus = "Descuento Pendiente";
+					} else if (estatus.equals("Pendiente") && !a.getIncidencia().getDescuento()) {
+						estatus = "Justificación Pendiente";
+					} else if (estatus.equals("Rechazada") && a.getIncidencia().getDescuento()) {
+						estatus = "Descuento Rechazado";
+					} else if (estatus.equals("Rechazada") && !a.getIncidencia().getDescuento()) {
+						estatus = "Justificación Rechazada";
+					}
+				} 
 			}
 			
 			elementos.add(estatus);	
