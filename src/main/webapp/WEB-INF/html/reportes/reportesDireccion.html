@@ -210,16 +210,18 @@
 														<td id="idAsistencia" th:text="${asistencia.usuarioDto.nivel}"></td>
 														<td th:text="${asistencia.usuarioDto.nombreUnidad}"></td>
 														<td th:text="${asistencia.idTipoDia.nombre}"></td>
-														<td>
+														<td th:if="${asistencia.idTipoDia.idTipoDia != 6 and asistencia.idTipoDia.idTipoDia != 7 and asistencia.idTipoDia.idTipoDia != 5}">
 															<span th:if="${asistencia.idEstatus.estatus == 'Validada' and asistencia.incidencia.descuento}">Descuento Aprobado</span>
 															<span th:if="${asistencia.idEstatus.estatus == 'Validada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Aprobada</span>
 															<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and asistencia.incidencia.descuento}">Descuento Pendiente</span>
 															<span th:if="${asistencia.idEstatus.estatus == 'Pendiente' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Pendiente</span>
 															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and asistencia.incidencia.descuento}">Descuento Rechazado</span>
 															<span th:if="${asistencia.idEstatus.estatus == 'Rechazada' and !asistencia.incidencia.descuento}">Justificaci&oacute;n Rechazada</span>
-															<span th:if="${asistencia.idTipoDia.idTipoDia == 5}">Aprobada</span>
-															<span th:if="${asistencia.idTipoDia.idTipoDia == 6}">Aprobada</span>
-															<span th:if="${asistencia.idTipoDia.idTipoDia == 7}">Aprobada</span>
+														</td>
+														<td th:if="${asistencia.idTipoDia.idTipoDia == 6 or asistencia.idTipoDia.idTipoDia == 5 or asistencia.idTipoDia.idTipoDia == 7}">
+															<span th:if="${asistencia.idTipoDia.idTipoDia == 5}" th:text="${asistencia.idEstatus.estatus}"></span>
+															<span th:if="${asistencia.idTipoDia.idTipoDia == 6}" th:text="${asistencia.idEstatus.estatus}"></span>
+															<span th:if="${asistencia.idTipoDia.idTipoDia == 7}" th:text="${asistencia.idEstatus.estatus}"></span>
 														</td> 
 													</tr>
 												</tbody>
