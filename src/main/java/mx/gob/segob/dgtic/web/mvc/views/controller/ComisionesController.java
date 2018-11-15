@@ -1,7 +1,6 @@
 package mx.gob.segob.dgtic.web.mvc.views.controller;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -23,11 +22,11 @@ import java.io.InputStream;
 import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,7 +77,18 @@ public class ComisionesController extends BaseService {
   
   private static final String ETIQUETA_USUARIO = "usuario";
   private static final String ETIQUETA_COMISIONES = "comisiones";
-  
+  private static final String COMISIONES_EMPLEADOS = "comisionesEmpleados";
+  private static final String ETIQUETA_CORRECTAMENTE = "correctamente";
+  private static final String ETIQUETA_MENSAJE = "MENSAJE";
+  private static final String ETIQUETA_MENSAJE_EXCEPCION = "MENSAJE_EXCEPCION";
+  private static final String ETIQUETA_LISTA_HORARIOS = "listaHorarios";
+  private static final String ETIQUETA_LISTA_DIAS_FESTIVOS = "listaDiasFestivos";
+  private static final String ETIQUETA_LISTA_RESPONSABLE = "listaResponsable";
+  private static final String ETIQUETA_FECHA_REGISTRO = "fechaRegistro";
+  private static final String FORMATO_DD_MM_YYYY = "dd-MM-yyyy";
+  private static final String REDIRECT_COMISIONES_EMPLEADOS =
+      "redirect:/comisiones/comisionesEmpleados";
+
   /**
    * Comisiones propias
    * 
@@ -91,19 +101,21 @@ public class ComisionesController extends BaseService {
    * @return
    */
   @RequestMapping(value = {"comisionesPropias"}, method = RequestMethod.GET)
-  public String obtieneComisiones(String fechaInicioBusca1, String fechaFinBusca1,
-      String idEstatus, Model model, HttpSession session, Authentication authentication) {
+  public String obtieneComisiones(String fechaInicioBusca1, String fechaFinBusca1, String idEstatus,
+      Model model, HttpSession session, Authentication authentication) {
 
     String string = "" + session.getAttribute(ETIQUETA_USUARIO);
     String[] parts = string.split(": ");
     String claveUsuario = parts[1];
     Usuario usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
 
-    logger.info("Peticion de comisiones: idUsuario: {} fechaInicioBusca1: {} fechaFinBusca1: {} idEstatus: {}", 
-        new Object[] { usuario.getIdUsuario(), fechaInicioBusca1, fechaFinBusca1, idEstatus});
+    logger.info(
+        "Peticion de comisiones: idUsuario: {} fechaInicioBusca1: {} fechaFinBusca1: {} idEstatus: {}",
+        new Object[] {usuario.getIdUsuario(), fechaInicioBusca1, fechaFinBusca1, idEstatus});
 
-    List<Comision> listaComisiones = comisionService.obtenerListaComisionesPorFiltros(String.valueOf(usuario.getIdUsuario()), fechaInicioBusca1,
-        fechaFinBusca1, idEstatus, authentication);
+    List<Comision> listaComisiones =
+        comisionService.obtenerListaComisionesPorFiltros(String.valueOf(usuario.getIdUsuario()),
+            fechaInicioBusca1, fechaFinBusca1, idEstatus, authentication);
     logger.info("Numero de comisiones obtenidas: {}", listaComisiones.size());
     model.addAttribute(ETIQUETA_COMISIONES, listaComisiones);
     model.addAttribute("listaEstatus", estatusService.obtieneListaEstatus(authentication));
@@ -128,54 +140,54 @@ public class ComisionesController extends BaseService {
   public String obtieneComisionesEmpleados(String claveUsuario, String nombre,
       String apellidoPaterno, String apellidoMaterno, String idUnidad, String idEstatus,
       Model model, HttpSession session, Authentication authentication) {
-    System.out.println("Datos para comisionesEmpleados claveUsuario " + claveUsuario + " nombre "
-        + nombre + " apellidoPaterno " + apellidoPaterno + " apellidoMaterno " + apellidoMaterno
-        + " idUnidad " + idUnidad + " idEstatus " + idEstatus);
+    logger.info(
+        "Peticion de comisiones de empleados: idUsuario: {} Nombre: {} apellidoPaterno: {} apellidoMaterno: {} idUnidad: {} idEstatus: {}",
+        new Object[] {claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus});
+
     if (idEstatus == null) {
       idEstatus = "";
-      System.out.println("idestatus en controller " + idEstatus);
     }
     String string = "" + session.getAttribute(ETIQUETA_USUARIO);
     String[] parts = string.split(": ");
     String claveUsuarioLider = parts[1];
-    List<PerfilUsuario> listaPerfilUsuario = new ArrayList<>();
-    listaPerfilUsuario = perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider, authentication);
+    List<PerfilUsuario> listaPerfilUsuario =
+        perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider, authentication);
     Boolean usuarioBoolean = false;
-    
+
     for (PerfilUsuario perfilUsuario : listaPerfilUsuario) {
-      System.out.println("perfil usuario:" + perfilUsuario.getClavePerfil().getClavePerfil());
-      if (perfilUsuario.getClavePerfil().getClavePerfil().equals('2')) {
+      logger.info("Perfiles de usuario: {}", perfilUsuario.getClavePerfil().getClavePerfil());
+      if (perfilUsuario.getClavePerfil().getClavePerfil().equals("2")) {
         usuarioBoolean = true;
       }
     }
-    System.out.println("Bandera para determinar si es Coordinador o no " + usuarioBoolean);
-    Usuario usuarioAux = new Usuario();
+    logger.info("Bandera es coordinador: {}", usuarioBoolean);
     if (usuarioBoolean) {
-      usuarioAux = usuarioService.buscaUsuario(claveUsuarioLider, authentication);
+      Usuario usuarioAux = usuarioService.buscaUsuario(claveUsuarioLider, authentication);
       idUnidad = idUnidad != null ? "" + usuarioAux.getIdUnidad() : "";
     } else {
       idUnidad = "";
     }
-    
-    System.out.println("idUnidad: " + idUnidad);
+
+    logger.info("Id de Unidad: {} ", idUnidad);
     model.addAttribute("listaUnidades",
         unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
-    List<Comision> comisiones = comisionService.obtenerListaComisionesPorFiltrosEmpleados(
-        claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus, authentication);
-    System.out.println("Tamaño " + comisiones.size());
-    if (comisiones.size() > 0) {
-      model.addAttribute("comisionesEmpleados", comisiones);
+    List<Comision> comisiones =
+        comisionService.obtenerListaComisionesPorFiltrosEmpleados(claveUsuario, nombre,
+            apellidoPaterno, apellidoMaterno, idUnidad, idEstatus, authentication);
+    logger.info("Numero de comisiones obtenidas: {}", comisiones.size());
+    if (!comisiones.isEmpty()) {
+      model.addAttribute(COMISIONES_EMPLEADOS, comisiones);
     } else {
-      model.addAttribute("comisionesEmpleados", null);
+      model.addAttribute(COMISIONES_EMPLEADOS, null);
     }
 
     model.addAttribute("listaEstatus", estatusService.obtieneListaEstatus(authentication));
-    logger.info("Mensaje {}", getMensaje());
     if (!this.getMensaje().equals("")) {
-      if (this.mensaje.contains("correctamente"))
-        model.addAttribute("MENSAJE", this.mensaje);
-      else
-        model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+      if (this.mensaje.contains(ETIQUETA_CORRECTAMENTE)) {
+        model.addAttribute(ETIQUETA_MENSAJE, this.mensaje);
+      } else {
+        model.addAttribute(ETIQUETA_MENSAJE_EXCEPCION, this.mensaje);
+      }
     }
     this.mensaje = "";
     return "/comisiones/comisionesEmpleados";
@@ -189,41 +201,36 @@ public class ComisionesController extends BaseService {
    */
   @GetMapping("comision/busca")
   @ResponseBody
-  public HashMap<String, Object> buscaUsuario(String idComision, Authentication authentication ) {
-    HashMap<String, Object> hmap = new HashMap<String, Object>();
-    System.out.println("Id comision: " + idComision);
+  public Map<String, Object> buscaUsuario(String idComision, Authentication authentication) {
+    Map<String, Object> hmap = new HashMap<>();
+    logger.info("Id de la comision: {}", idComision);
     Comision comisiones = comisionService.obtieneComision(idComision, authentication);
     comisiones.getIdUsuario().setFechaIngreso(comisiones.getIdUsuario().getFechaIngreso());
     comisiones.setFechaInicio(comisiones.getFechaInicio());
     comisiones.setFechaFin(comisiones.getFechaFin());
     comisiones.setFechaRegistro(comisiones.getFechaRegistro());
-    System.out.println("Objeto comision: " + ReflectionToStringBuilder.toString(comisiones));
-    System.out.println(
-        "Objeto Usuario: " + ReflectionToStringBuilder.toString(comisiones.getIdUsuario()));
-    System.out.println(
-        "Objeto Estatus: " + ReflectionToStringBuilder.toString(comisiones.getIdEstatus()));
-    System.out.println(
-        "Objeto Horario: " + ReflectionToStringBuilder.toString(comisiones.getIdHorario()));
-    System.out.println(
-        "Objeto Archivo: " + ReflectionToStringBuilder.toString(comisiones.getIdArchivo()));
+
+    String comisionJson = gson.toJson(comisiones);
+    logger.info(comisionJson);
     hmap.put("comision", comisiones);
-    
 
     if (comisiones.getIdResponsable() != null
         && !comisiones.getIdResponsable().toString().isEmpty()) {
-      hmap.put("responsable",
-          usuarioService.buscaUsuarioPorId(Integer.toString(comisiones.getIdResponsable()), authentication));
+      hmap.put("responsable", usuarioService
+          .buscaUsuarioPorId(Integer.toString(comisiones.getIdResponsable()), authentication));
     } else {
       hmap.put("responsable", null);
     }
 
     if (comisiones.getIdHorario() != null && comisiones.getIdHorario().getIdHorario() != null
         && !comisiones.getIdHorario().getIdHorario().toString().isEmpty()) {
-      Horario horario = catalogoService.buscaHorario(comisiones.getIdHorario().getIdHorario(), authentication);
-      System.out.println(
-          "Horario en string: " + horario.getHoraEntrada().toString() + " - " + horario.getHoraSalida().toString());
-      hmap.put("horario",
-          horario.getHoraEntrada().toString() + " - " + horario.getHoraSalida().toString());
+      Horario horario =
+          catalogoService.buscaHorario(comisiones.getIdHorario().getIdHorario(), authentication);
+
+      String horarioString =
+          horario.getHoraEntrada().toString() + " - " + horario.getHoraSalida().toString();
+      logger.info("Horario: {}", horarioString);
+      hmap.put("horario", horarioString);
     } else {
       hmap.put("horario", null);
     }
@@ -238,30 +245,31 @@ public class ComisionesController extends BaseService {
    * @return
    */
   @RequestMapping(value = {"solicitudComision"}, method = RequestMethod.GET)
-  public String solicitudComisiones(Model model, HttpSession session, Authentication authentication) {
+  public String solicitudComisiones(Model model, HttpSession session,
+      Authentication authentication) {
 
-    String string = "" + session.getAttribute("usuario");
+    String string = "" + session.getAttribute(ETIQUETA_USUARIO);
     String[] parts = string.split(": ");
     String claveUsuario = parts[1];
-    model.addAttribute("fechaRegistro", obtenerFechaActual("dd-MM-yyyy"));
-    model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario, authentication));
-    model.addAttribute("listaResponsable",
+    model.addAttribute(ETIQUETA_FECHA_REGISTRO, obtenerFechaActual(FORMATO_DD_MM_YYYY));
+    model.addAttribute(ETIQUETA_USUARIO, usuarioService.buscaUsuario(claveUsuario, authentication));
+    model.addAttribute(ETIQUETA_LISTA_RESPONSABLE,
         unidadAdministrativaService.consultaResponsable(claveUsuario, authentication));
-    model.addAttribute("listaHorarios", catalogoService.obtieneHorarios(authentication));
+    model.addAttribute(ETIQUETA_LISTA_HORARIOS, catalogoService.obtieneHorarios(authentication));
     String cadena = catalogoService.obtieneDiaFestivoParaBloquear(authentication);
-    System.out.println("Dias festivos para bloquear " + cadena);
-    model.addAttribute("listaDiasFestivos", cadena);
+    logger.info("Dias festivos a bloquear: {}", cadena);
+    model.addAttribute(ETIQUETA_LISTA_DIAS_FESTIVOS, cadena);
 
     if (!this.getMensaje().equals("")) {
-      if (this.mensaje.contains("correctamente"))
-        model.addAttribute("MENSAJE", this.mensaje);
+      if (this.mensaje.contains(ETIQUETA_CORRECTAMENTE))
+        model.addAttribute(ETIQUETA_MENSAJE, this.mensaje);
       else
-        model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+        model.addAttribute(ETIQUETA_MENSAJE_EXCEPCION, this.mensaje);
     }
     this.mensaje = "";
 
-    System.out.println("Registrar comision usuario: " + claveUsuario);
-    return "/comisiones/solicitudComision";
+    logger.info("Registrar comision a usuario: {}", claveUsuario);
+    return "/comisiones/solicitudComission";
 
   }
 
@@ -280,25 +288,25 @@ public class ComisionesController extends BaseService {
    */
   @RequestMapping(value = {"agregarComision"}, method = RequestMethod.POST)
   public String agregarComision(String claveUsuario, String idResponsable, String fechaInicio,
-      String fechaFin, Integer dias, String comision, String idHorario, Model model, HttpSession session, Authentication authentication) {
+      String fechaFin, Integer dias, String comision, String idHorario, Model model,
+      HttpSession session, Authentication authentication) {
 
-    System.out.println(
-        "Datos claveUsuario " + claveUsuario + " responsable " + idResponsable + " fechaInicio "
-            + fechaInicio + " fechaFin " + fechaFin + " dias " + dias + " comision " + comision);
+    logger.info(
+        "Peticion de agregar comision: claveUsuario: {} idResponsable: {} fechaInicio: {} fechaFin: {} dias: {} comision: {} idHorario: {}",
+        new Object[] {claveUsuario, idResponsable, fechaInicio, fechaFin, dias, comision,
+            idHorario});
 
     Integer idResponsableAux = null;
     if (idResponsable != null && !idResponsable.trim().isEmpty()) {
       idResponsableAux = Integer.parseInt(idResponsable);
     }
-   
-    System.out.println(
-        "Datos claveUsuario " + claveUsuario + " responsable " + idResponsable + " fechaInicio "
-            + fechaInicio + " fechaFin " + fechaFin + " dias " + dias + " comision " + comision);
-    Comision comisionRespuesta = comisionService.agregarComision(new ComisionAux(null, null, idResponsableAux, null, 1,
-        fechaInicio, fechaFin, dias, comision, obtenerFechaActual("dd/MM/yyyy"), Integer.valueOf(idHorario)), claveUsuario, authentication);
-    System.out.println("Mensaje obtenido "+comisionRespuesta.getMensaje());
-    this.mensaje=comisionRespuesta.getMensaje();
-    
+
+    Comision comisionRespuesta = comisionService.agregarComision(
+        new ComisionAux(null, null, idResponsableAux, null, 1, fechaInicio, fechaFin, dias,
+            comision, obtenerFechaActual("dd/MM/yyyy"), Integer.valueOf(idHorario)),
+        claveUsuario, authentication);
+    this.mensaje = comisionRespuesta.getMensaje();
+
     return "redirect:/comisiones/solicitudComisionEmpleados";
 
   }
@@ -315,33 +323,34 @@ public class ComisionesController extends BaseService {
    * @return
    */
   @RequestMapping(value = {"solicitudComisionEmpleados"}, method = RequestMethod.GET)
-  public String SolitudComisionesEmpleados(String claveUsuario, String nombre,
-      String apellidoPaterno, String apellidoMaterno, Model model, HttpSession session, Authentication authentication) {
-    System.out.println("claveUsuario " + claveUsuario + " nombre " + nombre + " apellidoPaterno "
-        + apellidoPaterno + " apellidoMaterno " + apellidoMaterno);
-    String string = "" + session.getAttribute("usuario");
+  public String solitudComisionesEmpleados(String claveUsuario, String nombre,
+      String apellidoPaterno, String apellidoMaterno, Model model, HttpSession session,
+      Authentication authentication) {
+
+    logger.info(
+        "Peticion de registro de comisiones a empleados: idUsuario: {} Nombre: {} apellidoPaterno: {} apellidoMaterno: {}",
+        new Object[] {claveUsuario, nombre, apellidoPaterno, apellidoMaterno});
+
+    String string = "" + session.getAttribute(ETIQUETA_USUARIO);
     String[] parts = string.split(": ");
     String claveUsuarioAux = parts[1];
-    System.out.println("Datos para comisiones empleados");
-    Usuario usuario = new Usuario();
-    usuario = usuarioService.buscaUsuario(claveUsuarioAux, authentication);
+    Usuario usuario = usuarioService.buscaUsuario(claveUsuarioAux, authentication);
     String idUnidad = "" + usuario.getIdUnidad();
     List<Comision> comisionesEmpleados = comisionService.obtenerComisionesPorUnidad(idUnidad,
         claveUsuario, nombre, apellidoPaterno, apellidoMaterno, authentication);
 
-    if (comisionesEmpleados.size() > 0) {
-      model.addAttribute("comisionesEmpleados", comisionesEmpleados);
+    if (!comisionesEmpleados.isEmpty()) {
+      model.addAttribute(COMISIONES_EMPLEADOS, comisionesEmpleados);
     } else {
-      model.addAttribute("comisionesEmpleados", null);
+      model.addAttribute(COMISIONES_EMPLEADOS, null);
     }
     if (!this.getMensaje().equals("")) {
-      if (this.mensaje.contains("correctamente"))
-        model.addAttribute("MENSAJE", this.mensaje);
+      if (this.mensaje.contains(ETIQUETA_CORRECTAMENTE))
+        model.addAttribute(ETIQUETA_MENSAJE, this.mensaje);
       else
-        model.addAttribute("MENSAJE_EXCEPCION", this.mensaje);
+        model.addAttribute(ETIQUETA_MENSAJE_EXCEPCION, this.mensaje);
     }
-    model.addAttribute("listaHorarios",
-        catalogoService.obtieneHorarios(authentication));
+    model.addAttribute(ETIQUETA_LISTA_HORARIOS, catalogoService.obtieneHorarios(authentication));
     this.mensaje = "";
     return "/comisiones/solicitudComisionesEmpleados";
 
@@ -356,51 +365,69 @@ public class ComisionesController extends BaseService {
    */
   @RequestMapping(value = {"comision/buscaUsuario"}, method = RequestMethod.GET)
   public String buscaUsuario(String claveUsuario, Model model, Authentication authentication) {
-    System.out.println("Usuarioooooooooooooo " + claveUsuario);
+    logger.info("Id de usuario: {}", claveUsuario);
 
-    model.addAttribute("fechaRegistro", obtenerFechaActual("dd-MM-yyyy"));
-    model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario, authentication));
-    model.addAttribute("listaResponsable",
+    model.addAttribute(ETIQUETA_FECHA_REGISTRO, obtenerFechaActual(FORMATO_DD_MM_YYYY));
+    model.addAttribute(ETIQUETA_USUARIO, usuarioService.buscaUsuario(claveUsuario, authentication));
+    model.addAttribute(ETIQUETA_LISTA_RESPONSABLE,
         unidadAdministrativaService.consultaResponsable(claveUsuario, authentication));
-    model.addAttribute("listaHorarios",
-        catalogoService.obtieneHorarios(authentication));
-    String cadena=catalogoService.obtieneDiaFestivoParaBloquear(authentication);
-    System.out.println("Dias festivos para bloquear "+cadena);
-    model.addAttribute("listaDiasFestivos", cadena);
+    model.addAttribute(ETIQUETA_LISTA_HORARIOS, catalogoService.obtieneHorarios(authentication));
+    String cadena = catalogoService.obtieneDiaFestivoParaBloquear(authentication);
+    logger.info("Dias festivos para bloquear: {}", cadena);
+    model.addAttribute(ETIQUETA_LISTA_DIAS_FESTIVOS, cadena);
 
-    System.out.println("Registrar comision usuario: " + claveUsuario);
-     return "/comisiones/registraComisionesEmpleados";
+    return "/comisiones/registraComisionesEmpleados";
 
   }
 
+  /**
+   * Muestra la pantalla para modificar una comision.
+   * 
+   * @param idComision
+   * @param claveUsuario
+   * @param model
+   * @param session
+   * @param authentication
+   * @return
+   */
   @RequestMapping(value = {"modificarComision"}, method = RequestMethod.GET)
   public String modificarComisiones(String idComision, String claveUsuario, Model model,
       HttpSession session, Authentication authentication) {
-    System.out.println("Comision con id: " + idComision);
-    System.out.println("ClaveUsuario con id: " + claveUsuario);
+    logger.info("Id de comision: {} claveUsuario: {}", idComision, claveUsuario);
 
     model.addAttribute("comision", comisionService.obtieneComision(idComision, authentication));
-    model.addAttribute("fechaRegistro", obtenerFechaActual("dd-MM-yyyy"));
-    model.addAttribute("usuario", usuarioService.buscaUsuario(claveUsuario, authentication));
-    model.addAttribute("listaResponsable",
+    model.addAttribute(ETIQUETA_FECHA_REGISTRO, obtenerFechaActual(FORMATO_DD_MM_YYYY));
+    model.addAttribute(ETIQUETA_USUARIO, usuarioService.buscaUsuario(claveUsuario, authentication));
+    model.addAttribute(ETIQUETA_LISTA_RESPONSABLE,
         unidadAdministrativaService.consultaResponsable(claveUsuario, authentication));
-    model.addAttribute("listaHorarios",
-        catalogoService.obtieneHorarios(authentication));
-    String cadena=catalogoService.obtieneDiaFestivoParaBloquear(authentication);
-    System.out.println("Dias festivos para bloquear "+cadena);
-    model.addAttribute("listaDiasFestivos", cadena);
+    model.addAttribute(ETIQUETA_LISTA_HORARIOS, catalogoService.obtieneHorarios(authentication));
+    String cadena = catalogoService.obtieneDiaFestivoParaBloquear(authentication);
+    model.addAttribute(ETIQUETA_LISTA_DIAS_FESTIVOS, cadena);
 
-    System.out.println("Registrar comision usuario: " + claveUsuario);
     return "/comisiones/modificarComisionEmpleados";
 
   }
 
+  /**
+   * Envia los datos modificados de una comision al back.
+   * 
+   * @param idComision
+   * @param fechaInicio
+   * @param fechaFin
+   * @param dias
+   * @param comision
+   * @param claveUsuario
+   * @param idHorario
+   * @param model
+   * @param session
+   * @param authentication
+   * @return
+   */
   @RequestMapping(value = {"modificarComisionGuardado"}, method = RequestMethod.GET)
   public String modificarComisionesGuardado(String idComision, String fechaInicio, String fechaFin,
-      String dias, String comision, String claveUsuario, String idHorario, Model model, HttpSession session, Authentication authentication) {
-    System.out.println("Comision a ser modificada con id: " + idComision);
-    System.out.println("fechaInicio " + fechaInicio + " fechaFin " + fechaFin + " diasPorPedir "
-        + dias);
+      String dias, String comision, String claveUsuario, String idHorario, Model model,
+      HttpSession session, Authentication authentication) {
+    logger.info("Clave de usuario: {}", claveUsuario);
     ComisionAux comisioPeticion = new ComisionAux();
     comisioPeticion.setIdComision(Integer.valueOf(idComision));
     comisioPeticion.setFechaInicio(fechaInicio);
@@ -408,32 +435,51 @@ public class ComisionesController extends BaseService {
     comisioPeticion.setDias(Integer.valueOf(dias));
     comisioPeticion.setComision(comision);
     comisioPeticion.setIdHorario(Integer.valueOf(idHorario));
-    
-    System.out.println("ComisionAux front: " + ReflectionToStringBuilder.toString(comisioPeticion));
-    Comision comisionRespuesta = comisionService.modificaComisiones(comisioPeticion, claveUsuario, authentication);
-    this.mensaje=comisionRespuesta.getMensaje();
-    System.out.println("mensaje recuperado "+comisionRespuesta.getMensaje());
-    return "redirect:/comisiones/comisionesEmpleados";
+
+    String comisionPeticionJson = gson.toJson(comisioPeticion);
+    logger.info("Comision peticion: {}", comisionPeticionJson);
+
+    Comision comisionRespuesta =
+        comisionService.modificaComisiones(comisioPeticion, claveUsuario, authentication);
+    this.mensaje = comisionRespuesta.getMensaje();
+    return REDIRECT_COMISIONES_EMPLEADOS;
 
   }
-  
+
+  /**
+   * Genera el formato de comisiones.
+   * 
+   * @param idComision
+   * @param idUnidadAdministrativa
+   * @param nombre
+   * @param apellidoPaterno
+   * @param apellidoMaterno
+   * @param fechaInicio1
+   * @param fechaFin1
+   * @param idHorario
+   * @param comision
+   * @param request
+   * @param response
+   * @param authentication
+   */
   @RequestMapping(value = "comision/generarArchivo", method = RequestMethod.GET)
   public void generarReporteComisiones(String idComision, String idUnidadAdministrativa,
       String nombre, String apellidoPaterno, String apellidoMaterno, String fechaInicio1,
       String fechaFin1, String idHorario, String comision, HttpServletRequest request,
       HttpServletResponse response, Authentication authentication) {
 
-    System.out.println("Datos para el archivo " + idComision + " unidadAdministrativa "
-        + idUnidadAdministrativa + " nombre " + nombre + " apellidoPaterno " + apellidoPaterno
-        + " apellidoMaterno " + apellidoMaterno + " fechaInicio1 " + fechaInicio1 + " fechaFin1 "
-        + fechaFin1 + " idHOrario " + idHorario + " comision " + comision);
+    logger.info(
+        "Peticion para generar formato. Parametros: idComision: {} Unidad Administrativa: {} Nombre: {} apellidoPaterno: {} apellidoMaterno: {} fechaInicio: {} fechaFin: {} idHorario: {} comision: {}",
+        new Object[] {idComision, idUnidadAdministrativa, nombre, apellidoPaterno, apellidoMaterno,
+            fechaInicio1, fechaFin1, idHorario, comision});
+
     String nombreCompleto = nombre + " " + apellidoPaterno + " " + apellidoMaterno;
 
     try {
-      System.out.println("Datos " + nombre);
-      reporte archivo =
-          comisionService.generarReporte(new GenerarReporteArchivoComision(nombreCompleto,
-              idUnidadAdministrativa, comision, fechaInicio1, fechaFin1, idHorario), authentication);
+      logger.info("Datos: {}", nombreCompleto);
+      reporte archivo = comisionService
+          .generarReporte(new GenerarReporteArchivoComision(nombreCompleto, idUnidadAdministrativa,
+              comision, fechaInicio1, fechaFin1, idHorario), authentication);
 
       InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
       String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
@@ -447,88 +493,153 @@ public class ComisionesController extends BaseService {
       stream.flush();
       response.flushBuffer();
     } catch (IOException e) {
-      e.printStackTrace();
-    } catch (Exception e) {
-      e.printStackTrace();
+      logger.error("Exception {}", e.getMessage());
     }
   }
-  
+
+  /**
+   * Descarga el archivo que se le ha cargado a la comision.
+   * 
+   * @param idArchivo
+   * @param request
+   * @param response
+   * @param authentication
+   * @throws IOException
+   */
   @RequestMapping(value = "/descargaArchivo", method = RequestMethod.GET)
-  public void getFile(Integer idArchivo, HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
-      System.out.println("id del archivo "+idArchivo);
-      Archivo archivo= new Archivo();
-      archivo=archivoService.consultaArchivo(idArchivo, authentication);
-      System.out.println("archivo retornado "+archivo.getUrl());
-      String nombrecompleto=archivo.getUrl()+archivo.getNombre();
-      String nombreArchivo=nombrecompleto;
-      System.out.println("nombre de archivo "+nombreArchivo);
-      File file = new File(nombreArchivo);
-      InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-      String mimeType= URLConnection.guessContentTypeFromStream(inputStream);
-      if(mimeType==null){
-          mimeType="application/pdf";
-      }
-      
-      response.setContentType(mimeType);
-      response.setContentLength((int)file.length());
-      response.setHeader("Content-Disposition", String.format("attachment; filename\"%s\"",file.getName()));
-      FileCopyUtils.copy(inputStream, response.getOutputStream());
+  public void getFile(Integer idArchivo, HttpServletRequest request, HttpServletResponse response,
+      Authentication authentication) throws IOException {
+    logger.info("Id del archivo: {}", idArchivo);
+
+    Archivo archivo = archivoService.consultaArchivo(idArchivo, authentication);
+    logger.info("URL del archivo recuperado: {}", archivo.getUrl());
+    String nombrecompleto = archivo.getUrl() + archivo.getNombre();
+    String nombreArchivo = nombrecompleto;
+    logger.info("Nombre del archivo: {}", nombreArchivo);
+
+    File file = new File(nombreArchivo);
+    InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+    String mimeType = URLConnection.guessContentTypeFromStream(inputStream);
+
+    if (mimeType == null) {
+      mimeType = "application/pdf";
+    }
+
+    response.setContentType(mimeType);
+    response.setContentLength((int) file.length());
+    response.setHeader("Content-Disposition",
+        String.format("attachment; filename\"%s\"", file.getName()));
+    FileCopyUtils.copy(inputStream, response.getOutputStream());
   }
-  
+
+  /**
+   * Actualiza o carga el archivo a la comision.
+   * 
+   * @param archivo
+   * @param idArchivo
+   * @param claveUsuario
+   * @param idComisionArchivo
+   * @param authentication
+   * @return
+   */
   @PostMapping("comision/actualizaArchivo")
   public String actualizaArchivoComision(@RequestParam MultipartFile archivo, Integer idArchivo,
       String claveUsuario, Integer idComisionArchivo, Authentication authentication) {
+    logger.info(
+        "Actualiza o carga archivo de comision. Parametros: idComision {} claveUsuario: {} idArchivo: {}",
+        new Object[] {idComisionArchivo, claveUsuario, idArchivo});
 
-    System.out.println("Datos archivo " + "" + " idArchivo " + idArchivo + " claveUsuario "
-        + claveUsuario + " idComision " + idComisionArchivo);
     Comision comision = new Comision();
     Archivo idArchivoAux = null;
-    Archivo archivoDto = new Archivo();
     if (archivo != null && !archivo.isEmpty()) {
       if (idArchivo != null && !idArchivo.toString().isEmpty()) {
-        archivoService.actualizaArchivo(archivo, claveUsuario, "comisiones", idArchivo,
+        archivoService.actualizaArchivo(archivo, claveUsuario, ETIQUETA_COMISIONES, idArchivo,
             "comision-", authentication);
-         comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo, null, null, idArchivo, 1, null, null, null, null, null, null), claveUsuario, authentication);
+        comision = comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo,
+            null, null, idArchivo, 1, null, null, null, null, null, null), claveUsuario,
+            authentication);
       } else {
-        // idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones");
-        // archivoDto.setIdArchivo(idArchivoAux);
-        idArchivoAux =
-            archivoService.guardaArchivo(archivo, claveUsuario, "comisiones", "comision-", authentication);
-        System.out.println("IDArchivo recuperado " + idArchivoAux.getIdArchivo());
-        comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo, null, null, idArchivoAux.getIdArchivo(), 1, null, null, null, null, null, null), claveUsuario, authentication);
+        idArchivoAux = archivoService.guardaArchivo(archivo, claveUsuario, ETIQUETA_COMISIONES,
+            "comision-", authentication);
+        logger.info("Id de archivo recuperado: {}", idArchivoAux.getIdArchivo());
+        comision = comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo,
+            null, null, idArchivoAux.getIdArchivo(), 1, null, null, null, null, null, null),
+            claveUsuario, authentication);
       }
     }
-    System.out.println("mensaje recuperado " + comision.getMensaje());
+
     this.mensaje = comision.getMensaje();
-    return "redirect:/comisiones/comisionesEmpleados";
+    return REDIRECT_COMISIONES_EMPLEADOS;
   }
-  
+
+  /**
+   * Acepta una comision.
+   * 
+   * @param idComision
+   * @param claveUsuario
+   * @param idArchivo
+   * @param authentication
+   * @return
+   */
   @PostMapping("acepta")
-  public String aceptarComisiones(Integer idComision,String claveUsuario, Integer idArchivo, Authentication authentication) {
-      System.out.println("idLicencia "+idComision+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
-      Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComision, null, null, idArchivo, 2, null, null, null, null, null, null), claveUsuario, authentication);
-      this.mensaje=comision.getMensaje();
-      System.out.println("mensaje recuperado "+comision.getMensaje());
-      return "redirect:/comisiones/comisionesEmpleados";
+  public String aceptarComisiones(Integer idComision, String claveUsuario, Integer idArchivo,
+      Authentication authentication) {
+    logger.info("Aceptar comision. Parametros: idComision {} claveUsuario: {} idArchivo: {}",
+        new Object[] {idComision, claveUsuario, idArchivo});
+
+    Comision comision = comisionService.modificaComisionEstatusArchivo(
+        new ComisionAux(idComision, null, null, idArchivo, 2, null, null, null, null, null, null),
+        claveUsuario, authentication);
+
+    this.mensaje = comision.getMensaje();
+    return REDIRECT_COMISIONES_EMPLEADOS;
   }
-  
+
+  /**
+   * Rechaza una comision.
+   * 
+   * @param idComision
+   * @param claveUsuario
+   * @param idArchivo
+   * @param authentication
+   * @return
+   */
   @PostMapping("rechaza")
-  public String rechazarComisiones(Integer idComision,String claveUsuario, Integer idArchivo, Authentication authentication) {
-      System.out.println("idLicencia "+idComision+" claveUsuario "+claveUsuario+" idArchivo "+idArchivo);
-      Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComision, null, null, idArchivo, 3, null, null, null, null, null, null), claveUsuario, authentication);
-      this.mensaje=comision.getMensaje();
-      System.out.println("mensaje recuperado "+comision.getMensaje());
-      return "redirect:/comisiones/comisionesEmpleados";
+  public String rechazarComisiones(Integer idComision, String claveUsuario, Integer idArchivo,
+      Authentication authentication) {
+    logger.info("Rechazar comision. Parametros: idComision {} claveUsuario: {} idArchivo: {}",
+        new Object[] {idComision, claveUsuario, idArchivo});
+
+    Comision comision = comisionService.modificaComisionEstatusArchivo(
+        new ComisionAux(idComision, null, null, idArchivo, 3, null, null, null, null, null, null),
+        claveUsuario, authentication);
+
+    this.mensaje = comision.getMensaje();
+    return REDIRECT_COMISIONES_EMPLEADOS;
   }
-  
+
+  /**
+   * Cancela una comision.
+   * 
+   * @param idComisionCancelar
+   * @param claveUsuarioCancelar
+   * @param idArchivoCancelar
+   * @param authentication
+   * @return
+   */
   @PostMapping("cancelarComision")
-  public String cancelarComision(Integer idComisionCancelar,String claveUsuarioCancelar, Integer idArchivoCancelar,Authentication authentication) {
-      System.out.println("CancelarComision");
-      System.out.println("idComision "+idComisionCancelar+" claveUsuario "+claveUsuarioCancelar);
-      Comision comision= comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionCancelar, null, null, idArchivoCancelar, 6, null, null, null, null, null, null), claveUsuarioCancelar, authentication);
-      this.mensaje=comision.getMensaje();
-      System.out.println("mensaje recuperado "+comision.getMensaje());
-      return "redirect:/comisiones/comisionesEmpleados";
+  public String cancelarComision(Integer idComisionCancelar, String claveUsuarioCancelar,
+      Integer idArchivoCancelar, Authentication authentication) {
+    logger.info("Cancelar comision. Parametros: idComision: {} claveUsuario: {}",
+        idComisionCancelar, claveUsuarioCancelar);
+
+    Comision comision = comisionService.modificaComisionEstatusArchivo(
+        new ComisionAux(idComisionCancelar, null, null, idArchivoCancelar, 6, null, null, null,
+            null, null, null),
+        claveUsuarioCancelar, authentication);
+
+    this.mensaje = comision.getMensaje();
+    return REDIRECT_COMISIONES_EMPLEADOS;
   }
 
   public String getMensaje() {
@@ -540,14 +651,15 @@ public class ComisionesController extends BaseService {
   }
 
   /**
-   * Obtiene fecha actual en formato dd-MM-yyyy
+   * Obtiene fecha actual en un formato dado.
    * 
+   * @param format
    * @return
    */
   private String obtenerFechaActual(String format) {
     Calendar now = Calendar.getInstance();
     DateFormat df = new SimpleDateFormat(format);
-    Date d= now.getTime();
+    Date d = now.getTime();
     return df.format(d);
   }
 

@@ -52,21 +52,11 @@
 				<div class="tab-content" >
 					<div class="row tab-pane fade in active misPropiasVacaciones" >
 						  <div class="card" id="misPropiasVacaciones">
-						    <!-- <div class="card-header" id="headingOne">
-						      <h5 class="mb-0">
-						        <button id="muestraVacacionesPropias"  name="muestraVacacionesPropias" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						          <span class="glyphicon glyphicon-chevron-right"  ></span><span> Mis solicitudes</span>
-						        </button>
-						        <button id="ocultaVacacionesPropias" name="ocultaVacacionesPropias" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="display: none;">
-						          <span class="glyphicon glyphicon-chevron-down"  ></span><span> Mis solicitudes</span>
-						        </button>
-						      </h5>
-						    </div> -->
 						    <!-- <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion"> -->
 						    <div class="card">
 							<h3>Busca comisiones propias</h3>
 							<div class="asistenciaForm">      <!-- Formulario busqueda comisiones -->
-			      				<form th:action="@{/comisiones/comisionesPropias}" method="get">
+			      				<form th:action="@{/comisiones/comisionesPropias}" method="get" enctype="multipart/form-data">
 									<div class="row">
 										<div class="col-md-4">
 											<label>
@@ -134,7 +124,7 @@
 						</div>
 						
 						
-				<div class="row tab-pane fade in active" id="actualizamosVacacion" style="display: none; ">
+				<div class="row tab-pane fade in active" id="verDetalleComision" style="display: none; ">
 						<div class="card">
 							<form th:action="@{/comisiones/descargaArchivo}" 
 								method="get" class="actualizaVacacion" id="validarFechas"
@@ -313,9 +303,9 @@
 								<div class="col-md-4">
 									<form class="formModificar"
 										th:action="@{/comisiones/modificarComision}" method="get">
-										<a th:href="@{/comisiones/comisionesPropias}"><button
+										<button id="regresar"
 												type="button" class="btn btn-secondary" data-dismiss="modal"
-												th:text="#{COMUN.CANCELAR}"></button></a>
+												th:text="#{COMUN.CANCELAR}"></button>
 									</form>
 								</div>
 								<!-- 												<a th:href="@{/comisiones/comisionesEmpleados}"><button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button></a> -->
@@ -340,44 +330,6 @@
 				</div>
 				</div>
 			
-			<div class="modal fade" id="aceptarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-				  <div class="modal-dialog" role="document">
-				    <div class="modal-content">
-				      <div class="modal-header">
-				        <h3 class="modal-title" id="exampleModalLongTitle" th:text="#{COMUN.GUARDAR}"></h3>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				          <span aria-hidden="true">&times;</span>
-				        </button>
-				      </div>
-				      <div class="modal-body">
-				        <p th:text="#{COMUN.ACEPTA.CONFIRMACION}"></p>
-				      </div>
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
-				        <a href="" class="btn btn-danger" id="aceptaModal" th:text="#{COMUN.ACEPTAR}"></a>
-				      </div>
-				    </div>
-				  </div>
-				</div>
-				<div class="modal fade" id="rechazarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-				  <div class="modal-dialog" role="document">
-				    <div class="modal-content">
-				      <div class="modal-header">
-				        <h3 class="modal-title" id="exampleModalLongTitle" th:text="#{COMUN.ELIMINA}"></h3>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				          <span aria-hidden="true">&times;</span>
-				        </button>
-				      </div>
-				      <div class="modal-body">
-				        <p th:text="#{COMUN.RECHAZA.CONFIRMACION}"></p>
-				      </div>
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
-				        <a href="" class="btn btn-danger" id="rechazaModal" th:text="#{COMUN.RECHAZA}"></a>
-				      </div>
-				    </div>
-				  </div>
-				</div>	
 		</div>		
 		</th:block>
 		

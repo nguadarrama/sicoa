@@ -9,12 +9,7 @@ $(document).ready(function() {
 	  });
 	
 	$('.collapse').collapse();
-//	$('#collapseOne').collapse({
-//		  toggle: false
-//		})
-	//$("#botonGuardarVacaciones").disabled = true;
-	//document.getElementById("botonGuardarVacaciones").disabled=true;
-		//document.getElementById("validacionDias").style.display = "none";
+	
 	var disableddates = ["10-26-2018", "10-30-2018", "10-31-2018"];
 
 	  function DisableSpecificDates(date) {
@@ -41,9 +36,9 @@ $(document).ready(function() {
 		
 			
 		});
-		$("#miBotonCancelar").on('click', function(event){
+		$("#regresar").on('click', function(event){
 			event.preventDefault();
-			$("#actualizamosVacacion").css("display","none");
+			$("#verDetalleComision").css("display","none");
 			$(".misPropiasVacaciones").css("display","inline");
 		});
 		
@@ -169,9 +164,8 @@ $(document).ready(function() {
 						$('.actualizaVacacion #responsable').css("display","none");
 						$('.actualizaVacacion #responsableAux').css("display","inline");
 					}
-					$("#actualizamosVacacion").css("display","inline");
-					$(".misPropiasVacaciones").css("display","none");
-					
+					$(".misPropiasVacaciones").css("display","none");	
+					$("#verDetalleComision").css("display","inline");
 				});
 				
 				//$('.usuarioForm #usuarioModal').modal().slideUp(300).delay(400).fadeIn(400);

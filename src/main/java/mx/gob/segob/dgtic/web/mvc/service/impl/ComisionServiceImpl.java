@@ -29,18 +29,15 @@ import com.google.gson.reflect.TypeToken;
 
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
-import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.constants.ComisionEndPointConstants;
-import mx.gob.segob.dgtic.web.mvc.constants.LicenciaMedicaEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Comision;
 import mx.gob.segob.dgtic.web.mvc.dto.ComisionAux;
 import mx.gob.segob.dgtic.web.mvc.dto.GenerarReporteArchivoComision;
-import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
-import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.ComisionService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
+import mx.gob.segob.dgtic.web.mvc.service.constants.Constantes;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
@@ -60,8 +57,8 @@ public class ComisionServiceImpl implements ComisionService {
     HttpResponse response;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	//Se agrega el JWT a la cabecera para acceso al recurso rest
-	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+	/** Se agrega el JWT a la cabecera para acceso al recurso rest **/
+	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
     
     try {
       response = ClienteRestUtil.getCliente()
@@ -107,12 +104,11 @@ public class ComisionServiceImpl implements ComisionService {
     HttpResponse response;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	//Se agrega el JWT a la cabecera para acceso al recurso rest
-	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 
-    try { // se consume recurso rest
+    try {
       response = ClienteRestUtil.getCliente()
           .get(ComisionEndPointConstants.WEB_SERVICE_BUSCA_COMISION + "?id=" + idComision, header);
     } catch (ClienteException e) {
@@ -146,8 +142,8 @@ public class ComisionServiceImpl implements ComisionService {
     HttpResponse response;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	//Se agrega el JWT a la cabecera para acceso al recurso rest
-	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+	/** Se agrega el JWT a la cabecera para acceso al recurso rest **/
+	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 	
     try {
       response = ClienteRestUtil.getCliente()
@@ -183,12 +179,10 @@ public class ComisionServiceImpl implements ComisionService {
     Comision comision= new Comision();
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	//Se agrega el JWT a la cabecera para acceso al recurso rest
-	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     HttpEntity httpEntity = new BasicHttpEntity();
     HttpResponse response;
-    //BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
     Usuario usuario= new Usuario();
     usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
     comisionAux.setIdUsuario(usuario.getIdUsuario());
@@ -202,7 +196,7 @@ public class ComisionServiceImpl implements ComisionService {
         e1.printStackTrace();
     }
     
-    try { //se consume recurso rest
+    try {
         response=ClienteRestUtil.getCliente().put(ComisionEndPointConstants.WEB_SERVICE_AGREGA_COMISION, httpEntity, header);
     } catch (ClienteException e) {
         logger.error(e.getMessage(), e);
@@ -229,11 +223,10 @@ public class ComisionServiceImpl implements ComisionService {
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 	//Se agrega el JWT a la cabecera para acceso al recurso rest
-	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     HttpEntity httpEntity = new BasicHttpEntity();
     HttpResponse response;
-    // BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
     Usuario usuario = new Usuario();
     usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
     System.out.println("IdUsuario recuperado " + usuario.getIdUsuario());
@@ -244,11 +237,10 @@ public class ComisionServiceImpl implements ComisionService {
     try {
       httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
     } catch (ClienteException e1) {
-      // TODO Auto-generated catch block
       e1.printStackTrace();
     }
 
-    try { // se consume recurso rest
+    try { 
       response = ClienteRestUtil.getCliente()
           .put(ComisionEndPointConstants.WEB_SERVICE_MODIFICA_COMISION, httpEntity, header);
     } catch (ClienteException e) {
@@ -275,13 +267,11 @@ public class ComisionServiceImpl implements ComisionService {
   public void eliminaComisiones(String idComision, Authentication authentication) {
     HttpResponse response;
 
-    Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	//Se agrega el JWT a la cabecera para acceso al recurso rest
-	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 
-    try { // se consume recurso rest
+    try { 
       response = ClienteRestUtil.getCliente()
           .get(ComisionEndPointConstants.WEB_SERVICE_ELIMINA_COMISION + "?id=" + idComision, header);
     } catch (ClienteException e) {
@@ -299,8 +289,7 @@ public class ComisionServiceImpl implements ComisionService {
     HttpResponse response;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-    // Se agrega el JWT a la cabecera para acceso al recurso rest
-    Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+    Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 
     try {
       response = ClienteRestUtil.getCliente().get(
@@ -389,11 +378,10 @@ public class ComisionServiceImpl implements ComisionService {
     try {
         httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
     } catch (ClienteException e1) {
-        // TODO Auto-generated catch block
         e1.printStackTrace();
     }
     
-    try { //se consume recurso rest
+    try { 
         response=ClienteRestUtil.getCliente().put(ComisionEndPointConstants.WEB_SERVICE_MODIFICA_COMISION_ESTATUS_ARCHIVO, httpEntity, header);
     } catch (ClienteException e) {
         logger.error(e.getMessage(), e);
