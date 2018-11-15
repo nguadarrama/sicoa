@@ -193,7 +193,7 @@ $(document).ready(function() {
 							$('#descarga').css("display","none");
 						}
 					}
-					if(hmap.vacacion.idEstatus.idEstatus=='4'){
+					if(hmap.vacacion.idEstatus.idEstatus=='6'){
 						$('.actualizaArchivo1').css("display","none");
 						$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 						$('.descargaArchivo').css("display","inline");

@@ -496,7 +496,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 			}
 			String listaFechas="";
 			for(Vacaciones vacaciones: listaVacaciones){
-				if(vacaciones.getIdEstatus().getIdEstatus()!=3 && vacaciones.getIdEstatus().getIdEstatus()!=4){
+				if(vacaciones.getIdEstatus().getIdEstatus()!=3 && vacaciones.getIdEstatus().getIdEstatus()!=6){
 					Date fechaInicio=vacaciones.getFechaInicio();
 					Date fechaFin=vacaciones.getFechaFin();
 					
