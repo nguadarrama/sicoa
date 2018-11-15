@@ -225,7 +225,11 @@
 													</td>
 													<td th:if="${activaCheckbox}">
 														<input 
-															th:if="${asistencia.idEstatus.idEstatus == null and asistencia.idTipoDia.idTipoDia != 1}" 
+															th:if="${asistencia.idEstatus.idEstatus == null 
+																	and asistencia.idTipoDia.idTipoDia != 1
+																	and asistencia.idTipoDia.idTipoDia != 5
+																	and asistencia.idTipoDia.idTipoDia != 6
+																	and asistencia.idTipoDia.idTipoDia != 7}" 
 															th:type="checkbox" 
 															th:value="${asistencia.idAsistencia}" 
 															name="checkboxes"
