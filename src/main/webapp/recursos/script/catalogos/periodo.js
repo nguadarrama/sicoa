@@ -136,4 +136,54 @@ $(document).ready(function() {
             $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No encontrado</td></tr>'));
         }
     });   
+    
+    $(document).ready(function() { 
+    	 
+        $('#blockButton').click(function() { 
+            $('div.test').block({ message: null }); 
+        }); 
+ 
+        $('#blockButton2').click(function() { 
+            $('div.test').block({ 
+                message: '<h1>Procesando</h1>', 
+                css: { border: '3px solid #a00' } 
+            }); 
+        }); 
+ 
+        $('#unblockButton').click(function() { 
+            $('div.test').unblock(); 
+        }); 
+ 
+        $('a.test').click(function() { 
+            alert('link clicked'); 
+            return false; 
+        }); 
+    }); 
+    
+    $(document).ready(function() { 
+        $('#blockEdita').click(function() { 
+            $.blockUI();
+            $('#modalEdicion').submit();
+            setTimeout(function() { 
+                $.unblockUI({ 
+                    onUnblock: function(){ /**alert('onUnblock');**/ } 
+                }); 
+            }, 8000); 
+        }); 
+    });
+    
+    $(document).ready(function() { 
+        $('#blockAlta').click(function() { 
+            $.blockUI();
+            $('#modalAlta').submit();
+            setTimeout(function() { 
+                $.unblockUI({ 
+                    onUnblock: function(){ /**alert('onUnblock');**/ } 
+                }); 
+            }, 60000); 
+        }); 
+    });
+    
+    $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+    
 }); 

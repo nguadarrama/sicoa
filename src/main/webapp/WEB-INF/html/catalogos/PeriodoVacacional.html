@@ -47,7 +47,7 @@
            			</h1>
            			<hr/>
            			<!-- INICIO DE MENSAJES -->
-           			<div class="form-group" th:if="${MENSAJE_EXCEPCION}">
+           			<div class="form-group" id="demo8" th:if="${MENSAJE_EXCEPCION}">
 						<div class="alert alert-danger">
 							<span class="fa fa-exclamation-triangle"></span>
 			      			<span th:text="${MENSAJE_EXCEPCION}"></span>
@@ -95,7 +95,7 @@
 				</div>
 				
 				<div class="periodoForm">      <!-- Modal para editar -->
-		      		<form th:action="@{/catalogos/periodo/modifica}" method="get">
+		      		<form th:action="@{/catalogos/periodo/modifica}" method="get" id="modalEdicion">
 						<div class="modal fade" id="periodoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
@@ -137,7 +137,7 @@
 							    	</div>
 								    <div class="modal-footer">
 					    				<button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
-								    	<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+								    	<button type="button" class="btn btn-primary" data-dismiss="modal" id="blockEdita" th:text="GUARDAR" th:value="#{COMUN.GUARDAR}" ></button>
 								    </div>
 							  	</div>
 							</div>
@@ -146,7 +146,7 @@
       			</div>
       			
       			<div class="nuevoPeriodoForm"> <!-- Modal para agregar -->
-		      		<form th:action="@{/catalogos/periodo/agrega}" method="post">
+		      		<form th:action="@{/catalogos/periodo/agrega}" method="post" id="modalAlta">
 						<div class="modal fade" id="nuevoPeriodoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
@@ -188,7 +188,8 @@
 							    	</div>
 								    <div class="modal-footer">
 					    				<button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{COMUN.CANCELAR}"></button>
-								    	<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
+<!-- 								    	<input type="submit" class="btn btn-primary" th:value="#{COMUN.GUARDAR}" /> -->
+								    	<button type="button" class="btn btn-primary" data-dismiss="modal" id="blockAlta" th:text="GUARDAR" th:value="#{COMUN.GUARDAR}" ></button>
 								    </div>
 							  	</div>
 							</div>
@@ -228,11 +229,12 @@
 	        <script charset="utf-8" th:src="@{/recursos/assets/datatables/responsive-2.1.0/js/dataTables.responsive.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
-	        <script charset="utf-8" th:src="@{/recursos/script/catalogos/periodo.js}"></script>	 
-	        
+	        <script charset="utf-8" th:src="@{/recursos/script/catalogos/periodo.js}"></script>	 	        
 			<script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/moment.js}"></script>
-	        <link rel="stylesheet" th:href="@{/recursos/assets/date-picker/style/jquery-ui.css}" />		       
+	        <script charset="utf-8" th:src="@{/recursos/assets/blockUI/js/blockUi.js}"></script>
+	        <link rel="stylesheet" th:href="@{/recursos/assets/date-picker/style/jquery-ui.css}" />
+	       	
 	        
 		</th:block>
 	</body>
