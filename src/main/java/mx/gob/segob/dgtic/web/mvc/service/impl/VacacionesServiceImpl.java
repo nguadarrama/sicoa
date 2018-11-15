@@ -218,7 +218,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
+		System.out.println("Datos en front "+ vacaciones.getIdDetalle()+ " "+ vacaciones.getIdArchivo().getIdArchivo());
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("detalleVacacion", vacaciones);
 
@@ -355,7 +355,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS+ "?claveUsuario="+claveUsuario+"&nombre="+nombre+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad+"&idEstatus="+idEstatus, header);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS+ "?claveUsuario="+removerEspacios(claveUsuario)+"&nombre="+removerEspacios(nombre)+"&apellidoPaterno="+removerEspacios(apellidoPaterno)+"&apellidoMaterno="+removerEspacios(apellidoMaterno)+"&idUnidad="+idUnidad+"&idEstatus="+idEstatus, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -385,7 +385,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin, header);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+removerEspacios(claveUsuario)+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -555,7 +555,12 @@ public class VacacionesServiceImpl implements VacacionesService{
 		return vacacio;
 	}
 
-	
+	private String removerEspacios(String string) {
+	    if(string != null && !string.isEmpty()) {
+	      return string.replace(" ", "_");
+	    }
+	    return string;
+	  }
 	
 
 

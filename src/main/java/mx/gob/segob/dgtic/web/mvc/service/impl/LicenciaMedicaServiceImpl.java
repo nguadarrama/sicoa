@@ -108,8 +108,8 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		try{
-			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_EMPLEADOS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&nombre="+nombre
-					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad, header);
+			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_EMPLEADOS+ "?claveUsuario="+removerEspacios(claveUsuario)+"&idEstatus="+idEstatus+"&nombre="+removerEspacios(nombre)
+					+"&apellidoPaterno="+removerEspacios(apellidoPaterno)+"&apellidoMaterno="+removerEspacios(apellidoMaterno)+"&idUnidad="+idUnidad, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -230,8 +230,8 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		try{
-			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_POR_UNIDAD+ "?idUnidad="+idUnidad+"&claveUsuario="+claveUsuario+"&nombre="+nombre
-					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno, header);
+			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_POR_UNIDAD+ "?idUnidad="+idUnidad+"&claveUsuario="+removerEspacios(claveUsuario)+"&nombre="+removerEspacios(nombre)
+					+"&apellidoPaterno="+removerEspacios(apellidoPaterno)+"&apellidoMaterno="+removerEspacios(apellidoMaterno), header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -416,4 +416,10 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		return listaFechas;
 	}
 
+	private String removerEspacios(String string) {
+	    if(string != null && !string.isEmpty()) {
+	      return string.replace(" ", "_");
+	    }
+	    return string;
+	  }
 }

@@ -46,7 +46,7 @@ public class VacacionPeriodoServiceImpl implements VacacionPeriodoService{
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_USUARIOS_VACACIONES+ "?claveUsuario="+claveUsuario+"&nombre="+nombre+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad, header);
+			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_USUARIOS_VACACIONES+ "?claveUsuario="+removerEspacios(claveUsuario)+"&nombre="+removerEspacios(nombre)+"&apellidoPaterno="+removerEspacios(apellidoPaterno)+"&apellidoMaterno="+removerEspacios(apellidoMaterno)+"&idUnidad="+idUnidad, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -75,4 +75,11 @@ public class VacacionPeriodoServiceImpl implements VacacionPeriodoService{
 		
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
+	
+	private String removerEspacios(String string) {
+	    if(string != null && !string.isEmpty()) {
+	      return string.replace(" ", "_");
+	    }
+	    return string;
+	  }
 }

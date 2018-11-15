@@ -134,7 +134,7 @@ $(document).ready(function() {
 			var href = $(this).attr('href');
 			var text = $(this).text();
 				$.get(href, function(hmap, status) {
-					//alert(hmap.vacacion.idVacacion.idVacacion),
+					//lert(hmap.vacacion.idVacacion.idVacacion),
 					$('.actualizaVacacion #numeroEmpleado').val(hmap.vacacion.idUsuario.claveUsuario);
 					
 					$('.actualizaVacacion #nombre').val(hmap.vacacion.idUsuario.nombre);
@@ -165,7 +165,7 @@ $(document).ready(function() {
 						$('.eliminaVacacion #idVacacionEliminar').val(hmap.vacacion.idDetalle);
 						$('#botonEliminarVacaciones').css("display","inline");
 					}
-					//alert(hmap.vacacion.idArchivo.idArchivo);
+					alert(hmap.vacacion.idArchivo.idArchivo+" "+hmap.vacacion.idEstatus.idEstatus);
 					if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
 						$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 						$('.descargaArchivo').css("display","inline");

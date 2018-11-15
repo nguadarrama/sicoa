@@ -157,9 +157,12 @@ $(document).ready(function() {
 //					}
 					if(hmap.vacacion.idEstatus.idEstatus=='1'){
 						$('#descarga').css("display","inline");
+						$('.actualizaArchivo1 #idDetalle').val(hmap.vacacion.idDetalle);
 						$('.cancelaVacacion').css("display","none");
 						$('.actualizaArchivo1').css("display","inline");
 						if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
+							$('.actualizaArchivo1 #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
+							
 							$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 							$('.descargaArchivo').css("display","inline");
 							$('.rechazaVacacion').css("display","inline");

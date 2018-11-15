@@ -621,12 +621,14 @@ public class VacacionesController {
     	Archivo archivoDto=new Archivo();
     	vacaciones.setIdDetalle(idDetalle);
     	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
+    		System.out.println("id de archivo actualizar "+idArchivo);
     		idArchivoAux=archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo,"vacacion-", authentication);
     		archivoDto.setIdArchivo(idArchivo);
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones, authentication);
     	}else{
     		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones","vacacion-", authentication);
+    		System.out.println("id de archivo guardar "+idArchivoAux.getIdArchivo());
     		archivoDto.setIdArchivo(idArchivoAux.getIdArchivo());
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones, authentication);

@@ -151,6 +151,10 @@ public class LicenciasMedicasController {
 		List<LicenciaMedica> lista= new ArrayList<>();
 		System.out.println("Haciendo la consulta de empleados claveUsuario "+claveUsuario+" nombre "+nombre+" apellidoPaterno "+apellidoPaterno
 		+" apellidoMaterno "+apellidoMaterno);
+		nombre.trim().replace(" ", "_");
+	    claveUsuario.trim().replace(" ", "_");
+	    apellidoPaterno.trim().replace(" ", "_");
+	    apellidoMaterno.trim().replace(" ", "_");
 		if(nombre==null || nombre.trim().isEmpty()){
 			nombre="";
 		}
@@ -186,7 +190,10 @@ public class LicenciasMedicasController {
 	@RequestMapping(value={"licenciasEmpleados"}, method = RequestMethod.GET)
     public String obtieneLicenciasPropias(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, 
     		String idEstatus, String idUnidad, Model model, HttpSession session, Authentication authentication) {
-		
+		nombre.trim().replace(" ", "_");
+	    claveUsuario.trim().replace(" ", "_");
+	    apellidoPaterno.trim().replace(" ", "_");
+	    apellidoMaterno.trim().replace(" ", "_");
 		System.out.println("Datos claveUsuario "+ "nombre "+nombre+" apellidoPaterno "+apellidoPaterno+" idEstatus "
     		+idEstatus+" apellidoMaterno "+apellidoMaterno+" idUnidad "+idUnidad);
 		if(nombre==null || nombre.trim().isEmpty()){
