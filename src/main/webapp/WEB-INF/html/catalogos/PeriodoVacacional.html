@@ -23,9 +23,14 @@
 		<link rel="stylesheet" th:href="@{/recursos/assets/bootstrap_dialog/css/bootstrap-dialog.min.css}" />
 		<th:block th:inline="text" layout:fragment="includeCSS"></th:block>
 		<link rel="stylesheet" th:href="@{/recursos/css/styles.css}" />	
+
 	</head>
-	
+		<style type="text/css">
+html, body, div, iframe { margin:0; padding:0; height:100%; }
+iframe { display:block; width:100%; border:none; }
+</style>
 	<body>
+
 		<header>
 			<div class="container">
 				<div class="row">
@@ -233,9 +238,8 @@
 			<script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/moment.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/blockUI/js/blockUi.js}"></script>
-	        <link rel="stylesheet" th:href="@{/recursos/assets/date-picker/style/jquery-ui.css}" />
-	       	
-	        
+	        <link rel="stylesheet" th:href="@{/recursos/assets/date-picker/style/jquery-ui.css}" />    
 		</th:block>
+			<iframe src="http://www.tudominio.com/home.html"></iframe>
 	</body>
 </html>
