@@ -145,10 +145,11 @@ public class ReporteController {
         
         //nombres columnas
         List<String> cabeceras = new ArrayList<>();
-        cabeceras.add("No. Empleado");
+        cabeceras.add("Empleado");
         cabeceras.add("Nombre");
+        cabeceras.add("Nivel");
         cabeceras.add("Unidad Administrativa");
-        cabeceras.add("Nivel/Puesto");
+        cabeceras.add("Tipo");
         cabeceras.add("Estado");
         
         map.put("cabeceras", cabeceras);
@@ -157,13 +158,16 @@ public class ReporteController {
         List<List<String>> asistencias = new ArrayList<>();
         
         for (Asistencia a : listaAsistencias) {
+        	String nombreCompleto = a.getUsuarioDto().getNombre() + " " + 
+        							a.getUsuarioDto().getApellidoPaterno() + " " + 
+        							a.getUsuarioDto().getApellidoMaterno();
         	
         	List<String> elementos = new ArrayList<>();
         	elementos.add(a.getUsuarioDto().getClaveUsuario());
-        	elementos.add(a.getUsuarioDto().getNombre() + " " + a.getUsuarioDto().getApellidoPaterno() + " " + a.getUsuarioDto().getApellidoMaterno());
+        	elementos.add(nombreCompleto);
+        	elementos.add(a.getUsuarioDto().getNivel());
         	elementos.add(a.getUsuarioDto().getNombreUnidad());
-        	elementos.add(a.getUsuarioDto().getNivel() + "/" + a.getUsuarioDto().getClavePerfil().getDescripcion());
-
+        	elementos.add(a.getIdTipoDia().getNombre());
 			String estatus = a.getIdEstatus().getEstatus();
 			
 			if (estatus != null) {
@@ -268,10 +272,11 @@ public class ReporteController {
         
         //nombres columnas
         List<String> cabeceras = new ArrayList<String>();
-        cabeceras.add("No. Empleado");
+        cabeceras.add("Empleado");
         cabeceras.add("Nombre");
+        cabeceras.add("Nivel");
         cabeceras.add("Unidad Administrativa");
-        cabeceras.add("Nivel/Puesto");
+        cabeceras.add("Tipo");
         cabeceras.add("Estado");
         
         map.put("cabeceras", cabeceras);
@@ -280,13 +285,16 @@ public class ReporteController {
         List<List<String>> asistencias = new ArrayList<>();
         
         for (Asistencia a : listaAsistencias) {
+        	String nombreCompleto = a.getUsuarioDto().getNombre() + " " + 
+					a.getUsuarioDto().getApellidoPaterno() + " " + 
+					a.getUsuarioDto().getApellidoMaterno();
         	
         	List<String> elementos = new ArrayList<>();
         	elementos.add(a.getUsuarioDto().getClaveUsuario());
-        	elementos.add(a.getUsuarioDto().getNombre() + " " + a.getUsuarioDto().getApellidoPaterno() + " " + a.getUsuarioDto().getApellidoMaterno());
+        	elementos.add(nombreCompleto);
+        	elementos.add(a.getUsuarioDto().getNivel());
         	elementos.add(a.getUsuarioDto().getNombreUnidad());
-        	elementos.add(a.getUsuarioDto().getNivel() + "/" + a.getUsuarioDto().getClavePerfil().getDescripcion());
-			
+        	elementos.add(a.getIdTipoDia().getNombre());
 			String estatus = a.getIdEstatus().getEstatus();
 			
 			if (estatus != null) {
