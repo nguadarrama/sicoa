@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
+import mx.gob.segob.dgtic.web.mvc.dto.BusquedaDto;
 import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
 import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedicaAux;
@@ -92,7 +93,12 @@ public class LicenciasMedicasController {
 			idEstatus="";
 		}
 		List<LicenciaMedica> lista= new ArrayList<>();
-		lista=licenciaMedicaService.obtenerListaLicenciaMedicaPorFiltros(claveUsuario, fechaInicioBusca1, fechaFinBusca1, idEstatus, authentication);
+		BusquedaDto busquedaDto = new BusquedaDto();
+		busquedaDto.setFechaFin(fechaFinBusca1);
+		busquedaDto.setFechaInicio(fechaInicioBusca1);
+		busquedaDto.setClaveUsuario(claveUsuario);
+		busquedaDto.setIdEstatus(idEstatus);
+		lista=licenciaMedicaService.obtenerListaLicenciaMedicaPorFiltros(busquedaDto, authentication);
 		System.out.println("Haciendo la consulta "+lista.size());
 		model.addAttribute("licenciasMedicas",lista);
 		model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus(authentication));
@@ -151,10 +157,6 @@ public class LicenciasMedicasController {
 		List<LicenciaMedica> lista= new ArrayList<>();
 		System.out.println("Haciendo la consulta de empleados claveUsuario "+claveUsuario+" nombre "+nombre+" apellidoPaterno "+apellidoPaterno
 		+" apellidoMaterno "+apellidoMaterno);
-		nombre.trim().replace(" ", "_");
-	    claveUsuario.trim().replace(" ", "_");
-	    apellidoPaterno.trim().replace(" ", "_");
-	    apellidoMaterno.trim().replace(" ", "_");
 		if(nombre==null || nombre.trim().isEmpty()){
 			nombre="";
 		}
@@ -167,6 +169,7 @@ public class LicenciasMedicasController {
 		if(apellidoMaterno==null || apellidoMaterno.trim().isEmpty()){
 			apellidoMaterno="";
 		}
+		
 		String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuarioAux = parts[1];
@@ -174,8 +177,14 @@ public class LicenciasMedicasController {
     	usuario=usuarioService.buscaUsuario(claveUsuarioAux, authentication);
     	String idUnidad=""+usuario.getIdUnidad();
     	System.out.println("idUnidad para buscar "+idUnidad);
-		//String idUnidad="13";
-		model.addAttribute("licencias",licenciaMedicaService.obtenerLicenciasPorUnidad(idUnidad, claveUsuario, nombre, apellidoPaterno, apellidoMaterno, authentication));
+    	BusquedaDto busquedaDto = new BusquedaDto();
+    	busquedaDto.setApellidoMaterno(apellidoMaterno);
+    	busquedaDto.setApellidoPaterno(apellidoPaterno);
+    	busquedaDto.setClaveUsuario(claveUsuario);
+    	busquedaDto.setIdUnidad(idUnidad);
+    	busquedaDto.setNombre(nombre);
+    	
+		model.addAttribute("licencias",licenciaMedicaService.obtenerLicenciasPorUnidad(busquedaDto, authentication));
 		if(!this.getMensaje().equals("")){
 			if(this.mensaje.contains("correctamente"))
 				model.addAttribute("MENSAJE", this.mensaje);
@@ -190,10 +199,6 @@ public class LicenciasMedicasController {
 	@RequestMapping(value={"licenciasEmpleados"}, method = RequestMethod.GET)
     public String obtieneLicenciasPropias(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, 
     		String idEstatus, String idUnidad, Model model, HttpSession session, Authentication authentication) {
-		nombre.trim().replace(" ", "_");
-	    claveUsuario.trim().replace(" ", "_");
-	    apellidoPaterno.trim().replace(" ", "_");
-	    apellidoMaterno.trim().replace(" ", "_");
 		System.out.println("Datos claveUsuario "+ "nombre "+nombre+" apellidoPaterno "+apellidoPaterno+" idEstatus "
     		+idEstatus+" apellidoMaterno "+apellidoMaterno+" idUnidad "+idUnidad);
 		if(nombre==null || nombre.trim().isEmpty()){
@@ -240,7 +245,14 @@ public class LicenciasMedicasController {
 		
 		System.out.println("idUnidad "+idUnidad);
 		List<LicenciaMedica> lista= new ArrayList<>();
-		lista=licenciaMedicaService.obtenerListaLicenciaMedicaEmpleados(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idEstatus, idUnidad, authentication);
+		BusquedaDto busquedaDto = new BusquedaDto();
+		busquedaDto.setClaveUsuario(claveUsuario);
+		busquedaDto.setNombre(nombre);
+		busquedaDto.setApellidoPaterno(apellidoPaterno);
+		busquedaDto.setApellidoMaterno(apellidoMaterno);
+		busquedaDto.setIdEstatus(idEstatus);
+		busquedaDto.setIdUnidad(idUnidad);
+		lista=licenciaMedicaService.obtenerListaLicenciaMedicaEmpleados(busquedaDto, authentication);
 		System.out.println("Haciendo la consulta "+lista.size());
 		model.addAttribute("licenciasMedicas",lista);
 		model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));

@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
+import mx.gob.segob.dgtic.web.mvc.dto.BusquedaDto;
 import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
@@ -253,7 +254,13 @@ public class VacacionesController {
 	    model.addAttribute("listaPeriodos",periodoService.periodos(authentication));
 	   // model.addAttribute("vacacion",vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo()));
     	List<Vacaciones> vacaciones = new ArrayList<>();
-    	vacaciones=vacacionesService.consultaVacacionesPropiasPorFiltros(claveUsuario, idPeriodo, idEstatus, fechaInicioBusca1, fechaFinBusca1, authentication);
+    	BusquedaDto busquedaDto = new BusquedaDto();
+    	busquedaDto.setClaveUsuario(claveUsuario);
+    	busquedaDto.setIdEstatus(idEstatus);
+    	busquedaDto.setIdPeriodo(idPeriodo);
+    	busquedaDto.setFechaInicio(fechaInicioBusca1);
+    	busquedaDto.setFechaFin(fechaFinBusca1);
+    	vacaciones=vacacionesService.consultaVacacionesPropiasPorFiltros(busquedaDto, authentication);
     	if(vacaciones.size()>0){
     		model.addAttribute("vacacionesPropias",vacaciones);	
     	}else{
@@ -358,7 +365,14 @@ public class VacacionesController {
     	
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 	    List<Vacaciones> vacaciones = new ArrayList<>();
-	    vacaciones=vacacionesService.obtenerVacacionesPorFiltros(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, idEstatus, authentication);
+	    BusquedaDto busquedaDto = new BusquedaDto();
+    	busquedaDto.setClaveUsuario(claveUsuario);
+    	busquedaDto.setNombre(nombre);
+    	busquedaDto.setApellidoPaterno(apellidoPaterno);
+    	busquedaDto.setApellidoMaterno(apellidoMaterno);
+    	busquedaDto.setIdUnidad(idUnidad);
+    	busquedaDto.setIdEstatus(idEstatus);
+	    vacaciones=vacacionesService.obtenerVacacionesPorFiltros(busquedaDto, authentication);
 	    System.out.println("Tamaño "+vacaciones.size());
 	    if(vacaciones.size()>0){
 	    	model.addAttribute("vacacionesEmpleados",vacaciones);

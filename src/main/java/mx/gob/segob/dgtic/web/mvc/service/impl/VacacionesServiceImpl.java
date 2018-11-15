@@ -38,10 +38,12 @@ import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
+import mx.gob.segob.dgtic.web.mvc.dto.BusquedaDto;
 import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
+import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
 import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
@@ -348,14 +350,27 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 
 	@Override
-	public List<Vacaciones> obtenerVacacionesPorFiltros(String claveUsuario, String nombre, String apellidoPaterno,
-			String apellidoMaterno, String idUnidad, String idEstatus, Authentication authentication) {
+	public List<Vacaciones> obtenerVacacionesPorFiltros(BusquedaDto busquedaDto, Authentication authentication) {
 		List<Vacaciones> listaVacaciones = new ArrayList<>();
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		HttpEntity httpEntity = new BasicHttpEntity();
+		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("busqueda", busquedaDto);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS+ "?claveUsuario="+removerEspacios(claveUsuario)+"&nombre="+removerEspacios(nombre)+"&apellidoPaterno="+removerEspacios(apellidoPaterno)+"&apellidoMaterno="+removerEspacios(apellidoMaterno)+"&idUnidad="+idUnidad+"&idEstatus="+idEstatus, header);
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_POR_FILTROS,httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -378,14 +393,27 @@ public class VacacionesServiceImpl implements VacacionesService{
 	}
 
 	@Override
-	public List<Vacaciones> consultaVacacionesPropiasPorFiltros(String claveUsuario, String idPeriodo,
-			String idEstatus, String pfechaInicio, String pfechaFin, Authentication authentication) {
+	public List<Vacaciones> consultaVacacionesPropiasPorFiltros(BusquedaDto busquedaDto, Authentication authentication) {
 		List<Vacaciones> listaVacaciones = new ArrayList<>();
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		HttpEntity httpEntity = new BasicHttpEntity();
+		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
+		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("busqueda", busquedaDto);
+
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try{
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+removerEspacios(claveUsuario)+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin, header);
+			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS,httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

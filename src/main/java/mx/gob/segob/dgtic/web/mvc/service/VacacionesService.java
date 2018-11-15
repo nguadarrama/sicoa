@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.security.core.Authentication;
 
+import mx.gob.segob.dgtic.web.mvc.dto.BusquedaDto;
 import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
 import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
@@ -18,10 +19,8 @@ public interface VacacionesService {
 	public Vacaciones modificaVacaciones(Vacaciones vacaciones, Authentication authentication);
 	public VacacionPeriodo buscaVacacionPeriodoPorClaveUsuarioYPeriodo(String claveUsuario, Integer idPeriodo, Authentication authentication);
 	public Vacaciones aceptaORechazaVacaciones(Vacaciones vacaciones, Integer idDetalle, Authentication authentication);
-	public List<Vacaciones> obtenerVacacionesPorFiltros(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, 
-			String idUnidad, String idEstatus, Authentication authentication);
-	public List<Vacaciones> consultaVacacionesPropiasPorFiltros(String claveUsuario, String idPeriodo, String idEstatus,
-			String pfechaInicio, String pfechaFin, Authentication authentication );
+	public List<Vacaciones> obtenerVacacionesPorFiltros(BusquedaDto busquedaDto, Authentication authentication);
+	public List<Vacaciones> consultaVacacionesPropiasPorFiltros(BusquedaDto busquedaDto, Authentication authentication );
 	public reporte generaReporte(GeneraReporteArchivo generaReporteArchivo, Authentication authentication);
 	public String recuperaDiasVacacioness(String claveUsuario, Authentication authentication);
 	public Vacaciones cancelaVacaciones(Integer idDetalle, Authentication authentication);
