@@ -33,16 +33,14 @@ import com.google.gson.reflect.TypeToken;
 
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
-import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.constants.LicenciaMedicaEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.BusquedaDto;
-import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
 import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedicaAux;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
-import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
 import mx.gob.segob.dgtic.web.mvc.service.LicenciaMedicaService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
+import mx.gob.segob.dgtic.web.mvc.service.constants.Constantes;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
@@ -59,23 +57,20 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	@Override
 	public List<LicenciaMedica> obtenerListaLicenciaMedicaPorFiltros(BusquedaDto busquedaDto, Authentication authentication) {
 		
-		List<LicenciaMedica> listaLicencias = new ArrayList<>();
+		List<LicenciaMedica> listaLicencias;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("busqueda", busquedaDto);
+		Map<String, Object> content = new HashMap<>();
+		content.put(Constantes.BUSQUEDA, busquedaDto);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warn. {} ", e1);
 		}
 		try{
 			response = ClienteRestUtil.getCliente().put(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_POR_FILTROS,httpEntity,header);
@@ -95,7 +90,7 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros.: "+response.getStatusLine().getReasonPhrase());
 		}
 		return listaLicencias;
 	}
@@ -110,23 +105,21 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 
 	@Override
 	public List<LicenciaMedica> obtenerListaLicenciaMedicaEmpleados(BusquedaDto busquedaDto, Authentication authentication) {
-		List<LicenciaMedica> listaLicencias = new ArrayList<>();
+		List<LicenciaMedica> listaLicencias;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("busqueda", busquedaDto);
+	
+		Map<String, Object> content = new HashMap<>();
+		content.put(Constantes.BUSQUEDA, busquedaDto);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warn.. {} ",e1);
 		}
 		try{
 			response = ClienteRestUtil.getCliente().put(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_EMPLEADOS,httpEntity, header);
@@ -146,35 +139,34 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros--: "+response.getStatusLine().getReasonPhrase());
 		}
 		return listaLicencias;
 	}
 
 	@Override
 	public LicenciaMedica AgregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario, Authentication authentication) {
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HttpEntity httpEntity = new BasicHttpEntity();
 		HttpResponse response;
-		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		Usuario usuario= new Usuario();
-		usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
-		System.out.println("id del usuario "+usuario.getIdUsuario());
+		LicenciaMedica licenciaMedicaRespuesta;
+		Usuario usuario;
+		usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
+		logger.info("id del usuario: {} ",usuario.getIdUsuario());
 		licenciaMedica.setIdUsuario(usuario.getIdUsuario());
 		licenciaMedica.setIdEstatus(1);
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("licenciaMedica", licenciaMedica);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warn... {} ", e1);
 		}
 		
 		try { //se consume recurso rest
@@ -200,12 +192,13 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 
 	@Override
 	public LicenciaMedica buscaLicenciaMedica(Integer idLicencia, Authentication authentication) {
-		LicenciaMedica licencia = new LicenciaMedica();
+		LicenciaMedica licencia;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
@@ -241,25 +234,23 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 
 	@Override
 	public List<LicenciaMedica> obtenerLicenciasPorUnidad(BusquedaDto busquedaDto, Authentication authentication) {
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-		List<LicenciaMedica> listaLicencias= new ArrayList<>();
+		List<LicenciaMedica> listaLicencias;
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
+		
 		HttpEntity httpEntity = new BasicHttpEntity();
 		HttpResponse response;
-		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("busqueda", busquedaDto);
+		
+		Map<String, Object> content = new HashMap<>();
+		content.put(Constantes.BUSQUEDA, busquedaDto);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warn ... {} ",e1);
 		}
-		
 		try{
 			response = ClienteRestUtil.getCliente().put(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_POR_UNIDAD, httpEntity, header);
 		} catch (ClienteException e) {
@@ -280,12 +271,12 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		} else {
 			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
 		}
-		System.out.println("Recuperados "+listaLicencias.size());
+		logger.info("Recuperados: {} ",listaLicencias.size());
 		for(LicenciaMedica licencia: listaLicencias){
-			if(licencia.getTotalLicencias()==null || licencia.getTotalLicencias().toString().isEmpty()){
+			if(licencia.getTotalLicencias().isEmpty()){
 				licencia.setTotalLicencias("0");
 			}
-			if(licencia.getDiasTotales()==null || licencia.getDiasTotales().toString().isEmpty()){
+			if(licencia.getDiasTotales().isEmpty()){
 				licencia.setDiasTotales("0");
 			}
 		}
@@ -294,27 +285,26 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 
 	@Override
 	public LicenciaMedica modificaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario, Authentication authentication) {
-		LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
+		LicenciaMedica licenciaMedicaRespuesta;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HttpEntity httpEntity = new BasicHttpEntity();
 		HttpResponse response;
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		Usuario usuario= new Usuario();
-		usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
-		System.out.println("IdUsuario recuperado "+usuario.getIdUsuario());
+		Usuario usuario;
+		usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
+		logger.info("IdUsuario recuperado: {} ",usuario.getIdUsuario());
 		licenciaMedica.setIdUsuario(usuario.getIdUsuario());
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("licenciaMedica", licenciaMedica);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn(".Warn : {} ",e1);
 		}
 		
 		try { //se consume recurso rest
@@ -339,12 +329,13 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 
 	@Override
 	public LicenciaMedica buscaDiasLicenciaMedica(String claveUsuario, Authentication authentication) {
-		LicenciaMedica licencia = new LicenciaMedica();
+		LicenciaMedica licencia;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
@@ -371,11 +362,12 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 
 	@Override
 	public String consultaDiasPorBloquear(String claveUsuario, Authentication authentication) {
-		List<LicenciaMedica> listaLicencias = new ArrayList<>();
+		List<LicenciaMedica> listaLicencias;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		String apellidoPaterno="";
 		String apellidoMaterno="";
 		String idUnidad="";
@@ -408,22 +400,21 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		SimpleDateFormat sdfnuevo = new SimpleDateFormat("dd-MM-yyyy");
 		for(LicenciaMedica licenciaMedica: listaLicencias){
 			if(licenciaMedica.getIdEstatus().getIdEstatus()!=3){
-				System.out.println("fechaInicio "+licenciaMedica.getFechaInicio()+" fechaFin "+licenciaMedica.getFechaFin());
+				logger.info("fechaInicio: {} ",licenciaMedica.getFechaInicio()+" fechaFin "+licenciaMedica.getFechaFin());
 				Date fechaInicio=null;
 				Date fechaFin=null;
 				try{
 					fechaInicio=sdfnuevo.parse(licenciaMedica.getFechaInicio());
 				 fechaFin=sdfnuevo.parse(licenciaMedica.getFechaFin());
 				}catch(Exception e){
-					e.printStackTrace();
+					logger.warn("..Warn : {}",e);
 				}
 				
 				Calendar c1 = Calendar.getInstance();
-				//System.out.println("Fechas fecha inicial "+detalleVacacionDto.getFechaInicio()+" fecha final "+detalleVacacionDto.getFechaFin());
 			    c1.setTime(fechaInicio);
 			    Calendar c2 = Calendar.getInstance();
 			    c2.setTime(fechaFin);
-			    List<Date> listaFechasAux = new ArrayList<Date>();
+			    List<Date> listaFechasAux = new ArrayList<>();
 			    while (!c1.after(c2)) {
 			        listaFechasAux.add(c1.getTime());
 			        c1.add(Calendar.DAY_OF_MONTH, 1);
@@ -433,23 +424,16 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 			    for (Iterator<Date> it = listaFechasAux.iterator(); it.hasNext();) {
 			        Date date = it.next();
 			        fecha = sdf1.format(date);
-			        listaFechas+=""+fecha+",";
+			        listaFechas =""+fecha+",";
 			    }
 			}  
 		}
 			if(!listaFechas.isEmpty() && listaFechas!=null){
 			listaFechas=listaFechas.substring(0, (listaFechas.length()- 1));
 			}
-			System.out.println("Fecha de fechas desde el array "+listaFechas);
-		
-		//return listaFechas;
+			logger.info("Fecha de fechas desde el array: {} ",listaFechas);
 		return listaFechas;
 	}
 
-	private String removerEspacios(String string) {
-	    if(string != null && !string.isEmpty()) {
-	      return string.replace(" ", "_");
-	    }
-	    return string;
-	  }
+
 }

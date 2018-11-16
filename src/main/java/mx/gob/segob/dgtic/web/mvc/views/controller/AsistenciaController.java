@@ -75,16 +75,16 @@ public class AsistenciaController  {
 	private UnidadAdministrativaService unidadAdministrativaService;
 	
 	//JUSTIFICACION
-	private String MENSAJE_REGISTRO_JUSTIFICACION = "La justificación ha quedado registrada";
-	private String MENSAJE_AUTORIZA_JUSTIFICACION = "La justificación ha sido aceptada";
-	private String MENSAJE_RECHAZA_JUSTIFICACION = "La justificación ha sido marcada para enviar a descuento";
+	private static final String MENSAJE_REGISTRO_JUSTIFICACION = "La justificación ha quedado registrada";
+	private static final String MENSAJE_AUTORIZA_JUSTIFICACION = "La justificación ha sido aceptada";
+	private static final String MENSAJE_RECHAZA_JUSTIFICACION = "La justificación ha sido marcada para enviar a descuento";
 	
 	//DESCUENTO
-	private String MENSAJE_REGISTRO_DESCUENTO     = "La incidencia ha sido marcada para enviar a descuento";
-	private String MENSAJE_AUTORIZA_DESCUENTO     = "Esta incidencia será enviada a descuento";
-	private String MENSAJE_RECHAZA_DESCUENTO      = "El descuento ha sido aceptado";
+	private static final String MENSAJE_REGISTRO_DESCUENTO     = "La incidencia ha sido marcada para enviar a descuento";
+	private static final String MENSAJE_AUTORIZA_DESCUENTO     = "Esta incidencia será enviada a descuento";
+	private static final String MENSAJE_RECHAZA_DESCUENTO      = "El descuento ha sido aceptado";
 	
-	private String MENSAJE_EXCEPCION = "No se registró la operación.";
+	private static final String MENSAJE_EXCEPCION = "No se registró la operación.";
 	
 	//EMPLEADO
 	@RequestMapping(value={"empleado"}, method = RequestMethod.GET)
@@ -270,7 +270,7 @@ public class AsistenciaController  {
     		} 
 
     	} catch(Exception e) {
-    		new Exception("No se logró crear la incidencia " + e.getMessage());
+    		new Exception("No se logró crear la incidencia .." + e.getMessage());
     	}
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication );

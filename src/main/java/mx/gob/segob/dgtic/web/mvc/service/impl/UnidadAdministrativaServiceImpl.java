@@ -20,7 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -28,11 +27,11 @@ import com.google.gson.reflect.TypeToken;
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
-import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.UnidadAdministrativa;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.UsuarioUnidadAdministrativa;
 import mx.gob.segob.dgtic.web.mvc.service.UnidadAdministrativaService;
+import mx.gob.segob.dgtic.web.mvc.service.constants.Constantes;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
@@ -46,12 +45,13 @@ public class UnidadAdministrativaServiceImpl implements UnidadAdministrativaServ
 	
 	@Override
 	public List<UsuarioUnidadAdministrativa> obtenerListaUnidadAdministrativa(Authentication authentication) {
-		List<UsuarioUnidadAdministrativa> listaUnidadAdministrativa = new ArrayList<>();
+		List<UsuarioUnidadAdministrativa> listaUnidadAdministrativa;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try{
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_UNIDAD_ADMINISTRATIVA, header);
@@ -94,16 +94,16 @@ public class UnidadAdministrativaServiceImpl implements UnidadAdministrativaServ
 		UsuarioUnidadAdministrativa usuarioUnidadAdministrativa= new UsuarioUnidadAdministrativa();
 		usuarioUnidadAdministrativa.setClaveUsuario(usuario);
 		usuarioUnidadAdministrativa.setIdUnidad(unidadAdministrativa);
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("UsuarioUnidadAdministrativa", usuarioUnidadAdministrativa);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warn . {} ",e1);
 		}
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_GUARDA_USUARIO_UNIDAD_ADMINISTRATIVA, httpEntity, header);
@@ -120,12 +120,13 @@ public class UnidadAdministrativaServiceImpl implements UnidadAdministrativaServ
 
 	@Override
 	public List<UsuarioUnidadAdministrativa> consultaResponsable(String claveUsuario, Authentication authentication) {
-		List<UsuarioUnidadAdministrativa> listaUsuarioUnidadAdministrativa = new ArrayList<>();
+		List<UsuarioUnidadAdministrativa> listaUsuarioUnidadAdministrativa;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try{
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_CONSULTA_RESPONSABLE+ "?id=" + claveUsuario, header);
@@ -152,12 +153,13 @@ public class UnidadAdministrativaServiceImpl implements UnidadAdministrativaServ
 
 	@Override
 	public List<UsuarioUnidadAdministrativa> obtenerUnidadesAdministrativas(Authentication authentication) {
-		List<UsuarioUnidadAdministrativa> listaUnidadAdministrativa = new ArrayList<>();
+		List<UsuarioUnidadAdministrativa> listaUnidadAdministrativa;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try{
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_UNIDADES_ADMINISTRATIVAS, header);
@@ -172,8 +174,8 @@ public class UnidadAdministrativaServiceImpl implements UnidadAdministrativaServ
 			JsonArray dataJson = json.getAsJsonArray("data");
 			listaUnidadAdministrativa = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<UsuarioUnidadAdministrativa>>(){}.getType());
 			for(UsuarioUnidadAdministrativa usuarioUnidadAdministrativa: listaUnidadAdministrativa){
-				System.out.println("nombre "+usuarioUnidadAdministrativa.getIdUnidad().getNombre());
-				System.out.println("nombre "+usuarioUnidadAdministrativa.getIdUnidad().getIdUnidad());
+				logger.info("nombre: {} ",usuarioUnidadAdministrativa.getIdUnidad().getNombre());
+				logger.info("idUnidadAdministrativa: {} ",usuarioUnidadAdministrativa.getIdUnidad().getIdUnidad());
 			}
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {

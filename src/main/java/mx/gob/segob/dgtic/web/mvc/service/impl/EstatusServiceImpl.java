@@ -37,9 +37,10 @@ public class EstatusServiceImpl implements EstatusService{
      */
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Estatus> obtieneListaEstatus(Authentication authentication) {
-		List<Estatus> listaEstatus = new ArrayList<>();
+		List<Estatus> listaEstatus;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
@@ -77,9 +78,10 @@ public class EstatusServiceImpl implements EstatusService{
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Estatus> obtieneListaCompletaEstatus(Authentication authentication) {
-		List<Estatus> listaEstatus = new ArrayList<>();
+		List<Estatus> listaEstatus;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 

@@ -35,10 +35,11 @@ public class VacacionPeriodoServiceImpl implements VacacionPeriodoService{
 
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<VacacionPeriodo> obtenerUsuariosVacacionesPorFiltros(String claveUsuario, String nombre,
 			String apellidoPaterno, String apellidoMaterno,String idUnidad, Authentication authentication) {
-		List<VacacionPeriodo> listaUsuariosVacaciones = new ArrayList<>();
+		List<VacacionPeriodo> listaUsuariosVacaciones;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 

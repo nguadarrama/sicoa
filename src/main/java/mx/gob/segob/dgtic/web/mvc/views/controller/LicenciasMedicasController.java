@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -73,6 +75,7 @@ public class LicenciasMedicasController {
 	@Autowired
 	private PerfilUsuarioService perfilUsuarioService;
 	
+	private static final Logger logger = LoggerFactory.getLogger(CatalogoController.class);
 	private String mensaje = "";
 	
 	@RequestMapping(value={"licenciasPropias"}, method = RequestMethod.GET)
@@ -80,8 +83,8 @@ public class LicenciasMedicasController {
 		String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
-    	Periodo periodo= new Periodo();
-		System.out.println("Datos claveUsuario "+ claveUsuario +" fechaInicio "+fechaInicioBusca1+" fechaFin "+fechaFinBusca1+" idEstatus "+idEstatus);
+    	Periodo periodo;
+		logger.info("Datos claveUsuario: {} ",claveUsuario +" fechaInicio "+fechaInicioBusca1+" fechaFin "+fechaFinBusca1+" idEstatus "+idEstatus);
 		
 		if(fechaInicioBusca1==null || fechaInicioBusca1.trim().isEmpty()){
 			fechaInicioBusca1="";
@@ -92,7 +95,7 @@ public class LicenciasMedicasController {
 		if(idEstatus==null || idEstatus.trim().isEmpty()){
 			idEstatus="";
 		}
-		List<LicenciaMedica> lista= new ArrayList<>();
+		List<LicenciaMedica> lista;
 		BusquedaDto busquedaDto = new BusquedaDto();
 		busquedaDto.setFechaFin(fechaFinBusca1);
 		busquedaDto.setFechaInicio(fechaInicioBusca1);

@@ -39,6 +39,7 @@ public class PerfilUsuarioServiceImpl implements PerfilUsuarioService{
 
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PerfilUsuario> recuperaPerfilesUsuario(String claveUsuario, Authentication authentication) {
 		
@@ -47,7 +48,7 @@ public class PerfilUsuarioServiceImpl implements PerfilUsuarioService{
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
-		List<PerfilUsuario> listaUsuarioPerfil = new ArrayList<>();
+		List<PerfilUsuario> listaUsuarioPerfil;
 		HttpResponse response;
 		try{
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_PERFILES_USUARIO+ "?id=" + claveUsuario, header);
@@ -72,6 +73,7 @@ public class PerfilUsuarioServiceImpl implements PerfilUsuarioService{
 		return listaUsuarioPerfil;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Integer guardaEliminaPerfilesUsuario(Integer[] clavePerfil, String claveUsuario, Authentication authentication) {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
@@ -85,13 +87,12 @@ public class PerfilUsuarioServiceImpl implements PerfilUsuarioService{
 		Usuario usuario = new Usuario();
 		usuario.setClaveUsuario(claveUsuario);
 		perfilUsuario.setClaveUsuario(usuario);
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("usuarioPerfil", perfilUsuario);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warn: {} ",e1);
 		}
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_PERFILES_USUARIO, httpEntity, header);

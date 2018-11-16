@@ -31,9 +31,10 @@ public class DashServiceImpl implements DashService{
 
 	private static final Logger logger = LoggerFactory.getLogger(DashServiceImpl.class);
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public DashBoardDto getDash (Integer id, Authentication authentication){
-		DashBoardDto dash = new DashBoardDto();
+		DashBoardDto dash;
 		HttpResponse response;
 	    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
@@ -54,13 +55,15 @@ public class DashServiceImpl implements DashService{
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
 			dash = gson.fromJson(dataJson, DashBoardDto.class);		
-			if(dash.getVacaciones().size()>0){
+			if(!dash.getVacaciones().isEmpty()){
 				dash.setVacacion(dash.getVacaciones().get(0));
 				dash.getVacaciones().remove(0);
-			}if(dash.getVacaciones().size()>0){
+			}
+			if(!dash.getVacaciones().isEmpty()){
 				dash.setVacacion1(dash.getVacaciones().get(0));
 				dash.getVacaciones().remove(0);
-			}if(dash.getVacaciones().size()>0){
+			}
+			if(!dash.getVacaciones().isEmpty()){
 				dash.setVacacion2(dash.getVacaciones().get(0));
 				dash.getVacaciones().remove(0);
 			}

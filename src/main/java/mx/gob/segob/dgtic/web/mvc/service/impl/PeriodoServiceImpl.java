@@ -1,11 +1,6 @@
 package mx.gob.segob.dgtic.web.mvc.service.impl;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,9 +26,9 @@ import com.google.gson.reflect.TypeToken;
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
-import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.service.PeriodoService;
+import mx.gob.segob.dgtic.web.mvc.service.constants.Constantes;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
@@ -44,18 +39,17 @@ public class PeriodoServiceImpl implements PeriodoService{
 	
 	@Override
 	public Periodo buscaPeriodoPorClaveUsuario(String claveUsuario, Authentication authentication) {
-		Periodo periodo = new Periodo();
+		Periodo periodo;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		System.out.println("usuario "+claveUsuario);
-		DateFormat formatoFecha = new SimpleDateFormat("dd-mm-yyyy");
-		String fechaInicial=null;
-		String fechaFinal=null;
+		logger.info("usuario: {} ",claveUsuario);
+		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_PERFIL_POR_CLAVE_USUARIO + "?claveUsuario=" + claveUsuario, header);
 		} catch (ClienteException e) {
@@ -68,16 +62,6 @@ public class PeriodoServiceImpl implements PeriodoService{
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
 			periodo = gson.fromJson(dataJson, Periodo.class);
-			//fechaInicial = formatoFecha.format(periodo.getFechaInicio());
-			//fechaFinal=formatoFecha.format(periodo.getFechaFin());
-			//System.out.println("fechaInicial "+fechaInicial);
-			//periodo.setFechaInicio(fechaInicial+ " a "+fechaFinal);
-//				periodo.setFechaIni(fechaInicial+" a "+fechaFinal);
-			periodo.setFechaFin(fechaFinal);
-//				periodo.setFechaFi(fechaFinal);
-//				periodo.setFechaFin(formatoFecha.parse(fechaFinal));
-			
-	
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			
 			String mensaje = obtenerMensajeError(response);					 
@@ -99,12 +83,13 @@ public class PeriodoServiceImpl implements PeriodoService{
 
 	@Override
 	public List<Periodo> periodos(Authentication authentication) {
-		List<Periodo> listaPeriodo = new ArrayList<>();
+		List<Periodo> listaPeriodo;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_PERIODOS, header);
@@ -125,7 +110,8 @@ public class PeriodoServiceImpl implements PeriodoService{
 			throw new AuthenticationServiceException("Error al obtener catalogo de periodos vacacionales: "+response.getStatusLine().getReasonPhrase());
 		}
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
-				System.out.println("ListaService: "+gson.toJson(listaPeriodo));
+				String gsonT = gson.toJson(listaPeriodo);
+				logger.info("ListaService: {} ", gsonT);
 		return listaPeriodo;
 	}
 

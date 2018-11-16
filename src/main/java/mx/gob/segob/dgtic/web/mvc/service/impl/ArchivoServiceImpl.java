@@ -30,10 +30,8 @@ import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
-import mx.gob.segob.dgtic.web.mvc.dto.Horario;
-import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
-import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.service.ArchivoService;
+import mx.gob.segob.dgtic.web.mvc.service.constants.Constantes;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
@@ -45,49 +43,39 @@ public class ArchivoServiceImpl implements ArchivoService{
 	@Override
 	public Archivo guardaArchivo(MultipartFile archivo, String claveUsuario, String accion, String nombreArchivo, Authentication authentication) {
 		HttpResponse response;
-		Archivo archivoResponse = null;
-
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		Archivo archivoDto = new Archivo();
-		Archivo archivoRespuesta = new Archivo();
+		Archivo archivoRespuesta;
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		String ruta="/documentos/sicoa/"+claveUsuario+"/"+accion+"/";
 		try {
-			System.out.println("Antes del error");
+			logger.info("Antes del error");
 			archivoDto.setArchivo(IOUtils.toByteArray(archivo.getInputStream()));
 			
 			
 		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			logger.warn(".Warn. {} ",e2);
 		}
-//		String nombreaux=archivo.getOriginalFilename();
-//		String[] parts = nombreaux.split(".");
-//		String part1 = parts[0]; // 004
-//		String part2 = parts[1];
-//		System.out.println("extensión del archivo "+part1);
 		archivoDto.setUrl(ruta);
 		archivoDto.setSize((int) (long) archivo.getSize());
 		archivoDto.setActivo(true);
-		System.out.println("nombre compelto "+archivo.getOriginalFilename()+" nombre"+archivo.getName());
+		logger.info("nombre compelto : {}",archivo.getOriginalFilename()+" nombre"+archivo.getName());
 		archivoDto.setNombre(nombreArchivo);
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("archivo", archivoDto);
-		System.out.println("Despues del error1");
+		logger.info("Despues del error1");
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-			//System.out.println("Despues del error2");
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warn- {} ",e1);
 		}
 		
 		try { //se consume recurso rest
@@ -111,52 +99,44 @@ public class ArchivoServiceImpl implements ArchivoService{
 		return archivoRespuesta;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Archivo actualizaArchivo(MultipartFile archivo, String claveUsuario, String accion, Integer idArchivo,String nombreArchivo, Authentication authentication) {
 		HttpResponse response;
-		Archivo archivoRespuesta = new Archivo();
+		Archivo archivoRespuesta;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		Archivo archivoDto = new Archivo();
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		String ruta="/documentos/sicoa/"+claveUsuario+"/"+accion+"/";
 		try {
-			System.out.println("Antes del error");
+			logger.info("..Antes del error");
 			archivoDto.setArchivo(IOUtils.toByteArray(archivo.getInputStream()));
 			
 			
 		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			logger.warn("Warn.- {} ",e2);
 		}
-		String nombreaux=archivo.getOriginalFilename().toString();
+		String nombreaux=archivo.getOriginalFilename();
 		
-		System.out.println("nombreOriginal "+nombreaux);
-//		String[] parts = nombreaux.split(".");
-//		String part1 = parts[0];
-		//String part2 = parts[1];
-		//System.out.println("extensión del archivo "+part1);
+		logger.info("nombreOriginal: {} ",nombreaux);
 		archivoDto.setIdArchivo(idArchivo);
 		archivoDto.setUrl(ruta);
 		archivoDto.setSize((int) (long) archivo.getSize());
 		archivoDto.setActivo(true);
-		//System.out.println("nombre compelto "+archivo.getOriginalFilename()+" nombre"+archivo.getName());
 		archivoDto.setNombre(nombreArchivo);
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("archivo", archivoDto);
-		System.out.println("Despues del error1");
+		logger.info("Despues del error1");
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-			//System.out.println("Despues del error2");
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warns {} ",e1);
 		}
 		
 		try { //se consume recurso rest
@@ -181,14 +161,15 @@ public class ArchivoServiceImpl implements ArchivoService{
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Archivo consultaArchivo(Integer idArchivo, Authentication authentication) {
-		Archivo archivo = new Archivo();
+		Archivo archivo;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
@@ -212,7 +193,7 @@ public class ArchivoServiceImpl implements ArchivoService{
 		} else {
 			throw new AuthenticationServiceException("Error al obtener archivo : "+response.getStatusLine().getReasonPhrase());
 		}
-		System.out.println("datos del archivo que se fue a buscar "+archivo.getUrl());
+		logger.info("datos del archivo que se fue a buscar: {} ",archivo.getUrl());
 		return archivo;
 	}
 	

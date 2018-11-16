@@ -37,6 +37,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
+import mx.gob.segob.dgtic.web.mvc.service.constants.Constantes;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
@@ -52,11 +53,13 @@ public class CatalogoServiceImpl implements CatalogoService {
 
 	@Override
 	public List<Horario> obtieneHorarios(Authentication authentication) {
-		List<Horario> listaHorario = new ArrayList<>();
+		List<Horario> listaHorario;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		HttpResponse response;
 		try { //se consume recurso rest
@@ -76,19 +79,21 @@ public class CatalogoServiceImpl implements CatalogoService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException("Error al obtener usuario.. : "+response.getStatusLine().getReasonPhrase());
 		}	
 		return listaHorario;
 	}
 	
 	@Override
 	public List<Horario> obtieneHorariosCat(Authentication authentication) {
-		List<Horario> listaHorario = new ArrayList<>();
+		List<Horario> listaHorario;
 		HttpResponse response;
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION,Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_HORARIO_CAT, header);
@@ -107,7 +112,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException("Error al obtener usuario- : "+response.getStatusLine().getReasonPhrase());
 		}	
 		return listaHorario;
 	}
@@ -116,19 +121,20 @@ public class CatalogoServiceImpl implements CatalogoService {
 	public Horario modificaHorario(Horario horario, Authentication authentication) {
 		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		HttpEntity httpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("horario", horario);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warn {} ",e1);
 		}
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_HORARIO, httpEntity, header);
@@ -147,7 +153,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException("Error al obtener usuario... : "+response.getStatusLine().getReasonPhrase());
 		}
 		return horario;		
 	}
@@ -156,20 +162,20 @@ public class CatalogoServiceImpl implements CatalogoService {
 	public Horario agregaHorario(Horario horario, Authentication authentication) {
 		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("horario", horario);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.info("Warn -- {} ",e1);
 		}
 		
 		try { //se consume recurso rest
@@ -189,7 +195,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException("Error al obtener usuario.: "+response.getStatusLine().getReasonPhrase());
 		}
 		
 		return horario;
@@ -197,8 +203,9 @@ public class CatalogoServiceImpl implements CatalogoService {
 	
 	@Override
 	public void borraHorario(Horario horario, Authentication authentication) {
-		@SuppressWarnings("unused")
-		HttpResponse response;
+		/**
+		 * 
+		 */
 	}
 
 	@Override
@@ -206,14 +213,16 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Horario buscaHorario(Integer id, Authentication authentication) {
-		Horario horario = new Horario();
+		Horario horario;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
@@ -243,18 +252,18 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	@SuppressWarnings("unused")
 	public void eliminaHorario(Integer id, Authentication authentication) {
-		HttpResponse response;
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+	
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_ELIMINA_HORARIO + "?id=" + id, header);
+		ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_ELIMINA_HORARIO + "?id=" + id, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
@@ -269,14 +278,16 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<TipoDia> obtieneTipoDias(Authentication authentication) {
-		List<TipoDia> listaTipoDia = new ArrayList<>();
+		List<TipoDia> listaTipoDia;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_TIPODIA, header);
@@ -296,21 +307,23 @@ public class CatalogoServiceImpl implements CatalogoService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException("Error al obtener usuario.- : "+response.getStatusLine().getReasonPhrase());
 		}
 				
 		return listaTipoDia;
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public TipoDia buscaTipoDia(Integer id, Authentication authentication) {
-		TipoDia tipo = new TipoDia();
+		TipoDia tipo;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
@@ -338,14 +351,16 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Perfil> obtienePerfiles(Authentication authentication) {
-		List<Perfil> listaPerfil = new ArrayList<>();
+		List<Perfil> listaPerfil;
 		HttpResponse response;	
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_PERFIL, header);
@@ -371,14 +386,16 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return listaPerfil;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Justificacion> obtieneListaJ(Authentication authentication) {
-		List<Justificacion> listaJustificacion = new ArrayList<>();
+		List<Justificacion> listaJustificacion;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_CAT_JUSTIFICACION, header);
@@ -403,14 +420,16 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return listaJustificacion;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Justificacion> obtieneJustificaciones(Authentication authentication) {
-		List<Justificacion> listaJustificacion = new ArrayList<>();
+		List<Justificacion> listaJustificacion;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_JUSTIFICACION, header);
@@ -436,6 +455,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Justificacion modificaJustificacion(Justificacion justificacion, Authentication authentication) {
 			HttpResponse response;
@@ -443,15 +463,15 @@ public class CatalogoServiceImpl implements CatalogoService {
 			HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 			
 			//Se agrega el JWT a la cabecera para acceso al recurso rest
-			Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+			Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+					+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 			HttpEntity httpEntity = new BasicHttpEntity();
-			Map<String, Object> content = new HashMap<String, Object>();
+			Map<String, Object> content = new HashMap<>();
 			content.put("justificacion", justificacion);
 			try {
 				httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 			} catch (ClienteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				logger.warn("Warn: -- {} ",e1);
 			}
 			try { //se consume recurso rest
 				response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_JUSTIFICACION, httpEntity, header);
@@ -475,6 +495,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 			return justificacion;		
 		}
 		
+	@SuppressWarnings("unchecked")
 	@Override
 	public Justificacion agregaJustificacion(Justificacion justificacion, Authentication authentication) {
 		HttpResponse response;
@@ -482,15 +503,15 @@ public class CatalogoServiceImpl implements CatalogoService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("justificacion", justificacion);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warn.-. {} ",e1);
 		}
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_JUSTIFICACION, httpEntity, header);
@@ -515,14 +536,16 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Justificacion buscaJustificacion(Integer id, Authentication authentication) {
-		Justificacion justificacion = new Justificacion();
+		Justificacion justificacion;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_BUSCA_JUSTIFICACION + "?id=" + id, header);
@@ -545,25 +568,26 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return justificacion;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	@SuppressWarnings("unused")
 	public void eliminaJustificacion(Integer id, Authentication authentication) {
 		
-		HttpResponse response;
+		
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_ELIMINA_JUSTIFICACION + "?id=" + id, header);
+			ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_ELIMINA_JUSTIFICACION + "?id=" + id, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Periodo agregaPeriodoVacacional(Periodo periodo, Authentication authentication) {
 		HttpResponse response;
@@ -571,17 +595,17 @@ public class CatalogoServiceImpl implements CatalogoService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("periodo", periodo);
+		Map<String, Object> content = new HashMap<>();
+		content.put(Constantes.PERIODO, periodo);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn(" Warn-. {} ",e1);
 		}
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_PERIODO, httpEntity, header);
@@ -600,43 +624,46 @@ public class CatalogoServiceImpl implements CatalogoService {
 		} else {
 			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
 		}
-		System.out.println("CAtalogoServiceImpl--method--agregaPeriodoVacacional-- "+gson.toJson(periodo));
+		String gsonT = gson.toJson(periodo);
+		logger.info("CAtalogoServiceImpl--method--agregaPeriodoVacacional-- {} ",gsonT);
 		return periodo;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void modificaPeriodoVacacional(Periodo periodo, Authentication authentication) {
-		HttpResponse response;
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("periodo", periodo);
+		Map<String, Object> content = new HashMap<>();
+		content.put(Constantes.PERIODO, periodo);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("Warn--. {} ",e1);
 		}
 		try { //se consume recurso rest
-			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_PERIODO, httpEntity, header);
+			ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_MODIFICA_PERIODO, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<DiaFestivo> obtieneDiaFestivo(Authentication authentication) {
-		List<DiaFestivo> lista = new ArrayList<>();
+		List<DiaFestivo> lista;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_DIA_FESTIVO, header);
@@ -656,20 +683,22 @@ public class CatalogoServiceImpl implements CatalogoService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener los días festivos : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException("Error al obtener los días festivos.-. : "+response.getStatusLine().getReasonPhrase());
 		}
 				
 		return lista;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<DiaFestivo> obtieneDiaFestivoCat(Authentication authentication) {
-		List<DiaFestivo> lista = new ArrayList<>();
+		List<DiaFestivo> lista;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_DIA_FESTIVO_CAT, header);
@@ -695,6 +724,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return lista;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public DiaFestivo modificaDiaFestivo(DiaFestivo dia, Authentication authentication) {
 		HttpResponse response;
@@ -703,16 +733,15 @@ public class CatalogoServiceImpl implements CatalogoService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("diaFestivo", dia);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn(".Warn {} ",e1);
 		}
 		
 		try { //se consume recurso rest
@@ -737,6 +766,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 				
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public DiaFestivo agregaDiaFestivo(DiaFestivo dia, Authentication authentication) {
 		HttpResponse response;
@@ -747,16 +777,13 @@ public class CatalogoServiceImpl implements CatalogoService {
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("diaFestivo", dia);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("-Warn: {} ",e1);
 		}
 		
 		try { //se consume recurso rest
@@ -780,14 +807,16 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return dia;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public DiaFestivo buscaDiaFestivo(Integer id, Authentication authentication) {
-		DiaFestivo dia = new DiaFestivo();
+		DiaFestivo dia;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
@@ -815,14 +844,16 @@ public class CatalogoServiceImpl implements CatalogoService {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Periodo> obtienePeriodos(Authentication authentication) {
-		List<Periodo> listaPeriodos = new ArrayList<>();
+		List<Periodo> listaPeriodos;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_PERIODOS, header);
@@ -848,14 +879,16 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return listaPeriodos;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Periodo> obtienePeriodosCat(Authentication authentication) {
-		List<Periodo> listaPeriodos = new ArrayList<>();
+		List<Periodo> listaPeriodos;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_PERIODOS_CAT, header);
@@ -881,6 +914,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return listaPeriodos;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Periodo modificaEstatusPeriodo(Periodo periodo, Authentication authentication) {
 		HttpResponse response;
@@ -889,16 +923,15 @@ public class CatalogoServiceImpl implements CatalogoService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("periodo", periodo);
+		Map<String, Object> content = new HashMap<>();
+		content.put(Constantes.PERIODO, periodo);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn(",Warn : {} ",e1);
 		}
 		
 		try { //se consume recurso rest
@@ -918,18 +951,21 @@ public class CatalogoServiceImpl implements CatalogoService {
 		} else {
 			throw new AuthenticationServiceException("Error al obtener el periodo : "+response.getStatusLine().getReasonPhrase());
 		}
-		System.out.println("CatalogoServiceimpl--method--modificaEstatusPeriodo: "+gson.toJson(periodo));	
+		String gsonT = gson.toJson(periodo);
+		logger.info("CatalogoServiceimpl--method--modificaEstatusPeriodo: {} ",gsonT);	
 		return periodo;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Periodo buscaPeriodo(Integer id, Authentication authentication) {
-		Periodo periodo = new Periodo();
+		Periodo periodo;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
@@ -956,16 +992,16 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return periodo;
 	}
 	
-	@SuppressWarnings("unused")
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Usuario> nivelesEmpleado(Authentication authentication) {
-		List<Usuario> listaNiveles = new ArrayList<>();
+		List<Usuario> listaNiveles;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_NIVELES_EMPLEADOS, header);
 		} catch (ClienteException e) {
@@ -978,7 +1014,6 @@ public class CatalogoServiceImpl implements CatalogoService {
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonArray dataJson = json.getAsJsonArray("data");
 			listaNiveles = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Usuario>>(){}.getType());
-//			System.out.println("ResponseObtieneUnidades: "+gson.toJson(listaNiveles));
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			
 			String mensaje = obtenerMensajeError(response);					 
@@ -986,19 +1021,19 @@ public class CatalogoServiceImpl implements CatalogoService {
 		} else {
 			throw new AuthenticationServiceException("Error al obtener la lista de Unidades : "+response.getStatusLine().getReasonPhrase());
 		}
-			
-//			System.out.println("CatalogoServiceimpl--method--obtieneUnidades: "+gson.toJson(listaNiveles));
 		return listaNiveles;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<NivelOrganizacional> obtieneNiveles(Authentication authentication) {
-		List<NivelOrganizacional> listaNiveles = new ArrayList<>();
+		List<NivelOrganizacional> listaNiveles;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_NIVELES, header);
@@ -1012,7 +1047,8 @@ public class CatalogoServiceImpl implements CatalogoService {
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonArray dataJson = json.getAsJsonArray("data");
 			listaNiveles = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<NivelOrganizacional>>(){}.getType());
-			System.out.println("ResponseObtieneUnidades: "+gson.toJson(listaNiveles));
+			String gsonT = gson.toJson(listaNiveles);
+			logger.info("ResponseObtieneUnidades: {} ",gsonT);
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			
 			String mensaje = obtenerMensajeError(response);					 
@@ -1020,11 +1056,10 @@ public class CatalogoServiceImpl implements CatalogoService {
 		} else {
 			throw new AuthenticationServiceException("Error al obtener la lista de Niveles Organizacionales : "+response.getStatusLine().getReasonPhrase());
 		}
-			
-//			System.out.println("CatalogoServiceimpl--method--obtieneUnidades: "+gson.toJson(listaNiveles));
 		return listaNiveles;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public NivelOrganizacional nivelAgrega(NivelOrganizacional nivel, Authentication authentication) {
 		HttpResponse response;
@@ -1032,17 +1067,17 @@ public class CatalogoServiceImpl implements CatalogoService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("nivel", nivel);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("_Warn: {} ", e1);
 		}
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_AGREGA_NIVEL_ORGANIZACIONAL, httpEntity, header);
@@ -1061,19 +1096,20 @@ public class CatalogoServiceImpl implements CatalogoService {
 		} else {
 			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
 		}
-//		System.out.println("CAtalogoServiceImpl--method--agregaPeriodoVacacional-- "+gson.toJson(nivel));
 		return nivel;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public NivelOrganizacional nivelBusca(Integer idNivel, Authentication authentication) {
-		System.out.println("entro a catalogoServiceImpl--method--nivelBusca idNivel: "+idNivel);
-		NivelOrganizacional nivel = new NivelOrganizacional();
+		logger.info("entro a catalogoServiceImpl--method--nivelBusca idNivel: {} ",idNivel);
+		NivelOrganizacional nivel;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
@@ -1100,6 +1136,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 		return nivel;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public NivelOrganizacional modificaNivel(NivelOrganizacional nivel, Authentication authentication) {
 		HttpResponse response;
@@ -1107,17 +1144,17 @@ public class CatalogoServiceImpl implements CatalogoService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("nivel", nivel);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.warn("..Warn: {} ", e1);
 		}
 		
 		try { //se consume recurso rest
@@ -1139,19 +1176,22 @@ public class CatalogoServiceImpl implements CatalogoService {
 		} else {
 			throw new AuthenticationServiceException("Error al obtener nivel : "+response.getStatusLine().getReasonPhrase());
 		}
-		System.out.println("CAtalogoServiceImpl--method--modificaNivel-- "+gson.toJson(nivel));	
+		String gsonT = gson.toJson(nivel);
+		logger.info("CAtalogoServiceImpl--method--modificaNivel-- {} ",gsonT);	
 		return nivel;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public String obtieneDiaFestivoParaBloquear(Authentication authentication) {
 		
-		List<DiaFestivo> lista = new ArrayList<>();
+		List<DiaFestivo> lista;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER
+				+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_INFO_DIA_FESTIVO_ACTIVO, header);
@@ -1173,25 +1213,24 @@ public class CatalogoServiceImpl implements CatalogoService {
 		} else {
 			throw new AuthenticationServiceException("Error al obtener los días festivos : "+response.getStatusLine().getReasonPhrase());
 		}
-			//listaDias+="";
-		System.out.println("tamaño "+lista.size());
+
+		logger.info("tamaño: {} ",lista.size());
 		String listaDias= "";
 		for(DiaFestivo diaFestivo: lista){
 			Date date = new Date();
 			String fecha=null;
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
-			System.out.println("Fechas obtenidas "+diaFestivo.getFecha());
+			logger.info("Fechas obtenidas: {} ",diaFestivo.getFecha());
 		    try {
 				date = sdf.parse(diaFestivo.getFecha());
 				fecha = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.warn("Warn-- {} ",e);
 			}
-		    listaDias+=""+fecha+",";
+		    listaDias=""+fecha+",";
 		}
-		if(!listaDias.isEmpty() && listaDias!=null){
+		if(!listaDias.isEmpty()){
 		listaDias=listaDias.substring(0, (listaDias.length()- 1));
 		}
 		return listaDias;
