@@ -354,7 +354,8 @@ public class AsistenciaController  {
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="formatoJustificacion")
     public String descargaFormatoJustificacion(Model model, String nombre, String unidad, String nombreAutorizador, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cve_m_usuario, Integer idTipoDiaModal, HttpServletResponse response) {
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cve_m_usuario, Integer idTipoDiaModal, HttpServletResponse response,
+    		String fechaIncidenciaHidden) {
     	
     	//se traduce la incidencia
     	String codigoincidencia = "";
@@ -379,7 +380,7 @@ public class AsistenciaController  {
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte archivo = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidad, fechaActual, codigoincidencia, "", ""), authentication);
+			reporte archivo = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidad, fechaActual, codigoincidencia, "", fechaIncidenciaHidden), authentication);
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
