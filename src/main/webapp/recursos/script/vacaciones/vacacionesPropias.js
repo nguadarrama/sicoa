@@ -165,7 +165,7 @@ $(document).ready(function() {
 						$('.eliminaVacacion #idVacacionEliminar').val(hmap.vacacion.idDetalle);
 						$('#botonEliminarVacaciones').css("display","inline");
 					}
-					alert(hmap.vacacion.idArchivo.idArchivo+" "+hmap.vacacion.idEstatus.idEstatus);
+					//alert(hmap.vacacion.idArchivo.idArchivo+" "+hmap.vacacion.idEstatus.idEstatus);
 					if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
 						$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 						$('.descargaArchivo').css("display","inline");
