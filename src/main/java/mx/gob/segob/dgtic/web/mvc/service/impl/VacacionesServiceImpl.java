@@ -496,14 +496,29 @@ public class VacacionesServiceImpl implements VacacionesService{
 			List<Vacaciones> listaVacaciones = new ArrayList<>();
 			HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 			Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-			String idEstatus="";
-			String idUnidad="";
-			String idPeriodo="";
-			String pfechaInicio="";
-			String pfechaFin="";
+			BusquedaDto busquedaDto = new BusquedaDto();
+			busquedaDto.setIdEstatus("");
+			busquedaDto.setIdUnidad("");
+			busquedaDto.setIdPeriodo("");
+			busquedaDto.setFechaInicio("");
+			busquedaDto.setFechaFin("");
+			busquedaDto.setClaveUsuario(claveUsuario);
 			HttpResponse response;
+			Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+			HttpEntity httpEntity = new BasicHttpEntity();
+			LicenciaMedica licenciaMedicaRespuesta= new LicenciaMedica();
+			//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+			Map<String, Object> content = new HashMap<String, Object>();
+			content.put("busqueda", busquedaDto);
+
+			try {
+				httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+			} catch (ClienteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			try{
-				response = ClienteRestUtil.getCliente().get(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&idPeriodo="+idPeriodo+"&fechaInicio="+pfechaInicio+"&fechaFin="+pfechaFin, header);
+				response = ClienteRestUtil.getCliente().put(CatalogoEndPointConstants.WEB_SERVICE_OBTIENE_VACACIONES_PROPIAS, httpEntity, header);
 			} catch (ClienteException e) {
 				logger.error(e.getMessage(), e);
 				throw new AuthenticationServiceException(e.getMessage(), e);
