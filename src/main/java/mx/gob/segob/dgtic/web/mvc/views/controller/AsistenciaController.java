@@ -76,6 +76,8 @@ public class AsistenciaController  {
 	
 	//JUSTIFICACION
 	private String MENSAJE_REGISTRO_JUSTIFICACION = "La justificación ha quedado registrada";
+	private String MENSAJE_AUTORIZA_JUSTIFICACION = "La justificación ha sido aceptada";
+	private String MENSAJE_RECHAZA_JUSTIFICACION = "La justificación ha sido marcada para enviar a descuento";
 	
 	//DESCUENTO
 	private String MENSAJE_REGISTRO_DESCUENTO     = "La incidencia ha sido marcada para enviar a descuento";
@@ -807,11 +809,19 @@ public class AsistenciaController  {
     	model.addAttribute("estado", estadoHidden);
     	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
 
-    	if (resultadoProceso == 1) {
+    	if (resultadoProceso != 0) {
     		if (dictaminacion.equals("Autorizar")) {
-    			model.addAttribute("MENSAJE", MENSAJE_AUTORIZA_DESCUENTO);
+    			if (resultadoProceso == 1) {
+    				model.addAttribute("MENSAJE", MENSAJE_AUTORIZA_JUSTIFICACION);
+    			} else if (resultadoProceso == 2) {
+    				model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    			}
     		} else if (dictaminacion.equals("Rechazar")) {
-    			model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    			if (resultadoProceso == 3) {
+    				model.addAttribute("MENSAJE", MENSAJE_RECHAZA_JUSTIFICACION);
+    			} else if (resultadoProceso == 2) {
+    				model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    			}
     		}
     	} else if (resultadoProceso == 0) {
     		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
