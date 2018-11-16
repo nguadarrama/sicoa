@@ -47,19 +47,24 @@ public class ComisionServiceImpl implements ComisionService {
 
   private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 
+  private static final String ETIQUETA_EXCEPCION = "Excepcion: {}";
+  private static final String ETIQUETA_COMISION = "comision";
+  private static final String ERROR_DIA_INHABIL = "Error al obtener el día Inhábil : ";
+
   @Autowired
   private UsuarioService usuarioService;
 
   @Override
   public List<Comision> obtenerListaComisionesPorFiltros(String claveUsuario, String fechaInicio,
       String fechaFin, String idEstatus, Authentication authentication) {
-    List<Comision> listaComisiones = new ArrayList<>();
+    List<Comision> listaComisiones = null;
     HttpResponse response;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	/** Se agrega el JWT a la cabecera para acceso al recurso rest **/
-	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
-    
+    /** Se agrega el JWT a la cabecera para acceso al recurso rest **/
+    Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION,
+        Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
+
     try {
       response = ClienteRestUtil.getCliente()
           .get(ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_POR_FILTROS
@@ -100,11 +105,12 @@ public class ComisionServiceImpl implements ComisionService {
 
   @Override
   public Comision obtieneComision(String idComision, Authentication authentication) {
-    Comision comisiones = new Comision();
+    Comision comisiones;
     HttpResponse response;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
+    Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION,
+        Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 
@@ -134,22 +140,25 @@ public class ComisionServiceImpl implements ComisionService {
     return comisiones;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public List<Comision> obtenerListaComisionesPorFiltrosEmpleados(String claveUsuario,
       String nombre, String apellidoPaterno, String apellidoMaterno, String idUnidad,
       String idEstatus, Authentication authentication) {
-    List<Comision> listaComisiones = new ArrayList<>();
+    List<Comision> listaComisiones = null;
     HttpResponse response;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	/** Se agrega el JWT a la cabecera para acceso al recurso rest **/
-	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
-	
+    /** Se agrega el JWT a la cabecera para acceso al recurso rest **/
+    Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION,
+        Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
+
     try {
       response = ClienteRestUtil.getCliente()
           .get(ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_EMPLEADOS_POR_FILTROS
-              + "?claveUsuario=" + removerEspacios(claveUsuario) + "&nombre=" + removerEspacios(nombre) + "&apellidoPaterno="
-              + removerEspacios(apellidoPaterno) + "&apellidoMaterno=" + removerEspacios(apellidoMaterno) + "&idUnidad=" + idUnidad
+              + "?claveUsuario=" + removerEspacios(claveUsuario) + "&nombre="
+              + removerEspacios(nombre) + "&apellidoPaterno=" + removerEspacios(apellidoPaterno)
+              + "&apellidoMaterno=" + removerEspacios(apellidoMaterno) + "&idUnidad=" + idUnidad
               + "&idEstatus=" + idEstatus, header);
     } catch (ClienteException e) {
       logger.error(e.getMessage(), e);
@@ -175,76 +184,79 @@ public class ComisionServiceImpl implements ComisionService {
   }
 
   @Override
-  public Comision agregarComision(ComisionAux comisionAux, String claveUsuario, Authentication authentication) {
-    Comision comision= new Comision();
+  public Comision agregarComision(ComisionAux comisionAux, String claveUsuario,
+      Authentication authentication) {
+    Comision comision;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
+    Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION,
+        Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     HttpEntity httpEntity = new BasicHttpEntity();
     HttpResponse response;
-    Usuario usuario= new Usuario();
-    usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
+    Usuario usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
     comisionAux.setIdUsuario(usuario.getIdUsuario());
-    Map<String, Object> content = new HashMap<String, Object>();
-    content.put("comision", comisionAux);
-
-    try {
-        httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-    } catch (ClienteException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
-    }
-    
-    try {
-        response=ClienteRestUtil.getCliente().put(ComisionEndPointConstants.WEB_SERVICE_AGREGA_COMISION, httpEntity, header);
-    } catch (ClienteException e) {
-        logger.error(e.getMessage(), e);
-        throw new AuthenticationServiceException(e.getMessage(), e);
-    }
-    if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-        
-        JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-        JsonElement dataJson = json.get("data").getAsJsonObject();
-        comision = gson.fromJson(dataJson, Comision.class);        
-    } else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-        String mensaje = obtenerMensajeError(response);                  
-        throw new AuthenticationServiceException(mensaje);          
-    } else {
-        throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
-    }
-            
-    return comision;
-  }
-
-  @Override
-  public Comision modificaComisiones(ComisionAux comisionAux, String claveUsuario, Authentication authentication) {
-    Comision comisionRespuesta = new Comision();
-    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-
-	//Se agrega el JWT a la cabecera para acceso al recurso rest
-	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
-    Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-    HttpEntity httpEntity = new BasicHttpEntity();
-    HttpResponse response;
-    Usuario usuario = new Usuario();
-    usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
-    System.out.println("IdUsuario recuperado " + usuario.getIdUsuario());
-    comisionAux.setIdUsuario(usuario.getIdUsuario());
-    Map<String, Object> content = new HashMap<String, Object>();
-    content.put("comision", comisionAux);
+    Map<String, Object> content = new HashMap<>();
+    content.put(ETIQUETA_COMISION, comisionAux);
 
     try {
       httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-    } catch (ClienteException e1) {
-      e1.printStackTrace();
+    } catch (ClienteException e) {
+      logger.error(ETIQUETA_EXCEPCION, e.getMessage());
     }
 
-    try { 
+    try {
+      response = ClienteRestUtil.getCliente()
+          .put(ComisionEndPointConstants.WEB_SERVICE_AGREGA_COMISION, httpEntity, header);
+    } catch (ClienteException e) {
+      logger.error(ETIQUETA_EXCEPCION, e.getMessage());
+      throw new AuthenticationServiceException(e.getMessage(), e);
+    }
+    if (HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+
+      JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+      JsonElement dataJson = json.get("data").getAsJsonObject();
+      comision = gson.fromJson(dataJson, Comision.class);
+    } else if (HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+      String mensaje = obtenerMensajeError(response);
+      throw new AuthenticationServiceException(mensaje);
+    } else {
+      throw new AuthenticationServiceException(
+          ERROR_DIA_INHABIL + response.getStatusLine().getReasonPhrase());
+    }
+
+    return comision;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Comision modificaComisiones(ComisionAux comisionAux, String claveUsuario,
+      Authentication authentication) {
+    Comision comisionRespuesta;
+    HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+
+    Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION,
+        Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
+    Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+    HttpEntity httpEntity = new BasicHttpEntity();
+    HttpResponse response;
+    Usuario usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
+    logger.info("Id usuario recuperado: {}", usuario.getIdUsuario());
+    comisionAux.setIdUsuario(usuario.getIdUsuario());
+    Map<String, Object> content = new HashMap<>();
+    content.put(ETIQUETA_COMISION, comisionAux);
+
+    try {
+      httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+    } catch (ClienteException e) {
+      logger.error(ETIQUETA_EXCEPCION, e.getMessage());
+    }
+
+    try {
       response = ClienteRestUtil.getCliente()
           .put(ComisionEndPointConstants.WEB_SERVICE_MODIFICA_COMISION, httpEntity, header);
     } catch (ClienteException e) {
-      logger.error(e.getMessage(), e);
+      logger.error(ETIQUETA_EXCEPCION, e.getMessage());
       throw new AuthenticationServiceException(e.getMessage(), e);
     }
     if (HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
@@ -257,23 +269,23 @@ public class ComisionServiceImpl implements ComisionService {
       throw new AuthenticationServiceException(mensaje);
     } else {
       throw new AuthenticationServiceException(
-          "Error al obtener el día Inhábil : " + response.getStatusLine().getReasonPhrase());
+          ERROR_DIA_INHABIL + response.getStatusLine().getReasonPhrase());
     }
     return comisionRespuesta;
   }
-  
+
 
   @Override
   public void eliminaComisiones(String idComision, Authentication authentication) {
-    HttpResponse response;
 
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
+    Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION,
+        Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 
-    try { 
-      response = ClienteRestUtil.getCliente()
-          .get(ComisionEndPointConstants.WEB_SERVICE_ELIMINA_COMISION + "?id=" + idComision, header);
+    try {
+      ClienteRestUtil.getCliente().get(
+          ComisionEndPointConstants.WEB_SERVICE_ELIMINA_COMISION + "?id=" + idComision, header);
     } catch (ClienteException e) {
       logger.error(e.getMessage(), e);
       throw new AuthenticationServiceException(e.getMessage(), e);
@@ -281,22 +293,24 @@ public class ComisionServiceImpl implements ComisionService {
 
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public List<Comision> obtenerComisionesPorUnidad(String idUnidad, String claveUsuario,
       String nombre, String apellidoPaterno, String apellidoMaterno,
       Authentication authentication) {
-    List<Comision> listaComisiones = new ArrayList<>();
+    List<Comision> listaComisiones;
     HttpResponse response;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-    Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
+    Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION,
+        Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 
     try {
-      response = ClienteRestUtil.getCliente().get(
-          ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_POR_UNIDAD + "?idUnidad="
-              + idUnidad + "&claveUsuario=" + removerEspacios(claveUsuario) + "&nombre=" + removerEspacios(nombre)
-              + "&apellidoPaterno=" + removerEspacios(apellidoPaterno) + "&apellidoMaterno=" + removerEspacios(apellidoMaterno),
-          header);
+      response = ClienteRestUtil.getCliente()
+          .get(ComisionEndPointConstants.WEB_SERVICE_CONSULTA_COMISION_POR_UNIDAD + "?idUnidad="
+              + idUnidad + "&claveUsuario=" + removerEspacios(claveUsuario) + "&nombre="
+              + removerEspacios(nombre) + "&apellidoPaterno=" + removerEspacios(apellidoPaterno)
+              + "&apellidoMaterno=" + removerEspacios(apellidoMaterno), header);
     } catch (ClienteException e) {
       logger.error(e.getMessage(), e);
       throw new AuthenticationServiceException(e.getMessage(), e);
@@ -317,92 +331,93 @@ public class ComisionServiceImpl implements ComisionService {
       throw new AuthenticationServiceException(
           "Error al obtener vacaciones por filtros: " + response.getStatusLine().getReasonPhrase());
     }
-    System.out.println("Recuperados " + listaComisiones.size());
+    logger.info("Numero de comisiones recuperadas: {}", listaComisiones.size());
     return listaComisiones;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public reporte generarReporte(GenerarReporteArchivoComision generaReporteArchivo, Authentication authentication) {
+  public reporte generarReporte(GenerarReporteArchivoComision generaReporteArchivo,
+      Authentication authentication) {
     HttpResponse response;
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     reporte respuesta = new reporte();
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	//Se agrega el JWT a la cabecera para acceso al recurso rest
-	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+    Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
     HttpEntity httpEntity = new BasicHttpEntity();
-    Map<String, Object> content = new HashMap<String, Object>();
+    Map<String, Object> content = new HashMap<>();
     content.put("generaReporteArchivo", generaReporteArchivo);
     try {
-        httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-        response = ClienteRestUtil.getCliente().put(ComisionEndPointConstants.WEB_SERVICE_GENERA_REPORTE, httpEntity, header);
-        if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-            JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-            try{
-                JsonElement dataJson = json.get("data").getAsJsonObject();
-                respuesta = gson.fromJson(dataJson, reporte.class); 
-            }catch(Exception e){
-                e.printStackTrace();
-            }       
-        } else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-            String mensaje = obtenerMensajeError(response);                  
-            throw new AuthenticationServiceException(mensaje);          
-        } else {
-            throw new AuthenticationServiceException("Error al obtener el archivo : "+response.getStatusLine().getReasonPhrase());
-        }
+      httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+      response = ClienteRestUtil.getCliente()
+          .put(ComisionEndPointConstants.WEB_SERVICE_GENERA_REPORTE, httpEntity, header);
+      if (HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+        JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+        JsonElement dataJson = json.get("data").getAsJsonObject();
+        respuesta = gson.fromJson(dataJson, reporte.class);
+      } else if (HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+        String mensaje = obtenerMensajeError(response);
+        throw new AuthenticationServiceException(mensaje);
+      } else {
+        throw new AuthenticationServiceException(
+            "Error al obtener el archivo : " + response.getStatusLine().getReasonPhrase());
+      }
     } catch (ClienteException e) {
-        logger.error(e.getMessage(), e);
-        throw new AuthenticationServiceException(e.getMessage(), e);
+      logger.error(ETIQUETA_EXCEPCION, e.getMessage());
+      throw new AuthenticationServiceException(e.getMessage(), e);
+    } catch (Exception e) {
+      logger.error(ETIQUETA_EXCEPCION, e.getMessage());
     }
     return respuesta;
   }
 
   @Override
-  public Comision modificaComisionEstatusArchivo(ComisionAux comisionAux, String claveUsuario, Authentication authentication) {
-    Comision comisionRespuesta= new Comision();
+  public Comision modificaComisionEstatusArchivo(ComisionAux comisionAux, String claveUsuario,
+      Authentication authentication) {
+    Comision comisionRespuesta;
     HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
-	//Se agrega el JWT a la cabecera para acceso al recurso rest
-	Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+    Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     HttpEntity httpEntity = new BasicHttpEntity();
     HttpResponse response;
-    //BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
-    Usuario usuario= new Usuario();
-    usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
-    System.out.println("IdUsuario recuperado "+usuario.getIdUsuario());
+    Usuario usuario = usuarioService.buscaUsuario(claveUsuario, authentication);
     comisionAux.setIdUsuario(usuario.getIdUsuario());
-    Map<String, Object> content = new HashMap<String, Object>();
-    content.put("comision", comisionAux);
+    Map<String, Object> content = new HashMap<>();
+    content.put(ETIQUETA_COMISION, comisionAux);
 
     try {
-        httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
-    } catch (ClienteException e1) {
-        e1.printStackTrace();
-    }
-    
-    try { 
-        response=ClienteRestUtil.getCliente().put(ComisionEndPointConstants.WEB_SERVICE_MODIFICA_COMISION_ESTATUS_ARCHIVO, httpEntity, header);
+      httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
     } catch (ClienteException e) {
-        logger.error(e.getMessage(), e);
-        throw new AuthenticationServiceException(e.getMessage(), e);
+      logger.error(ETIQUETA_EXCEPCION, e.getMessage());
     }
-    if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
-        
-        JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-        JsonElement dataJson = json.get("data").getAsJsonObject();
-        comisionRespuesta = gson.fromJson(dataJson, Comision.class);        
-    } else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
-        String mensaje = obtenerMensajeError(response);                  
-        throw new AuthenticationServiceException(mensaje);          
+
+    try {
+      response = ClienteRestUtil.getCliente().put(
+          ComisionEndPointConstants.WEB_SERVICE_MODIFICA_COMISION_ESTATUS_ARCHIVO, httpEntity,
+          header);
+    } catch (ClienteException e) {
+      logger.error(ETIQUETA_EXCEPCION, e.getMessage());
+      throw new AuthenticationServiceException(e.getMessage(), e);
+    }
+    if (HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
+
+      JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
+      JsonElement dataJson = json.get("data").getAsJsonObject();
+      comisionRespuesta = gson.fromJson(dataJson, Comision.class);
+    } else if (HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
+      String mensaje = obtenerMensajeError(response);
+      throw new AuthenticationServiceException(mensaje);
     } else {
-        throw new AuthenticationServiceException("Error al obtener el día Inhábil : "+response.getStatusLine().getReasonPhrase());
+      throw new AuthenticationServiceException(
+          ERROR_DIA_INHABIL + response.getStatusLine().getReasonPhrase());
     }
     return comisionRespuesta;
   }
-  
+
   private String removerEspacios(String string) {
-    if(string != null && !string.isEmpty()) {
+    if (string != null && !string.isEmpty()) {
       return string.replace(" ", "_");
     }
     return string;
