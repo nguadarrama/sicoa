@@ -34,6 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
+import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
@@ -163,9 +164,18 @@ public class AsistenciaController  {
     @RequestMapping(value={"coordinador"}, method = RequestMethod.GET)
     public String buscaListaAsistenciaCoordinador(Model model, Authentication authentication) {
     	
+    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+    	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute("listaEstado", listaEstado);
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("inicio", true);
@@ -180,9 +190,18 @@ public class AsistenciaController  {
 	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
 	    			tipo, estado, fechaInicial, fechaFinal, "", authentication.getName(), authentication);
 	    	
+	    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+	    	List<Estatus> listaEstado = new ArrayList<>();
+	    	
+	    	for (Estatus e : estatus) {
+	    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+	    			listaEstado.add(e);
+	    		}
+	    	}
+	    	
 	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
 	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+	    	model.addAttribute("listaEstado", listaEstado);
 	    	model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
 	    	model.addAttribute("fechaInicial", fechaInicial);
@@ -275,9 +294,18 @@ public class AsistenciaController  {
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication );
     	
+    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+    	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute("listaEstado", listaEstado);
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -326,9 +354,18 @@ public class AsistenciaController  {
 		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication);
     	
+		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+		
 		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
 		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+		model.addAttribute("listaEstado", listaEstado);
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -401,9 +438,18 @@ public class AsistenciaController  {
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication);
     	
+    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+    	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute("listaEstado", listaEstado);
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -453,9 +499,18 @@ public class AsistenciaController  {
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication);
     	
+    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+    	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute("listaEstado", listaEstado);
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
     	model.addAttribute("fechaInicial", fechaInicial);
@@ -506,9 +561,18 @@ public class AsistenciaController  {
 	    	List<Justificacion> listaJustificaciones = catalogoService.obtieneJustificaciones(authentication);
 	    	List<Usuario> listaJefes = usuarioService.obtieneListaJefes(authentication);
 	    	
+	    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+	    	List<Estatus> listaEstado = new ArrayList<>();
+	    	
+	    	for (Estatus e : estatus) {
+	    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+	    			listaEstado.add(e);
+	    		}
+	    	}
+	    	
 	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
 	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+	    	model.addAttribute("listaEstado", listaEstado);
 	    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 	    	model.addAttribute("listaAsistenciaJustificar", listaAsistenciaJustificar);
 	    	model.addAttribute("listaJustificaciones", listaJustificaciones);
@@ -522,9 +586,18 @@ public class AsistenciaController  {
     		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_lista_multiple, "", "", "",
         			"", 0, 0, fechaInicial_hidden_lista_multiple, fechaFinal_hidden_lista_multiple, "", authentication.getName(), authentication);
     		
+    		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+        	List<Estatus> listaEstado = new ArrayList<>();
+        	
+        	for (Estatus e : estatus) {
+        		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+        			listaEstado.add(e);
+        		}
+        	}
+    		
     		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
     		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+    		model.addAttribute("listaEstado", listaEstado);
     		model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
 	    	model.addAttribute("fechaInicial", fechaInicial_hidden_lista_multiple);
@@ -571,9 +644,18 @@ public class AsistenciaController  {
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", 0, 0, 
     			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName(), authentication);
     	
+    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+    	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute("listaEstado", listaEstado);
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<>());
     	model.addAttribute("fechaInicial", fechaInicial_hidden_guarda_multiple);
@@ -668,9 +750,18 @@ public class AsistenciaController  {
     @RequestMapping(value={"direccion"}, method = RequestMethod.GET)
     public String buscaListaAsistenciaDireccion(Model model, Authentication authentication) {
     	
+    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+    	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute("listaEstado", listaEstado);
     	model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
     	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
     	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
@@ -686,9 +777,18 @@ public class AsistenciaController  {
 	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombre, paterno, materno, nivel, 
 	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication);
 	    	
+	    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+	    	List<Estatus> listaEstado = new ArrayList<>();
+	    	
+	    	for (Estatus e : estatus) {
+	    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+	    			listaEstado.add(e);
+	    		}
+	    	}
+	    	
 	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
 	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+	    	model.addAttribute("listaEstado", listaEstado);
 	    	model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 	    	model.addAttribute("listaAsistencia", asistencia);
 	    	model.addAttribute("fechaInicial", fechaInicial);
@@ -795,9 +895,18 @@ public class AsistenciaController  {
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication);
     	
+    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+    	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute("listaEstado", listaEstado);
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
@@ -841,9 +950,18 @@ public class AsistenciaController  {
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication);
     	
+    	List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+    	
     	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
     	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute("listaEstado", listaEstado);
     	model.addAttribute("listaAsistencia", asistencia);
     	model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
