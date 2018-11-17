@@ -19,7 +19,7 @@ public class ConstantsController {
 	public static final String ASISTENCIA = "asistencia";
 	public static final String ERROR = "Error: {} ";
 	public static final String REGISTROS = "registros";
-	public static final String CVE_M_USUARIO = "cve_m_usuario";
+	public static final String CVE_M_USUARIO = "cveMusuario";
 	public static final String NOMBRE = "nombre";
 	public static final String PATERNO = "paterno";
 	public static final String MATERNO = "materno";

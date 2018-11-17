@@ -25,7 +25,7 @@ public class Excel extends AbstractExcelView {
         String nombreHoja = (String) model.get("nombreHoja");
         List<String> cabeceras = (List<String>)model.get("cabeceras");
         List<List<String>> registros = (List<List<String>>) model.get("registros");
-        List<String> numericColumns = new ArrayList<String>();
+        List<String> numericColumns = new ArrayList<>();
         
         if (model.containsKey("numericcolumns")) {
             numericColumns = (List<String>)model.get("numericcolumns");
