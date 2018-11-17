@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
+import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
@@ -51,11 +52,27 @@ public class ReporteController {
 	@RequestMapping(value={"inicioDireccion"}, method = RequestMethod.GET)
     public String inicioReporteDireccion(Model model, Authentication authentication) {
 		
+
 		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
 		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
 		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
 		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
+
+		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+		
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+		model.addAttribute("listaEstado", listaEstado);
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
+		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
     	return "/reportes/reportesDireccion";
@@ -64,11 +81,28 @@ public class ReporteController {
 	@RequestMapping(value={"inicioCoordinador"}, method = RequestMethod.GET)
     public String inicioReporteCoordinador(Model model, Authentication authentication) {
 		
+
 		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
 		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
 		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
 		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
+
+		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+		
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+		model.addAttribute("listaEstado", listaEstado);
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
+		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+
 		model.addAttribute("inicio", true);
     	
     	return "/reportes/reportesCoordinador";
@@ -82,11 +116,27 @@ public class ReporteController {
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cveMusuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos, authentication);
 		
+
 		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
 		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
 		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
 		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, listaAsistencias);
+
+		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+		
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+		model.addAttribute("listaEstado", listaEstado);
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
+		model.addAttribute("listaAsistencia", listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
     	model.addAttribute("cve_m_usuario", cveMusuario);
@@ -211,12 +261,27 @@ public class ReporteController {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cveMUsuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos, authentication);
-		
+
 		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
 		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
 		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
 		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, listaAsistencias);
+
+		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<Estatus> listaEstado = new ArrayList<>();
+    	
+    	for (Estatus e : estatus) {
+    		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
+    			listaEstado.add(e);
+    		}
+    	}
+		
+		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
+		model.addAttribute("listaEstado", listaEstado);
+		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
+		model.addAttribute("listaAsistencia", listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
     	model.addAttribute("cve_m_usuario", cveMUsuario);
