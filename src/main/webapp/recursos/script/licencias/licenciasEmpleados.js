@@ -66,6 +66,10 @@ $(document).ready(function() {
 					$(".rechazaLicencia #idLicencia").val(hmap.licencia.idLicencia);
 					$(".rechazaLicencia #idArchivo").val(hmap.licencia.idArchivo.idArchivo);
 					$(".rechazaLicencia #claveUsuario").val(hmap.licencia.idUsuario.claveUsuario);
+					$(".actualizaArchivo1 #idArchivo").val(hmap.licencia.idArchivo.idArchivo);
+					$(".actualizaArchivo1 #idLicencia").val(hmap.licencia.idLicencia);
+					$(".actualizaArchivo1 #claveUsuario").val(hmap.licencia.idUsuario.claveUsuario);
+					$(".actualizaArchivo1").css("display","inline");
 					
 				}else{
 					$(".aceptaLicencia").css("display","none");

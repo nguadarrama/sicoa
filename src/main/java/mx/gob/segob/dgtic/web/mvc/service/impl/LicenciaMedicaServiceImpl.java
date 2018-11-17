@@ -366,17 +366,28 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		HttpResponse response;
 		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
-		String apellidoPaterno="";
-		String apellidoMaterno="";
-		String idUnidad="";
-		String nombre="";
-		String idEstatus="";
+		HttpEntity httpEntity = new BasicHttpEntity();
 		
+		BusquedaDto busquedaDto = new BusquedaDto();
+		busquedaDto.setApellidoMaterno("");
+		busquedaDto.setClaveUsuario(claveUsuario);
+		busquedaDto.setNombre("");
+		busquedaDto.setApellidoPaterno("");
+		busquedaDto.setIdUnidad("");
+		busquedaDto.setIdEstatus("");
+		busquedaDto.setNombre("");
+		Map<String, Object> content = new HashMap<>();
+		content.put(Constantes.BUSQUEDA, busquedaDto);
+		try {
+			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
+		} catch (ClienteException e1) {
+			logger.warn("Warn.. {} ",e1);
+		}
 		try{
-			response = ClienteRestUtil.getCliente().get(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_EMPLEADOS+ "?claveUsuario="+claveUsuario+"&idEstatus="+idEstatus+"&nombre="+nombre
-					+"&apellidoPaterno="+apellidoPaterno+"&apellidoMaterno="+apellidoMaterno+"&idUnidad="+idUnidad, header);
+			response = ClienteRestUtil.getCliente().put(LicenciaMedicaEndPointConstants.WEB_SERVICE_CONSULTA_LICENCIA_EMPLEADOS, httpEntity, header);
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);

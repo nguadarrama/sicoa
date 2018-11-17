@@ -1,29 +1,19 @@
 $(document).ready(function() {
-	var elementExists = document.getElementById("archivo");
-	if(elementExists!=null && elementExists!=""){
-			document.getElementById("guardarArchivo").disabled = true;
-			document.getElementById("archivo").required = true;
-			if(document.getElementById("archivo").required == true){
-				$("#guardarArchivo").attr('disabled', false);
-			}else{
-				document.getElementById("guardarArchivo").disabled = true;
-			}
-	}
+//	var elementExists = document.getElementById("archivo");
+//	if(elementExists!=null && elementExists!=""){
+//			document.getElementById("guardarArchivo").disabled = true;
+//			document.getElementById("archivo").required = true;
+//			if(document.getElementById("archivo").required == true){
+//				$("#guardarArchivo").attr('disabled', false);
+//			}else{
+//				document.getElementById("guardarArchivo").disabled = true;
+//			}
+//	}
 	$('#vacacionesPropias').DataTable({
 	    "scrollY": "500px",
 	    "scrollCollapse": true
 	  });
 	$('.collapse').collapse();
-//	$('#collapseOne').collapse({
-//		  toggle: false
-//		})
-	//$("#botonGuardarVacaciones").disabled = true;
-	//document.getElementById("botonGuardarVacaciones").disabled=true;
-		//document.getElementById("validacionDias").style.display = "none";
-//	var array =$("#listaDiasFestivos").val();
-//	//alert("LLegada "+array);
-//	var disableddates=array.split(",");
-	//alert("LLegada "+disableddates);
 	
 	$("#fechaInicio").datepicker({ 
 		beforeShowDay: function(date){ 
@@ -67,37 +57,12 @@ $(document).ready(function() {
 		        $("#fechaInicio").datepicker("change", { maxDate: maxDate });
 	       },
 		   })
-//	  function DisableSpecificDates(date) {
-//
-//	   var m = date.getMonth();
-//	   var d = date.getDate();
-//	   var y = date.getFullYear();
-//	   var currentdate = (m + 1) + '-' + d + '-' + y ;
-//
-//	   for (var i = 0; i < disableddates.length; i++) {
-//
-//
-//	   if ($.inArray(currentdate, disableddates) != -1 ) {
-//	   return [false];
-//	   } 
-//	   }
-//	   var highlight = eventDates[date];
-//       if( highlight ) {
-//            return [true, "event", 'Tooltip text'];
-//       } else {
-//            return [true, '', ''];
-//       }
-//	  
-//	   return disableddates;
-//	  }
 	$('.descargaArchivo').css("display","none");
-	$("#actualizamosVacacion").css("display","none");
-	$('.actualizaVacacion #responsableAux').css("display","none");
 		$("#btnVacacionesPropias").on('click', function(event){
 		
 			
 		});
-		$("#miBotonCancelar").on('click', function(event){
+		$("#miBotonRegresar").on('click', function(event){
 			event.preventDefault();
 			$("#actualizamosVacacion").css("display","none");
 			$(".misPropiasVacaciones").css("display","inline");
@@ -150,20 +115,21 @@ $(document).ready(function() {
 					$('.actualizaVacacion #fechaInicio1').val(hmap.vacacion.fechaInicio);
 					$('.actualizaVacacion #fechaSolicitud').val(hmap.vacacion.fechaRegistro);
 					$('.actualizaVacacion #fechaFin1').val(hmap.vacacion.fechaFin);
-					$('.actualizaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
-					$('.actualizaArchivo #idDetalle').val(hmap.vacacion.idDetalle);
-					$('.actualizaArchivo #claveUsuario').val(hmap.vacacion.idUsuario.claveUsuario);
+					//$('.actualizaArchivo #idDetalle').val(hmap.vacacion.idDetalle);
+					//$('.actualizaArchivo #claveUsuario').val(hmap.vacacion.idUsuario.claveUsuario);
 					if(hmap.vacacion.idEstatus.idEstatus!='1'){
 						$('.rechazaVacacion #rechazaVacacion').css("display","none");
 						$('.aceptaVacacion #aceptaVacacion').css("display","none");
-						$('.actualizaArchivo').css("display","none");
+						//$('.actualizaArchivo').css("display","none");
 						$('#descarga').css("display","none");
 					}
 					//alert(hmap.vacacion.idEstatus.idEstatus)
 					if(hmap.vacacion.idEstatus.idEstatus=='1'){
-						$('.actualizaArchivo').css("display","inline");
+						//$('.actualizaArchivo').css("display","inline");
 						$('.eliminaVacacion #idVacacionEliminar').val(hmap.vacacion.idDetalle);
 						$('#botonEliminarVacaciones').css("display","inline");
+					}else{
+						$('#botonEliminarVacaciones').css("display","none");
 					}
 					//alert(hmap.vacacion.idArchivo.idArchivo+" "+hmap.vacacion.idEstatus.idEstatus);
 					if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){

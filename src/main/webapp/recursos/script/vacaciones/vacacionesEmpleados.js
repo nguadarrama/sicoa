@@ -158,6 +158,7 @@ $(document).ready(function() {
 					if(hmap.vacacion.idEstatus.idEstatus=='1'){
 						$('#descarga').css("display","inline");
 						$('.actualizaArchivo1 #idDetalle').val(hmap.vacacion.idDetalle);
+						$('.actualizaArchivo1 #claveUsuario').val(hmap.vacacion.idUsuario.claveUsuario);
 						$('.cancelaVacacion').css("display","none");
 						$('.actualizaArchivo1').css("display","inline");
 						if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
@@ -179,6 +180,8 @@ $(document).ready(function() {
 						if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
 							$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 							$('.descargaArchivo').css("display","inline");
+							$('.aceptaVacacion').css("display","none");
+							$('.rechazaVacacion').css("display","none");
 						}
 						$('.cancelaVacacion #idVacacionCancelar').val(hmap.vacacion.idDetalle);
 						$('.cancelaVacacion').css("display","inline");
@@ -191,6 +194,8 @@ $(document).ready(function() {
 							$('.descargaArchivo').css("display","inline");
 							$('.cancelaVacacion').css("display","none");
 							$('#descarga').css("display","none");
+							$('.rechazaVacacion').css("display","none");
+							$('.aceptaVacacion').css("display","none");
 						}
 					}
 					if(hmap.vacacion.idEstatus.idEstatus=='6'){

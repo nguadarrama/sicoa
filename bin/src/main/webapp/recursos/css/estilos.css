@@ -17,6 +17,19 @@ body {
     bottom: 0px;
 }
 
+.ocultaColor{
+	width: 100% !important; 
+	border-color: #f6f6f6 !important;
+}
+
+.estiloMenu{
+	position: fixed !important; 
+	width: 101% !important; 
+	background-color: #222222 !important; 
+	z-index: 100 !important; 
+	margin-left:-15 px !important;
+}
+
 .red{
 	position: inherit!important;
 }
