@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -46,6 +48,7 @@ import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import mx.gob.segob.dgtic.web.mvc.util.AsistenciaJustificacion;
 import mx.gob.segob.dgtic.web.mvc.util.Excel;
 import mx.gob.segob.dgtic.web.mvc.util.FormatoIncidencia;
+import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
 
 /**
  * Controller donde se registran las vistas de asistencia
@@ -53,7 +56,7 @@ import mx.gob.segob.dgtic.web.mvc.util.FormatoIncidencia;
  * Path : {contextoAplicacion}/
  */
 @Controller
-@RequestMapping( value = "asistencia")
+@RequestMapping( value = ConstantsController.ASISTENCIA)
 public class AsistenciaController  {	
 	
 	@Autowired
@@ -73,7 +76,7 @@ public class AsistenciaController  {
 	
 	@Autowired
 	private UnidadAdministrativaService unidadAdministrativaService;
-	
+	private static final Logger logger = LoggerFactory.getLogger(CatalogoController.class);
 	//JUSTIFICACION
 	private static final String MENSAJE_REGISTRO_JUSTIFICACION = "La justificación ha quedado registrada";
 	private static final String MENSAJE_AUTORIZA_JUSTIFICACION = "La justificación ha sido aceptada";
@@ -86,13 +89,27 @@ public class AsistenciaController  {
 	
 	private static final String MENSAJE_EXCEPCION = "No se registró la operación.";
 	
+	private static final String ID_ASISTENCIA = "Id Asistencia";
+	private static final String ENTRADA = "Entrada";
+	private static final String ID_STATUS = "Id Status";
+	private static final String ID_TIPO = "Id Tipo";
+	private static final String SALIDA = "Salida";
+	private static final String USUARIO = "Usuario";
+	private static final String CABECERAS = "Cabeceras";
+	private static final String ASISTENCIA_DIRECCION = "/asistencia/direccion";
+	private static final String APPLICATION_MS_EXCEL = "application/ms-excel";
+	private static final String CONTENT_DISPOSITION = "Content-disposition";
+	private static final String ASISTENCIA_COORDINADOR = "/asistencia/coordinador";
+	private static final String APPLICATION_PDF = "application/pdf";
+	
+	
 	//EMPLEADO
 	@RequestMapping(value={"empleado"}, method = RequestMethod.GET)
     public String buscaListaAsistenciaEmpleado(Model model) {
     	
-    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
-    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
-    	model.addAttribute("inicio", true);
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
+    	model.addAttribute(ConstantsController.INICIO, true);
     	
     	return "/asistencia/empleado";
     }
@@ -101,9 +118,9 @@ public class AsistenciaController  {
     public String buscaListaAsistenciaEmpleadoRango(Model model, Authentication authentication, String fechaInicial, String fechaFinal) {
 
     	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRango(authentication.getName(), fechaInicial, fechaFinal, authentication);
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
+    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinal);
     	
     	return "/asistencia/empleado";
     }
@@ -116,17 +133,17 @@ public class AsistenciaController  {
 	    	Map<String, Object> model = new HashMap<>();
 	        
 	    	//nombre de la hoja
-	        model.put("nombreHoja", "asistencia");
+	        model.put(ConstantsController.NOMBRE_HOJA, ConstantsController.ASISTENCIA);
 	        
 	        //nombres columnas
 	        List<String> cabeceras = new ArrayList<>();
-	        cabeceras.add("Id Asistencia");
-	        cabeceras.add("Entrada");
-	        cabeceras.add("Id Status");
-	        cabeceras.add("Id Tipo");
-	        cabeceras.add("Salida");
-	        cabeceras.add("Usuario");
-	        model.put("cabeceras", cabeceras);
+	        cabeceras.add(ID_ASISTENCIA);
+	        cabeceras.add(ENTRADA);
+	        cabeceras.add(ID_STATUS);
+	        cabeceras.add(ID_TIPO);
+	        cabeceras.add(SALIDA);
+	        cabeceras.add(USUARIO);
+	        model.put(CABECERAS, cabeceras);
 	        
 	        //Información registros (List<Object[]>)
 	        List<List<String>> asistencias = new ArrayList<>();
@@ -134,25 +151,25 @@ public class AsistenciaController  {
 	        for (Asistencia a : listaAsistencia) {
 	        	
 	        	List<String> elementos = new ArrayList<>();
-	        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : new String(""));
+	        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : "");
 	        	elementos.add(a.getEntrada().toString());
-	        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : new String(""));
-	        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : new String(""));
-	        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : new String(""));
-	        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() : new String(""));
+	        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : "");
+	        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : "");
+	        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : "");
+	        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() :"");
 	        	asistencias.add(elementos);
 	        }
 	        
-	        model.put("registros", asistencias);
+	        model.put(ConstantsController.REGISTROS, asistencias);
 	        
-	        response.setContentType( "application/ms-excel" );
-	        response.setHeader( "Content-disposition", "attachment; filename=SESNSP.xls" );         
+	        response.setContentType( APPLICATION_MS_EXCEL );
+	        response.setHeader( CONTENT_DISPOSITION, "attachment; filename=SESNSP.xls" );         
 	        
 	        return new ModelAndView(new Excel(), model);
     }
     
     @RequestMapping(value="empleado/busca", method=RequestMethod.GET, params="imprime")
-    public ModelAndView imprimeEmpleado(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
+    public ModelAndView imprimeEmpleado(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cveMUsuario, String fechaInicial, String fechaFinal) {
         
     	return new ModelAndView();
     	
@@ -163,68 +180,68 @@ public class AsistenciaController  {
     @RequestMapping(value={"coordinador"}, method = RequestMethod.GET)
     public String buscaListaAsistenciaCoordinador(Model model, Authentication authentication) {
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
-    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
-    	model.addAttribute("inicio", true);
+    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
+    	model.addAttribute(ConstantsController.INICIO, true);
     	
-    	return "/asistencia/coordinador";
+    	return ASISTENCIA_COORDINADOR;
     }
     
     @RequestMapping(value={"coordinador/busca"}, method = RequestMethod.GET, params="busca")
-    public String buscaListaAsistenciaCoordinadorRango(Model model, Authentication authentication, String cve_m_usuario, String nombre, String paterno, 
+    public String buscaListaAsistenciaCoordinadorRango(Model model, Authentication authentication, String cveMusuario, String nombre, String paterno, 
     		String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
 
-	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
+	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cveMusuario, nombre, paterno, materno, nivel, 
 	    			tipo, estado, fechaInicial, fechaFinal, "", authentication.getName(), authentication);
 	    	
-	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-	    	model.addAttribute("listaAsistencia", asistencia);
-	    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
-	    	model.addAttribute("fechaInicial", fechaInicial);
-	    	model.addAttribute("fechaFinal", fechaFinal);
-	    	model.addAttribute("cve_m_usuario", cve_m_usuario);
-	    	model.addAttribute("nombre", nombre);
-	    	model.addAttribute("paterno", paterno);
-	    	model.addAttribute("materno", materno);
-	    	model.addAttribute("nivel", nivel);
-	    	model.addAttribute("tipo", tipo);
-	    	model.addAttribute("estado", estado);
-	    	model.addAttribute("unidadAdministrativa", unidadAdministrativa);
+	    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
+	    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
+	    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinal);
+	    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMusuario);
+	    	model.addAttribute(ConstantsController.NOMBRE, nombre);
+	    	model.addAttribute(ConstantsController.PATERNO, paterno);
+	    	model.addAttribute(ConstantsController.MATERNO, materno);
+	    	model.addAttribute(ConstantsController.NIVEL, nivel);
+	    	model.addAttribute(ConstantsController.TIPO, tipo);
+	    	model.addAttribute(ConstantsController.ESTADO, estado);
+	    	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativa);
 	    	
 	    	//se realizó búsqueda por usuario
-	    	if (!cve_m_usuario.isEmpty()) {
+	    	if (!cveMusuario.isEmpty()) {
 	    		model.addAttribute("activaCheckbox", true);
 	    	}
 	    	
-	    	return "/asistencia/coordinador";
+	    	return ASISTENCIA_COORDINADOR;
     }
     
     @RequestMapping(value="coordinador/busca", method=RequestMethod.GET, params="exporta")
-    public ModelAndView exportaExcelCoordinador(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String nombre, String paterno, 
+    public ModelAndView exportaExcelCoordinador(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cveMUsuario, String nombre, String paterno, 
     		String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
         
-    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario, nombre, paterno, materno, nivel, 
+    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cveMUsuario, nombre, paterno, materno, nivel, 
     			tipo, estado, fechaInicial, fechaFinal, "", authentication.getName(), authentication);
     	
     	Map<String, Object> model = new HashMap<>();
         
     	//nombre de la hoja
-        model.put("nombreHoja", "asistencia");
+        model.put(ConstantsController.NOMBRE_HOJA, ConstantsController.ASISTENCIA);
         
         //nombres columnas
         List<String> cabeceras = new ArrayList<>();
-        cabeceras.add("Id Asistencia");
-        cabeceras.add("Entrada");
-        cabeceras.add("Id Status");
-        cabeceras.add("Id Tipo");
-        cabeceras.add("Salida");
-        cabeceras.add("Usuario");
-        model.put("cabeceras", cabeceras);
+        cabeceras.add(ID_ASISTENCIA);
+        cabeceras.add(ENTRADA);
+        cabeceras.add(ID_STATUS);
+        cabeceras.add(ID_TIPO);
+        cabeceras.add(SALIDA);
+        cabeceras.add(USUARIO);
+        model.put(CABECERAS, cabeceras);
         
         //Información registros (List<Object[]>)
         List<List<String>> asistencias = new ArrayList<>();
@@ -232,28 +249,28 @@ public class AsistenciaController  {
         for (Asistencia a : listaAsistencia) {
         	
         	List<String> elementos = new ArrayList<>();
-        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : new String(""));
+        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : "");
         	elementos.add(a.getEntrada().toString());
-        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : new String(""));
-        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : new String(""));
-        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : new String(""));
-        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() : new String(""));
+        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : "");
+        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : "");
+        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : "");
+        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() : "");
         	asistencias.add(elementos);
         }
         
-        model.put("registros", asistencias);
+        model.put(ConstantsController.REGISTROS, asistencias);
         
-        response.setContentType( "application/ms-excel" );
-        response.setHeader( "Content-disposition", "attachment; filename=ReporteSESNSP.xls" );         
+        response.setContentType( APPLICATION_MS_EXCEL );
+        response.setHeader( CONTENT_DISPOSITION, "attachment; filename=ReporteSESNSP.xls" );         
         
         return new ModelAndView(new Excel(), model);
     	
     }
     
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="justifica")
-    public String creaIncidencia(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
+    public String creaIncidencia(Model model, String cveMUsuarioHidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivoSubido, String cve_m_usuario, String nombreAutorizador) {
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivoSubido, String cveMUsuario, String nombreAutorizador) {
     	
     	Integer resultadoProceso = 0;
     	Archivo archivo = null;
@@ -261,7 +278,7 @@ public class AsistenciaController  {
     	try {
     		//guarda el archivo
     		if (archivoSubido.getSize() > 0) {
-    			archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "asistencia_justificacion", "justificacion-", authentication);
+    			archivo = archivoService.guardaArchivo(archivoSubido, cveMUsuario, "asistencia_justificacion", "justificacion-", authentication);
     		}
     		
     		if (archivo != null) {
@@ -270,40 +287,40 @@ public class AsistenciaController  {
     		} 
 
     	} catch(Exception e) {
-    		new Exception("No se logró crear la incidencia .." + e.getMessage());
+    		logger.warn(ConstantsController.ERROR,e);
     	}
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cveMUsuarioHidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication );
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
-    	model.addAttribute("nombre", nombreHidden);
-    	model.addAttribute("paterno", paternoHidden);
-    	model.addAttribute("materno", maternoHidden);
-    	model.addAttribute("nivel", nivelHidden);
-    	model.addAttribute("tipo", tipoHidden);
-    	model.addAttribute("estado", estadoHidden);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
+    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
+    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinal);
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMUsuarioHidden);
+    	model.addAttribute(ConstantsController.NOMBRE, nombreHidden);
+    	model.addAttribute(ConstantsController.PATERNO, paternoHidden);
+    	model.addAttribute(ConstantsController.MATERNO, maternoHidden);
+    	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
+    	model.addAttribute(ConstantsController.TIPO, tipoHidden);
+    	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
     	
     	if (resultadoProceso == 1) {
-    		model.addAttribute("MENSAJE", MENSAJE_REGISTRO_JUSTIFICACION);
+    		model.addAttribute(ConstantsController.MENSAJE, MENSAJE_REGISTRO_JUSTIFICACION);
     	} else if (resultadoProceso == 0) {
-    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    		model.addAttribute(ConstantsController.MENSAJE_EXCEPTION, MENSAJE_EXCEPCION);
     	}
     	
-    	return "/asistencia/coordinador";
+    	return ASISTENCIA_COORDINADOR;
     }
     
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="descuenta")
-    public String creaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
+    public String creaDescuento(Model model, String cveMUsuarioHidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivoSubido, String cve_m_usuario, String nombreAutorizador) {
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, MultipartFile archivoSubido, String cveMUsuario, String nombreAutorizador) {
     	
     	Integer resultadoProceso = 0;
     	Archivo archivo = null;
@@ -311,7 +328,7 @@ public class AsistenciaController  {
     	try {
     		//guarda el archivo
     		if (archivoSubido.getSize() > 0) {
-    			archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "descuento" , "descuento-", authentication);
+    			archivo = archivoService.guardaArchivo(archivoSubido, cveMUsuario, "descuento" , "descuento-", authentication);
     		}
     		
     		if (archivo != null) {
@@ -320,41 +337,41 @@ public class AsistenciaController  {
     		} 
 
     	} catch(Exception e) {
-    		new Exception("No se logró crear la incidencia " + e.getMessage());
+    		logger.warn(ConstantsController.ERROR,e);
     	}
     	
-		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cveMUsuarioHidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication);
     	
-		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
-    	model.addAttribute("nombre", nombreHidden);
-    	model.addAttribute("paterno", paternoHidden);
-    	model.addAttribute("materno", maternoHidden);
-    	model.addAttribute("nivel", nivelHidden);
-    	model.addAttribute("tipo", tipoHidden);
-    	model.addAttribute("estado", estadoHidden);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
+    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
+    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinal);
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMUsuarioHidden);
+    	model.addAttribute(ConstantsController.NOMBRE, nombreHidden);
+    	model.addAttribute(ConstantsController.PATERNO, paternoHidden);
+    	model.addAttribute(ConstantsController.MATERNO, maternoHidden);
+    	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
+    	model.addAttribute(ConstantsController.TIPO, tipoHidden);
+    	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
     	
     	if (resultadoProceso == 1) {
-    		model.addAttribute("MENSAJE", MENSAJE_REGISTRO_DESCUENTO);
+    		model.addAttribute(ConstantsController.MENSAJE, MENSAJE_REGISTRO_DESCUENTO);
     	} else if (resultadoProceso == 0) {
-    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    		model.addAttribute(ConstantsController.MENSAJE_EXCEPTION, MENSAJE_EXCEPCION);
     	}
     	
-    	return "/asistencia/coordinador";
+    	return ASISTENCIA_COORDINADOR;
     }
     
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="formatoJustificacion")
-    public String descargaFormatoJustificacion(Model model, String nombre, String unidad, String nombreAutorizador, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
+    public String descargaFormatoJustificacion(Model model, String nombre, String unidad, String nombreAutorizador, String cveMUsuarioHidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cve_m_usuario, Integer idTipoDiaModal, HttpServletResponse response,
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cveMusuario, Integer idTipoDiaModal, HttpServletResponse response,
     		String fechaIncidenciaHidden) {
     	
     	//se traduce la incidencia
@@ -376,7 +393,7 @@ public class AsistenciaController  {
     	
     	//fecha actual para el reporte
     	Date fechaHoy = new Date();
-    	SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+    	SimpleDateFormat f = new SimpleDateFormat(ConstantsController.DD_MM_YYYY);
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
@@ -385,7 +402,7 @@ public class AsistenciaController  {
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
 			if(mimeType == null){
-				mimeType = "application/pdf";
+				mimeType = APPLICATION_PDF;
 			}
 			
 			response.setContentType(mimeType);
@@ -395,49 +412,49 @@ public class AsistenciaController  {
 	        stream.flush();
 	        response.flushBuffer();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(ConstantsController.ERROR,e);
 		}
     	
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cveMUsuarioHidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
-    	model.addAttribute("nombre", nombreHidden);
-    	model.addAttribute("paterno", paternoHidden);
-    	model.addAttribute("materno", maternoHidden);
-    	model.addAttribute("nivel", nivelHidden);
-    	model.addAttribute("tipo", tipoHidden);
-    	model.addAttribute("estado", estadoHidden);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
+    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
+    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinal);
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMUsuarioHidden);
+    	model.addAttribute(ConstantsController.NOMBRE, nombreHidden);
+    	model.addAttribute(ConstantsController.PATERNO, paternoHidden);
+    	model.addAttribute(ConstantsController.MATERNO, maternoHidden);
+    	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
+    	model.addAttribute(ConstantsController.TIPO, tipoHidden);
+    	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
     	
-    	return "/asistencia/coordinador";
+    	return ASISTENCIA_COORDINADOR;
     }
     
     @RequestMapping(value={"creaIncidencia"}, method = RequestMethod.POST, params="formatoDescuento")
-    public String descargaFormatoDescuento(Model model, String nombre, String unidad, String nombreAutorizador, String cve_m_usuario_hidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
+    public String descargaFormatoDescuento(Model model, String nombre, String unidad, String nombreAutorizador, String cveMUsuarioHidden, Integer idAsistenciaHidden, Integer idTipoDia, Integer idJustificacion, 
     		String nombreHidden, String paternoHidden, String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String fechaInicial, 
-    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cve_m_usuario, HttpServletResponse response,
+    		String fechaFinal, String unidadAdministrativaHidden, Authentication authentication, String cveMusuario, HttpServletResponse response,
     		String fechaIncidenciaHidden) {
     	
     	//fecha actual para el reporte
     	Date fechaHoy = new Date();
-    	SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+    	SimpleDateFormat f = new SimpleDateFormat(ConstantsController.DD_MM_YYYY);
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte archivo = asistenciaService.formatoDescuento(new FormatoIncidencia(nombre, "", fechaActual, "", cve_m_usuario, fechaIncidenciaHidden), authentication);
+			reporte archivo = asistenciaService.formatoDescuento(new FormatoIncidencia(nombre, "", fechaActual, "", cveMusuario, fechaIncidenciaHidden), authentication);
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
 			if(mimeType == null){
-				mimeType = "application/pdf";
+				mimeType = APPLICATION_PDF;
 			}
 			
 			response.setContentType(mimeType);
@@ -447,34 +464,35 @@ public class AsistenciaController  {
 	        stream.flush();
 	        response.flushBuffer();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(ConstantsController.ERROR,e);
 		}
     	
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cveMUsuarioHidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication.getName(), authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
-    	model.addAttribute("nombre", nombreHidden);
-    	model.addAttribute("paterno", paternoHidden);
-    	model.addAttribute("materno", maternoHidden);
-    	model.addAttribute("nivel", nivelHidden);
-    	model.addAttribute("tipo", tipoHidden);
-    	model.addAttribute("estado", estadoHidden);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
+    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
+    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinal);
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMUsuarioHidden);
+    	model.addAttribute(ConstantsController.NOMBRE, nombreHidden);
+    	model.addAttribute(ConstantsController.PATERNO, paternoHidden);
+    	model.addAttribute(ConstantsController.MATERNO, maternoHidden);
+    	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
+    	model.addAttribute(ConstantsController.TIPO, tipoHidden);
+    	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
     	
-    	return "/asistencia/coordinador";
+    	return ASISTENCIA_COORDINADOR;
     }
     
-    @RequestMapping(value={"coordinador/buscaAsistenciasPorId"}, method = RequestMethod.POST)
-    public String buscaAsistenciasPorId(Model model, Integer[] checkboxes, String[] arregloIdAsistencias, String cve_m_usuario_hidden_lista_multiple, String fechaInicial_hidden_lista_multiple, 
-    		String fechaFinal_hidden_lista_multiple, Authentication authentication) {
+    @SuppressWarnings("unused")
+	@RequestMapping(value={"coordinador/buscaAsistenciasPorId"}, method = RequestMethod.POST)
+    public String buscaAsistenciasPorId(Model model, Integer[] checkboxes, String[] arregloIdAsistencias, String cveMusuarioHiddenListaMultiple, String fechaInicialHiddenListaMultiple, 
+    		String fechaFinalHiddenListaMultiple, Authentication authentication) {
     	
     	List<Asistencia> listaAsistenciaJustificar = new ArrayList<>();
     	String nombreJefe = "";
@@ -496,53 +514,53 @@ public class AsistenciaController  {
 	    			nombreJefe = asistenciaJustificar.getUsuarioDto().getNombreJefe();
 	    		}
 	    		
-	    		if (motivo.isEmpty()) {
-	    			if (asistenciaJustificar.getIncidencia().getJustificacion().getJustificacion() != null) {
+	    		if (motivo.isEmpty() && asistenciaJustificar.getIncidencia().getJustificacion().getJustificacion() != null) {
+	    			
 	    				motivo = asistenciaJustificar.getIncidencia().getJustificacion().getJustificacion();
-	    			}
+	    			
 	    		}
 	    	}
 	    	
 	    	List<Justificacion> listaJustificaciones = catalogoService.obtieneJustificaciones(authentication);
 	    	List<Usuario> listaJefes = usuarioService.obtieneListaJefes(authentication);
 	    	
-	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-	    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
-	    	model.addAttribute("listaAsistenciaJustificar", listaAsistenciaJustificar);
+	    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
+	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, listaAsistenciaJustificar);
 	    	model.addAttribute("listaJustificaciones", listaJustificaciones);
 	    	model.addAttribute("listaAutorizadores", listaJefes);
 	    	model.addAttribute("nombreJefe", nombreJefe);
 	    	model.addAttribute("justificacion", motivo);
-	    	model.addAttribute("fechaInicial", fechaInicial_hidden_lista_multiple);
-	    	model.addAttribute("fechaFinal", fechaFinal_hidden_lista_multiple);
-	    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_lista_multiple);
+	    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicialHiddenListaMultiple);
+	    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinalHiddenListaMultiple);
+	    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMusuarioHiddenListaMultiple);
     	} else {
-    		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_lista_multiple, "", "", "",
-        			"", 0, 0, fechaInicial_hidden_lista_multiple, fechaFinal_hidden_lista_multiple, "", authentication.getName(), authentication);
+    		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cveMusuarioHiddenListaMultiple, "", "", "",
+        			"", 0, 0, fechaInicialHiddenListaMultiple, fechaFinalHiddenListaMultiple, "", authentication.getName(), authentication);
     		
-    		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-    		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-    		model.addAttribute("listaAsistencia", asistencia);
-	    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
-	    	model.addAttribute("fechaInicial", fechaInicial_hidden_lista_multiple);
-	    	model.addAttribute("fechaFinal", fechaFinal_hidden_lista_multiple);
-	    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_lista_multiple);
+    		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+    		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+    		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
+	    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicialHiddenListaMultiple);
+	    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinalHiddenListaMultiple);
+	    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMusuarioHiddenListaMultiple);
 	    	
 	    	//se realizó búsqueda por usuario
-	    	if (!cve_m_usuario_hidden_lista_multiple.isEmpty()) {
+	    	if (!cveMusuarioHiddenListaMultiple.isEmpty()) {
 	    		model.addAttribute("activaCheckbox", true);
 	    	}
     	}
     	
-    	return "/asistencia/coordinador";
+    	return ASISTENCIA_COORDINADOR;
     }
     
     @RequestMapping(value={"coordinador/justificaMultiple"}, method = RequestMethod.POST, params = "justificacionMultipleGuarda")
     public String creaIncidencias(Model model, Integer[] listaIdAsistencias, MultipartFile archivoSubido, Integer selectJustificacion, String nombreAutorizador,
-    		String cve_m_usuario_hidden_guarda_multiple, String fechaInicial_hidden_guarda_multiple, String fechaFinal_hidden_guarda_multiple, Authentication authentication) {
+    		String cvemUsuarioHiddenGuardaMultiple, String fechaInicialHiddenGuardaMultiple, String fechaFinalHiddenGuardaMultiple, Authentication authentication) {
 
     	Integer resultadoProceso = 0;
     	Archivo archivo = null;
@@ -551,12 +569,12 @@ public class AsistenciaController  {
     	for (Integer idAsistencia : listaIdAsistencias) {
     		Asistencia asistencia = asistenciaService.buscaAsistenciaPorId(idAsistencia, authentication);
     		Integer idTipoDia = asistencia.getIdTipoDia().getIdTipoDia();
-    		String cve_m_usuario = asistencia.getUsuarioDto().getClaveUsuario();
+    		String cveMusuario = asistencia.getUsuarioDto().getClaveUsuario();
     		
     		try {
         		//guarda el archivo
         		if (archivoSubido.getSize() > 0) {
-    				archivo = archivoService.guardaArchivo(archivoSubido, cve_m_usuario, "justificacion", "justificacion-", authentication);
+    				archivo = archivoService.guardaArchivo(archivoSubido, cveMusuario, "justificacion", "justificacion-", authentication);
         			
     				if (archivo != null) {
 	        			//crea la incidencia y asocia el archivo
@@ -564,37 +582,37 @@ public class AsistenciaController  {
     				}
         		}
         	} catch(Exception e) {
-        		new Exception("No se logró crear la incidencia " + e.getMessage());
+        		logger.error(ConstantsController.ERROR, e);
         	}
     	}
     	
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", 0, 0, 
-    			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName(), authentication);
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cvemUsuarioHiddenGuardaMultiple, "", "", "", "", 0, 0, 
+    			fechaInicialHiddenGuardaMultiple, fechaFinalHiddenGuardaMultiple, "", authentication.getName(), authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<>());
-    	model.addAttribute("fechaInicial", fechaInicial_hidden_guarda_multiple);
-    	model.addAttribute("fechaFinal", fechaFinal_hidden_guarda_multiple);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_guarda_multiple);
+    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<>());
+    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicialHiddenGuardaMultiple);
+    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinalHiddenGuardaMultiple);
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cvemUsuarioHiddenGuardaMultiple);
     	
     	if (resultadoProceso == 1) {
-    		model.addAttribute("MENSAJE", MENSAJE_REGISTRO_JUSTIFICACION);
+    		model.addAttribute(ConstantsController.MENSAJE, MENSAJE_REGISTRO_JUSTIFICACION);
     	} else if (resultadoProceso == 0) {
-    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    		model.addAttribute(ConstantsController.MENSAJE_EXCEPTION, MENSAJE_EXCEPCION);
     	}
     	
-    	return "/asistencia/coordinador";
+    	return ASISTENCIA_COORDINADOR;
     }
     
     @RequestMapping(value={"coordinador/justificaMultiple"}, method = RequestMethod.POST, params = "formatoJustificacionMultipleBtn")
     public String descargaFormatoJustificacionMultiple(Model model, Integer[] listaIdAsistencias, MultipartFile archivo, Integer selectJustificacion, 
-    		String nombreAutorizador, String cve_m_usuario_hidden_guarda_multiple, String fechaInicial_hidden_guarda_multiple, 
-    		String fechaFinal_hidden_guarda_multiple, Authentication authentication, HttpServletResponse response) {
+    		String nombreAutorizador, String cveMUsuarioHiddenGuardaMultiple, String fechaInicialHiddenGuardaMultiple, 
+    		String fechaFinalHiddenGuardaMultiple, Authentication authentication, HttpServletResponse response) {
     	
-    	Asistencia asistencia = new Asistencia();
+    	Asistencia asistencia;
     	Integer idTipoDia = 0;
     	String nombre = "";
     	String unidadAdministrativa = "";
@@ -628,7 +646,7 @@ public class AsistenciaController  {
     	
     	//fecha actual para el reporte
     	Date fechaHoy = new Date();
-    	SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+    	SimpleDateFormat f = new SimpleDateFormat(ConstantsController.DD_MM_YYYY);
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
@@ -637,7 +655,7 @@ public class AsistenciaController  {
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			
 			if(mimeType == null){
-				mimeType = "application/pdf";
+				mimeType = APPLICATION_PDF;
 			}
 			
 			response.setContentType(mimeType);
@@ -647,19 +665,19 @@ public class AsistenciaController  {
 	        stream.flush();
 	        response.flushBuffer();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(ConstantsController.ERROR,e);
 		}
     	
-    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cve_m_usuario_hidden_guarda_multiple, "", "", "", "", 0, 0, 
-    			fechaInicial_hidden_guarda_multiple, fechaFinal_hidden_guarda_multiple, "", authentication.getName(), authentication);
+    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(cveMUsuarioHiddenGuardaMultiple, "", "", "", "", 0, 0, 
+    			fechaInicialHiddenGuardaMultiple, fechaFinalHiddenGuardaMultiple, "", authentication.getName(), authentication);
    	
-    	model.addAttribute("listaAsistencia", listaAsistencia);
-    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<>());
-    	model.addAttribute("fechaInicial", fechaInicial_hidden_guarda_multiple);
-    	model.addAttribute("fechaFinal", fechaFinal_hidden_guarda_multiple);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden_guarda_multiple);
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, listaAsistencia);
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<>());
+    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicialHiddenGuardaMultiple);
+    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinalHiddenGuardaMultiple);
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMUsuarioHiddenGuardaMultiple);
    	
-    	return "/asistencia/coordinador";
+    	return ASISTENCIA_COORDINADOR;
     }
     
     //TERMINA COORDINADOR
@@ -668,64 +686,64 @@ public class AsistenciaController  {
     @RequestMapping(value={"direccion"}, method = RequestMethod.GET)
     public String buscaListaAsistenciaDireccion(Model model, Authentication authentication) {
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
     	model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
-    	model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
-    	model.addAttribute("listaAsistenciaJustificar", new ArrayList<Asistencia>());
-    	model.addAttribute("inicio", true);
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
+    	model.addAttribute(ConstantsController.INICIO, true);
     	
-    	return "/asistencia/direccion";
+    	return ASISTENCIA_DIRECCION;
     }
     
     @RequestMapping(value={"direccion/busca"}, method = RequestMethod.GET, params="busca")
-    public String buscaListaAsistenciaDireccionRango(Model model, Authentication authentication, String cve_m_usuario, String nombre, String paterno, 
+    public String buscaListaAsistenciaDireccionRango(Model model, Authentication authentication, String cveMusuario, String nombre, String paterno, 
     		String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
 
-	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombre, paterno, materno, nivel, 
+	    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cveMusuario, nombre, paterno, materno, nivel, 
 	    			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication);
 	    	
-	    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-	    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-	    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
 	    	model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
-	    	model.addAttribute("listaAsistencia", asistencia);
-	    	model.addAttribute("fechaInicial", fechaInicial);
-	    	model.addAttribute("fechaFinal", fechaFinal);
-	    	model.addAttribute("cve_m_usuario", cve_m_usuario);
-	    	model.addAttribute("nombre", nombre);
-	    	model.addAttribute("paterno", paterno);
-	    	model.addAttribute("materno", materno);
-	    	model.addAttribute("nivel", nivel);
-	    	model.addAttribute("tipo", tipo);
-	    	model.addAttribute("estado", estado);
-	    	model.addAttribute("unidadAdministrativa", !unidadAdministrativa.isEmpty() ? Integer.parseInt(unidadAdministrativa) : 0);
+	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+	    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
+	    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinal);
+	    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMusuario);
+	    	model.addAttribute(ConstantsController.NOMBRE, nombre);
+	    	model.addAttribute(ConstantsController.PATERNO, paterno);
+	    	model.addAttribute(ConstantsController.MATERNO, materno);
+	    	model.addAttribute(ConstantsController.NIVEL, nivel);
+	    	model.addAttribute(ConstantsController.TIPO, tipo);
+	    	model.addAttribute(ConstantsController.ESTADO, estado);
+	    	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, !unidadAdministrativa.isEmpty() ? Integer.parseInt(unidadAdministrativa) : 0);
 	    	
-	    	return "/asistencia/direccion";
+	    	return ASISTENCIA_DIRECCION;
     }
     
     @RequestMapping(value="direccion/busca", method=RequestMethod.GET, params="exporta")
     public ModelAndView exportaExcelDireccion(HttpServletRequest request, HttpServletResponse response, Authentication authentication, 
-    		String cve_m_usuario, String nombre, String paterno, String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
+    		String cveMusuario, String nombre, String paterno, String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa) {
         
-    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombre, paterno, materno, nivel, 
+    	List<Asistencia> listaAsistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cveMusuario, nombre, paterno, materno, nivel, 
     			tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication);
     	
     	Map<String, Object> model = new HashMap<>();
         
     	//nombre de la hoja
-        model.put("nombreHoja", "asistencia");
+        model.put(ConstantsController.NOMBRE_HOJA, ConstantsController.ASISTENCIA);
         
         //nombres columnas
         List<String> cabeceras = new ArrayList<>();
-        cabeceras.add("Id Asistencia");
-        cabeceras.add("Entrada");
-        cabeceras.add("Id Status");
-        cabeceras.add("Id Tipo");
-        cabeceras.add("Salida");
-        cabeceras.add("Usuario");
-        model.put("cabeceras", cabeceras);
+        cabeceras.add(ID_ASISTENCIA);
+        cabeceras.add(ENTRADA);
+        cabeceras.add(ID_STATUS);
+        cabeceras.add(ID_TIPO);
+        cabeceras.add(SALIDA);
+        cabeceras.add(USUARIO);
+        model.put(CABECERAS, cabeceras);
         
         //Información registros (List<Object[]>)
         List<List<String>> asistencias = new ArrayList<>();
@@ -733,19 +751,19 @@ public class AsistenciaController  {
         for (Asistencia a : listaAsistencia) {
         	
         	List<String> elementos = new ArrayList<>();
-        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : new String(""));
+        	elementos.add(a.getIdAsistencia() != null ? a.getIdAsistencia().toString() : "");
         	elementos.add(a.getEntrada().toString());
-        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : new String(""));
-        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : new String(""));
-        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : new String(""));
-        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() : new String(""));
+        	elementos.add(a.getIdEstatus().getEstatus() != null ? a.getIdEstatus().getEstatus() : "");
+        	elementos.add(a.getIdTipoDia().getNombre() != null ? a.getIdTipoDia().getNombre() : "");
+        	elementos.add(a.getSalida() != null ? a.getSalida().toString() : "");
+        	elementos.add(a.getUsuarioDto() != null ? a.getUsuarioDto().getClaveUsuario() : "");
         	asistencias.add(elementos);
         }
         
-        model.put("registros", asistencias);
+        model.put(ConstantsController.REGISTROS, asistencias);
         
-        response.setContentType( "application/ms-excel" );
-        response.setHeader( "Content-disposition", "attachment; filename=SESNSP.xls" );         
+        response.setContentType( APPLICATION_MS_EXCEL );
+        response.setHeader( CONTENT_DISPOSITION, "attachment; filename=SESNSP.xls" );         
         
         return new ModelAndView(new Excel(), model);
     	
@@ -753,7 +771,7 @@ public class AsistenciaController  {
     }
     
     @RequestMapping(value={"direccion/dictamina_Incidencia_Descuento"}, method = RequestMethod.POST) //permite aprobar o rechazar justificaciones y descuentos
-    public String dictaminaIncidenciaDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
+    public String dictaminaIncidenciaDescuento(Model model, String cveMUsuarioHidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
     		String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
     		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion, String nombre, String unidad, HttpServletResponse response,
     		Authentication authentication) {
@@ -767,7 +785,7 @@ public class AsistenciaController  {
     		Asistencia asistencia = asistenciaService.buscaAsistenciaPorId(idAsistenciaHidden, authentication);
     		Integer idArchivo = asistencia.getIncidencia().getIdArchivo().getIdArchivo();    		
 
-    		Archivo archivoAsociado= new Archivo();
+    		Archivo archivoAsociado;
         	archivoAsociado = archivoService.consultaArchivo(idArchivo, authentication);
         	String nombrecompleto = archivoAsociado.getUrl() + archivoAsociado.getNombre();
 
@@ -779,7 +797,7 @@ public class AsistenciaController  {
 				String mimeType= URLConnection.guessContentTypeFromStream(inputStream);
 				
 				if(mimeType==null){
-	            	mimeType="application/pdf";
+	            	mimeType=APPLICATION_PDF;
 	            }
 	            
 	            response.setContentType(mimeType);
@@ -787,80 +805,80 @@ public class AsistenciaController  {
 	            response.setHeader("Content-Disposition", String.format("attachment; filename\"%s\"",file.getName()));
 	            FileCopyUtils.copy(inputStream, response.getOutputStream());
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.info(ConstantsController.ERROR,e);
 			}
             
     	}
     	
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cveMUsuarioHidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
-    	model.addAttribute("nombre", nombreHidden);
-    	model.addAttribute("paterno", paternoHidden);
-    	model.addAttribute("materno", maternoHidden);
-    	model.addAttribute("nivel", nivelHidden);
-    	model.addAttribute("tipo", tipoHidden);
-    	model.addAttribute("estado", estadoHidden);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
+    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinal);
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMUsuarioHidden);
+    	model.addAttribute(ConstantsController.NOMBRE, nombreHidden);
+    	model.addAttribute(ConstantsController.PATERNO, paternoHidden);
+    	model.addAttribute(ConstantsController.MATERNO, maternoHidden);
+    	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
+    	model.addAttribute(ConstantsController.TIPO, tipoHidden);
+    	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
 
     	if (resultadoProceso != 0) {
     		if (dictaminacion.equals("Autorizar")) {
     			if (resultadoProceso == 1) {
-    				model.addAttribute("MENSAJE", MENSAJE_AUTORIZA_JUSTIFICACION);
+    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_AUTORIZA_JUSTIFICACION);
     			} else if (resultadoProceso == 2) {
-    				model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_RECHAZA_DESCUENTO);
     			}
     		} else if (dictaminacion.equals("Rechazar")) {
     			if (resultadoProceso == 3) {
-    				model.addAttribute("MENSAJE", MENSAJE_RECHAZA_JUSTIFICACION);
+    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_RECHAZA_JUSTIFICACION);
     			} else if (resultadoProceso == 2) {
-    				model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_RECHAZA_DESCUENTO);
     			}
     		}
     	} else if (resultadoProceso == 0) {
-    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    		model.addAttribute(ConstantsController.MENSAJE_EXCEPTION, MENSAJE_EXCEPCION);
     	}
     	
-    	return "/asistencia/direccion";
+    	return ASISTENCIA_DIRECCION;
     }
     
     @RequestMapping(value={"direccion/dictamina_Incidencia_Descuento"}, method = RequestMethod.POST, params="descargaArchivoJustificacionDescuento") //permite aprobar o rechazar justificaciones y descuentos
-    public String descargaArchivoJustificacionDescuento(Model model, String cve_m_usuario_hidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
+    public String descargaArchivoJustificacionDescuento(Model model, String cveMUsuarioHidden, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
     		String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
     		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion, Authentication authentication) {
 
     	asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion, authentication);
     	
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario_hidden, nombreHidden, paternoHidden, maternoHidden,
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cveMUsuarioHidden, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario_hidden);
-    	model.addAttribute("nombre", nombreHidden);
-    	model.addAttribute("paterno", paternoHidden);
-    	model.addAttribute("materno", maternoHidden);
-    	model.addAttribute("nivel", nivelHidden);
-    	model.addAttribute("tipo", tipoHidden);
-    	model.addAttribute("estado", estadoHidden);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
+    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinal);
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMUsuarioHidden);
+    	model.addAttribute(ConstantsController.NOMBRE, nombreHidden);
+    	model.addAttribute(ConstantsController.PATERNO, paternoHidden);
+    	model.addAttribute(ConstantsController.MATERNO, maternoHidden);
+    	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
+    	model.addAttribute(ConstantsController.TIPO, tipoHidden);
+    	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
     	
-    	return "/asistencia/direccion";
+    	return ASISTENCIA_DIRECCION;
     }
     
     @RequestMapping(value={"direccion/dictaminaDescuento"}, method = RequestMethod.POST)
-    public String dictaminaDescuento(Model model, String cve_m_usuario, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
+    public String dictaminaDescuento(Model model, String cveMusuario, Integer idAsistenciaHidden, String nombreHidden, String paternoHidden,
     		String maternoHidden, String nivelHidden, Integer tipoHidden, Integer estadoHidden, String unidadAdministrativaHidden, Integer idTipoDia, 
     		Integer idJustificacion, String fechaInicial, String fechaFinal, String dictaminacion, Authentication authentication ) {
     	
@@ -868,35 +886,35 @@ public class AsistenciaController  {
 
     	resultadoProceso = asistenciaService.dictaminaIncidencia(idAsistenciaHidden, idTipoDia, idJustificacion, dictaminacion, authentication);
     	
-    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cve_m_usuario, nombreHidden, paternoHidden, maternoHidden,
+    	List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoDireccion(cveMusuario, nombreHidden, paternoHidden, maternoHidden,
     			nivelHidden, tipoHidden, estadoHidden, fechaInicial, fechaFinal, unidadAdministrativaHidden, authentication);
     	
-    	model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-    	model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-    	model.addAttribute("listaAsistencia", asistencia);
-    	model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario);
-    	model.addAttribute("nombre", nombreHidden);
-    	model.addAttribute("paterno", paternoHidden);
-    	model.addAttribute("materno", maternoHidden);
-    	model.addAttribute("nivel", nivelHidden);
-    	model.addAttribute("tipo", tipoHidden);
-    	model.addAttribute("estado", estadoHidden);
-    	model.addAttribute("unidadAdministrativa", unidadAdministrativaHidden);
+    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
+    	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
+    	model.addAttribute(ConstantsController.FECHA_FINAL, fechaFinal);
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMusuario);
+    	model.addAttribute(ConstantsController.NOMBRE, nombreHidden);
+    	model.addAttribute(ConstantsController.PATERNO, paternoHidden);
+    	model.addAttribute(ConstantsController.MATERNO, maternoHidden);
+    	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
+    	model.addAttribute(ConstantsController.TIPO, tipoHidden);
+    	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
 
     	if (resultadoProceso == 1) {
     		if (dictaminacion.equals("Autorizar")) {
-    			model.addAttribute("MENSAJE", MENSAJE_AUTORIZA_DESCUENTO);
+    			model.addAttribute(ConstantsController.MENSAJE, MENSAJE_AUTORIZA_DESCUENTO);
     		} else if (dictaminacion.equals("Rechazar")) {
-    			model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    			model.addAttribute(ConstantsController.MENSAJE, MENSAJE_RECHAZA_DESCUENTO);
     		}
     	} else if (resultadoProceso == 0) {
-    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    		model.addAttribute(ConstantsController.MENSAJE_EXCEPTION, MENSAJE_EXCEPCION);
     	}
     	
-    	return "/asistencia/direccion";
+    	return ASISTENCIA_DIRECCION;
     }
     //TERMINA DIRECCION
     
@@ -932,8 +950,8 @@ public class AsistenciaController  {
 			IOUtils.copy(inputStream, response.getOutputStream());
 	        response.flushBuffer();
 		} catch (IOException e) {
-			e.printStackTrace();
-		} //load the file
+		logger.warn(ConstantsController.ERROR,e);
+		} 
         
         
     }

@@ -22,6 +22,7 @@ import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
 import mx.gob.segob.dgtic.web.mvc.service.UnidadAdministrativaService;
 import mx.gob.segob.dgtic.web.mvc.util.Excel;
+import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
 
 /**
  * Controller donde se registran las vistas de reportes
@@ -43,15 +44,18 @@ public class ReporteController {
 	
 	@Autowired
 	private UnidadAdministrativaService unidadAdministrativaService;
+	private static final String VALIDADA = "Validada";
+	private static final String PENDIENTE = "Pendiente";
+	private static final String RECHAZADA = "Rechazada";
 	
 	@RequestMapping(value={"inicioDireccion"}, method = RequestMethod.GET)
     public String inicioReporteDireccion(Model model, Authentication authentication) {
 		
-		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
-		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
+		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
     	return "/reportes/reportesDireccion";
@@ -60,11 +64,11 @@ public class ReporteController {
 	@RequestMapping(value={"inicioCoordinador"}, method = RequestMethod.GET)
     public String inicioReporteCoordinador(Model model, Authentication authentication) {
 		
-		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
-		model.addAttribute("listaAsistencia", new ArrayList<Asistencia>());
+		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
+		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
 		model.addAttribute("inicio", true);
     	
     	return "/reportes/reportesCoordinador";
@@ -72,20 +76,20 @@ public class ReporteController {
 	
 	//DIRECCIÓN
 	@RequestMapping(value={"reporteDireccion"}, method = RequestMethod.GET, params="busca")
-    public String reporteDireccion(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
+    public String reporteDireccion(Model model, String cveMusuario, String nombre, String paterno, String materno, String nivel,
     		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
 		
-		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cve_m_usuario, nombre, paterno, materno, 
+		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cveMusuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos, authentication);
 		
-		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
-		model.addAttribute("listaAsistencia", listaAsistencias);
+		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
+		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario);
+    	model.addAttribute("cve_m_usuario", cveMusuario);
     	model.addAttribute("nombre", nombre);
     	model.addAttribute("paterno", paterno);
     	model.addAttribute("materno", materno);
@@ -99,23 +103,23 @@ public class ReporteController {
     	if (permisos != null) {
     		List<String> listaPermisos = new ArrayList<>(Arrays.asList(permisos));
     		
-    		if (listaPermisos.contains("vacacion")) {
-    			model.addAttribute("vacacion", true);
+    		if (listaPermisos.contains(ConstantsController.VACACION)) {
+    			model.addAttribute(ConstantsController.VACACION, true);
     			p = true;
     		}
     		
-    		if (listaPermisos.contains("comision")) {
-    			model.addAttribute("comision", true);
+    		if (listaPermisos.contains(ConstantsController.COMISION)) {
+    			model.addAttribute(ConstantsController.COMISION, true);
     			p = true;
     		}
     		
-    		if (listaPermisos.contains("licencia")) {
-    			model.addAttribute("licencia", true);
+    		if (listaPermisos.contains(ConstantsController.LICENCIA)) {
+    			model.addAttribute(ConstantsController.LICENCIA, true);
     			p = true;
     		}
     		
-    		if (listaPermisos.contains("descuento")) {
-    			model.addAttribute("descuento", true);
+    		if (listaPermisos.contains(ConstantsController.DESCUENTO)) {
+    			model.addAttribute(ConstantsController.DESCUENTO, true);
     			p = true;
     		}
     	}
@@ -130,11 +134,11 @@ public class ReporteController {
     }
 	
 	@RequestMapping(value={"reporteDireccion"}, method = RequestMethod.GET, params="exporta")
-    public ModelAndView exportaReporteDireccion(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
+    public ModelAndView exportaReporteDireccion(Model model, String cveMusuario, String nombre, String paterno, String materno, String nivel,
     		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
     		HttpServletResponse response, Authentication authentication) {
 		
-		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cve_m_usuario, nombre, paterno, materno, 
+		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cveMusuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos, authentication);
 		
     	Map<String, Object> map = new HashMap<>();
@@ -171,17 +175,17 @@ public class ReporteController {
 			
 			if (estatus != null) {
 				if (a.getIdTipoDia().getIdTipoDia() != 5 && a.getIdTipoDia().getIdTipoDia() != 6 && a.getIdTipoDia().getIdTipoDia() != 7) {
-					if (estatus.equals("Validada") && a.getIncidencia().getDescuento()) {
+					if (estatus.equals(VALIDADA) && a.getIncidencia().getDescuento()) {
 						estatus = "Descuento Aprobado";
-					} else if (estatus.equals("Validada") && !a.getIncidencia().getDescuento()) {
+					} else if (estatus.equals(VALIDADA) && !a.getIncidencia().getDescuento()) {
 						estatus = "Justificación Aprobada";
-					} else if (estatus.equals("Pendiente") && a.getIncidencia().getDescuento()) {
+					} else if (estatus.equals(PENDIENTE) && a.getIncidencia().getDescuento()) {
 						estatus = "Descuento Pendiente";
-					} else if (estatus.equals("Pendiente") && !a.getIncidencia().getDescuento()) {
+					} else if (estatus.equals(PENDIENTE) && !a.getIncidencia().getDescuento()) {
 						estatus = "Justificación Pendiente";
-					} else if (estatus.equals("Rechazada") && a.getIncidencia().getDescuento()) {
+					} else if (estatus.equals(RECHAZADA) && a.getIncidencia().getDescuento()) {
 						estatus = "Descuento Rechazado";
-					} else if (estatus.equals("Rechazada") && !a.getIncidencia().getDescuento()) {
+					} else if (estatus.equals(RECHAZADA) && !a.getIncidencia().getDescuento()) {
 						estatus = "Justificación Rechazada";
 					}
 				} 
@@ -202,20 +206,20 @@ public class ReporteController {
 	
 	//COORDINADOR
 	@RequestMapping(value={"reporteCoordinador"}, method = RequestMethod.GET, params="busca")
-    public String reporteCoordinador(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
+    public String reporteCoordinador(Model model, String cveMUsuario, String nombre, String paterno, String materno, String nivel,
     		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
 		
-		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cve_m_usuario, nombre, paterno, materno, 
+		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cveMUsuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos, authentication);
 		
-		model.addAttribute("listaTipo", catalogoService.obtieneTipoDias(authentication));
-		model.addAttribute("listaNivel", catalogoService.obtieneNiveles(authentication));
-		model.addAttribute("listaEstado", estatusService.obtieneListaCompletaEstatus(authentication));
-		model.addAttribute("listaUnidadAdministrativa", unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
-		model.addAttribute("listaAsistencia", listaAsistencias);
+		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
+		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
+		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
+		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, listaAsistencias);
 		model.addAttribute("fechaInicial", fechaInicial);
     	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute("cve_m_usuario", cve_m_usuario);
+    	model.addAttribute("cve_m_usuario", cveMUsuario);
     	model.addAttribute("nombre", nombre);
     	model.addAttribute("paterno", paterno);
     	model.addAttribute("materno", materno);
@@ -228,23 +232,23 @@ public class ReporteController {
     	if (permisos != null) {
     		List<String> listaPermisos = new ArrayList<>(Arrays.asList(permisos));
     		
-    		if (listaPermisos.contains("vacacion")) {
-    			model.addAttribute("vacacion", true);
+    		if (listaPermisos.contains(ConstantsController.VACACION)) {
+    			model.addAttribute(ConstantsController.VACACION, true);
     			p = true;
     		}
     		
-    		if (listaPermisos.contains("comision")) {
-    			model.addAttribute("comision", true);
+    		if (listaPermisos.contains(ConstantsController.COMISION)) {
+    			model.addAttribute(ConstantsController.COMISION, true);
     			p = true;
     		}
     		
-    		if (listaPermisos.contains("licencia")) {
-    			model.addAttribute("licencia", true);
+    		if (listaPermisos.contains(ConstantsController.LICENCIA)) {
+    			model.addAttribute(ConstantsController.LICENCIA, true);
     			p = true;
     		}
     		
-    		if (listaPermisos.contains("descuento")) {
-    			model.addAttribute("descuento", true);
+    		if (listaPermisos.contains(ConstantsController.DESCUENTO)) {
+    			model.addAttribute(ConstantsController.DESCUENTO, true);
     			p = true;
     		}
     	}
@@ -259,11 +263,11 @@ public class ReporteController {
     }
 	
 	@RequestMapping(value={"reporteCoordinador"}, method = RequestMethod.GET, params="exporta")
-    public ModelAndView exportaReporteCoordinador(Model model, String cve_m_usuario, String nombre, String paterno, String materno, String nivel,
+    public ModelAndView exportaReporteCoordinador(Model model, String cveMUsuario, String nombre, String paterno, String materno, String nivel,
     		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
     		HttpServletResponse response, Authentication authentication) {
 		
-		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cve_m_usuario, nombre, paterno, materno, 
+		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cveMUsuario, nombre, paterno, materno, 
 				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos, authentication);
     	
     	Map<String, Object> map = new HashMap<>();
@@ -272,7 +276,7 @@ public class ReporteController {
     	map.put("nombreHoja", "Reporte");
         
         //nombres columnas
-        List<String> cabeceras = new ArrayList<String>();
+        List<String> cabeceras = new ArrayList<>();
         cabeceras.add("Empleado");
         cabeceras.add("Nombre");
         cabeceras.add("Nivel");
@@ -300,17 +304,17 @@ public class ReporteController {
 			
 			if (estatus != null) {
 				if (a.getIdTipoDia().getIdTipoDia() != 5 && a.getIdTipoDia().getIdTipoDia() != 6 && a.getIdTipoDia().getIdTipoDia() != 7) {
-					if (estatus.equals("Validada") && a.getIncidencia().getDescuento()) {
+					if (estatus.equals(VALIDADA) && a.getIncidencia().getDescuento()) {
 						estatus = "Descuento Aprobado";
-					} else if (estatus.equals("Validada") && !a.getIncidencia().getDescuento()) {
+					} else if (estatus.equals(VALIDADA) && !a.getIncidencia().getDescuento()) {
 						estatus = "Justificación Aprobada";
-					} else if (estatus.equals("Pendiente") && a.getIncidencia().getDescuento()) {
+					} else if (estatus.equals(PENDIENTE) && a.getIncidencia().getDescuento()) {
 						estatus = "Descuento Pendiente";
-					} else if (estatus.equals("Pendiente") && !a.getIncidencia().getDescuento()) {
+					} else if (estatus.equals(PENDIENTE) && !a.getIncidencia().getDescuento()) {
 						estatus = "Justificación Pendiente";
-					} else if (estatus.equals("Rechazada") && a.getIncidencia().getDescuento()) {
+					} else if (estatus.equals(RECHAZADA) && a.getIncidencia().getDescuento()) {
 						estatus = "Descuento Rechazado";
-					} else if (estatus.equals("Rechazada") && !a.getIncidencia().getDescuento()) {
+					} else if (estatus.equals(RECHAZADA) && !a.getIncidencia().getDescuento()) {
 						estatus = "Justificación Rechazada";
 					}
 				} 
