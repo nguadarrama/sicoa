@@ -64,7 +64,7 @@ public class CatalogoController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CatalogoController.class);
 	private static final String MENSAJE = "MENSAJE";
-	private static final String MENSAJE_EXCEPTION = "MENSAJE_EXCEPTION";
+	private static final String MENSAJE_EXCEPTION = "MENSAJE_EXCEPCION";
 	private static final String REDIRECT_CATALOGOS_HORARIO = "redirect:/catalogos/horario";
 	private static final String REDIRECT_CATALOGOS_JUSTIFICACION = "redirect:/catalogos/justificacion";
 	private static final String REDIRECT_CATALOGOS_PERIODO = "redirect:/catalogos/periodo";
@@ -431,11 +431,15 @@ public class CatalogoController {
 			model.addAttribute("listaNiveles", catalogoService.obtieneNiveles(authentication)); // niveles en c_nivel_organizacional
 			model.addAttribute("listaUnidades", catalogoService.nivelesEmpleado(authentication)); // niveles de empleados en m_usuario
 			model.addAttribute(ConstantsController.LISTA_HORARIOS, catalogoService.obtieneHorarios(authentication)); // horarios en c_horario
+			logger.info("CatalogoController--method--inicioNivel: {} ",this.mensajes);
+			logger.info("CatalogoController--method--inicioNivel: this.getMensajes {} ",this.getMensaje());
 			if(!this.getMensaje().equals("")){
-				if(this.mensajes.contains(ConstantsController.CORRECTAMENTE))
+				if(this.mensajes.contains(ConstantsController.CORRECTAMENTE)) {
 					model.addAttribute(MENSAJE, this.mensajes);
-				else
+				}
+				else {
 					model.addAttribute(MENSAJE_EXCEPTION, this.mensajes);
+				}
 			}
 			this.mensajes="";
 			return "/catalogos/NivelOrganizacional";
