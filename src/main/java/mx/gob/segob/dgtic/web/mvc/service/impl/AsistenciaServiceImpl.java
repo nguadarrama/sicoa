@@ -127,9 +127,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
-	public List<Asistencia> buscaAsistenciaEmpleadoRangoCoordinador(String cveMUsuario, String nombre, String paterno,
-			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
-			String unidadAdministrativa, String cveCoordinador, Authentication authentication) {
+	public List<Asistencia> buscaAsistenciaEmpleadoRangoCoordinador(AsistenciaBusquedaUtil asistenciaBusquedaUtil, Authentication authentication) {
 
 		List<Asistencia> listaAsistencia = new ArrayList<>();
 		HttpResponse response;
@@ -140,21 +138,8 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
-		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
-		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
-		asistenciaBusquedaUtil.setNombre(nombre);
-		asistenciaBusquedaUtil.setPaterno(paterno);
-		asistenciaBusquedaUtil.setMaterno(materno);
-		asistenciaBusquedaUtil.setNivel(nivel);
-		asistenciaBusquedaUtil.setTipo(tipo);
-		asistenciaBusquedaUtil.setEstado(estado);
-		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
-		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
-		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
-		asistenciaBusquedaUtil.setCveUsuarioLogeado(cveCoordinador);
-		
 		HttpEntity httpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("asistenciaBusqueda", asistenciaBusquedaUtil);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
@@ -190,9 +175,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	@Override
-	public List<Asistencia> buscaAsistenciaEmpleadoRangoDireccion(String cveMUsuario, String nombre, String paterno,
-			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
-			String unidadAdministrativa, Authentication authentication) {
+	public List<Asistencia> buscaAsistenciaEmpleadoRangoDireccion(AsistenciaBusquedaUtil asistenciaBusquedaUtil, Authentication authentication) {
 
 		List<Asistencia> listaAsistencia = new ArrayList<>();
 		HttpResponse response;
@@ -202,18 +185,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		
-		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
-		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
-		asistenciaBusquedaUtil.setNombre(nombre);
-		asistenciaBusquedaUtil.setPaterno(paterno);
-		asistenciaBusquedaUtil.setMaterno(materno);
-		asistenciaBusquedaUtil.setNivel(nivel);
-		asistenciaBusquedaUtil.setTipo(tipo);
-		asistenciaBusquedaUtil.setEstado(estado);
-		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
-		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
-		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
 		
 		HttpEntity httpEntity = new BasicHttpEntity();
 		Map<String, Object> content = new HashMap<String, Object>();
@@ -451,7 +422,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("incidencia", incidencia);
@@ -459,7 +429,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -537,7 +506,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		
 		Map<String, Object> content = new HashMap<String, Object>();
 		content.put("incidencia", incidencia);
@@ -545,7 +513,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -583,7 +550,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("generaReporteArchivo", generaReporteArchivo);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
@@ -654,9 +621,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 
 	@Override
-	public List<Asistencia> buscaAsistenciaDireccionReporte(String cveMUsuario, String nombre, String paterno,
-			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
-			String unidadAdministrativa, String[] p, Authentication authentication) {
+	public List<Asistencia> buscaAsistenciaDireccionReporte(AsistenciaBusquedaUtil asistenciaBusquedaUtil, Authentication authentication) {
 
 		List<Asistencia> listaAsistencia = new ArrayList<>();
 		HttpResponse response;
@@ -666,27 +631,16 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
-		if (p != null) {
-			for (int i = 0; i < p.length; i++ ) {
-				permisos.append(p[i]);
+		if (asistenciaBusquedaUtil.getP() != null) {
+			for (int i = 0; i < asistenciaBusquedaUtil.getP().length; i++ ) {
+				permisos.append(asistenciaBusquedaUtil.getP()[i]);
 				
-				if (i < p.length - 1) {
+				if (i < asistenciaBusquedaUtil.getP().length - 1) {
 					permisos.append(",");
 				}
 			}
 		}
 		
-		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
-		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
-		asistenciaBusquedaUtil.setNombre(nombre);
-		asistenciaBusquedaUtil.setPaterno(paterno);
-		asistenciaBusquedaUtil.setMaterno(materno);
-		asistenciaBusquedaUtil.setNivel(nivel);
-		asistenciaBusquedaUtil.setTipo(tipo);
-		asistenciaBusquedaUtil.setEstado(estado);
-		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
-		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
-		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
 		asistenciaBusquedaUtil.setPermisos(permisos.toString());
 		
 		HttpEntity httpEntity = new BasicHttpEntity();
@@ -725,9 +679,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 
 	@Override
-	public List<Asistencia> buscaAsistenciaCoordinadorReporte(String cveMUsuario, String nombre, String paterno,
-			String materno, String nivel, Integer tipo, Integer estado, String fechaInicial, String fechaFinal,
-			String unidadAdministrativa, String cveCoordinador, String[] p, Authentication authentication) {
+	public List<Asistencia> buscaAsistenciaCoordinadorReporte(AsistenciaBusquedaUtil asistenciaBusquedaUtil, Authentication authentication) {
 
 		
 		List<Asistencia> listaAsistencia = new ArrayList<>();
@@ -738,28 +690,16 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		
-		if (p != null) {
-			for (int i = 0; i < p.length; i++ ) {
-				permisos.append(p[i]);
+		if (asistenciaBusquedaUtil.getP() != null) {
+			for (int i = 0; i < asistenciaBusquedaUtil.getP().length; i++ ) {
+				permisos.append(asistenciaBusquedaUtil.getP()[i]);
 				
-				if (i < p.length - 1) {
+				if (i < asistenciaBusquedaUtil.getP().length - 1) {
 					permisos.append(",");
 				}
 			}
 		}
 		
-		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
-		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
-		asistenciaBusquedaUtil.setNombre(nombre);
-		asistenciaBusquedaUtil.setPaterno(paterno);
-		asistenciaBusquedaUtil.setMaterno(materno);
-		asistenciaBusquedaUtil.setNivel(nivel);
-		asistenciaBusquedaUtil.setTipo(tipo);
-		asistenciaBusquedaUtil.setEstado(estado);
-		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
-		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
-		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
-		asistenciaBusquedaUtil.setCveUsuarioLogeado(cveCoordinador);
 		asistenciaBusquedaUtil.setPermisos(permisos.toString());
 		
 		HttpEntity httpEntity = new BasicHttpEntity();

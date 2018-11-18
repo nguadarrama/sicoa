@@ -11,10 +11,6 @@ public class AsistenciaJustificacion {
 	private List<Justificacion> listaJustificacion;
 	private List<Usuario> listaAutorizador;
 	
-	public AsistenciaJustificacion() {
-		
-	}
-
 	public Asistencia getAsistencia() {
 		return asistencia;
 	}

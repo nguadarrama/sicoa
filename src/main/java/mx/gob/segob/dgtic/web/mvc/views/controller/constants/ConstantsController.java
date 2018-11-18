@@ -4,14 +4,18 @@ public class ConstantsController {
 	
 	private ConstantsController() {}
 	
+	public static final String APLICATION_PDF = "application/pdf";
+	public static final String CONTENT_DISPOSITION = "Content-Disposition";
 	public static final String LISTA_HORARIOS = "listaHorarios";
 	public static final String CORRECTAMENTE = "correctamente";
+	public static final String LISTA_AUTORIZADORES = "listaAutorizadores";
 	public static final String LISTA_ASISTENCIA = "listaAsistencia";
 	public static final String LISTA_ASISTENCIA_JUSTIFICAR = "listaAsistenciaJustificar";
 	public static final String LISTA_TIPO  = "listaTipo";
 	public static final String LISTA_NIVEL = "listaNivel";
 	public static final String LISTA_ESTADO = "listaEstado";
 	public static final String LISTA_UNIDAD_ADMINISTRATIVA = "listaUnidadAdministrativa";
+	public static final String LISTA_JUSTIFICACIONES = "listaJustificaciones";
 	public static final String INICIO = "inicio";
 	public static final String FECHA_INICIAL = "fechaInicial";
 	public static final String FECHA_FINAL = "fechaFinal";
@@ -20,7 +24,9 @@ public class ConstantsController {
 	public static final String ERROR = "Error: {} ";
 	public static final String REGISTROS = "registros";
 	public static final String CVE_M_USUARIO = "cveMusuario";
+	public static final String JUSTIFICACION = "justificacion";
 	public static final String NOMBRE = "nombre";
+	public static final String NOMBRE_JEFE = "nombreJefe";
 	public static final String PATERNO = "paterno";
 	public static final String MATERNO = "materno";
 	public static final String NIVEL = "nivel";

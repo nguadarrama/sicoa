@@ -22,6 +22,7 @@ import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
 import mx.gob.segob.dgtic.web.mvc.service.UnidadAdministrativaService;
+import mx.gob.segob.dgtic.web.mvc.util.AsistenciaBusquedaUtil;
 import mx.gob.segob.dgtic.web.mvc.util.Excel;
 import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
 
@@ -98,8 +99,21 @@ public class ReporteController {
     public String reporteDireccion(Model model, String cveMusuario, String nombre, String paterno, String materno, String nivel,
     		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
 		
-		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cveMusuario, nombre, paterno, materno, 
-				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos, authentication);
+		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
+		
+		asistenciaBusquedaUtil.setCveMusuario(cveMusuario);
+		asistenciaBusquedaUtil.setNombre(nombre);
+		asistenciaBusquedaUtil.setPaterno(paterno);
+		asistenciaBusquedaUtil.setMaterno(materno);
+		asistenciaBusquedaUtil.setNivel(nivel);
+		asistenciaBusquedaUtil.setTipo(tipo);
+		asistenciaBusquedaUtil.setEstado(estado);
+		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
+		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
+		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
+		asistenciaBusquedaUtil.setP(permisos);
+		
+		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(asistenciaBusquedaUtil, authentication);
 		
 		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
     	List<Estatus> listaEstado = new ArrayList<>();
@@ -166,8 +180,21 @@ public class ReporteController {
     		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
     		HttpServletResponse response, Authentication authentication) {
 		
-		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(cveMusuario, nombre, paterno, materno, 
-				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, permisos, authentication);
+		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
+		
+		asistenciaBusquedaUtil.setCveMusuario(cveMusuario);
+		asistenciaBusquedaUtil.setNombre(nombre);
+		asistenciaBusquedaUtil.setPaterno(paterno);
+		asistenciaBusquedaUtil.setMaterno(materno);
+		asistenciaBusquedaUtil.setNivel(nivel);
+		asistenciaBusquedaUtil.setTipo(tipo);
+		asistenciaBusquedaUtil.setEstado(estado);
+		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
+		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
+		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
+		asistenciaBusquedaUtil.setP(permisos);
+		
+		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(asistenciaBusquedaUtil, authentication);
 		
     	Map<String, Object> map = new HashMap<>();
         
@@ -237,8 +264,22 @@ public class ReporteController {
     public String reporteCoordinador(Model model, String cveMUsuario, String nombre, String paterno, String materno, String nivel,
     		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
 		
-		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cveMUsuario, nombre, paterno, materno, 
-				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos, authentication);
+		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
+		
+		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
+		asistenciaBusquedaUtil.setNombre(nombre);
+		asistenciaBusquedaUtil.setPaterno(paterno);
+		asistenciaBusquedaUtil.setMaterno(materno);
+		asistenciaBusquedaUtil.setNivel(nivel);
+		asistenciaBusquedaUtil.setTipo(tipo);
+		asistenciaBusquedaUtil.setEstado(estado);
+		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
+		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
+		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
+		asistenciaBusquedaUtil.setP(permisos);
+		asistenciaBusquedaUtil.setCveUsuarioLogeado(authentication.getName());
+		
+		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(asistenciaBusquedaUtil, authentication);
 
 		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
     	List<Estatus> listaEstado = new ArrayList<>();
@@ -304,8 +345,22 @@ public class ReporteController {
     		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
     		HttpServletResponse response, Authentication authentication) {
 		
-		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(cveMUsuario, nombre, paterno, materno, 
-				nivel, tipo, estado, fechaInicial, fechaFinal, unidadAdministrativa, authentication.getName(), permisos, authentication);
+		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
+		
+		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
+		asistenciaBusquedaUtil.setNombre(nombre);
+		asistenciaBusquedaUtil.setPaterno(paterno);
+		asistenciaBusquedaUtil.setMaterno(materno);
+		asistenciaBusquedaUtil.setNivel(nivel);
+		asistenciaBusquedaUtil.setTipo(tipo);
+		asistenciaBusquedaUtil.setEstado(estado);
+		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
+		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
+		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
+		asistenciaBusquedaUtil.setP(permisos);
+		asistenciaBusquedaUtil.setCveUsuarioLogeado(authentication.getName());
+		
+		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(asistenciaBusquedaUtil, authentication);
     	
     	Map<String, Object> map = new HashMap<>();
         
