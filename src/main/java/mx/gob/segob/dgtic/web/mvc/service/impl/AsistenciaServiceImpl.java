@@ -50,6 +50,11 @@ import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
 public class AsistenciaServiceImpl implements AsistenciaService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
+	private static final String INCIDENCIA = "incidencia";
+	private static final String TOKEN = "_token";
+	private static final String ERROR = "Error al obtener usuario : ";
+	private static final String BEARER = "Bearer ";
+	private static final String AUTHORIZATION = "Authorization";
 	
 	@Override
 	public List<Asistencia> buscaAsistenciaEmpleadoMes(String claveEmpleado, Authentication authentication) {
@@ -58,9 +63,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_EMPLEADO + "?claveEmpleado=" + claveEmpleado, header);
@@ -82,7 +85,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException(ERROR + response.getStatusLine().getReasonPhrase());
 		}
 		
 		return listaAsistencia;
@@ -96,8 +99,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(
@@ -135,8 +136,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		HttpEntity httpEntity = new BasicHttpEntity();
 		Map<String, Object> content = new HashMap<>();
@@ -183,8 +182,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
-		
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
 		HttpEntity httpEntity = new BasicHttpEntity();
 		Map<String, Object> content = new HashMap<String, Object>();
@@ -294,7 +291,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HttpEntity httpEntity = new BasicHttpEntity();
 		
 		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("incidencia", incidencia);
+		content.put(INCIDENCIA, incidencia);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
@@ -365,15 +362,13 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
-		//BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 		
 		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("incidencia", incidencia);
+		content.put(INCIDENCIA, incidencia);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -394,7 +389,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al crear el descuento: "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException(ERROR + response.getStatusLine().getReasonPhrase());
 		}
 		
 		return respuesta;
