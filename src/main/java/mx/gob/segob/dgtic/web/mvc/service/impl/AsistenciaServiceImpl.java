@@ -55,6 +55,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	private static final String ERROR = "Error al obtener usuario : ";
 	private static final String BEARER = "Bearer ";
 	private static final String AUTHORIZATION = "Authorization";
+	private static final String ASISTENCIA_BUSQUEDA = "asistenciaBusqueda";
 	
 	@Override
 	public List<Asistencia> buscaAsistenciaEmpleadoMes(String claveEmpleado, Authentication authentication) {
@@ -98,7 +99,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().get(
@@ -121,7 +122,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException(ERROR + response.getStatusLine().getReasonPhrase());
 		}
 		
 		return listaAsistencia;
@@ -135,15 +136,15 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		
 		HttpEntity httpEntity = new BasicHttpEntity();
 		Map<String, Object> content = new HashMap<>();
-		content.put("asistenciaBusqueda", asistenciaBusquedaUtil);
+		content.put(ASISTENCIA_BUSQUEDA, asistenciaBusquedaUtil);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			e1.printStackTrace();
+			logger.error(e1.getMessage(), e1);
 		}
 		
 		try { //se consume recurso rest
@@ -166,7 +167,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException(ERROR + response.getStatusLine().getReasonPhrase());
 		}
 		
 		return listaAsistencia;
@@ -181,15 +182,15 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		
 		HttpEntity httpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("asistenciaBusqueda", asistenciaBusquedaUtil);
+		Map<String, Object> content = new HashMap<>();
+		content.put(ASISTENCIA_BUSQUEDA, asistenciaBusquedaUtil);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			e1.printStackTrace();
+			logger.error(e1.getMessage(), e1);
 		}
 		
 		try { //se consume recurso rest
@@ -212,7 +213,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException(ERROR + response.getStatusLine().getReasonPhrase());
 		}
 		
 		return listaAsistencia;
@@ -226,7 +227,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
@@ -244,7 +245,9 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			if (response != null) {
+				throw new AuthenticationServiceException(ERROR + response.getStatusLine().getReasonPhrase());
+			}
 		}
 		
 		return asistencia;
@@ -287,16 +290,16 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put(INCIDENCIA, incidencia);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			e1.printStackTrace();
+			logger.error(e1.getMessage(), e1);
 		}
 		
 		HttpResponse response = null;
@@ -360,16 +363,16 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put(INCIDENCIA, incidencia);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			e1.printStackTrace();
+			logger.error(e1.getMessage(), e1);
 		}
 		
 		HttpResponse response = null;
@@ -415,16 +418,16 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("incidencia", incidencia);
+		Map<String, Object> content = new HashMap<>();
+		content.put(INCIDENCIA, incidencia);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			e1.printStackTrace();
+			logger.error(e1.getMessage(), e1);
 		}
 		
 		HttpResponse response = null;
@@ -499,16 +502,16 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("incidencia", incidencia);
+		Map<String, Object> content = new HashMap<>();
+		content.put(INCIDENCIA, incidencia);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			e1.printStackTrace();
+			logger.error(e1.getMessage(), e1);
 		}
 		
 		HttpResponse response = null;
@@ -543,7 +546,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		Map<String, Object> content = new HashMap<>();
 		content.put("generaReporteArchivo", generaReporteArchivo);
@@ -552,12 +555,10 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_FORMATO_JUSTIFICACION, httpEntity, header);
 			if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
 				JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-				try{
-					JsonElement dataJson = json.get("data").getAsJsonObject();
-					respuesta = gson.fromJson(dataJson, reporte.class);	
-				}catch(Exception e){
-					e.printStackTrace();
-				}		
+				
+				//parsea la respuesta a objeto reporte
+				respuesta = parseaAReporte(json, gson);
+				
 			} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 				String mensaje = obtenerMensajeError(response);					 
 				throw new AuthenticationServiceException(mensaje);			
@@ -579,7 +580,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		Map<String, Object> content = new HashMap<>();
 		content.put("generaReporteArchivo", generaReporteArchivo);
@@ -588,17 +589,15 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			response = ClienteRestUtil.getCliente().put(AsistenciaEndPointConstants.WEB_SERVICE_INFO_ASISTENCIA_FORMATO_DESCUENTO, httpEntity, header);
 			if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
 				JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
-				try{
-					JsonElement dataJson = json.get("data").getAsJsonObject();
-					respuesta = gson.fromJson(dataJson, reporte.class);	
-				}catch(Exception e){
-					e.printStackTrace();
-				}		
+				
+				//parsea la respuesta a objeto reporte
+				respuesta = parseaAReporte(json, gson);
+					
 			} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 				String mensaje = obtenerMensajeError(response);					 
 				throw new AuthenticationServiceException(mensaje);			
 			} else {
-				throw new AuthenticationServiceException("Error al obtener el archivo : "+response.getStatusLine().getReasonPhrase());
+				throw new AuthenticationServiceException(ERROR + response.getStatusLine().getReasonPhrase());
 			}
 		} catch (ClienteException e) {
 			logger.error(e.getMessage(), e);
@@ -624,7 +623,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		
 		if (asistenciaBusquedaUtil.getP() != null) {
 			for (int i = 0; i < asistenciaBusquedaUtil.getP().length; i++ ) {
@@ -639,12 +638,12 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		asistenciaBusquedaUtil.setPermisos(permisos.toString());
 		
 		HttpEntity httpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("asistenciaBusqueda", asistenciaBusquedaUtil);
+		Map<String, Object> content = new HashMap<>();
+		content.put(ASISTENCIA_BUSQUEDA, asistenciaBusquedaUtil);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			e1.printStackTrace();
+			logger.error(e1.getMessage(), e1);
 		}
 		
 		try { //se consume recurso rest
@@ -667,7 +666,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener usuario : "+response.getStatusLine().getReasonPhrase());
+			throw new AuthenticationServiceException(ERROR + response.getStatusLine().getReasonPhrase());
 		}
 		
 		return listaAsistencia;
@@ -683,7 +682,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		
 		if (asistenciaBusquedaUtil.getP() != null) {
 			for (int i = 0; i < asistenciaBusquedaUtil.getP().length; i++ ) {
@@ -698,12 +697,12 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		asistenciaBusquedaUtil.setPermisos(permisos.toString());
 		
 		HttpEntity httpEntity = new BasicHttpEntity();
-		Map<String, Object> content = new HashMap<String, Object>();
-		content.put("asistenciaBusqueda", asistenciaBusquedaUtil);
+		Map<String, Object> content = new HashMap<>();
+		content.put(ASISTENCIA_BUSQUEDA, asistenciaBusquedaUtil);
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			e1.printStackTrace();
+			logger.error(e1.getMessage(), e1);
 		}
 		
 		try { //se consume recurso rest
@@ -733,13 +732,12 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	}
 	
 	private boolean esDescuento(Integer idIncidencia, Authentication authentication) {
-		Incidencia incidencia = new Incidencia();
 		HttpResponse response = null;
 		boolean esDescuento = false;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
-		Header header = new BasicHeader("Authorization", "Bearer " + detalles.get("_token").toString());
+		Header header = new BasicHeader(AUTHORIZATION, BEARER + detalles.get(TOKEN).toString());
 		
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		
@@ -752,7 +750,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()) {
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
-			incidencia = gson.fromJson(dataJson, Incidencia.class);	
+			Incidencia incidencia = gson.fromJson(dataJson, Incidencia.class);	
 			
 			if (incidencia.getDescuento() != null && incidencia.getDescuento()) { //es descuento
 				esDescuento = true;
@@ -762,10 +760,23 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			String mensaje = obtenerMensajeError(response);					 
 			throw new AuthenticationServiceException(mensaje);			
 		} else {
-			throw new AuthenticationServiceException("Error al obtener la incidencia : "+response.getStatusLine().getReasonPhrase());
+			if (response != null) {
+				throw new AuthenticationServiceException("Error al obtener la incidencia : "+response.getStatusLine().getReasonPhrase());
+			}
 		}
 		
 		return esDescuento;
+	}
+	
+	private reporte parseaAReporte(JsonObject json, Gson gson) {
+		try{
+			JsonElement dataJson = json.get("data").getAsJsonObject();
+			return gson.fromJson(dataJson, reporte.class);	
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+		}	
+		
+		return new reporte();
 	}
 
 }

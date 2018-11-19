@@ -1173,9 +1173,9 @@ public class AsistenciaController  {
 
     	if (resultadoProceso == 1) {
     		if (dictaminacion.equals("Autorizar")) {
-    			model.addAttribute("MENSAJE", MENSAJE_AUTORIZA_DESCUENTO);
+    			model.addAttribute(ConstantsController.MENSAJE, MENSAJE_AUTORIZA_DESCUENTO);
     		} else if (dictaminacion.equals("Rechazar")) {
-    			model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    			model.addAttribute(ConstantsController.MENSAJE_EXCEPTION, MENSAJE_RECHAZA_DESCUENTO);
     		}
     	} else if (resultadoProceso == 0) {
     		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
@@ -1252,19 +1252,19 @@ public class AsistenciaController  {
     	if (resultadoProceso != 0) {
     		if (dictaminacion.equals("Autorizar")) {
     			if (resultadoProceso == 1) {
-    				model.addAttribute("MENSAJE", MENSAJE_AUTORIZA_JUSTIFICACION);
+    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_AUTORIZA_JUSTIFICACION);
     			} else if (resultadoProceso == 2) {
-    				model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_RECHAZA_DESCUENTO);
     			}
     		} else if (dictaminacion.equals("Rechazar")) {
     			if (resultadoProceso == 3) {
-    				model.addAttribute("MENSAJE", MENSAJE_RECHAZA_JUSTIFICACION);
+    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_RECHAZA_JUSTIFICACION);
     			} else if (resultadoProceso == 2) {
-    				model.addAttribute("MENSAJE", MENSAJE_RECHAZA_DESCUENTO);
+    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_RECHAZA_DESCUENTO);
     			}
     		}
     	} else {
-    		model.addAttribute("MENSAJE_EXCEPCION", MENSAJE_EXCEPCION);
+    		model.addAttribute(ConstantsController.MENSAJE_EXCEPTION, MENSAJE_EXCEPCION);
     	}
     }
     
