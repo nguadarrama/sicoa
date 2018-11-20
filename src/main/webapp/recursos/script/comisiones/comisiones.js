@@ -53,7 +53,6 @@ $(document).ready(function() {
 		$("#fechaInicio").datepicker({ 
 			minDate: 1,
 		       beforeShowDay: $.datepicker.noWeekends,
-		       beforeShowDay: DisableSpecificDates,
 		       onSelect: function() 
 		       { 
 		    	   calcularDias();
@@ -68,12 +67,6 @@ $(document).ready(function() {
 		       },
 		   });
 		
-		function cambiarFile(){
-		    const input = document.getElementById('inputFileServer');
-		    if(input.files && input.files[0]);
-		        //alert("File Seleccionado : ", input.files[0]);
-		    
-		}
 		$('#vacacionesPropias').on('click','.eBtn' , function(event) { 					//botón edita
 			 event.preventDefault();
 			var href = $(this).attr('href');
