@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
-
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -113,7 +112,7 @@ public class ComisionServiceImpl implements ComisionService {
         Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 
     Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-
+    logger.info("Entro a servicio FRONT");
     try {
       response = ClienteRestUtil.getCliente()
           .get(ComisionEndPointConstants.WEB_SERVICE_BUSCA_COMISION + "?id=" + idComision, header);

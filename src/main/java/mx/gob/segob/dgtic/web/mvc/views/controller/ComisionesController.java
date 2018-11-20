@@ -211,7 +211,7 @@ public class ComisionesController extends BaseService {
     comisiones.setFechaRegistro(comisiones.getFechaRegistro());
 
     String comisionJson = gson.toJson(comisiones);
-    logger.info(comisionJson);
+    logger.info("Comision objeto: {}", comisionJson);
     hmap.put("comision", comisiones);
 
     if (comisiones.getIdResponsable() != null

@@ -1,12 +1,8 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import mx.gob.segob.dgtic.web.mvc.service.BaseService;
+import mx.gob.segob.dgtic.web.mvc.service.constants.Constantes;
 
-public class Comision extends BaseService {
+public class Comision {
 
   private Integer idComision;
   private Usuario idUsuario;
@@ -20,14 +16,6 @@ public class Comision extends BaseService {
   private String fechaRegistro;
   private Horario idHorario;
   private String mensaje;
-  
-  private static final String FECHA_FORMATO_LARGO = "MMM dd, yyyy HH:mm:ss";
-  private static final String FECHA_FORMATO_MMM_DD_YYYY = "MMM dd, yyyy";
-  private static final String FECHA_FORMATO_DD_MM_YYYY = "dd-MM-yyyy";
-  private static final String ES = "es_ES";
-  private static final String EXCEPCION = "Excepcion: {}";
-  
-  
   
   public String getMensaje() {
     return mensaje;
@@ -101,28 +89,7 @@ public class Comision extends BaseService {
    * @return the fechaInicio
    */
   public String getFechaInicio() {
-    if(fechaInicio.length()>13){
-      Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_LARGO, new Locale(ES));
-      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
-      try {
-          date = sdf.parse(fechaInicio);
-          fechaInicio = sdf1.format(date);
-      } catch (ParseException e) {
-        logger.error(EXCEPCION, e.getMessage());
-      }
-  }else if(fechaInicio.length()>10){
-      Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_MMM_DD_YYYY);
-      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
-      try {
-          date = sdf.parse(fechaInicio);
-          fechaInicio = sdf1.format(date);
-      } catch (ParseException e) {
-        logger.error(EXCEPCION, e.getMessage());
-      }
-  }
-  return fechaInicio;
+  return Constantes.formatearFecha(fechaInicio);
   }
   /**
    * @param fechaInicio the fechaInicio to set
@@ -134,28 +101,7 @@ public class Comision extends BaseService {
    * @return the fechaFin
    */
   public String getFechaFin() {
-    if(fechaFin.length()>13){
-      Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_LARGO, new Locale(ES));
-      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
-      try {
-          date = sdf.parse(fechaFin);
-          fechaFin = sdf1.format(date);
-      } catch (ParseException e) {
-        logger.error(EXCEPCION, e.getMessage());
-      }
-  }else if(fechaFin.length()>10){
-      Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_MMM_DD_YYYY);
-      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
-      try {
-          date = sdf.parse(fechaFin);
-          fechaFin = sdf1.format(date);
-      } catch (ParseException e) {
-        logger.error(EXCEPCION, e.getMessage());
-      }
-  }
-  return fechaFin;
+  return Constantes.formatearFecha(fechaFin);
   }
   /**
    * @param fechaFin the fechaFin to set
@@ -176,43 +122,10 @@ public class Comision extends BaseService {
     this.dias = dias;
   }
   /**
-   * @return the comision
-   */
-  public String getComision() {
-    return comisionDesc;
-  }
-  /**
-   * @param comisionDesc the comision to set
-   */
-  public void setComision(String comisionDesc) {
-    this.comisionDesc = comisionDesc;
-  }
-  /**
    * @return the fechaRegistro
    */
   public String getFechaRegistro() {
-    if(fechaRegistro.length()>13){
-      Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_LARGO, new Locale(ES));
-      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
-      try {
-          date = sdf.parse(fechaRegistro);
-          fechaRegistro = sdf1.format(date);
-      } catch (ParseException e) {
-          logger.error(EXCEPCION, e.getMessage());
-      }
-  }else if(fechaRegistro.length()>10){
-      Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_MMM_DD_YYYY);
-      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
-      try {
-          date = sdf.parse(fechaRegistro);
-          fechaRegistro = sdf1.format(date);
-      } catch (ParseException e) {
-        logger.error(EXCEPCION, e.getMessage());
-      }
-  }
-  return fechaRegistro;
+  return Constantes.formatearFecha(fechaRegistro);
   }
   /**
    * @param fechaRegistro the fechaRegistro to set
@@ -228,5 +141,20 @@ public class Comision extends BaseService {
   public void setIdHorario(Horario idHorario) {
     this.idHorario = idHorario;
   }
+
+  /**
+   * @return the comisionDesc
+   */
+  public String getComisionDesc() {
+    return comisionDesc;
+  }
+
+  /**
+   * @param comisionDesc the comisionDesc to set
+   */
+  public void setComisionDesc(String comisionDesc) {
+    this.comisionDesc = comisionDesc;
+  } 
+  
 
 }
