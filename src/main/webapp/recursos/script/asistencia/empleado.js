@@ -7,7 +7,7 @@ $(document).ready(function() {
 		
 		
 		$('#fechaInicial').val($('#validBeforeDatepicker').val());
-		$('#fechaFinal').val($('#validAfterDatepicker').val());
+		$('#fechaFinal').val($('#validAfterDatepicker').val()); 
 		
 		$.get(href, function(asistenciaJustificacion, status) {
 			var nombre = asistenciaJustificacion.asistencia.usuarioDto.nombre + ' ' + 
