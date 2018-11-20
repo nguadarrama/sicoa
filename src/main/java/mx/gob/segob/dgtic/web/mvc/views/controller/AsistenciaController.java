@@ -1211,24 +1211,12 @@ public class AsistenciaController  {
     			+ "/" + 
     			asistenciaJustificacion.getAsistencia().getIncidencia().getIdArchivo().getNombre();
     	
-    	InputStream inputStream = null;
-    	
-		try {
-			inputStream = new FileInputStream(new File(rutaArchivo));
+		try (InputStream inputStream = new FileInputStream(new File(rutaArchivo));)	{
 			IOUtils.copy(inputStream, response.getOutputStream());
 	        response.flushBuffer();
 		} catch (IOException e) {
 			logger.warn(ConstantsController.ERROR,e);
-		} finally {
-			try {
-				if (inputStream != null) {
-					inputStream.close();
-				}
-			} catch (IOException e) {
-				logger.warn(ConstantsController.ERROR,e);
-			}
 		}
-        
         
     }
     
