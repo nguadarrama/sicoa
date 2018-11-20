@@ -47,7 +47,8 @@ public class EncodingFilter implements Filter {
         encoding = filterConfig.getInitParameter("encoding");
         encoding = (encoding == null || encoding.isEmpty())? DEFAULT_ENCODING : encoding;
 
-        logger.info("Inicializando filtro "+EncodingFilter.class.getName()+":"+encoding );
+        logger.info("Inicializando filtro: {} ",EncodingFilter.class.getName());
+        logger.info("Encoding: {}", encoding );
     }
 
     /**
@@ -76,6 +77,6 @@ public class EncodingFilter implements Filter {
 	 */
     @Override
     public void destroy() {
-    	logger.info("Destruyendo filtro "+EncodingFilter.class.getName());        
+    	logger.info("Destruyendo filtro: {} ",EncodingFilter.class.getName());        
     }
 }

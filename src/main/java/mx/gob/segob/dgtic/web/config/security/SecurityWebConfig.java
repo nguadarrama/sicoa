@@ -58,7 +58,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 	 * @throws Exception Error al configurar parametros globales
 	 */
 	@Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder auth) {
 		
 		//Se registra el proveedor de autenticaci&oacute;n.
 		auth.authenticationProvider(authenticationRestProvider());
