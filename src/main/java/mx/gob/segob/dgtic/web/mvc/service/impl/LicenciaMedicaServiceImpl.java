@@ -435,7 +435,7 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 			    for (Iterator<Date> it = listaFechasAux.iterator(); it.hasNext();) {
 			        Date date = it.next();
 			        fecha = sdf1.format(date);
-			        listaFechas =""+fecha+",";
+			        listaFechas=listaFechas+""+fecha+",";
 			    }
 			}  
 		}

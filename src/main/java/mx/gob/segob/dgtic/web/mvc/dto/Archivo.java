@@ -1,8 +1,5 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
-import java.io.InputStream;
-
-import org.springframework.web.multipart.MultipartFile;
 
 public class Archivo {
 	private Integer idArchivo;
@@ -10,7 +7,7 @@ public class Archivo {
 	private String url;
 	private Integer size;
 	private Boolean activo;
-	private byte[] archivo;
+	private byte[] archivoByte;
 	private String accion;
 	private String claveUsuario;
 	private String mensaje;
@@ -19,7 +16,7 @@ public class Archivo {
 	}
 	public Archivo(byte[] archivo, String accion, String claveUsuario){
 		super();
-		this.archivo=archivo;
+		this.archivoByte=archivo;
 		this.accion=accion;
 		this.claveUsuario=claveUsuario;
 	}
@@ -61,10 +58,10 @@ public class Archivo {
 		this.activo = activo;
 	}
 	public byte[] getArchivo() {
-		return archivo;
+		return archivoByte;
 	}
 	public void setArchivo(byte[] archivo) {
-		this.archivo = archivo;
+		this.archivoByte = archivo;
 	}
 	public String getAccion() {
 		return accion;

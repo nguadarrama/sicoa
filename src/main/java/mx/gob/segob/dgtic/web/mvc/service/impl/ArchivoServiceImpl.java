@@ -64,7 +64,7 @@ public class ArchivoServiceImpl implements ArchivoService{
 			logger.warn(".Warn. {} ",e2);
 		}
 		archivoDto.setUrl(ruta);
-		archivoDto.setSize((int) (long) archivo.getSize());
+		archivoDto.setSize((int) archivo.getSize());
 		archivoDto.setActivo(true);
 		logger.info("nombre compelto : {}",archivo.getOriginalFilename()+" nombre"+archivo.getName());
 		archivoDto.setNombre(nombreArchivo);
@@ -126,7 +126,7 @@ public class ArchivoServiceImpl implements ArchivoService{
 		logger.info("nombreOriginal: {} ",nombreaux);
 		archivoDto.setIdArchivo(idArchivo);
 		archivoDto.setUrl(ruta);
-		archivoDto.setSize((int) (long) archivo.getSize());
+		archivoDto.setSize((int) archivo.getSize());
 		archivoDto.setActivo(true);
 		archivoDto.setNombre(nombreArchivo);
 		Map<String, Object> content = new HashMap<>();

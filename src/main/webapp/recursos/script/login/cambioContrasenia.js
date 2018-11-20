@@ -21,7 +21,6 @@ var CambioContraseniaJS =  (function() {
 		
 		var formCambioContrasenia = "#formCambioContrasenia";		
 		var btnCambioContrasenia="#btnCambioContrasenia";
-		var accesoClave= "#accesoClave";
 		var accesoClave1= "#accesoClave1";
 		var accesoClave2= "#accesoClave2";
 		$("#formLogin").css("display","none");

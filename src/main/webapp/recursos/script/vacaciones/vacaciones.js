@@ -11,7 +11,7 @@ $(document).ready(function() {
 	if(mm<10){
 	    mm='0'+mm;
 	} 
-	var today = dd+'-'+mm+'-'+yyyy;
+	today = dd+'-'+mm+'-'+yyyy;
 	$("#fechaSolicitud").val(today);
 	$('.collapse').collapse();
 //	$('#collapseOne').collapse({
@@ -97,18 +97,10 @@ $(document).ready(function() {
 			dateFormat: 'yy-mm-dd',
 		       beforeShowDay: $.datepicker.noWeekends 
 		   });
-		
-		function cambiarFile(){
-		    const input = document.getElementById('inputFileServer');
-		    if(input.files && input.files[0]);
-		        //alert("File Seleccionado : ", input.files[0]);
-		    
-		}
 		$('#vacacionesPropias').on('click','.eBtn' , function(event) { 					//botón edita
 			//alert(""); 
 			event.preventDefault();
 			var href = $(this).attr('href');
-			var text = $(this).text();
 				$.get(href, function(hmap, status) {
 					//alert(hmap.vacacion.idVacacion.idVacacion),
 					$('.actualizaVacacion #numeroEmpleado').val(hmap.vacacion.idUsuario.claveUsuario);
@@ -132,8 +124,6 @@ $(document).ready(function() {
 					if(hmap.vacacion.idEstatus.idEstatus=='2' || hmap.vacacion.idEstatus.idEstatus=='3'){
 						$('.rechazaVacacion #rechazaVacacion').css("display","none");
 						$('.aceptaVacacion #aceptaVacacion').css("display","none");
-					}else{
-						
 					}
 					//alert(hmap.vacacion.idArchivo.idArchivo);
 					if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
@@ -250,7 +240,7 @@ $(document).ready(function() {
 				//document.getElementById("botonGuardarVacaciones").disabled = true;
 			}
 			//document.getElementById("botonGuardarVacaciones").disabled = true;
-		};
+		}
 		$('#guardarVacaciones').on('click', function(event){
 			
 		});

@@ -136,13 +136,12 @@ $(document).ready(function() {
 			//document.getElementById("botonGuardarVacaciones").disabled = true;
 		}
 		//document.getElementById("botonGuardarVacaciones").disabled = true;
-	};
+	}
 	
 	$("#registrarMiLicencia").on('click', function(event){
 		//alert("");
 		event.preventDefault();
 		var href = $(this).attr('href');
-	 	var text = $(this).text();
 		$.get(href, function(hmap, status) {
 			$(".actualizaLicencia #nombre").val(hmap.usuario.nombre);
 			$(".actualizaLicencia #apellidoPaterno").val(hmap.usuario.apellidoPaterno);
@@ -182,7 +181,6 @@ $(document).ready(function() {
 	$('#tablaLicenciasEmpleados').on('click','.eBtn' , function(event) { 					//botón edita
 	 	event.preventDefault();
 	 	var href = $(this).attr('href');
-	 	var text = $(this).text();
 		$.get(href, function(hmap, status) {
 			//alert(hmap.periodo.mensaje);
 			$(".actualizaLicencia #nombre").val(hmap.usuario.nombre);

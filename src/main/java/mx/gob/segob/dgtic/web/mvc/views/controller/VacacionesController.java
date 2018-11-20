@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.BusquedaDto;
 import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
@@ -61,6 +64,8 @@ import mx.gob.segob.dgtic.web.mvc.service.VacacionesService;
 @Controller
 @RequestMapping( value = "vacaciones")
 public class VacacionesController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
 	
 	@Autowired
 	private VacacionesService vacacionesService;
@@ -95,12 +100,10 @@ public class VacacionesController {
 	
     @RequestMapping(value={"solicitudVacaciones"}, method = RequestMethod.GET)
     public String obtieneAsistencias(Model model, HttpSession session, Authentication authentication) {
-    	System.out.print("Peticion de vacaciones");
 	    String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
     	Periodo periodo= new Periodo();
-    	System.out.println("periodo.getIdPeriodo() "+claveUsuario);
     	String cadena=catalogoService.obtieneDiaFestivoParaBloquear(authentication);
 	    model.addAttribute("listaDiasFestivos", cadena);
     	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario, authentication);
@@ -112,9 +115,7 @@ public class VacacionesController {
     			cadena=fechas;
     		}
     	}
-    	System.out.println("Dias festivos para bloquear "+cadena);
     	periodo.setMensaje(cadena);
-    	System.out.println("periodo.getIdPeriodo() "+periodo.getIdPeriodo());
 	   
 	    if(periodo.getIdPeriodo()!=null && !periodo.getIdPeriodo().toString().isEmpty()){
 	    	 model.addAttribute("periodo",periodo);
@@ -134,7 +135,7 @@ public class VacacionesController {
 	    	model.addAttribute("periodo",null);
 	    	 model.addAttribute("vacacion",null);
 	    }
-	    System.out.println("idPeriodo "+periodo.getIdPeriodo());
+	    logger.info("idPeriodo "+periodo.getIdPeriodo());
 	    
 	    model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuario, authentication));
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
@@ -152,28 +153,21 @@ public class VacacionesController {
 			
 		}
 		this.mensaje = "";
-    	//Periodo periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
-    	//System.out.println("datos del periodo "+periodo.getFechaInicio());
     	return "/vacaciones/solicitudVacaciones";
     }
     @GetMapping("vacacion/busca")
 	@ResponseBody
 	public HashMap<String, Object> buscaUsuario(String idVacacion, Authentication authentication) {
-		//cargaUsuarioPerfil(id, model);
 		HashMap<String, Object> hmap = new HashMap<String, Object>();
-		System.out.println("vamos bien "+idVacacion);
+		logger.info("vamos bien "+idVacacion);
 		VacacionesAux vacaciones = new VacacionesAux();
 		vacaciones=vacacionesService.obtieneVacacion(idVacacion, authentication);
 		hmap.put("vacacion",vacaciones);
-		//String claveResponsable=Integer.toString(vacaciones.getIdResponsable());
-		//System.out.println("claveResponsable "+claveResponsable);
 		if(vacaciones.getIdResponsable()!=null && !vacaciones.getIdResponsable().toString().isEmpty()){
 			hmap.put("responsable", usuarioService.buscaUsuarioPorId(Integer.toString(vacaciones.getIdResponsable()),authentication));
 		}else{
 			hmap.put("responsable", null);
 		}
-		//hmap.put("listaUsuarioPerfiles", perfilUsuarioService.recuperaPerfilesUsuario(id));
-		//hmap.put("listaPerfiles", catalogoService.obtienePerfiles());
 		return hmap;
 	}
     
@@ -181,10 +175,10 @@ public class VacacionesController {
 	public void  generaReporteVacaciones(String idSolicitud,String idEstatus,String idPuesto,String idUnidadAdministrativa,String numeroEmpleado,
 			String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio1, String fechaFin1, 
 			String dias, String responsable, String idVacacion, String responsableAux,String fechaSolicitud ,HttpServletRequest request, HttpServletResponse response, Authentication authentication){
-    		System.out.println("Datos para el archivo "+idSolicitud+" unidadAdministrativa "+idUnidadAdministrativa+" idPuesto "+idPuesto +" idUnidad "+idVacacion
+    	logger.info("Datos para el archivo "+idSolicitud+" unidadAdministrativa "+idUnidadAdministrativa+" idPuesto "+idPuesto +" idUnidad "+idVacacion
     				+" fechaInicio "+fechaInicio1+" fechaFin "+fechaFin1+" responsableAux "+responsableAux +" responsable "+responsable);
     	try {
-			System.out.println("Datos "+nombre);
+    		logger.info("Datos "+nombre);
 			Map<String,Object> parametros = new HashMap<String, Object>();
 			parametros.put("nombre", nombre);
 			parametros.put("apellidoPaterno", apellidoPaterno);
@@ -229,7 +223,7 @@ public class VacacionesController {
     
     @RequestMapping(value={"vacacionesPropias"}, method = RequestMethod.GET)
     public String obtieneAsistenciasPropias(String idPeriodo, String idEstatus, String fechaInicioBusca1, String fechaFinBusca1 ,Model model, HttpSession session, Authentication authentication) {
-    	System.out.println("idEstatus "+idEstatus+" idPeriodo "+idPeriodo+" fechaInicio "+fechaInicioBusca1+" fechaFin "+fechaFinBusca1 );
+    	logger.info("idEstatus "+idEstatus+" idPeriodo "+idPeriodo+" fechaInicio "+fechaInicioBusca1+" fechaFin "+fechaFinBusca1 );
     	if(idEstatus==null || idEstatus.toString().isEmpty()){
     		idEstatus="";
     	}
@@ -245,14 +239,9 @@ public class VacacionesController {
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
-    	System.out.println("Datos para vacacionesPropias");
-//    	Periodo periodo= new Periodo();
-//    	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
-//	    model.addAttribute("periodo",periodo);
-//	    System.out.println("idPeriodo "+periodo.getIdPeriodo());
+    	logger.info("Datos para vacacionesPropias");
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 	    model.addAttribute("listaPeriodos",periodoService.periodos(authentication));
-	   // model.addAttribute("vacacion",vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo()));
     	List<Vacaciones> vacaciones = new ArrayList<>();
     	BusquedaDto busquedaDto = new BusquedaDto();
     	busquedaDto.setClaveUsuario(claveUsuario);
@@ -283,16 +272,16 @@ public class VacacionesController {
     }
     @RequestMapping(value={"solicitudVacacionesEmpleados"}, method = RequestMethod.GET)
     public String SolitudVacacionesEmpleados(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, Model model,HttpSession session, Authentication authentication) {
-    	System.out.println("claveUsuario "+claveUsuario+" nombre "+nombre+" apellidoPaterno "+apellidoPaterno+" apellidoMaterno "+apellidoMaterno);
+    	logger.info("claveUsuario "+claveUsuario+" nombre "+nombre+" apellidoPaterno "+apellidoPaterno+" apellidoMaterno "+apellidoMaterno);
     	String string=""+ session.getAttribute("usuario");
     	String[] parts = string.split(": ");
     	String claveUsuarioAux = parts[1];
-    	System.out.println("Datos para vacacionesPropias");
+    	logger.info("Datos para vacacionesPropias");
     	Usuario usuario= new Usuario();
     	usuario=usuarioService.buscaUsuario(claveUsuarioAux, authentication);
     	
     	String idUnidad=""+usuario.getIdUnidad();
-    	System.out.println("id de la unidad administrativa "+idUnidad);
+    	logger.info("id de la unidad administrativa "+idUnidad);
     	List<VacacionPeriodo> conVacaciones= new ArrayList<>();
     	conVacaciones=vacacionPeriodoService.obtenerUsuariosVacacionesPorFiltros(claveUsuario, nombre, apellidoPaterno, apellidoMaterno, idUnidad, authentication);
     	if(conVacaciones.size()>0){
@@ -311,13 +300,12 @@ public class VacacionesController {
 			
 		}
 		this.mensaje = "";
-    	//model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus());
     	return "/vacaciones/solicitudVacacionesEmpleados"; 
     	
     }
     @RequestMapping(value={"vacacionesEmpleados"}, method = RequestMethod.GET)
     public String obtieneVacacionesEmpleados(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, String idUnidad, String idEstatus, Model model,HttpSession session, Authentication authentication) {
-    	System.out.println("Datos para vacacionesEmpleados claveUsuario "+claveUsuario+" nombre "+nombre+" apellidoPaterno "+apellidoPaterno+" apellidoMaterno "+apellidoMaterno+" idUnidad "+idUnidad+" idEstatus "+idEstatus );
+    	logger.info("Datos para vacacionesEmpleados claveUsuario "+claveUsuario+" nombre "+nombre+" apellidoPaterno "+apellidoPaterno+" apellidoMaterno "+apellidoMaterno+" idUnidad "+idUnidad+" idEstatus "+idEstatus );
     	if(nombre==null || nombre.trim().isEmpty()){
 			nombre="";
 		}
@@ -344,9 +332,9 @@ public class VacacionesController {
     	Boolean usuario= false;
     	for(PerfilUsuario perfilUsuario: listaPerfilUsuario){
     		if(idUnidad==null || idUnidad.toString().isEmpty()){
-    			System.out.println("Entrando al if "+perfilUsuario.getClavePerfil().getClavePerfil());
+    			logger.info("Entrando al if "+perfilUsuario.getClavePerfil().getClavePerfil());
 	    		if(perfilUsuario.getClavePerfil().getClavePerfil().toString().equals("2")){
-	    			System.out.println("Entrando al if "+perfilUsuario.getClavePerfil().getClavePerfil());
+	    			logger.info("Entrando al if "+perfilUsuario.getClavePerfil().getClavePerfil());
 	    			usuario=true;
 	    			Usuario usuarioAux= new Usuario();
 	    	    	if(usuario==true){
@@ -359,9 +347,9 @@ public class VacacionesController {
 	    			idUnidad="";
 	    		}
     		}
-    		System.out.println("valor para idUnidad "+idUnidad);
+    		logger.info("valor para idUnidad "+idUnidad);
     	}
-    	System.out.println("Bandera para determinar si es empleado o no "+usuario+" claveUsuario "+claveUsuario);
+    	logger.info("Bandera para determinar si es empleado o no "+usuario+" claveUsuario "+claveUsuario);
     	
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 	    List<Vacaciones> vacaciones = new ArrayList<>();
@@ -373,7 +361,7 @@ public class VacacionesController {
     	busquedaDto.setIdUnidad(idUnidad);
     	busquedaDto.setIdEstatus(idEstatus);
 	    vacaciones=vacacionesService.obtenerVacacionesPorFiltros(busquedaDto, authentication);
-	    System.out.println("Tamaño "+vacaciones.size());
+	    logger.info("Tamaño "+vacaciones.size());
 	    if(vacaciones.size()>0){
 	    	model.addAttribute("vacacionesEmpleados",vacaciones);
 	    }else{
@@ -405,13 +393,13 @@ public class VacacionesController {
     
     @RequestMapping(value={"vacacion/buscaUsuario"}, method = RequestMethod.GET)
     public String buscaUsuario(String claveUsuario, Model model, Authentication authentication) {
-	    System.out.println("Usuarioooooooooooooo para buscar "+claveUsuario);
+    	logger.info("Usuarioooooooooooooo para buscar "+claveUsuario);
 	    global=claveUsuario;
     	Periodo periodo= new Periodo();
-    	System.out.println("periodo.getIdPeriodo() "+claveUsuario);
+    	logger.info("periodo.getIdPeriodo() "+claveUsuario);
     	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario, authentication);
     	String cadena=catalogoService.obtieneDiaFestivoParaBloquear(authentication);
-	    System.out.println("Dias festivos para bloquear "+cadena);
+    	logger.info("Dias festivos para bloquear "+cadena);
 	    model.addAttribute("listaDiasFestivos", cadena);
     	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario, authentication);
     	String fechas=vacacionesService.recuperaDiasVacacioness(claveUsuario, authentication);
@@ -424,14 +412,10 @@ public class VacacionesController {
     	}
     	periodo.setMensaje(cadena);
     	model.addAttribute("usuario",usuarioService.buscaUsuario(claveUsuario, authentication));
-    	System.out.println("periodo.getIdPeriodo() "+periodo.getIdPeriodo());
-    	//VacacionPeriodo vacacionPeriodo=new VacacionPeriodo();
+    	logger.info("periodo.getIdPeriodo() "+periodo.getIdPeriodo());
 	    if(periodo.getIdPeriodo()!=null && !periodo.getIdPeriodo().toString().isEmpty()){
 	    	 model.addAttribute("periodo",periodo);
-	    	 System.out.println("Datos claveUsuario "+claveUsuario+"periodo.getIdPeriodo() "+periodo.getIdPeriodo());
-	    	 //vacacionPeriodo=vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo(), authentication);
-//	    	 System.out.println("Datos para la consulta "+claveUsuario +" idPeriodo "+periodo.getIdPeriodo()+" "
-//		    	 		+ "vacacionPeriodo.getIdUsuario().getClaveUsuario() "+vacacionPeriodo.getIdUsuario().getClaveUsuario());
+	    	 logger.info("Datos claveUsuario "+claveUsuario+"periodo.getIdPeriodo() "+periodo.getIdPeriodo());
 	    	 VacacionPeriodo vaca= new VacacionPeriodo(); 
 	    	 vaca=vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo(), authentication);
 	    	 try{
@@ -444,32 +428,13 @@ public class VacacionesController {
 	    	 catch(Exception e){
 	    		 
 	    	 }
-	    	 //model.addAttribute("vacacion",vacacionPeriodo);
 	    }else{
 	    	model.addAttribute("periodo",null);
 	    	 model.addAttribute("vacacion",null);
 	    }
-	    System.out.println("idPeriodo "+periodo.getIdPeriodo());
-//	    String claveUsuarioAux= null;
-//	    try{
-//	    
-//	    claveUsuarioAux=vacacionPeriodo.getIdUsuario().getClaveUsuario();
-//	    }catch(Exception e){
-//	    	e.printStackTrace();
-//	    }
-	    //claveUsuarioAux=vacacionPeriodo.getIdUsuario().getClaveUsuario();
-//	    if(claveUsuarioAux!=null && !claveUsuarioAux.toString().isEmpty()){
-//	    	model.addAttribute("listaResponsable",unidadAdministrativaService.consultaResponsable(claveUsuarioAux));
-//	    }else{
-//	    	model.addAttribute("listaResponsable",null);
-//	    }
-//	    String cadena=catalogoService.obtieneDiaFestivoParaBloquear();
-//	    System.out.println("Dias festivos para bloquear "+cadena);
-//	    model.addAttribute("listaDiasFestivos", cadena);
+	    logger.info("idPeriodo "+periodo.getIdPeriodo());
 	    model.addAttribute("listaUnidades",unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 	    model.addAttribute("listaEstatus",estatusService.obtieneListaEstatus(authentication));
-    	//Periodo periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario);
-    	//System.out.println("datos del periodo "+periodo.getFechaInicio());
     	return "/vacaciones/registraVacacionesEmpleados";
     	
     }
@@ -477,9 +442,8 @@ public class VacacionesController {
     @PostMapping("/vacacion/modifica")
     public String registraVacacioness(@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer diasPorPedir, @RequestParam Integer idPeriodo, @RequestParam String idVacacion ,Integer responsable, HttpSession session, Authentication authentication ) {
     	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-    	System.out.println("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" responsable "+responsable+" idVacacion "+idVacacion);
-    	//System.out.println("Archivo "+archivo+" idVacacion "+idVacacion);
-    	System.out.println("responsable "+responsable);
+    	logger.info("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" responsable "+responsable+" idVacacion "+idVacacion);
+    	logger.info("responsable "+responsable);
     	Date fechaInicial = new Date();
     	Date fechaFinal = new Date();
     	
@@ -487,35 +451,23 @@ public class VacacionesController {
     	try {
     		fechaInicial = df.parse(fechaInicio);
     		fechaFinal=df.parse(fechaFin);
-			System.out.println("fechaInicio "+fechaInicial);
+    		logger.info("fechaInicio "+fechaInicial);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	InputStream nuevoArchivo = null;
-//    	try {
-//			nuevoArchivo=archivo.getInputStream();
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
     	 String string=""+ session.getAttribute("usuario");
      	String[] parts = string.split(": ");
      	String claveUsuario = parts[1];
      	VacacionPeriodo vacacion=new  VacacionPeriodo();
-     	Archivo archivoDto = new Archivo();
      	vacacion.setIdVacacion(Integer.parseInt(idVacacion));
-     	//usuarioService.buscaUsuario(claveUsuario);
-     	//Integer idArchivo=archivoService.guardaArchivo(archivo, claveUsuario, new String("vacaciones"));
-     	//archivoDto.setIdArchivo(idArchivo);
      	Estatus estatus=new Estatus();
      	estatus.setIdEstatus(1);
      	VacacionPeriodo vacacion1= new VacacionPeriodo();
      	vacacion1.setIdVacacion(Integer.parseInt(idVacacion));
    
      	Vacaciones respuesta=vacacionesService.agregaVacaciones(new VacacionesAux(null,vacacion1, responsable, estatus, fechaInicio, fechaFin, diasPorPedir), claveUsuario,authentication);
-    	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
-    	System.out.println("respuesta con mensaje "+respuesta.getMensaje());
+     	logger.info("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
+     	logger.info("respuesta con mensaje "+respuesta.getMensaje());
     	
     	this.mensaje=respuesta.getMensaje();
     	
@@ -525,14 +477,14 @@ public class VacacionesController {
     public String registraVacacionesEmpleado( String fechaInicio,  String fechaFin,  Integer diasPorPedir,  Integer idPeriodo,  String idVacacion,Integer responsable,  String claveUsuario, HttpSession session, Authentication authentication) {
     	DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
     	claveUsuario=global;
-    	System.out.println("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
-    	System.out.println("responsable "+responsable);
+    	logger.info("fechaInicio "+fechaInicio+" fechaFin "+fechaFin+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
+    	logger.info("responsable "+responsable);
     	Date fechaInicial = new Date();
     	Date fechaFinal = new Date();
     	try {
     		fechaInicial = df.parse(fechaInicio);
     		fechaFinal=df.parse(fechaFin);
-			System.out.println("fechaInicio "+fechaInicial);
+    		logger.info("fechaInicio "+fechaInicial);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -546,30 +498,26 @@ public class VacacionesController {
      	Estatus estatus=new Estatus();
      	estatus.setIdEstatus(1);
      	Vacaciones vacaciones= vacacionesService.agregaVacaciones(new VacacionesAux(null,vacacion, responsable, estatus, fechaInicio, fechaFin, diasPorPedir), claveUsuario, authentication);
-    	System.out.println("Mensaje obtenido "+vacaciones.getMensaje());
+     	logger.info("Mensaje obtenido "+vacaciones.getMensaje());
      	this.mensaje=vacaciones.getMensaje();
-     	System.out.println("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
+     	logger.info("fechaInicio "+fechaInicial+" fechaFin "+fechaFinal+" diasPorPedir "+diasPorPedir+" idPeriodo "+idPeriodo+" claveUsuario "+claveUsuario);
      	global="";
      	return "redirect:/vacaciones/solicitudVacacionesEmpleados";
     }
     @GetMapping("vacacion/acepta")
     public String aceptaVacaciones(Integer idSolicitud, String fechaInicio, String fechaFin,Integer id, Authentication authentication) {
-    	System.out.println("idVacacion "+idSolicitud+" fechaInicio "+fechaInicio+" fechaFinal "+fechaFin+" idUsuario "+id);
-    	//fechaInicio=fechaInicio.substring(0,21);
+    	logger.info("idVacacion "+idSolicitud+" fechaInicio "+fechaInicio+" fechaFinal "+fechaFin+" idUsuario "+id);
     	ParsePosition pos = new ParsePosition(4);
-    	//fechaFin=fechaFin.substring(0,12);
-//    	VacacionPeriodo vacacion=  new  VacacionPeriodo();
-//    	vacacion.setIdVacacion(id);
     	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, hh:mm:ss a");
-    	Date fechaInicial = new Date();
-    	Date fechaFinal = new Date();
+    	Date fechaInicial =null;
+    	Date fechaFinal =null;
     	Usuario usuario=new Usuario();
     	usuario.setIdUsuario(id);
     	Estatus estatus= new Estatus();
         estatus.setIdEstatus(2);
         fechaInicial = formatter.parse(fechaInicio,pos);
 		fechaFinal=formatter.parse(fechaFin,pos);
-		System.out.println("fechaInicio "+fechaInicial);
+		logger.info("fechaInicio "+fechaInicial);
 		Vacaciones vacaciones=vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,null,null,null,estatus,fechaInicial,fechaFinal,null), idSolicitud, authentication);
     	//catalogoService.eliminaHorario(id);
 		this.mensaje=vacaciones.getMensaje();
@@ -579,7 +527,7 @@ public class VacacionesController {
     
     @GetMapping("vacacion/actualizaPropiasVacaciones")
     public String actualizaPropiasVacaciones(Integer id,String idUsuario,Integer idVacacion,Integer dias, Authentication authentication) {
-    	System.out.println("idVacacion "+id+" idUsuario "+idUsuario+" idVacacion "+idVacacion+" dias"+dias);
+    	logger.info("idVacacion "+id+" idUsuario "+idUsuario+" idVacacion "+idVacacion+" dias"+dias);
     	VacacionPeriodo vacacion=new  VacacionPeriodo();
     	vacacion.setIdVacacion(idVacacion);
     	Usuario usuario=new Usuario();
@@ -593,7 +541,7 @@ public class VacacionesController {
     }
     @GetMapping("vacacion/actualizaVacacionesEmpleados")
     public String actualizaVacacionesEmpleados(Integer id,String idUsuario,Integer idVacacion,Integer dias, Authentication authentication) {
-    	System.out.println("idVacacion "+id+" idUsuario "+idUsuario+" idVacacion "+idVacacion+" dias"+dias);
+    	logger.info("idVacacion "+id+" idUsuario "+idUsuario+" idVacacion "+idVacacion+" dias"+dias);
     	VacacionPeriodo vacacion=new  VacacionPeriodo();
     	vacacion.setIdVacacion(idVacacion);
     	Usuario usuario=new Usuario();
@@ -608,7 +556,7 @@ public class VacacionesController {
     
     @PostMapping("/vacacion/actualizaArchivo")
     public String registraVacaciones(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idDetalle, Authentication authentication ){
-    	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario);
+    	logger.info("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario);
     	Archivo idArchivoAux=new Archivo();
     	Vacaciones vacaciones= new Vacaciones();
     	Archivo archivoDto=new Archivo();
@@ -629,20 +577,20 @@ public class VacacionesController {
     	}
     @PostMapping("/vacacion/actualizaArchivoEmpleado")
     public String registraVacacionesEmpleado(@RequestParam MultipartFile archivo, Integer idArchivo,String claveUsuario,Integer idDetalle, Authentication authentication ){
-    	System.out.println("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario+" idDetalle "+idDetalle);
+    	logger.info("Datos archivo "+archivo+" idArchivo "+idArchivo+" claveUsuario "+claveUsuario+" idDetalle "+idDetalle);
     	Archivo idArchivoAux=new Archivo();
     	Vacaciones vacaciones= new Vacaciones();
     	Archivo archivoDto=new Archivo();
     	vacaciones.setIdDetalle(idDetalle);
     	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
-    		System.out.println("id de archivo actualizar "+idArchivo);
+    		logger.info("id de archivo actualizar "+idArchivo);
     		idArchivoAux=archivoService.actualizaArchivo(archivo, claveUsuario, new String("vacaciones"),idArchivo,"vacacion-", authentication);
     		archivoDto.setIdArchivo(idArchivo);
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones, authentication);
     	}else{
     		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, "vacaciones","vacacion-", authentication);
-    		System.out.println("id de archivo guardar "+idArchivoAux.getIdArchivo());
+    		logger.info("id de archivo guardar "+idArchivoAux.getIdArchivo());
     		archivoDto.setIdArchivo(idArchivoAux.getIdArchivo());
     		vacaciones.setIdArchivo(archivoDto);
     		vacacionesService.modificaVacaciones(vacaciones, authentication);
@@ -653,7 +601,7 @@ public class VacacionesController {
     
     @GetMapping("vacacion/rechaza")
     public String rechazaVacaciones(Integer idSolicitud,String idUsuario,Integer idVacacion,Integer dias, Authentication authentication) {
-    	System.out.println("idVacacion "+idSolicitud+" idUsuario "+idUsuario+" idVacacion "+idVacacion+" dias"+dias);
+    	logger.info("idVacacion "+idSolicitud+" idUsuario "+idUsuario+" idVacacion "+idVacacion+" dias"+dias);
     	VacacionPeriodo vacacion=new  VacacionPeriodo();
     	vacacion.setIdVacacion(idVacacion);
     	Usuario usuario=new Usuario();
@@ -668,14 +616,14 @@ public class VacacionesController {
     
     @RequestMapping(value = "/descargaArchivo", method = RequestMethod.GET)
     public void getFile(Integer idArchivo, HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
-    	System.out.println("id del archivo "+idArchivo);
+    	logger.info("id del archivo "+idArchivo);
     	Archivo archivo= new Archivo();
     	archivo=archivoService.consultaArchivo(idArchivo, authentication);
-    	System.out.println("archivo retornado "+archivo.getUrl());
+    	logger.info("archivo retornado "+archivo.getUrl());
     	String nombrecompleto=archivo.getUrl()+archivo.getNombre();
     	//String nombreArchivo=nombrecompleto.replace('/','\\');
     	String nombreArchivo=nombrecompleto;
-    	System.out.println("nombre de archivo "+nombreArchivo);
+    	logger.info("nombre de archivo "+nombreArchivo);
     	File file = new File(nombreArchivo);
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         String mimeType= URLConnection.guessContentTypeFromStream(inputStream);
@@ -691,7 +639,7 @@ public class VacacionesController {
     
     @RequestMapping(value={"eliminaVacacion"}, method = RequestMethod.POST)
     public String eliminaVacacion(Integer idVacacionEliminar, Authentication authentication) {
-	    System.out.println("id para eliminar "+idVacacionEliminar);
+    	logger.info("id para eliminar "+idVacacionEliminar);
 	    Vacaciones vacaciones= new Vacaciones();
 	    vacaciones=vacacionesService.eliminaVacaciones(idVacacionEliminar, authentication);
 	    this.mensaje=vacaciones.getMensaje();
@@ -701,7 +649,7 @@ public class VacacionesController {
     
     @RequestMapping(value={"cancelaVacacion"}, method = RequestMethod.POST)
     public String cancelaVacacion(Integer idVacacionCancelar, Authentication authentication) {
-	    System.out.println("id para cancelar "+idVacacionCancelar);
+	    logger.info("id para cancelar "+idVacacionCancelar);
 	    Vacaciones vacaciones= new Vacaciones();
 	    vacaciones=vacacionesService.cancelaVacaciones(idVacacionCancelar, authentication);
 	    this.mensaje=vacaciones.getMensaje();

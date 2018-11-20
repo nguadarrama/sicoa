@@ -20,7 +20,6 @@ $(document).ready(function() {
 		
 		 event.preventDefault();
 		var href = $(this).attr('href');
-		var text = $(this).text();
 			$.get(href, function(hmap, status) {
 				$('.usuarioForm #claveUsuario').val(hmap.usuario.claveUsuario);
 				$('.usuarioForm #nombre').val(hmap.usuario.nombre);
@@ -66,9 +65,6 @@ $(document).ready(function() {
 				}
 				//alert("perfiles "+hmap.listaUsuarioPerfiles[0]);
 				//alert(hmap.listaUsuarioPerfiles.length);
-				var a=0;
-				var selectPerfil = document.getElementById("perfiles");
-				var selectPerfiles = document.getElementsByName("clavePerfil")[0];
 
 				 /*for (value in array) {
 				  var option = document.createElement("option");

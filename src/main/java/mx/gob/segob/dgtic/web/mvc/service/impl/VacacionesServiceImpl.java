@@ -170,7 +170,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		HttpResponse response;
 		Usuario usuario;
 		usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
-		usuario.setFechaIngreso(null);
+		//usuario.setFechaIngreso(null);
 		vacaciones.setIdUsuario(usuario);
 		Map<String, Object> content = new HashMap<>();
 		content.put(Constantes.DETALLEVACACION, vacaciones);
@@ -537,7 +537,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 				    for (Iterator<Date> it = listaFechasAux.iterator(); it.hasNext();) {
 				        Date date = it.next();
 				        fecha = sdf1.format(date);
-				        listaFechas=""+fecha+",";
+				        listaFechas+=""+fecha+",";
 				    }
 			}
 				    
