@@ -85,7 +85,7 @@ $(document).ready(function() {
 					$('.actualizaVacacion #fechaInicio1').val(hmap.comision.fechaInicio);
 					$('.actualizaVacacion #fechaSolicitud').val(hmap.comision.fechaRegistro);
 					$('.actualizaVacacion #fechaFin1').val(hmap.comision.fechaFin);
-					$('.actualizaVacacion #comision').val(hmap.comision.comision);
+					$('.actualizaVacacion #comision').val(hmap.comision.comisionDesc);
 					$('.actualizaVacacion #idHorario').val(hmap.horario);
 					$('.actualizaVacacion #idArchivoPropio').val(hmap.comision.idArchivo.idArchivo);
 					$('.actualizaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
