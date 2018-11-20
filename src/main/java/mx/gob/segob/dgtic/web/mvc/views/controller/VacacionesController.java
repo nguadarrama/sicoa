@@ -204,8 +204,25 @@ public class VacacionesController {
 			if(responsable==null || responsable.trim().isEmpty()){
 				responsable=responsableAux;
 			}
+			GeneraReporteArchivo gra = new GeneraReporteArchivo();
+			gra.setIdsolicitud(idSolicitud);
+			gra.setIdEstatus(idEstatus);
+			gra.setIdPuesto(idPuesto);
+			gra.setUnidadAdministrativa(idUnidadAdministrativa);
+			gra.setNumeroEmpleado(numeroEmpleado);
+			gra.setFechaIngreso(fechaIngreso);
+			gra.setRfc(rfc);
+			gra.setNombre(nombre);
+			gra.setApellidoPaterno(apellidoPaterno);
+			gra.setApellidoMaterno(apellidoMaterno);
+			gra.setFechaInicio(fechaInicio1);
+			gra.setFechaFin(fechaFin1);
+			gra.setDias(dias);
+			gra.setResponsable(responsable);
+			gra.setIdVacacion(idVacacion);
+			gra.setFechaPeticion(fechaSolicitud);
 			
-			reporte archivo = vacacionesService.generaReporte(new GeneraReporteArchivo (idSolicitud, idEstatus, idPuesto, idUnidadAdministrativa, numeroEmpleado, fechaIngreso, rfc, nombre, apellidoPaterno, apellidoMaterno, fechaInicio1, fechaFin1, dias, responsable, idVacacion, fechaSolicitud), authentication);
+			reporte archivo = vacacionesService.generaReporte(gra, authentication);
 			InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			if(mimeType == null){
@@ -314,50 +331,12 @@ public class VacacionesController {
     	logger.info("apellidoMaterno-. {} ",apellidoMaterno);
     	logger.info("idUnidad {}",idUnidad);
     	logger.info("idEstatus: {} ",idEstatus );
-    	if(nombre==null || nombre.trim().isEmpty()){
-			nombre="";
-		}
-		if(claveUsuario==null || claveUsuario.trim().isEmpty()){
-			claveUsuario="";
-		}
-		if(apellidoPaterno==null || apellidoPaterno.trim().isEmpty()){
-			apellidoPaterno="";
-		}
-		if(apellidoMaterno==null || apellidoMaterno.trim().isEmpty()){
-			apellidoMaterno="";
-		}
-		if(idEstatus==null || idEstatus.trim().isEmpty()){
-			idEstatus="";
-		}
-		if(idUnidad==null || idUnidad.trim().isEmpty()){
-			idUnidad="";
-		}
     	String string=""+ session.getAttribute(ConstantsController.USUARIO);
     	String[] parts = string.split(": ");
     	String claveUsuarioLider = parts[1];
     	List<PerfilUsuario> listaPerfilUsuario;
     	listaPerfilUsuario=perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider, authentication);
-    	Boolean usuario= false;
-    	for(PerfilUsuario perfilUsuario: listaPerfilUsuario){
-    		if(idUnidad==null || idUnidad.isEmpty()){
-    			logger.info("Entrando al if {} ",perfilUsuario.getClavePerfil().getClavePerfil());
-	    		if(perfilUsuario.getClavePerfil().getClavePerfil().equals("2")){
-	    			logger.info("Entrando al if {} ",perfilUsuario.getClavePerfil().getClavePerfil());
-	    			usuario=true;
-	    			Usuario usuarioAux;
-	    	    	if(usuario){
-	    	    		
-	    	    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
-	    	    		idUnidad=""+usuarioAux.getIdUnidad();
-	    	    	}
-	    		}
-	    		if(perfilUsuario.getClavePerfil().getClavePerfil().equals("1")){
-	    			idUnidad="";
-	    		}
-    		}
-    		logger.info("valor para idUnidad {} ",idUnidad);
-    	}
-    	logger.info("Bandera para determinar si es empleado o no: {} ", usuario);
+    	idUnidad=retornaPerfil(idUnidad, listaPerfilUsuario, claveUsuarioLider, authentication);
     	logger.info("claveUsuario: {} ",claveUsuario);
     	
 	    model.addAttribute(ConstantsController.LISTA_UNIDADES,unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
@@ -390,6 +369,30 @@ public class VacacionesController {
 		}
 		this.mensaje = "";
     	return "/vacaciones/vacacionesEmpleados"; 
+    }
+    
+    public String retornaPerfil(String idUnidad, List<PerfilUsuario> listaPerfilUsuario, String claveUsuarioLider, Authentication authentication){
+    	Boolean usuario= false;
+    	for(PerfilUsuario perfilUsuario: listaPerfilUsuario){
+    		if(idUnidad==null || idUnidad.isEmpty()){
+    			logger.info("Entrando al if {} ",perfilUsuario.getClavePerfil().getClavePerfil());
+	    		if(perfilUsuario.getClavePerfil().getClavePerfil().equals("2")){
+	    			logger.info("Entrando al if {} ",perfilUsuario.getClavePerfil().getClavePerfil());
+	    			usuario=true;
+	    			Usuario usuarioAux;
+	    	    	if(usuario){
+	    	    		
+	    	    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
+	    	    		idUnidad=""+usuarioAux.getIdUnidad();
+	    	    	}
+	    		}
+	    		if(perfilUsuario.getClavePerfil().getClavePerfil().equals("1")){
+	    			idUnidad="";
+	    		}
+    		}
+    		logger.info("valor para idUnidad {} ",idUnidad);
+    	}
+    	return idUnidad;
     }
     
     @RequestMapping(value={"busca"}, method = RequestMethod.GET)

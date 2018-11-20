@@ -132,20 +132,6 @@ public class LicenciasMedicasController {
 	@RequestMapping(value={"solicitudLicenciasEmpleados"}, method = RequestMethod.GET)
     public String agregaLicenciaEmpleados(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno ,Model model, HttpSession session, Authentication authentication) {
 		
-
-		if(nombre==null || nombre.trim().isEmpty()){
-			nombre="";
-		}
-		if(claveUsuario==null || claveUsuario.trim().isEmpty()){
-			claveUsuario="";
-		}
-		if(apellidoPaterno==null || apellidoPaterno.trim().isEmpty()){
-			apellidoPaterno="";
-		}
-		if(apellidoMaterno==null || apellidoMaterno.trim().isEmpty()){
-			apellidoMaterno="";
-		}
-		
 		String string=""+ session.getAttribute(ConstantsController.USUARIO);
     	String[] parts = string.split(": ");
     	String claveUsuarioAux = parts[1];
@@ -175,22 +161,6 @@ public class LicenciasMedicasController {
 	@RequestMapping(value={"licenciasEmpleados"}, method = RequestMethod.GET)
     public String obtieneLicenciasPropias(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, 
     		String idEstatus, String idUnidad, Model model, HttpSession session, Authentication authentication) {
-		
-		if(nombre==null || nombre.trim().isEmpty()){
-			nombre="";
-		}
-		if(claveUsuario==null || claveUsuario.trim().isEmpty()){
-			claveUsuario="";
-		}
-		if(apellidoPaterno==null || apellidoPaterno.trim().isEmpty()){
-			apellidoPaterno="";
-		}
-		if(apellidoMaterno==null || apellidoMaterno.trim().isEmpty()){
-			apellidoMaterno="";
-		}
-		if(idEstatus==null || idEstatus.trim().isEmpty()){
-			idEstatus="";
-		}
 		String string=""+ session.getAttribute(ConstantsController.USUARIO);
     	String[] parts = string.split(": ");
     	String claveUsuarioLider = parts[1];

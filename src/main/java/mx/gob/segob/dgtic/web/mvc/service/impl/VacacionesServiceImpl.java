@@ -170,6 +170,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		HttpResponse response;
 		Usuario usuario;
 		usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
+		usuario.setFechaIngreso("");
 		vacaciones.setIdUsuario(usuario);
 		Map<String, Object> content = new HashMap<>();
 		content.put(Constantes.DETALLEVACACION, vacaciones);
@@ -516,36 +517,41 @@ public class VacacionesServiceImpl implements VacacionesService{
 			} else {
 				throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
 			}
-			String listaFechas="";
-			for(Vacaciones vacaciones: listaVacaciones){
-				if(vacaciones.getIdEstatus().getIdEstatus()!=3 && vacaciones.getIdEstatus().getIdEstatus()!=6){
-					Date fechaInicio=vacaciones.getFechaInicio();
-					Date fechaFin=vacaciones.getFechaFin();
-					
-					Calendar c1 = Calendar.getInstance();
-				    c1.setTime(fechaInicio);
-				    Calendar c2 = Calendar.getInstance();
-				    c2.setTime(fechaFin);
-				    List<Date> listaFechasAux = new ArrayList<>();
-				    while (!c1.after(c2)) {
-				        listaFechasAux.add(c1.getTime());
-				        c1.add(Calendar.DAY_OF_MONTH, 1);
-				    }
-				    SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
-				    String fecha=null;
-				    for (Iterator<Date> it = listaFechasAux.iterator(); it.hasNext();) {
-				        Date date = it.next();
-				        fecha = sdf1.format(date);
-				        listaFechas+=""+fecha+",";
-				    }
-			}
-				    
-			}
-				if(!listaFechas.isEmpty()){
-				listaFechas=listaFechas.substring(0, (listaFechas.length()- 1));
-				}
+			String listaFechas=recorreLista(listaVacaciones);
+			
 
 			return listaFechas;
+	}
+	public String recorreLista(List<Vacaciones> listaVacaciones){
+		String listaFechas="";
+		for(Vacaciones vacaciones: listaVacaciones){
+			if(vacaciones.getIdEstatus().getIdEstatus()!=3 && vacaciones.getIdEstatus().getIdEstatus()!=6){
+				Date fechaInicio=vacaciones.getFechaInicio();
+				Date fechaFin=vacaciones.getFechaFin();
+				
+				Calendar c1 = Calendar.getInstance();
+			    c1.setTime(fechaInicio);
+			    Calendar c2 = Calendar.getInstance();
+			    c2.setTime(fechaFin);
+			    List<Date> listaFechasAux = new ArrayList<>();
+			    while (!c1.after(c2)) {
+			        listaFechasAux.add(c1.getTime());
+			        c1.add(Calendar.DAY_OF_MONTH, 1);
+			    }
+			    SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+			    String fecha=null;
+			    for (Iterator<Date> it = listaFechasAux.iterator(); it.hasNext();) {
+			        Date date = it.next();
+			        fecha = sdf1.format(date);
+			        listaFechas+=""+fecha+",";
+			    }
+		}
+			    
+		}
+			if(!listaFechas.isEmpty()){
+			listaFechas=listaFechas.substring(0, (listaFechas.length()- 1));
+			}
+		return listaFechas;
 	}
 
 	@SuppressWarnings("unchecked")
