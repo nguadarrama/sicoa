@@ -4,8 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
+import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
+
 public class Usuario {
 	
+	private static final Logger logger = Logger.getLogger(Usuario.class);
 	private Integer idUsuario;
 	private Integer idArea;
 	private Perfil clavePerfil;
@@ -127,8 +132,7 @@ public class Usuario {
             date = sdf.parse(fechaIngreso);
             fechaIngreso = sdf1.format(date);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	 logger.warn(ConstantsController.WARN, e);
         }
     }else if(fechaIngreso.length()>=10){
         Date date = new Date();
@@ -138,8 +142,7 @@ public class Usuario {
             date = sdf.parse(fechaIngreso);
             fechaIngreso = sdf1.format(date);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+           logger.warn(ConstantsController.WARN, e);
         }
     }
     return fechaIngreso;

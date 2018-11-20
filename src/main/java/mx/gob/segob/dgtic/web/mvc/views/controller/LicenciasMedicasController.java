@@ -174,7 +174,7 @@ public class LicenciasMedicasController {
 	    			logger.info("Entrando al if: {} ",perfilUsuario.getClavePerfil().getClavePerfil());
 	    			usuario=true;
 	    			Usuario usuarioAux;
-	    	    	if(usuario==true){
+	    	    	if(usuario){
 	    	    		
 	    	    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
 	    	    		idUnidad=""+usuarioAux.getIdUnidad();

@@ -3,10 +3,14 @@ package mx.gob.segob.dgtic.web.mvc.dto;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+
+import org.apache.log4j.Logger;
+
+import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
 
 public class LicenciaMedica {
 
+	private static final Logger logger = Logger.getLogger(LicenciaMedica.class);
 	private Integer idLicencia;
 	private Usuario idUsuario;
 	private Integer idResponsable;
@@ -45,20 +49,11 @@ public class LicenciaMedica {
 		this.totalLicencias = totalLicencias;
 	}
 	public LicenciaMedica(){
-		
+		/**
+		 * 
+		 */
 	}
-	public LicenciaMedica(Integer idLicencia, Usuario idUsuario, Integer idResponsable, Archivo idArchivo, Estatus idEstatus, String fechaInicioAux, 
-			String fechaFinAux, Integer dias, String padecimiento){
-		this.idLicencia=idLicencia;
-		this.idUsuario=idUsuario;
-		this.idResponsable=idResponsable;
-		this.idArchivo=idArchivo;
-		this.idEstatus=idEstatus;
-		this.fechaInicioAux=fechaInicioAux;
-		this.fechaFinAux=fechaFinAux;
-		this.dias=dias;
-		this.padecimiento=padecimiento;
-	}
+	
 	public String getFechaInicioAux() {
 		return fechaInicioAux;
 	}
@@ -110,8 +105,7 @@ public class LicenciaMedica {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}else if(fechaInicio.length()>10){
 			Date date = new Date();
@@ -121,8 +115,7 @@ public class LicenciaMedica {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}
 		return fechaInicio;
@@ -139,7 +132,7 @@ public class LicenciaMedica {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}else if(fechaFin.length()>10){
 			Date date = new Date();
@@ -149,7 +142,7 @@ public class LicenciaMedica {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}
 		return fechaFin;
@@ -178,7 +171,7 @@ public class LicenciaMedica {
 				date = sdf.parse(fechaRegistro);
 				fechaRegistro = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}else if(fechaRegistro.length()>10){
 			Date date = new Date();
@@ -188,7 +181,7 @@ public class LicenciaMedica {
 				date = sdf.parse(fechaRegistro);
 				fechaRegistro = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}
 		return fechaRegistro;

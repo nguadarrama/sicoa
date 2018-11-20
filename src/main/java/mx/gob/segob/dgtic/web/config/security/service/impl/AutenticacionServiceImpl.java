@@ -39,6 +39,7 @@ import mx.gob.segob.dgtic.web.mvc.service.constants.Constantes;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
+import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
 
 /**
  * Implementaci&oacute;n de los m&eacute;todos para la l&oacute;gica de negocio de autenticaci&oacute;n
@@ -63,7 +64,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 	 * @see mx.gob.segob.dgtic.web.config.security.service.AutenticacionService#obtenerTokenAutorizacionLogin(java.lang.String)
 	 */
 	@Override
-	public String obtenerTokenAutorizacionLogin(String solicitante) throws AuthenticationServiceException{
+	public String obtenerTokenAutorizacionLogin(String solicitante) {
 			
 		String pathServiceTokenAuth = String.format(AuthenticationEndPointConstants.WEB_SERVICE_TOKEN_AUTH, solicitante);
 		String tokenAutorizacion = null;
@@ -102,8 +103,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 	 * @see mx.gob.segob.dgtic.web.config.security.service.AutenticacionService#obtenerTokenAccesoLogin(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String obtenerTokenAccesoLogin(String tokenAutorizacionLogin, String usuario, String contrasenia) 
-			throws AuthenticationServiceException{
+	public String obtenerTokenAccesoLogin(String tokenAutorizacionLogin, String usuario, String contrasenia) {
 		Map<String, Object> parametros = new HashMap<>(0);
 		parametros.put("usuario", usuario);
 		parametros.put("contrasenia", contrasenia);
@@ -147,8 +147,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 	 * @see mx.gob.segob.dgtic.web.config.security.service.AutenticacionService#obtenerInformacionUsuario(java.lang.String)
 	 */
 	@Override
-	public 	UsuarioSesion obtenerInformacionUsuario(String tokenAcceso) 
-			throws AuthenticationServiceException{
+	public 	UsuarioSesion obtenerInformacionUsuario(String tokenAcceso) {
 		
 		Gson gson = new GsonBuilder()
 				.enableComplexMapKeySerialization()
@@ -194,7 +193,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 	 * @see mx.gob.segob.dgtic.web.config.security.service.AutenticacionService#logout(java.lang.String)
 	 */
 	@Override
-	public void logout(String tokenAcceso) throws AuthenticationServiceException{
+	public void logout(String tokenAcceso) {
 		try {
 			Header tokenAccesoHeader = new BasicHeader( AutorizacionConstants.AUTHORIZATION_HEADER_NAME, 
 					String.format(AutorizacionConstants.AUTHENTICATION_TOKEN_WITH_SCHEME, tokenAcceso));
@@ -223,7 +222,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
 
-	@SuppressWarnings({ "unused", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public Boolean cambiaContrasenia(String usuario, String contrasenia, Authentication authentication) {
 		
@@ -241,7 +240,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			e1.printStackTrace();
+			logger.info(ConstantsController.WARN,e1);
 		}
 		try { //se consume recurso rest
 			response = ClienteRestUtil.getCliente().put(AuthenticationEndPointConstants.WEB_SERVICE_CONTRASENIA, httpEntity, header);

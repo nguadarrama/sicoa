@@ -4,8 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
+import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
+
 public class DiaFestivo {
 
+	private static final Logger logger = Logger.getLogger(DiaFestivo.class);
 	private Integer idDiaFestivo;
 	private String nombre;
 	private String fecha;
@@ -67,8 +72,7 @@ public class DiaFestivo {
 				date = sdf.parse(fecha);
 				fecha = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}else if(fecha.length()>10){
 			Date date = new Date();
@@ -78,8 +82,7 @@ public class DiaFestivo {
 				date = sdf.parse(fecha);
 				fecha = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				 logger.warn(ConstantsController.WARN, e);
 			}
 		}
 		return fecha;
