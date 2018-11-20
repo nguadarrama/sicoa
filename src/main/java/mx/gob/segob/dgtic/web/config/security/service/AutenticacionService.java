@@ -26,7 +26,7 @@ public interface AutenticacionService {
 	 * @return Token de autorizacio&oacute;n
 	 * @throws AuthenticationServiceException Error al solicitar el token de autorizaci&oacute;n
 	 */
-	String obtenerTokenAutorizacionLogin(String solicitanteSistema) throws AuthenticationServiceException;
+	String obtenerTokenAutorizacionLogin(String solicitanteSistema);
 
 	/**
 	 * Obtener token acceso.
@@ -37,8 +37,7 @@ public interface AutenticacionService {
 	 * @return El token de acceso a recursos restringidos
 	 * @throws AuthenticationServiceException Error al solicitar el token de acceso
 	 */
-	String obtenerTokenAccesoLogin(String tokenAutorizacionLogin, String usuario, String contrasenia)
-			throws AuthenticationServiceException;
+	String obtenerTokenAccesoLogin(String tokenAutorizacionLogin, String usuario, String contrasenia);
 
 	/**
 	 * Obtener informacion usuario.
@@ -47,7 +46,7 @@ public interface AutenticacionService {
 	 * @return La informaci&oacute;n del usuario asociado al token
 	 * @throws AuthenticationServiceException Error al solicitar el token de acceso
 	 */
-	UsuarioSesion obtenerInformacionUsuario(String tokenAcceso) throws AuthenticationServiceException;
+	UsuarioSesion obtenerInformacionUsuario(String tokenAcceso) ;
 
 	/**
 	 * Cierre de sesion
@@ -55,11 +54,10 @@ public interface AutenticacionService {
 	 * @param tokenAcceso El token de acceso asociado al sistema
 	 * @throws AuthenticationServiceException Error al solicitar el token de acceso
 	 */
-	void logout(String tokenAcceso) throws AuthenticationServiceException;
+	void logout(String tokenAcceso);
 
 	
-	Boolean cambiaContrasenia(String usuario, String contrasenia, Authentication authentication)
-			throws AuthenticationServiceException;
+	Boolean cambiaContrasenia(String usuario, String contrasenia, Authentication authentication);
 	
 
 }
