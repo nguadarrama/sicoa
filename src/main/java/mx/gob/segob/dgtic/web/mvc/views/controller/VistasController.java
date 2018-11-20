@@ -24,6 +24,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.service.DashService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
+import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
 
 
 /**
@@ -32,7 +33,7 @@ import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
  * Path : {contextoAplicacion}/
  */
 @Controller
-@RequestMapping( value = "/")
+@RequestMapping( value = ConstantsController.DIAGONAL)
 public class VistasController {	
 	
 
@@ -53,76 +54,61 @@ public class VistasController {
      * @param session the session
      * @return La vista de home
      */
-    @RequestMapping(value={"","home"}, method = RequestMethod.GET)
+    @RequestMapping(value={ConstantsController.VACIO,ConstantsController.HOME}, method = RequestMethod.GET)
     public String index(HttpSession session, Model model, Authentication authentication){ 
-    	String string=""+ session.getAttribute("usuario");
-    	String[] parts = string.split(": ");
+    	String string= ConstantsController.VACIO+ session.getAttribute(ConstantsController.USUARIO);
+    	String[] parts = string.split(ConstantsController.SPLIT);
     	String claveUsuario = parts[1];
-    	//model.addAttribute("bandera", false);
     	Usuario usuario=null;
     	usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
-    	if(usuario.getPrimeraVez().equals("Y") || usuario.getPrimeraVez().equals("S")){
-    		return "/cambiaContrasenia";
+    	if(usuario.getPrimeraVez().equals(ConstantsController.YES) || usuario.getPrimeraVez().equals(ConstantsController.SI)){
+    		return ConstantsController.CAMBIA_CONTRA;
     	}else{
-    		model.addAttribute("top",dashService.getDash(usuario.getIdUsuario(), authentication));
-    		return "home"; 
+    		model.addAttribute(ConstantsController.TOP,dashService.getDash(usuario.getIdUsuario(), authentication));
+    		return ConstantsController.HOME; 
 	   	}
     }   
 
 
-    @PostMapping("/cambiaContrasenia")
+    @PostMapping(ConstantsController.CAMBIA_CONTRA)
     public String cambiaContrasenia(HttpSession session,String accesoClave, String aC1, String accesoClave2, Model model, Authentication authentication) throws AuthenticationServiceException, ClienteException{
-    	
-    	
-    	String string=""+ session.getAttribute("usuario");
-    	String[] parts = string.split(": ");
+    	String string= ConstantsController.VACIO+ session.getAttribute(ConstantsController.USUARIO);
+    	String[] parts = string.split(ConstantsController.SPLIT);
     	String claveUsuario = parts[1];
     	Boolean response=autenticacionService.cambiaContrasenia(claveUsuario, aC1, authentication);
-    	System.out.println("clave antigua "+accesoClave +" nueva1 "+aC1 +" accesoClave2 "+accesoClave2);
-    	
-    	if(response==true){
-    		return"redirect:/login";
-        	}else{
-        	return"redirect:/cambiaContrasenia1";
-        	}
+    	return response == true ? ConstantsController.RE_LOGIN : ConstantsController.RE_CAMBIA_CONTRA;
     }
-    @GetMapping("/cambiaContrasenia")
+    @GetMapping(ConstantsController.CAMBIA_CONTRA)
     public String cambiaNuevaContrasenia() {
-  
-    	return "cambiaContrasenia";
+    	return ConstantsController.CAMBIA_CONTRAS;
     }
-    @GetMapping("/cambiaContrasenia1")
+    @GetMapping(ConstantsController.CAMBIA_CONTRA1)
     public String cambiaNuevaContrasenia1() {
-    	return "cambiaContrasenia1";
+    	return ConstantsController.CAMBIA_CONTRA1S;
     }
-    @GetMapping("/home")
+    @GetMapping(ConstantsController.HOME)
     public String home(HttpSession session, Model model, Authentication authentication){ 
-    	String string=""+ session.getAttribute("usuario");
-    	String[] parts = string.split(": ");
+    	String string= ConstantsController.VACIO+ session.getAttribute(ConstantsController.USUARIO);
+    	String[] parts = string.split(ConstantsController.SPLIT);
     	String claveUsuario = parts[1];
     	Usuario usuario=null;
     	usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
     	model.addAttribute("top",dashService.getDash(usuario.getIdUsuario(), authentication));
     	return "home";
     }
-    @GetMapping("/mensajeConfirmacion")
+    
+    @GetMapping(ConstantsController.MSJ_CONFIRMACION)
     public String mensajeConfirmacion() {
-    	return "mensajeConfirmacion";
+    	return ConstantsController.MSJ_CONFIRMACIONS;
     }
-    @PostMapping("/cambiaContrasenia1")
+    
+    @PostMapping(ConstantsController.CAMBIA_CONTRA1)
     public String cambiaContrasenia1(HttpSession session, String aC1, String accesoClave2, Model model, Authentication authentication) throws AuthenticationServiceException, ClienteException{
-    	String string=""+ session.getAttribute("usuario");
-    	String[] parts = string.split(": ");
+    	String string= ConstantsController.VACIO+ session.getAttribute(ConstantsController.USUARIO);
+    	String[] parts = string.split(ConstantsController.SPLIT);
     	String claveUsuario = parts[1];
-    	
     	Boolean response=autenticacionService.cambiaContrasenia(claveUsuario, aC1, authentication);
-    	System.out.println("cambia contraseña 1 "+aC1 );
-    	System.out.println("Response "+response );
-    	if(response==true){
-    		return"redirect:/login";
-        	}else{
-        	return"redirect:/cambiaContrasenia1";
-        	}
+    	return response == true ? ConstantsController.RE_LOGIN : ConstantsController.RE_CAMBIA_CONTRA;
     }
     
 }

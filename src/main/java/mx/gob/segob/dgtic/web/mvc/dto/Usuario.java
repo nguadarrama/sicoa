@@ -119,7 +119,6 @@ public class Usuario {
 	}
 	
 	public String getFechaIngreso() {
-	  System.out.println("getFecha formateo ingreso: " + fechaIngreso);
 	  if(fechaIngreso.length()>13){
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");

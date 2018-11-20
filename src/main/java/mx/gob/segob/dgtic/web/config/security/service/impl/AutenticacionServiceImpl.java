@@ -35,6 +35,7 @@ import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.config.security.service.AutenticacionService;
 import mx.gob.segob.dgtic.web.mvc.dto.UsuarioSesion;
+import mx.gob.segob.dgtic.web.mvc.service.constants.Constantes;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
@@ -65,7 +66,6 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 	public String obtenerTokenAutorizacionLogin(String solicitante) throws AuthenticationServiceException{
 			
 		String pathServiceTokenAuth = String.format(AuthenticationEndPointConstants.WEB_SERVICE_TOKEN_AUTH, solicitante);
-		
 		String tokenAutorizacion = null;
 		HttpResponse response;
 		try {
@@ -231,8 +231,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 		HttpResponse response;
 		Boolean respuesta=false;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-		System.out.println("token  -----------  " + detalles.get("_token").toString() );
-		Header header = new BasicHeader("Authorization", "Bearer "+ detalles.get("_token").toString());
+		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		
 		Map<String, Object> content = new HashMap<String, Object>();
@@ -251,20 +250,15 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 			logger.error(e.getMessage(), e);
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		System.out.println("********************************** "+HttpResponseUtil.getStatus(response));
-		System.out.println(Status.OK.getStatusCode());
 		if(HttpResponseUtil.getStatus(response) == Status.OK.getStatusCode()){
 			respuesta=true;	
-			this.logout(detalles.get("_token").toString());
+			this.logout(detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)){
 			respuesta=false;	
 			String mensaje = obtenerMensajeError(response);					 
-			//throw new AuthenticationServiceException(mensaje);	cambia contraseña		
 		} else {
-			respuesta=false;	
-			//throw new AuthenticationServiceException("Error al actualizar el password : "+response.getStatusLine().getReasonPhrase());
+			respuesta=false;
 		}
-		System.out.println("response "+response.getStatusLine());
 		return respuesta;
 		
 	}

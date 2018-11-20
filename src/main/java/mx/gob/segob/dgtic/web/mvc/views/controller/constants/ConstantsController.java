@@ -42,4 +42,21 @@ public class ConstantsController {
 	public static final String VACACION = "vacacion";
 	public static final String COMISION = "comision";
 	public static final String DESCUENTO = "descuento";
+	public static final String DIAGONAL = "/";
+	public static final String VACIO = "";
+	public static final String HOME = "home";
+	public static final String CAMBIA_CONTRA = "/cambiaContrasenia";
+	public static final String CAMBIA_CONTRA1 = "/cambiaContrasenia1";
+	public static final String CAMBIA_CONTRAS = "cambiaContrasenia";
+	public static final String CAMBIA_CONTRA1S = "cambiaContrasenia1";
+	public static final String YES = "Y";
+	public static final String SI = "S";
+	public static final String NO = "N";
+	public static final String TOP = "top";
+	public static final String SPLIT = ": ";
+	public static final String RE_LOGIN = "redirect:/login";
+	public static final String RE_CAMBIA_CONTRA = "redirect:/cambiaContrasenia1";
+	public static final String MSJ_CONFIRMACION = "/mensajeConfirmacion";
+	public static final String MSJ_CONFIRMACIONS = "mensajeConfirmacion";
+	
 }
