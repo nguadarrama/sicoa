@@ -6,7 +6,7 @@ $(document).ready(function() {
 	$('#tableJustificacion').on('click','.eBtn' , function(event){					//botón edita
 		event.preventDefault();
 		var href = $(this).attr('href');
-		var text = $(this).text();
+		
 		
 			$.get(href, function(justificacion, status) {
 				$('.justificacionForm #id').val(justificacion.idJustificacion);

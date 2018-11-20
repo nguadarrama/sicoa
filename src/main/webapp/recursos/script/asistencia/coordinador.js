@@ -148,7 +148,7 @@ $(document).ready(function() {
 	$('.descuentoBtn').on('click', function(event) { 					//botón descuento
 		event.preventDefault();
 		var href = $(this).attr('href');
-		var text = $(this).text();
+		
 		
 		$('.descuentoForm #fechaInicial').val($('#validBeforeDatepicker').val());
 		$('.descuentoForm #fechaFinal').val($('#validAfterDatepicker').val());

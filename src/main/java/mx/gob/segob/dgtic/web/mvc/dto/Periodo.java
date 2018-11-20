@@ -12,6 +12,7 @@ public class Periodo {
 	private String descripcion;
 	private Boolean activo;
 	private String mensaje;
+	private static final String DD_MM_YYYY = "dd-MM-yyyy";
 	public Periodo(){
 		
 	}
@@ -38,7 +39,7 @@ public class Periodo {
 		if(fechaInicio.length()>13){
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat(DD_MM_YYYY);
 		    try {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
@@ -48,7 +49,7 @@ public class Periodo {
 		}else if(fechaInicio.length()>10){
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat(DD_MM_YYYY);
 		    try {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
@@ -67,7 +68,7 @@ public class Periodo {
 		if(fechaFin.length()>13){
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat(DD_MM_YYYY);
 		    try {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
@@ -77,7 +78,7 @@ public class Periodo {
 		}else if(fechaFin.length()>10){
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf1 = new SimpleDateFormat(DD_MM_YYYY);
 		    try {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);

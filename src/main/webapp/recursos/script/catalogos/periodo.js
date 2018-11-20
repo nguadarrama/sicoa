@@ -54,7 +54,6 @@ $(document).ready(function() {
 	$('#tablePeriodos').on('click','.eBtn', function(event) { 					//botón edita
 		event.preventDefault();
 		var href = $(this).attr('href');
-		var text = $(this).text();
 		
 			$.get(href, function(periodo, status) {
 				$('.periodoForm #idPeriodo').val(periodo.idPeriodo);

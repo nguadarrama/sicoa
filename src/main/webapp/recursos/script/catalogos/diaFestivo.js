@@ -28,7 +28,7 @@ $(document).ready(function() {
 	$('#tableDiaFestivo').on('click','.eBtn' , function(event){			//botón edita
 		event.preventDefault();
 		var href = $(this).attr('href');
-		var text = $(this).text();
+		
 			$.get(href, function(diaFestivo, status) {
 				$('#id').val(diaFestivo.idDiaFestivo);
 				$('#nombre').val(diaFestivo.nombre);

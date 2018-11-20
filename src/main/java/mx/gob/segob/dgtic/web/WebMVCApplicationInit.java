@@ -40,10 +40,7 @@ import mx.gob.segob.dgtic.web.config.SpringWebConfig;
  */
 public class WebMVCApplicationInit extends AbstractAnnotationConfigDispatcherServletInitializer   {
 
-	    /**
-	     * Instancia para realizar log.
-	     */
-		Logger logger = LoggerFactory.getLogger(WebMVCApplicationInit.class);
+
 	
 		
 		/**

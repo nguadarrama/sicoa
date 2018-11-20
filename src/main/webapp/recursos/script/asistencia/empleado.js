@@ -4,7 +4,7 @@ $(document).ready(function() {
 	$('.nBtn').on('click', function(event) { 					//botón justifica
 		event.preventDefault();
 		var href = $(this).attr('href');
-		var text = $(this).text();
+		
 		
 		$('#fechaInicial').val($('#validBeforeDatepicker').val());
 		$('#fechaFinal').val($('#validAfterDatepicker').val());

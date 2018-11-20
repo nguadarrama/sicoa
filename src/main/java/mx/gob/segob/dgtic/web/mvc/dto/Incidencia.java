@@ -13,7 +13,9 @@ public class Incidencia {
 	private String nombreAutorizador;
 	
 	public Incidencia () {
-		
+		/**
+		 * 
+		 */
 	}
 	
 	public Integer getIdIncidencia() {
