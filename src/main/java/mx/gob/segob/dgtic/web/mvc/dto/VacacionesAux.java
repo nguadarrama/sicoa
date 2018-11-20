@@ -23,6 +23,10 @@ public class VacacionesAux {
 	private String fechaRegistro;
     private String name;
     private String mensaje;
+    private String lenguaje="es_ES";
+    private String conversionCorta="MMM dd, yyyy";
+	private String conversion="MMM dd, yyyy HH:mm:ss z";
+	private String conversionDeseada="dd-MM-yyyy";
     
     public String getMensaje() {
 		return mensaje;
@@ -81,29 +85,24 @@ public class VacacionesAux {
 		this.idEstatus = idEstatus;
 	}
 	public String getFechaInicio() {
-//		System.out.println("fechaInicio "+fechaInicio);
-//		fechaInicio=fechaInicio.substring(0, 21);
-//		System.out.println("fechaInicio "+fechaInicio);
 		if(fechaInicio.length()>13){
 			Date date = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversion, new Locale(lenguaje));
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else if(fechaInicio.length()>10){
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversionCorta);
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -113,27 +112,24 @@ public class VacacionesAux {
 		this.fechaInicio = fechaInicio;
 	}
 	public String getFechaFin() {
-		//fechaFin=fechaFin.substring(0, 21);
 		if(fechaFin.length()>13){
 			Date date = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversion, new Locale(lenguaje));
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else if(fechaFin.length()>10){
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversionCorta);
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -149,29 +145,24 @@ public class VacacionesAux {
 		this.dias = dias;
 	}
 	public String getFechaRegistro() {
-		System.out.println("Fecha registro "+fechaRegistro);
-		//fechaRegistro=fechaRegistro.substring(0, 11);
-		System.out.println("Fecha registro "+fechaRegistro);
 		if(fechaRegistro.length()>13){
 			Date date = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversion, new Locale(lenguaje));
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaRegistro);
 				fechaRegistro = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else if(fechaRegistro.length()>10){
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy" , new Locale("es_ES"));
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversionCorta , new Locale(lenguaje));
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaRegistro);
 				fechaRegistro = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

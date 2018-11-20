@@ -22,6 +22,9 @@ public class LicenciaMedica {
 	private String totalLicencias;
 	private String diasTotales;
 	private String mensaje;
+	private String conversionCorta="MMM dd, yyyy";
+	private String conversion="MMM dd, yyyy HH:mm:ss z";
+	private String conversionDeseada="dd-MM-yyyy";
 	
 	public String getMensaje() {
 		return mensaje;
@@ -101,8 +104,8 @@ public class LicenciaMedica {
 	public String getFechaInicio() {
 		if(fechaInicio.length()>13){
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversion);
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
@@ -112,8 +115,8 @@ public class LicenciaMedica {
 			}
 		}else if(fechaInicio.length()>10){
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversionCorta);
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
@@ -130,29 +133,26 @@ public class LicenciaMedica {
 	public String getFechaFin() {
 		if(fechaFin.length()>13){
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversion);
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else if(fechaFin.length()>10){
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversionCorta);
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		return fechaFin;
-		//return fechaFin;
 	}
 	public void setFechaFin(String fechaFin) {
 		this.fechaFin = fechaFin;
@@ -170,27 +170,24 @@ public class LicenciaMedica {
 		this.padecimiento = padecimiento;
 	}
 	public String getFechaRegistro() {
-		//fechaRegistro=fechaRegistro.substring(0, 12);
 		if(fechaRegistro.length()>13){
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversion);
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaRegistro);
 				fechaRegistro = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else if(fechaRegistro.length()>10){
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(conversionCorta);
+			SimpleDateFormat sdf1 = new SimpleDateFormat(conversionDeseada);
 		    try {
 				date = sdf.parse(fechaRegistro);
 				fechaRegistro = sdf1.format(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
