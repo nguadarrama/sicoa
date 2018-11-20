@@ -96,22 +96,7 @@ public class ReporteController {
 	
 	//DIRECCIÓN
 	@RequestMapping(value={"reporteDireccion"}, method = RequestMethod.GET, params="busca")
-    public String reporteDireccion(Model model, String cveMusuario, String nombre, String paterno, String materno, String nivel,
-    		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
-		
-		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
-		
-		asistenciaBusquedaUtil.setCveMusuario(cveMusuario);
-		asistenciaBusquedaUtil.setNombre(nombre);
-		asistenciaBusquedaUtil.setPaterno(paterno);
-		asistenciaBusquedaUtil.setMaterno(materno);
-		asistenciaBusquedaUtil.setNivel(nivel);
-		asistenciaBusquedaUtil.setTipo(tipo);
-		asistenciaBusquedaUtil.setEstado(estado);
-		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
-		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
-		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
-		asistenciaBusquedaUtil.setP(permisos);
+    public String reporteDireccion(Model model, AsistenciaBusquedaUtil asistenciaBusquedaUtil, Authentication authentication) {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(asistenciaBusquedaUtil, authentication);
 		
@@ -129,21 +114,21 @@ public class ReporteController {
 		model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
 		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, listaAsistencias);
-		model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMusuario);
-    	model.addAttribute("nombre", nombre);
-    	model.addAttribute("paterno", paterno);
-    	model.addAttribute("materno", materno);
-    	model.addAttribute("nivel", nivel);
-    	model.addAttribute("tipo", tipo);
-    	model.addAttribute("estado", estado);
-    	model.addAttribute("unidadAdministrativa", !unidadAdministrativa.isEmpty() ? Integer.parseInt(unidadAdministrativa) : 0);
+		model.addAttribute("fechaInicial", asistenciaBusquedaUtil.getFechaInicial());
+    	model.addAttribute("fechaFinal", asistenciaBusquedaUtil.getFechaFinal());
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, asistenciaBusquedaUtil.getCveMusuario());
+    	model.addAttribute("nombre", asistenciaBusquedaUtil.getNombre());
+    	model.addAttribute("paterno", asistenciaBusquedaUtil.getPaterno());
+    	model.addAttribute("materno", asistenciaBusquedaUtil.getMaterno());
+    	model.addAttribute("nivel", asistenciaBusquedaUtil.getNivel());
+    	model.addAttribute("tipo", asistenciaBusquedaUtil.getTipo());
+    	model.addAttribute("estado", asistenciaBusquedaUtil.getEstado());
+    	model.addAttribute("unidadAdministrativa", !asistenciaBusquedaUtil.getUnidadAdministrativa().isEmpty() ? Integer.parseInt(asistenciaBusquedaUtil.getUnidadAdministrativa()) : 0);
     	
     	Boolean p = false;
     	
-    	if (permisos != null) {
-    		List<String> listaPermisos = new ArrayList<>(Arrays.asList(permisos));
+    	if (asistenciaBusquedaUtil.getPermisos() != null) {
+    		List<String> listaPermisos = new ArrayList<>(Arrays.asList(asistenciaBusquedaUtil.getPermisos()));
     		
     		if (listaPermisos.contains(ConstantsController.VACACION)) {
     			model.addAttribute(ConstantsController.VACACION, true);
@@ -168,7 +153,7 @@ public class ReporteController {
     	
     	model.addAttribute("hayPermiso", p);
     	
-    	if (tipo != null) {
+    	if (asistenciaBusquedaUtil.getTipo() != null) {
     		model.addAttribute("hayTipo", true);
     	}
     	
@@ -176,24 +161,9 @@ public class ReporteController {
     }
 	
 	@RequestMapping(value={"reporteDireccion"}, method = RequestMethod.GET, params="exporta")
-    public ModelAndView exportaReporteDireccion(Model model, String cveMusuario, String nombre, String paterno, String materno, String nivel,
-    		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
+    public ModelAndView exportaReporteDireccion(Model model, AsistenciaBusquedaUtil asistenciaBusquedaUtil, 
     		HttpServletResponse response, Authentication authentication) {
-		
-		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
-		
-		asistenciaBusquedaUtil.setCveMusuario(cveMusuario);
-		asistenciaBusquedaUtil.setNombre(nombre);
-		asistenciaBusquedaUtil.setPaterno(paterno);
-		asistenciaBusquedaUtil.setMaterno(materno);
-		asistenciaBusquedaUtil.setNivel(nivel);
-		asistenciaBusquedaUtil.setTipo(tipo);
-		asistenciaBusquedaUtil.setEstado(estado);
-		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
-		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
-		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
-		asistenciaBusquedaUtil.setP(permisos);
-		
+			
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(asistenciaBusquedaUtil, authentication);
 		
     	Map<String, Object> map = new HashMap<>();
@@ -261,22 +231,8 @@ public class ReporteController {
 	
 	//COORDINADOR
 	@RequestMapping(value={"reporteCoordinador"}, method = RequestMethod.GET, params="busca")
-    public String reporteCoordinador(Model model, String cveMUsuario, String nombre, String paterno, String materno, String nivel,
-    		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, Authentication authentication) {
+    public String reporteCoordinador(Model model, AsistenciaBusquedaUtil asistenciaBusquedaUtil, Authentication authentication) {
 		
-		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
-		
-		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
-		asistenciaBusquedaUtil.setNombre(nombre);
-		asistenciaBusquedaUtil.setPaterno(paterno);
-		asistenciaBusquedaUtil.setMaterno(materno);
-		asistenciaBusquedaUtil.setNivel(nivel);
-		asistenciaBusquedaUtil.setTipo(tipo);
-		asistenciaBusquedaUtil.setEstado(estado);
-		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
-		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
-		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
-		asistenciaBusquedaUtil.setP(permisos);
 		asistenciaBusquedaUtil.setCveUsuarioLogeado(authentication.getName());
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(asistenciaBusquedaUtil, authentication);
@@ -295,20 +251,20 @@ public class ReporteController {
 		model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
 		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, listaAsistencias);
-		model.addAttribute("fechaInicial", fechaInicial);
-    	model.addAttribute("fechaFinal", fechaFinal);
-    	model.addAttribute(ConstantsController.CVE_M_USUARIO, cveMUsuario);
-    	model.addAttribute("nombre", nombre);
-    	model.addAttribute("paterno", paterno);
-    	model.addAttribute("materno", materno);
-    	model.addAttribute("nivel", nivel);
-    	model.addAttribute("tipo", tipo);
-    	model.addAttribute("estado", estado);
+		model.addAttribute("fechaInicial", asistenciaBusquedaUtil.getFechaInicial());
+    	model.addAttribute("fechaFinal", asistenciaBusquedaUtil.getFechaFinal());
+    	model.addAttribute(ConstantsController.CVE_M_USUARIO, asistenciaBusquedaUtil.getCveMusuario());
+    	model.addAttribute("nombre", asistenciaBusquedaUtil.getNombre());
+    	model.addAttribute("paterno", asistenciaBusquedaUtil.getPaterno());
+    	model.addAttribute("materno", asistenciaBusquedaUtil.getMaterno());
+    	model.addAttribute("nivel", asistenciaBusquedaUtil.getNivel());
+    	model.addAttribute("tipo", asistenciaBusquedaUtil.getTipo());
+    	model.addAttribute("estado", asistenciaBusquedaUtil.getEstado());
     	
     	Boolean p = false;
     	
-    	if (permisos != null) {
-    		List<String> listaPermisos = new ArrayList<>(Arrays.asList(permisos));
+    	if (asistenciaBusquedaUtil.getPermisos() != null) {
+    		List<String> listaPermisos = new ArrayList<>(Arrays.asList(asistenciaBusquedaUtil.getPermisos()));
     		
     		if (listaPermisos.contains(ConstantsController.VACACION)) {
     			model.addAttribute(ConstantsController.VACACION, true);
@@ -333,7 +289,7 @@ public class ReporteController {
     	
     	model.addAttribute("hayPermiso", p);
     	
-    	if (tipo != null) {
+    	if (asistenciaBusquedaUtil.getTipo() != null) {
     		model.addAttribute("hayTipo", true);
     	}
     	
@@ -341,23 +297,8 @@ public class ReporteController {
     }
 	
 	@RequestMapping(value={"reporteCoordinador"}, method = RequestMethod.GET, params="exporta")
-    public ModelAndView exportaReporteCoordinador(Model model, String cveMUsuario, String nombre, String paterno, String materno, String nivel,
-    		Integer tipo, Integer estado, String fechaInicial, String fechaFinal, String unidadAdministrativa, String[] permisos, 
-    		HttpServletResponse response, Authentication authentication) {
+    public ModelAndView exportaReporteCoordinador(Model model, AsistenciaBusquedaUtil asistenciaBusquedaUtil, HttpServletResponse response, Authentication authentication) {
 		
-		AsistenciaBusquedaUtil asistenciaBusquedaUtil = new AsistenciaBusquedaUtil();
-		
-		asistenciaBusquedaUtil.setCveMusuario(cveMUsuario);
-		asistenciaBusquedaUtil.setNombre(nombre);
-		asistenciaBusquedaUtil.setPaterno(paterno);
-		asistenciaBusquedaUtil.setMaterno(materno);
-		asistenciaBusquedaUtil.setNivel(nivel);
-		asistenciaBusquedaUtil.setTipo(tipo);
-		asistenciaBusquedaUtil.setEstado(estado);
-		asistenciaBusquedaUtil.setFechaInicial(fechaInicial);
-		asistenciaBusquedaUtil.setFechaFinal(fechaFinal);
-		asistenciaBusquedaUtil.setUnidadAdministrativa(unidadAdministrativa);
-		asistenciaBusquedaUtil.setP(permisos);
 		asistenciaBusquedaUtil.setCveUsuarioLogeado(authentication.getName());
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(asistenciaBusquedaUtil, authentication);
