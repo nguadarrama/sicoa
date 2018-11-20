@@ -473,13 +473,13 @@ public class ComisionesController extends BaseService {
   @RequestMapping(value = "comision/generarArchivo", method = RequestMethod.GET)
   public void generarReporteComisiones(String idComision, String idUnidadAdministrativa,
       String nombre, String apellidoPaterno, String apellidoMaterno, String fechaInicio1,
-      String fechaFin1, String idHorario, String comision, HttpServletRequest request,
+      String fechaFin1, String idHorario, String comisionDesc, HttpServletRequest request,
       HttpServletResponse response, Authentication authentication) {
 
     logger.info(
         "Peticion para generar formato. Parametros: idComision: {} Unidad Administrativa: {} Nombre: {} apellidoPaterno: {} apellidoMaterno: {} fechaInicio: {} fechaFin: {} idHorario: {} comision: {}",
         new Object[] {idComision, idUnidadAdministrativa, nombre, apellidoPaterno, apellidoMaterno,
-            fechaInicio1, fechaFin1, idHorario, comision});
+            fechaInicio1, fechaFin1, idHorario, comisionDesc});
 
     String nombreCompleto = nombre + " " + apellidoPaterno + " " + apellidoMaterno;
 
@@ -487,7 +487,7 @@ public class ComisionesController extends BaseService {
       logger.info("Datos: {}", nombreCompleto);
       reporte archivo = comisionService
           .generarReporte(new GenerarReporteArchivoComision(nombreCompleto, idUnidadAdministrativa,
-              comision, fechaInicio1, fechaFin1, idHorario), authentication);
+              comisionDesc, fechaInicio1, fechaFin1, idHorario), authentication);
 
       InputStream targetStream = new ByteArrayInputStream(archivo.getNombre());
       String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
@@ -633,6 +633,7 @@ public class ComisionesController extends BaseService {
     ComisionAux comisionAux = new ComisionAux();
     comisionAux.setIdComision(idComision);
     comisionAux.setIdArchivo(idArchivo);
+    comisionAux.setIdEstatus(3);
 
     Comision comision =
         comisionService.modificaComisionEstatusArchivo(comisionAux, claveUsuario, authentication);

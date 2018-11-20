@@ -85,7 +85,7 @@ $(document).ready(function() {
 					$('.actualizaVacacion #fechaInicio1').val(hmap.comision.fechaInicio);
 					$('.actualizaVacacion #fechaSolicitud').val(hmap.comision.fechaRegistro);
 					$('.actualizaVacacion #fechaFin1').val(hmap.comision.fechaFin);
-					$('.actualizaVacacion #comision').val(hmap.comision.comisionDesc);
+					$('.actualizaVacacion #comisionDesc').val(hmap.comision.comisionDesc);
 					$('.actualizaVacacion #idHorario').val(hmap.horario);
 					$('.actualizaVacacion #idArchivoPropio').val(hmap.comision.idArchivo.idArchivo);
 					$('.actualizaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
@@ -102,20 +102,18 @@ $(document).ready(function() {
 					$('.formCancelar #idComisionCancelar').val(hmap.comision.idComision);
 					$('.formCancelar #idArchivoCancelar').val(hmap.comision.idArchivo.idArchivo);
 					$('.descargaArchivo #idArchivo').val(hmap.comision.idArchivo.idArchivo);
-					if(hmap.comision.idArchivo.idArchivo==null || hmap.comision.idArchivo.idArchivo==""){
-						$('.actualizaArchivo').css("display","inline");
-						$('.rechazaComision').css("display","none");
-						$('.aceptaComision').css("display","none");
-						$('.actualizaArchivoPropio').css("display","none");
-						$("#descargar").css("display","none");
-//						$('.rechazaComision').css("display","inline");
-//						$('.aceptaComision').css("display","inline");
-//						$('.actualizaArchivoPropio').css("display","none");
-					}
+					
 					if(hmap.comision.idEstatus.idEstatus=='1') {
 						$('.aceptaComision').css("display","inline");
 						$('.rechazaComision').css("display","inline");
 						$('.formCancelar').css("display","none");
+						if(hmap.comision.idArchivo.idArchivo==null || hmap.comision.idArchivo.idArchivo==""){
+							$('.actualizaArchivo').css("display","inline");
+							$('.rechazaComision').css("display","none");
+							$('.aceptaComision').css("display","none");
+							$('.actualizaArchivoPropio').css("display","none");
+							$("#descargar").css("display","none");
+						}
 				   } else if(hmap.comision.idEstatus.idEstatus=='2'){
 						$('.aceptaComision').css("display","none");
 						$('.rechazaComision').css("display","none");
