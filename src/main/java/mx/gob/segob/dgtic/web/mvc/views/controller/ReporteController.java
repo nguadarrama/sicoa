@@ -198,22 +198,9 @@ public class ReporteController {
         	elementos.add(a.getIdTipoDia().getNombre());
 			String estatus = a.getIdEstatus().getEstatus();
 			
-			if (estatus != null) {
-				if (a.getIdTipoDia().getIdTipoDia() != 5 && a.getIdTipoDia().getIdTipoDia() != 6 && a.getIdTipoDia().getIdTipoDia() != 7) {
-					if (estatus.equals(VALIDADA) && a.getIncidencia().getDescuento()) {
-						estatus = "Descuento Aprobado";
-					} else if (estatus.equals(VALIDADA) && !a.getIncidencia().getDescuento()) {
-						estatus = "Justificación Aprobada";
-					} else if (estatus.equals(PENDIENTE) && a.getIncidencia().getDescuento()) {
-						estatus = "Descuento Pendiente";
-					} else if (estatus.equals(PENDIENTE) && !a.getIncidencia().getDescuento()) {
-						estatus = "Justificación Pendiente";
-					} else if (estatus.equals(RECHAZADA) && a.getIncidencia().getDescuento()) {
-						estatus = "Descuento Rechazado";
-					} else if (estatus.equals(RECHAZADA) && !a.getIncidencia().getDescuento()) {
-						estatus = "Justificación Rechazada";
-					}
-				} 
+			//define status personalizados para los que no son permisos
+			if (estatus != null && (a.getIdTipoDia().getIdTipoDia() != 5 && a.getIdTipoDia().getIdTipoDia() != 6 && a.getIdTipoDia().getIdTipoDia() != 7)) {
+				estatus = defineEstatusPersonalizado(estatus, a);
 			}
 			
 			elementos.add(estatus);			
@@ -334,23 +321,10 @@ public class ReporteController {
         	elementos.add(a.getUsuarioDto().getNombreUnidad());
         	elementos.add(a.getIdTipoDia().getNombre());
 			String estatus = a.getIdEstatus().getEstatus();
-			
-			if (estatus != null) {
-				if (a.getIdTipoDia().getIdTipoDia() != 5 && a.getIdTipoDia().getIdTipoDia() != 6 && a.getIdTipoDia().getIdTipoDia() != 7) {
-					if (estatus.equals(VALIDADA) && a.getIncidencia().getDescuento()) {
-						estatus = "Descuento Aprobado";
-					} else if (estatus.equals(VALIDADA) && !a.getIncidencia().getDescuento()) {
-						estatus = "Justificación Aprobada";
-					} else if (estatus.equals(PENDIENTE) && a.getIncidencia().getDescuento()) {
-						estatus = "Descuento Pendiente";
-					} else if (estatus.equals(PENDIENTE) && !a.getIncidencia().getDescuento()) {
-						estatus = "Justificación Pendiente";
-					} else if (estatus.equals(RECHAZADA) && a.getIncidencia().getDescuento()) {
-						estatus = "Descuento Rechazado";
-					} else if (estatus.equals(RECHAZADA) && !a.getIncidencia().getDescuento()) {
-						estatus = "Justificación Rechazada";
-					}
-				} 
+
+			//define status personalizados para los que no son permisos
+			if (estatus != null && (a.getIdTipoDia().getIdTipoDia() != 5 && a.getIdTipoDia().getIdTipoDia() != 6 && a.getIdTipoDia().getIdTipoDia() != 7)) {
+				estatus = defineEstatusPersonalizado(estatus, a);
 			}
 			
 			elementos.add(estatus);	
@@ -365,5 +339,25 @@ public class ReporteController {
         return new ModelAndView(new Excel(), map);
     }
 	//TERMINA COORDINADOR
+	
+	private String defineEstatusPersonalizado(String estatus, Asistencia a) {
+		String nuevoEstatus = "";
+		
+		if (estatus.equals(VALIDADA) && a.getIncidencia().getDescuento()) {
+			nuevoEstatus = "Descuento Aprobado";
+		} else if (estatus.equals(VALIDADA) && !a.getIncidencia().getDescuento()) {
+			nuevoEstatus = "Justificación Aprobada";
+		} else if (estatus.equals(PENDIENTE) && a.getIncidencia().getDescuento()) {
+			nuevoEstatus = "Descuento Pendiente";
+		} else if (estatus.equals(PENDIENTE) && !a.getIncidencia().getDescuento()) {
+			nuevoEstatus = "Justificación Pendiente";
+		} else if (estatus.equals(RECHAZADA) && a.getIncidencia().getDescuento()) {
+			nuevoEstatus = "Descuento Rechazado";
+		} else if (estatus.equals(RECHAZADA) && !a.getIncidencia().getDescuento()) {
+			nuevoEstatus = "Justificación Rechazada";
+		}
+		
+		return nuevoEstatus;
+	}
 	
 }
