@@ -7,6 +7,9 @@ public class PerfilUsuario {
 	private Integer[] idsPerfil;
 	
 	public PerfilUsuario(){
+		/**
+		 * 
+		 */
 		
 	}
 

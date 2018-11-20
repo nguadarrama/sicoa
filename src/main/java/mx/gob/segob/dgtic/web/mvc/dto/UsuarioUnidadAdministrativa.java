@@ -6,6 +6,9 @@ public class UsuarioUnidadAdministrativa {
 	private UnidadAdministrativa idUnidad;
 	
 	public UsuarioUnidadAdministrativa(){
+		/**
+		 * 
+		 */
 		
 	}
 

@@ -6,6 +6,9 @@ public class UnidadAdministrativa {
 	private String nombre;
 	
 	public UnidadAdministrativa(){
+		/**
+		 * 
+		 */
 		
 	}
 

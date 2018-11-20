@@ -81,48 +81,17 @@ public class Vacaciones {
 		this.idEstatus = idEstatus;
 	}
 	public Date getFechaInicio() {
-//		if(fechaInicio.length()>10){
-//			Date date = new Date();
-//			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-//			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
-//		    try {
-//		    	String aux = fechaInicio.substring(0,12);
-//				date = sdf.parse(aux);
-//				fechaInicio = sdf1.format(date);
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+
 		return fechaInicio;
 	}
 	public void setFechaInicio(Date fechaInicio) {
+		/**
+		 * 
+		 */
 		 
 	}
 	public Date getFechaFin() {
-//		if(fechaFin.length()>13){
-//			Date date = new Date();
-//			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss z");
-//			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
-//		    try {
-//				date = sdf.parse(fechaFin);
-//				fechaFin = sdf1.format(date);
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}else if(fechaFin.length()>10){
-//			Date date = new Date();
-//			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-//			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
-//		    try {
-//				date = sdf.parse(fechaFin);
-//				fechaFin = sdf1.format(date);
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+
 		return fechaFin;
 	}
 	public void setFechaFin(Date fechaFin) {

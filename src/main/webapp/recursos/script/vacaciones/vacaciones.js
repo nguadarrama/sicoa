@@ -49,7 +49,7 @@ $(document).ready(function() {
 	})
 	$("#fechaFin").datepicker({ 
 		beforeShowDay: function(date){ 
-			show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
+			var show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
 		//No Weekends 
 		for (var i = 0; i < disableddates.length; i++) {
 			if (new Date(disableddates[i]).toString() == date.toString()) {
