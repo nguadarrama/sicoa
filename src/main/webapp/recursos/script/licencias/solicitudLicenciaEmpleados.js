@@ -17,7 +17,7 @@ $(document).ready(function() {
 	    	   var array =$("#listaDiasFestivos").val();
 	    		//alert("LLegada "+array);
 	    		var disableddates=array.split(",");
-				show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
+				var show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
 				//No Weekends 
 				for (var i = 0; i < disableddates.length; i++) {
 					if (new Date(disableddates[i]).toString() == date.toString()) {

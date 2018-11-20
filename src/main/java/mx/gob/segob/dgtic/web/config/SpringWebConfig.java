@@ -94,6 +94,7 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 	 * 
 	 * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry)
 	 */
+	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/recursos/**",
                 "/img/**",

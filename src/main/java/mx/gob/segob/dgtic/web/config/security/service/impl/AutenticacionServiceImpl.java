@@ -230,18 +230,17 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 		HttpResponse response;
 		Boolean respuesta=false;
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
 		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER+ detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
 		
-		Map<String, Object> content = new HashMap<String, Object>();
+		Map<String, Object> content = new HashMap<>();
 		content.put("usuario", usuario);
 		content.put("contrasenia", contrasenia);
 
 		try {
 			httpEntity = ClienteRestUtil.getCliente().convertContentToJSONEntity(content);
 		} catch (ClienteException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		try { //se consume recurso rest
@@ -255,7 +254,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 			this.logout(detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)){
 			respuesta=false;	
-			String mensaje = obtenerMensajeError(response);					 
+					 
 		} else {
 			respuesta=false;
 		}

@@ -77,7 +77,7 @@ $(document).ready(function() {
 		$('#vacacionesPropias').on('click','.eBtn' , function(event) { 					//botón edita
 			 event.preventDefault();
 			var href = $(this).attr('href');
-			var text = $(this).text();
+			
 				$.get(href, function(hmap, status) {
 					$('.actualizaVacacion #numeroEmpleado').val(hmap.comision.idUsuario.claveUsuario);
 					$('.actualizaVacacion #nombre').val(hmap.comision.idUsuario.nombre);
@@ -223,7 +223,7 @@ $(document).ready(function() {
 				//document.getElementById("botonGuardarVacaciones").disabled = true;
 			}
 			//document.getElementById("botonGuardarVacaciones").disabled = true;
-		};
+		}
 		$('#guardarVacaciones').on('click', function(event){
 			
 		});
