@@ -66,6 +66,9 @@ $(document).ready(function() {
 						asistenciaJustificacion.asistencia.usuarioDto.apellidoMaterno;
 			
 			var fecha = new Date(asistenciaJustificacion.asistencia.entrada);
+			var dia = ("0" + fecha.getDate()).slice(-2);
+			var mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+			var anio = fecha.getFullYear();
 			
 			$('.justificaForm #puestoModal').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
 			$('.justificaForm #unidadModal').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
@@ -73,7 +76,7 @@ $(document).ready(function() {
 			$('.justificaForm #nombreModal').val(nombre);
 			$('.justificaForm #fechaIngresoModal').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
 			$('.justificaForm #RFCModal').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
-			$('.justificaForm #fechaModal').val(("0" + fecha.getDate()).slice(-2) + '-' + ("0" + fecha.getMonth()).slice(-2) + '-' + fecha.getFullYear());
+			$('.justificaForm #fechaModal').val(dia + '-' + mes + '-' + anio);
 			$('.justificaForm #tipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
 			$('.justificaForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			$('.justificaForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
