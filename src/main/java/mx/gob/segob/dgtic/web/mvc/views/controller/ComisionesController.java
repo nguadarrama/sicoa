@@ -301,10 +301,18 @@ public class ComisionesController extends BaseService {
       idResponsableAux = Integer.parseInt(idResponsable);
     }
 
-    Comision comisionRespuesta = comisionService.agregarComision(
-        new ComisionAux(null, null, idResponsableAux, null, 1, fechaInicio, fechaFin, dias,
-            comision, obtenerFechaActual("dd/MM/yyyy"), Integer.valueOf(idHorario)),
-        claveUsuario, authentication);
+    ComisionAux comisionAux = new ComisionAux();
+    comisionAux.setIdResponsable(idResponsableAux);
+    comisionAux.setFechaInicio(fechaInicio);
+    comisionAux.setFechaFin(fechaFin);
+    comisionAux.setDias(dias);
+    comisionAux.setComision(comision);
+    comisionAux.setFechaRegistro(obtenerFechaActual("dd/MM/yyyy"));
+    comisionAux.setIdHorario(Integer.valueOf(idHorario));
+    comisionAux.setIdEstatus(1);
+
+    Comision comisionRespuesta =
+        comisionService.agregarComision(comisionAux, claveUsuario, authentication);
     this.mensaje = comisionRespuesta.getMensaje();
 
     return "redirect:/comisiones/solicitudComisionEmpleados";
@@ -555,16 +563,25 @@ public class ComisionesController extends BaseService {
       if (idArchivo != null && !idArchivo.toString().isEmpty()) {
         archivoService.actualizaArchivo(archivo, claveUsuario, ETIQUETA_COMISIONES, idArchivo,
             "comision-", authentication);
-        comision = comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo,
-            null, null, idArchivo, 1, null, null, null, null, null, null), claveUsuario,
+        ComisionAux comisionAux = new ComisionAux();
+        comisionAux.setIdComision(idComisionArchivo);
+        comisionAux.setIdArchivo(idArchivo);
+        comisionAux.setIdEstatus(1);
+
+        comision = comisionService.modificaComisionEstatusArchivo(comisionAux, claveUsuario,
             authentication);
       } else {
         idArchivoAux = archivoService.guardaArchivo(archivo, claveUsuario, ETIQUETA_COMISIONES,
             "comision-", authentication);
         logger.info("Id de archivo recuperado: {}", idArchivoAux.getIdArchivo());
-        comision = comisionService.modificaComisionEstatusArchivo(new ComisionAux(idComisionArchivo,
-            null, null, idArchivoAux.getIdArchivo(), 1, null, null, null, null, null, null),
-            claveUsuario, authentication);
+
+        ComisionAux comisionAux = new ComisionAux();
+        comisionAux.setIdComision(idComisionArchivo);
+        comisionAux.setIdArchivo(idArchivoAux.getIdArchivo());
+        comisionAux.setIdEstatus(1);
+
+        comision = comisionService.modificaComisionEstatusArchivo(comisionAux, claveUsuario,
+            authentication);
       }
     }
 
@@ -587,9 +604,13 @@ public class ComisionesController extends BaseService {
     logger.info("Aceptar comision. Parametros: idComision {} claveUsuario: {} idArchivo: {}",
         new Object[] {idComision, claveUsuario, idArchivo});
 
-    Comision comision = comisionService.modificaComisionEstatusArchivo(
-        new ComisionAux(idComision, null, null, idArchivo, 2, null, null, null, null, null, null),
-        claveUsuario, authentication);
+    ComisionAux comisionAux = new ComisionAux();
+    comisionAux.setIdComision(idComision);
+    comisionAux.setIdEstatus(2);
+    comisionAux.setIdArchivo(idArchivo);
+
+    Comision comision =
+        comisionService.modificaComisionEstatusArchivo(comisionAux, claveUsuario, authentication);
 
     this.mensaje = comision.getMensaje();
     return REDIRECT_COMISIONES_EMPLEADOS;
@@ -609,10 +630,12 @@ public class ComisionesController extends BaseService {
       Authentication authentication) {
     logger.info("Rechazar comision. Parametros: idComision {} claveUsuario: {} idArchivo: {}",
         new Object[] {idComision, claveUsuario, idArchivo});
+    ComisionAux comisionAux = new ComisionAux();
+    comisionAux.setIdComision(idComision);
+    comisionAux.setIdArchivo(idArchivo);
 
-    Comision comision = comisionService.modificaComisionEstatusArchivo(
-        new ComisionAux(idComision, null, null, idArchivo, 3, null, null, null, null, null, null),
-        claveUsuario, authentication);
+    Comision comision =
+        comisionService.modificaComisionEstatusArchivo(comisionAux, claveUsuario, authentication);
 
     this.mensaje = comision.getMensaje();
     return REDIRECT_COMISIONES_EMPLEADOS;
@@ -632,10 +655,12 @@ public class ComisionesController extends BaseService {
       Integer idArchivoCancelar, Authentication authentication) {
     logger.info("Cancelar comision. Parametros: idComision: {} claveUsuario: {}",
         idComisionCancelar, claveUsuarioCancelar);
+    ComisionAux comisionAux = new ComisionAux();
+    comisionAux.setIdComision(idComisionCancelar);
+    comisionAux.setIdArchivo(idArchivoCancelar);
+    comisionAux.setIdEstatus(6);
 
-    Comision comision = comisionService.modificaComisionEstatusArchivo(
-        new ComisionAux(idComisionCancelar, null, null, idArchivoCancelar, 6, null, null, null,
-            null, null, null),
+    Comision comision = comisionService.modificaComisionEstatusArchivo(comisionAux,
         claveUsuarioCancelar, authentication);
 
     this.mensaje = comision.getMensaje();

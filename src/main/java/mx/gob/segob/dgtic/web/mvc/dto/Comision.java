@@ -4,8 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import mx.gob.segob.dgtic.web.mvc.service.BaseService;
 
-public class Comision {
+public class Comision extends BaseService {
 
   private Integer idComision;
   private Usuario idUsuario;
@@ -15,42 +16,18 @@ public class Comision {
   private String fechaInicio;
   private String fechaFin;
   private Integer dias;
-  private String comision;
+  private String comisionDesc;
   private String fechaRegistro;
   private Horario idHorario;
   private String mensaje;
-  /**
-   * @param idComision
-   * @param idUsuario
-   * @param idResponsable
-   * @param idAarchivo
-   * @param idEstatus
-   * @param fechaInicio
-   * @param fechaFin
-   * @param dias
-   * @param comision
-   * @param fechaRegistro
-   */
-  public Comision(Integer idComision, Usuario idUsuario, Integer idResponsable, Archivo idArchivo,
-      Estatus idEstatus, String fechaInicio, String fechaFin, Integer dias, String comision,
-      String fechaRegistro, Horario idHorario) {
-    super();
-    this.idComision = idComision;
-    this.idUsuario = idUsuario;
-    this.idResponsable = idResponsable;
-    this.idArchivo = idArchivo;
-    this.idEstatus = idEstatus;
-    this.fechaInicio = fechaInicio;
-    this.fechaFin = fechaFin;
-    this.dias = dias;
-    this.comision = comision;
-    this.fechaRegistro = fechaRegistro;
-    this.idHorario = idHorario;
-  }
   
-  public Comision() {
-    
-  }
+  private static final String FECHA_FORMATO_LARGO = "MMM dd, yyyy HH:mm:ss";
+  private static final String FECHA_FORMATO_MMM_DD_YYYY = "MMM dd, yyyy";
+  private static final String FECHA_FORMATO_DD_MM_YYYY = "dd-MM-yyyy";
+  private static final String ES = "es_ES";
+  private static final String EXCEPCION = "Excepcion: {}";
+  
+  
   
   public String getMensaje() {
     return mensaje;
@@ -126,25 +103,23 @@ public class Comision {
   public String getFechaInicio() {
     if(fechaInicio.length()>13){
       Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
-      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_LARGO, new Locale(ES));
+      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
       try {
           date = sdf.parse(fechaInicio);
           fechaInicio = sdf1.format(date);
       } catch (ParseException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        logger.error(EXCEPCION, e.getMessage());
       }
   }else if(fechaInicio.length()>10){
       Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_MMM_DD_YYYY);
+      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
       try {
           date = sdf.parse(fechaInicio);
           fechaInicio = sdf1.format(date);
       } catch (ParseException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        logger.error(EXCEPCION, e.getMessage());
       }
   }
   return fechaInicio;
@@ -161,25 +136,23 @@ public class Comision {
   public String getFechaFin() {
     if(fechaFin.length()>13){
       Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
-      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_LARGO, new Locale(ES));
+      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
       try {
           date = sdf.parse(fechaFin);
           fechaFin = sdf1.format(date);
       } catch (ParseException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        logger.error(EXCEPCION, e.getMessage());
       }
   }else if(fechaFin.length()>10){
       Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_MMM_DD_YYYY);
+      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
       try {
           date = sdf.parse(fechaFin);
           fechaFin = sdf1.format(date);
       } catch (ParseException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        logger.error(EXCEPCION, e.getMessage());
       }
   }
   return fechaFin;
@@ -206,13 +179,13 @@ public class Comision {
    * @return the comision
    */
   public String getComision() {
-    return comision;
+    return comisionDesc;
   }
   /**
-   * @param comision the comision to set
+   * @param comisionDesc the comision to set
    */
-  public void setComision(String comision) {
-    this.comision = comision;
+  public void setComision(String comisionDesc) {
+    this.comisionDesc = comisionDesc;
   }
   /**
    * @return the fechaRegistro
@@ -220,25 +193,23 @@ public class Comision {
   public String getFechaRegistro() {
     if(fechaRegistro.length()>13){
       Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", new Locale("es_ES"));
-      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_LARGO, new Locale(ES));
+      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
       try {
           date = sdf.parse(fechaRegistro);
           fechaRegistro = sdf1.format(date);
       } catch (ParseException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+          logger.error(EXCEPCION, e.getMessage());
       }
   }else if(fechaRegistro.length()>10){
       Date date = null;
-      SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-      SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+      SimpleDateFormat sdf = new SimpleDateFormat(FECHA_FORMATO_MMM_DD_YYYY);
+      SimpleDateFormat sdf1 = new SimpleDateFormat(FECHA_FORMATO_DD_MM_YYYY);
       try {
           date = sdf.parse(fechaRegistro);
           fechaRegistro = sdf1.format(date);
       } catch (ParseException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        logger.error(EXCEPCION, e.getMessage());
       }
   }
   return fechaRegistro;
