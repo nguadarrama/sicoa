@@ -170,8 +170,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 		HttpResponse response;
 		Usuario usuario;
 		usuario=usuarioService.buscaUsuario(claveUsuario, authentication);
-		usuario.setFechaIngreso("");
-		usuario.setFechaBloqueo("");
+		usuario.setFechaIngreso(usuario.getFechaIngreso());
 		vacaciones.setIdUsuario(usuario);
 		Map<String, Object> content = new HashMap<>();
 		content.put(Constantes.DETALLEVACACION, vacaciones);

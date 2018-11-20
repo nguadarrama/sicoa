@@ -25,10 +25,8 @@ public class Usuario {
 	private Boolean activo;
 	private Boolean nuevo;
 	private String enSesion;
-	private Date ultimoAcceso;
 	private Integer numeroIntentos;
 	private String bloqueado;
-	private Date fechaBloqueo;
 	private String primeraVez;
 	private String estatus;
 	private String rfc;
@@ -134,9 +132,9 @@ public class Usuario {
         } catch (ParseException e) {
         	 logger.warn(ConstantsController.WARN, e);
         }
-    }else if(fechaIngreso.length()>=10){
+    }else if(fechaIngreso.length()>10){
         Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
         SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
         try {
             date = sdf.parse(fechaIngreso);
@@ -185,14 +183,6 @@ public class Usuario {
 		this.enSesion = enSesion;
 	}
 	
-	public Date getUltimoAcceso() {
-		return ultimoAcceso;
-	}
-	
-	public void setUltimoAcceso(Date ultimoAcceso) {
-		this.ultimoAcceso = ultimoAcceso;
-	}
-	
 	public Integer getNumeroIntentos() {
 		return numeroIntentos;
 	}
@@ -207,14 +197,6 @@ public class Usuario {
 	
 	public void setBloqueado(String bloqueado) {
 		this.bloqueado = bloqueado;
-	}
-	
-	public Date getFechaBloqueo() {
-		return fechaBloqueo;
-	}
-	
-	public void setFechaBloqueo(Date fecha_bloqueo) {
-		this.fechaBloqueo = fecha_bloqueo;
 	}
 	
 	public String getPrimeraVez() {
@@ -246,7 +228,7 @@ public class Usuario {
 	public String getNombreUnidad() {
 		return nombreUnidad;
 	}
-	public void setNombre_unidad(String nombreUnidad) {
+	public void setNombreUnidad (String nombreUnidad) {
 		this.nombreUnidad = nombreUnidad;
 	}
 	public Integer getIdUnidad() {
