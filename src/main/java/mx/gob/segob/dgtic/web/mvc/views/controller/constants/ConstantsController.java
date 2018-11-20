@@ -67,5 +67,5 @@ public class ConstantsController {
 	public static final String RESPONSABLE = "responsable";
 	public static final String VACACIONES = "vacaciones";
 	public static final String NUMERO_EMPLEADO = "numeroEmpleado";
-	
+	public static final String WARN = "Warn: {} ";
 }
