@@ -34,27 +34,7 @@ public class GeneraReporteArchivo implements Serializable {
 		super();
 
 	}
-	public GeneraReporteArchivo(String idsolicitud,String idEstatus,String idPuesto,String unidadAdministrativa,String numeroEmpleado,
-			String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio, String fechaFin, 
-			String dias, String responsable, String idVacacion, String fechaPeticion){
-		super();
-		this.idsolicitud = idsolicitud;
-		this.idEstatus = idEstatus;
-		this.idPuesto = idPuesto;
-		this.unidadAdministrativa = unidadAdministrativa;
-		this.numeroEmpleado=numeroEmpleado;
-		this.fechaIngreso=fechaIngreso;
-		this.fechaFin=fechaFin;
-		this.rfc=rfc;
-		this.nombre=nombre;
-		this.apellidoMaterno=apellidoMaterno;
-		this.apellidoPaterno=apellidoPaterno;
-		this.dias=dias;
-		this.responsable=responsable;
-		this.fechaInicio=fechaInicio;
-		this.idVacacion=idVacacion;
-		this.fechaPeticion=fechaPeticion;
-	}
+	
 	public String getFechaPeticion() {
 		return fechaPeticion;
 	}
