@@ -32,7 +32,7 @@ public class GeneraReporteArchivo implements Serializable {
 	 */
 	public GeneraReporteArchivo() {
 		super();
-		// TODO Auto-generated constructor stub
+
 	}
 	public GeneraReporteArchivo(String idsolicitud,String idEstatus,String idPuesto,String unidadAdministrativa,String numeroEmpleado,
 			String fechaIngreso,String rfc,String nombre,String apellidoPaterno,String apellidoMaterno, String fechaInicio, String fechaFin, 

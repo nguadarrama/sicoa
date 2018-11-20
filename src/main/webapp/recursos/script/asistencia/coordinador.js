@@ -189,10 +189,10 @@ $(document).ready(function() {
 		event.preventDefault();
 		var href = $(this).attr('href');
 		
-		var valu = [];
-        $(':checkbox:checked').each(function(i){
+/**		var valu = [];
+       $(':checkbox:checked').each(function(i){
           valu[i] = $(this).val();
-        });
+       });**/ 
 		
 		$('.justificaMultipleForm #fechaInicial').val($('#validBeforeDatepicker').val());
 		$('.descuentoForm #fechaFinal').val($('#validAfterDatepicker').val());
@@ -301,17 +301,13 @@ $(document).ready(function() {
 	
 	//validación para datepicker, si se selecciona uno, entonces ambos deben seleccionarse
     $('#buscaBtn').on('click', function(event) {
-    	$("#validAfterDatepicker").prop('required',false);
-    	$("#validBeforeDatepicker").prop('required',false);
+    	$("#validAfterDatepicker").prop('required',true);
+    	$("#validBeforeDatepicker").prop('required',true);
     	
     	var existefechaInicial = $('#validBeforeDatepicker').datepicker('getDate') != null;
     	var existefechaFinal = $('#validAfterDatepicker').datepicker('getDate') != null;
     	
-    	if (existefechaInicial && !existefechaFinal) {
-    		$("#validAfterDatepicker").prop('required',true);
-    	} else if (existefechaFinal && !existefechaInicial) {
-    		$("#validBeforeDatepicker").prop('required',true);
-    	} else if (existefechaInicial && existefechaFinal) {
+    	if (existefechaInicial && existefechaFinal) {
     		$('#buscaBtn').submit();
     	}
     });

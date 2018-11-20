@@ -26,7 +26,5 @@ public final class SesionConstants {
 	 * Constante que representa el atributo TOKEN_SESION, nombre del atributo de sesion del token requerido para el consumo de los webservices restringidos. 
 	 */
 	public static final String TOKEN_SESION = "_token";
-	///////////////////////
-	public static final String CAMBIA_PASSWORD = "password";
 	
 }
