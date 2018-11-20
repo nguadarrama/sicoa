@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	
-	var idAsistencia = "";
+
 	
 	//pasa datos de campos de búsqueda a campos hidden del modal para llevarlos al controller
 	$('#justificacionMultipleListaBtn').on('click', function(event) { 
@@ -42,7 +42,6 @@ $(document).ready(function() {
 	$('.detalleBtn').on('click', function(event) { 					//botón justifica
 		event.preventDefault();
 		var href = $(this).attr('href');
-		var text = $(this).text();
 		$('#selectJustificacion').empty();
 		$('#selectAutorizador').empty();
 		var optionJustificacion = '<option></option>';
@@ -80,7 +79,7 @@ $(document).ready(function() {
 			$('.justificaForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('.justificaForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
 			$('.justificaForm #fechaIncidenciaHidden').val($('#fechaModal').val());
-			idAsistencia = asistenciaJustificacion.asistencia.idAsistencia;
+	
 			
 			//select justificación
 			for (var i=0; i < asistenciaJustificacion.listaJustificacion.length; i++) {
@@ -116,25 +115,25 @@ $(document).ready(function() {
 			}
 			
 			//select autorizadores
-			for (var i=0; i < asistenciaJustificacion.listaAutorizador.length; i++) {
+			for (var j =0; j < asistenciaJustificacion.listaAutorizador.length; j++) {
 				var jefe = false;
 				
 				//calculando el jefe para colocarlo seleccionado en el select
 				if (asistenciaJustificacion.asistencia.usuarioDto.nombreJefe != null) {
-					if (asistenciaJustificacion.asistencia.usuarioDto.nombreJefe == asistenciaJustificacion.listaAutorizador[i].nombre) {
+					if (asistenciaJustificacion.asistencia.usuarioDto.nombreJefe == asistenciaJustificacion.listaAutorizador[j].nombre) {
 						jefe = true;
 					}
 				} 
 				
 				optionAutorizador += '<option ';																		//apertura
-				optionAutorizador += 'value="' + asistenciaJustificacion.listaAutorizador[i].nombre + '" ';		//atributo value
+				optionAutorizador += 'value="' + asistenciaJustificacion.listaAutorizador[j].nombre + '" ';		//atributo value
 				
 				if (jefe) {
 					optionAutorizador += 'selected="selected" ';
 				}
 				
 				optionAutorizador += '">';																			//cierre apertura
-				optionAutorizador += asistenciaJustificacion.listaAutorizador[i].nombre;							//nombre a mostrar
+				optionAutorizador += asistenciaJustificacion.listaAutorizador[j].nombre;							//nombre a mostrar
 				optionAutorizador += '</option>';																	//cierre option
 			}			
 			
@@ -178,7 +177,7 @@ $(document).ready(function() {
 			$('.descuentoForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('.descuentoForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
 			$('.descuentoForm #justificacion').val(asistenciaJustificacion.asistencia.incidencia.justificacion.justificacion);
-			idAsistencia = asistenciaJustificacion.asistencia.idAsistencia;
+
 			
 		});
 		
@@ -190,9 +189,9 @@ $(document).ready(function() {
 		event.preventDefault();
 		var href = $(this).attr('href');
 		
-		var val = [];
+		var valu = [];
         $(':checkbox:checked').each(function(i){
-          val[i] = $(this).val();
+          valu[i] = $(this).val();
         });
 		
 		$('.justificaMultipleForm #fechaInicial').val($('#validBeforeDatepicker').val());
@@ -223,7 +222,7 @@ $(document).ready(function() {
 			$('.descuentoForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('.descuentoForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
 			$('.descuentoForm #justificacion').val(asistenciaJustificacion.asistencia.incidencia.justificacion.justificacion);
-			idAsistencia = asistenciaJustificacion.asistencia.idAsistencia;
+			/**idAsistencia = asistenciaJustificacion.asistencia.idAsistencia; **/
 			
 		});
 		

@@ -404,13 +404,13 @@ public class VacacionesController {
     public String buscaUsuario(String claveUsuario, Model model, Authentication authentication) {
     	logger.info("Usuarioooooooooooooo para buscar {} ",claveUsuario);
 	    global=claveUsuario;
-    	Periodo periodo;
+    	
     	logger.info("periodo.getIdPeriodo() {} ",claveUsuario);
-    	periodo = periodoService.buscaPeriodoPorClaveUsuario(claveUsuario, authentication);
+    	
     	String cadena=catalogoService.obtieneDiaFestivoParaBloquear(authentication);
     	logger.info("Dias festivos para bloquear {} ",cadena);
 	    model.addAttribute("listaDiasFestivos", cadena);
-    	periodo=periodoService.buscaPeriodoPorClaveUsuario(claveUsuario, authentication);
+	    Periodo periodo =periodoService.buscaPeriodoPorClaveUsuario(claveUsuario, authentication);
     	String fechas=vacacionesService.recuperaDiasVacacioness(claveUsuario, authentication);
     	if(!fechas.isEmpty()){
     		if(!cadena.isEmpty()){

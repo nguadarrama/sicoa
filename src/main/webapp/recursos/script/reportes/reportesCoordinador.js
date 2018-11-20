@@ -66,6 +66,7 @@ $(document).ready(function() {
     $('#validAfterDatepicker, #fecha').datepicker({
     	beforeShowDay: $.datepicker.noWeekends, //desactiva sábado y domingo del calendario
     	dateFormat: 'yy-mm-dd',
+    	required: true,
     	onSelect: function() 
 	       { 
     		var maxDate = $('#validAfterDatepicker').datepicker('getDate');
@@ -80,6 +81,7 @@ $(document).ready(function() {
     $('#validBeforeDatepicker, #fecha').datepicker({
     	beforeShowDay: $.datepicker.noWeekends, //desactiva sábado y domingo del calendario
     	dateFormat: 'yy-mm-dd',
+    	required: true,
     	onSelect: function() 
 	       { 
     		var minDate = $('#validBeforeDatepicker').datepicker('getDate');
@@ -131,17 +133,13 @@ $(document).ready(function() {
     
     //validación para datepicker, si se selecciona uno, entonces ambos deben seleccionarse
     $('#buscaBtn').on('click', function(event) {
-    	$("#validAfterDatepicker").prop('required',false);
-    	$("#validBeforeDatepicker").prop('required',false);
+    	$("#validAfterDatepicker").prop('required',true);
+    	$("#validBeforeDatepicker").prop('required', true);
     	
     	var existefechaInicial = $('#validBeforeDatepicker').datepicker('getDate') != null;
     	var existefechaFinal = $('#validAfterDatepicker').datepicker('getDate') != null;
     	
-    	if (existefechaInicial && !existefechaFinal) {
-    		$("#validAfterDatepicker").prop('required',true);
-    	} else if (existefechaFinal && !existefechaInicial) {
-    		$("#validBeforeDatepicker").prop('required',true);
-    	} else if (existefechaInicial && existefechaFinal) {
+    	if (existefechaInicial && existefechaFinal) {
     		$('#buscaBtn').submit();
     	}
     });

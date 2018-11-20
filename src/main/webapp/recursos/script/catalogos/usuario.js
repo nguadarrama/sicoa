@@ -45,9 +45,9 @@ $(document).ready(function() {
 				$('.usuarioForm #puesto').val(hmap.usuario.idPuesto);
 				$('.usuarioForm #fechaIngreso').val(hmap.usuario.fechaIngreso);
 				$('.usuarioForm #unidadAdministrativa').val(hmap.usuario.idUnidad).delay(3000);
-				var i=0;
+				
 				//alert("datos "+hmap.listaUsuarioPerfiles.length);
-				for(i=0;hmap.listaUsuarioPerfiles.length>i;i++){
+				for(var i=0;hmap.listaUsuarioPerfiles.length>i;i++){
 					//alert(hmap.listaUsuarioPerfiles[i].clavePerfil.clavePerfil);
 					if(hmap.listaUsuarioPerfiles[i].clavePerfil.clavePerfil=='0'){
 						$('#administrador').prop('checked', true);

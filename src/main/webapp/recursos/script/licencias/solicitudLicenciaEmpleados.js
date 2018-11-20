@@ -165,8 +165,8 @@ $(document).ready(function() {
 			if(mm<10){
 			    mm='0'+mm;
 			} 
-			var today = dd+'-'+mm+'-'+yyyy;
-			$(".actualizaLicencia #idSolicitud").val(today);
+			var today2 = dd+'-'+mm+'-'+yyyy;
+			$(".actualizaLicencia #idSolicitud").val(today2);
 			$(".actualizaLicencia #fechaIngreso").val(hmap.usuario.fechaIngreso);
 			
 			
@@ -205,8 +205,8 @@ $(document).ready(function() {
 			if(mm<10){
 			    mm='0'+mm;
 			} 
-			var today = dd+'-'+mm+'-'+yyyy;
-			$(".actualizaLicencia #idSolicitud").val(today);
+			var today1 = dd+'-'+mm+'-'+yyyy;
+			$(".actualizaLicencia #idSolicitud").val(today1);
 			$(".actualizaLicencia #fechaIngreso").val(hmap.usuario.fechaIngreso);
 			$("#detalleLicencia").css("display","inline");
 			$(".tablaLicencias").css("display","none");

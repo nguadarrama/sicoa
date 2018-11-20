@@ -10,7 +10,7 @@ $(document).ready(function() {
 	$('#tableNiveles').on('click','.eBtn', function(event) { 					//botón edita
 		event.preventDefault();
 		var href = $(this).attr('href');
-		var text = $(this).text();
+		
 		
 			$.get(href, function(nivel, status) {
 				$('.nivelForm #idNivel').val(nivel.idNivel);

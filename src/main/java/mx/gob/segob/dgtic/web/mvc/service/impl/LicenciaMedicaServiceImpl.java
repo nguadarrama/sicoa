@@ -366,7 +366,7 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 		HttpResponse response;
 		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+		
 		//Se agrega el JWT a la cabecera para acceso al recurso rest
 		Header header = new BasicHeader(Constantes.ETIQUETA_AUTHORIZATION, Constantes.ETIQUETA_BEARER + detalles.get(Constantes.ETIQUETA_TOKEN).toString());
 		HttpEntity httpEntity = new BasicHttpEntity();
