@@ -14,7 +14,11 @@ public class ConstantsController {
 	public static final String LISTA_TIPO  = "listaTipo";
 	public static final String LISTA_NIVEL = "listaNivel";
 	public static final String LISTA_ESTADO = "listaEstado";
+	public static final String LISTA_RESPONSABLE = "listaResponsable";
 	public static final String LISTA_UNIDAD_ADMINISTRATIVA = "listaUnidadAdministrativa";
+	public static final String LISTA_UNIDADES = "listaUnidades";
+	public static final String LISTA_ESTATUS = "listaEstatus";
+	
 	public static final String LISTA_JUSTIFICACIONES = "listaJustificaciones";
 	public static final String INICIO = "inicio";
 	public static final String FECHA_INICIAL = "fechaInicial";
@@ -35,6 +39,7 @@ public class ConstantsController {
 	public static final String UNIDAD_ADMINISTRATIVA = "unidadAdministrativa";
 	public static final String MENSAJE = "MENSAJE";
 	public static final String MENSAJE_EXCEPTION = "MENSAJE_EXCEPCION";
+	public static final String MENSAJE_ALERTA = "MENSAJE_ALERTA";
 	public static final String DD_MM_YYYY = "dd/MM/yyyy";
 	public static final String USUARIO = "usuario";
 	public static final String LICENCIAS_MEDICAS = "licenciasMedicas";
@@ -58,5 +63,9 @@ public class ConstantsController {
 	public static final String RE_CAMBIA_CONTRA = "redirect:/cambiaContrasenia1";
 	public static final String MSJ_CONFIRMACION = "/mensajeConfirmacion";
 	public static final String MSJ_CONFIRMACIONS = "mensajeConfirmacion";
+	public static final String PERIODO = "periodo";
+	public static final String RESPONSABLE = "responsable";
+	public static final String VACACIONES = "vacaciones";
+	public static final String NUMERO_EMPLEADO = "numeroEmpleado";
 	
 }
