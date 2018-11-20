@@ -24,6 +24,7 @@ public class VacacionesAux {
     private static final String DD_MM_YYYY = "dd-MM-yyyy";
     private static final String MM_DD_YYYY = "MMM dd, yyyy";
     private static final String ES_ES = "es_ES";
+
     
     public String getMensaje() {
 		return mensaje;
@@ -86,6 +87,7 @@ public class VacacionesAux {
 			Date date = null;
 			SimpleDateFormat sdf = new SimpleDateFormat(MM_DD_YYYY_HH, new Locale(ES_ES));
 			SimpleDateFormat sdf1 = new SimpleDateFormat(DD_MM_YYYY);
+
 		    try {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
@@ -111,6 +113,7 @@ public class VacacionesAux {
 	public String getFechaFin() {
 		if(fechaFin.length()>13){
 			Date date = null;
+
 			SimpleDateFormat sdf = new SimpleDateFormat(MM_DD_YYYY_HH, new Locale(ES_ES));
 			SimpleDateFormat sdf1 = new SimpleDateFormat(DD_MM_YYYY);
 		    try {
@@ -121,8 +124,10 @@ public class VacacionesAux {
 			}
 		}else if(fechaFin.length()>10){
 			Date date = new Date();
+
 			SimpleDateFormat sdf = new SimpleDateFormat(MM_DD_YYYY);
 			SimpleDateFormat sdf1 = new SimpleDateFormat(DD_MM_YYYY);
+
 		    try {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
@@ -144,6 +149,7 @@ public class VacacionesAux {
 	public String getFechaRegistro() {
 		if(fechaRegistro.length()>13){
 			Date date = null;
+
 			SimpleDateFormat sdf = new SimpleDateFormat(MM_DD_YYYY_HH, new Locale(ES_ES));
 			SimpleDateFormat sdf1 = new SimpleDateFormat(DD_MM_YYYY);
 		    try {
@@ -154,8 +160,10 @@ public class VacacionesAux {
 			}
 		}else if(fechaRegistro.length()>10){
 			Date date = new Date();
+
 			SimpleDateFormat sdf = new SimpleDateFormat(MM_DD_YYYY , new Locale(ES_ES));
 			SimpleDateFormat sdf1 = new SimpleDateFormat(DD_MM_YYYY);
+
 		    try {
 				date = sdf.parse(fechaRegistro);
 				fechaRegistro = sdf1.format(date);
