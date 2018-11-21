@@ -473,11 +473,11 @@ public class AsistenciaController  {
     	} else if (idTipoDiaModal == 4) {
     		codigoincidencia = "P";
     	} else if (idTipoDiaModal == 6) {
-    		codigoincidencia = "Inasistencia";
+    		codigoincidencia = "E";
     	} else if (idTipoDiaModal == 7) {
     		codigoincidencia = "Comisión";
     	}else if (idTipoDiaModal == 8) {
-    		codigoincidencia = "Licencia Médica";
+    		codigoincidencia = "Inasistencia";
     	}
     	
     	//fecha actual para el reporte
