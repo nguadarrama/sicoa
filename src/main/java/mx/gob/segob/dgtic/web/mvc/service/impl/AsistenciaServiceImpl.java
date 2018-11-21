@@ -32,11 +32,11 @@ import mx.gob.segob.dgtic.web.mvc.constants.AsistenciaEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
-import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
+import mx.gob.segob.dgtic.web.mvc.dto.EstatusDto;
 import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Incidencia;
-import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.JustificacionDto;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
@@ -259,7 +259,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//creación de la justificación para una incidencia
 		
 		//motivo de justificación
-		Justificacion justificacion = new Justificacion();
+		JustificacionDto justificacion = new JustificacionDto();
 		justificacion.setIdJustificacion(idJustificacion);
 		
 		//motivo de incidencia
@@ -271,7 +271,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		asistencia.setIdAsistencia(idAsistencia);
 		
 		//la justificación se crea con estatus "pendiente"
-		Estatus estatus = new Estatus();
+		EstatusDto estatus = new EstatusDto();
 		estatus.setIdEstatus(1);
 		
 		Archivo archivo = new Archivo();
@@ -332,7 +332,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//creación de la justificación para una incidencia
 		
 		//motivo de justificación
-		Justificacion justificacion = new Justificacion();
+		JustificacionDto justificacion = new JustificacionDto();
 		justificacion.setIdJustificacion(idJustificacion);
 		
 		//motivo de incidencia
@@ -344,7 +344,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		asistencia.setIdAsistencia(idAsistencia);
 		
 		//la justificación se crea con estatus "pendiente"
-		Estatus estatus = new Estatus();
+		EstatusDto estatus = new EstatusDto();
 		estatus.setIdEstatus(1);
 		
 		Archivo archivo = new Archivo();
@@ -406,7 +406,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		asistencia.setIdAsistencia(idAsistencia);
 		
 		//el descuento se actualiza con estatus "validada"
-		Estatus estatus = new Estatus();
+		EstatusDto estatus = new EstatusDto();
 		estatus.setIdEstatus(2);
 		
 		//se crea la incidencia con la información 
@@ -458,7 +458,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		//acepta justificación
 
 		//motivo de justificación
-		Justificacion justificacion = new Justificacion();
+		JustificacionDto justificacion = new JustificacionDto();
 		justificacion.setIdJustificacion(idJustificacion);
 		
 		//motivo de incidencia
@@ -470,7 +470,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		asistencia.setIdAsistencia(idAsistencia);
 		
 		//se dictamina
-		Estatus estatus = new Estatus();
+		EstatusDto estatus = new EstatusDto();
 		
 		//se crea la incidencia con la información 
 		Incidencia incidencia = new Incidencia();

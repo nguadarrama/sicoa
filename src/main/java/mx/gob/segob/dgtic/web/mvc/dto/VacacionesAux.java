@@ -13,7 +13,7 @@ public class VacacionesAux {
 	private  VacacionPeriodo idVacacion;
 	private Integer idResponsable;
 	private Archivo idArchivo;
-	private Estatus idEstatus;
+	private EstatusDto idEstatus;
 	private String fechaInicio;
 	private String fechaFin;
 	private Integer dias;
@@ -35,7 +35,7 @@ public class VacacionesAux {
 	public VacacionesAux(){
     	
     }
-    public VacacionesAux(Usuario idUsuario, VacacionPeriodo idVacacion, Integer idResponsable, Estatus idEstatus, String fechaInicio, String fechaFin, 
+    public VacacionesAux(Usuario idUsuario, VacacionPeriodo idVacacion, Integer idResponsable, EstatusDto idEstatus, String fechaInicio, String fechaFin, 
     	Integer dias	){
     	this.idUsuario = idUsuario;
     	this.idVacacion=idVacacion;
@@ -76,10 +76,10 @@ public class VacacionesAux {
 	public void setIdArchivo(Archivo idArchivo) {
 		this.idArchivo = idArchivo;
 	}
-	public Estatus getIdEstatus() {
+	public EstatusDto getIdEstatus() {
 		return idEstatus;
 	}
-	public void setIdEstatus(Estatus idEstatus) {
+	public void setIdEstatus(EstatusDto idEstatus) {
 		this.idEstatus = idEstatus;
 	}
 	public String getFechaInicio() {

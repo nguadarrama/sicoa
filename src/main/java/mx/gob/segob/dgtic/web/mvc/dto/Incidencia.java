@@ -5,11 +5,11 @@ public class Incidencia {
 	private Integer idIncidencia;
 	private Asistencia idAsistencia;
 	private TipoDia tipoDia;
-	private Estatus estatus;
+	private EstatusDto estatus;
 	private Archivo idArchivo;
 	private Integer idResponsable;
 	private Boolean descuento;
-	private Justificacion justificacion;
+	private JustificacionDto justificacion;
 	private String nombreAutorizador;
 	
 	public Incidencia () {
@@ -36,10 +36,10 @@ public class Incidencia {
 	public void setTipoDia(TipoDia tipoDia) {
 		this.tipoDia = tipoDia;
 	}
-	public Estatus getEstatus() {
+	public EstatusDto getEstatus() {
 		return estatus;
 	}
-	public void setEstatus(Estatus estatus) {
+	public void setEstatus(EstatusDto estatus) {
 		this.estatus = estatus;
 	}
 	public Archivo getIdArchivo() {
@@ -61,10 +61,10 @@ public class Incidencia {
 		this.descuento = descuento;
 	}
 
-	public Justificacion getJustificacion() {
+	public JustificacionDto getJustificacion() {
 		return justificacion;
 	}
-	public void setJustificacion(Justificacion justificacion) {
+	public void setJustificacion(JustificacionDto justificacion) {
 		this.justificacion = justificacion;
 	}
 

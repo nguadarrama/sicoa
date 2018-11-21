@@ -1,16 +1,16 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
-public class Estatus {
+public class EstatusDto {
 	
 	private Integer idEstatus;
 	private String descripcion;
 	private String estatus;
 	
-	public Estatus() {
+	public EstatusDto() {
 		
 	}
 	
-	public Estatus(Integer idEstatus, String descripcion, String estatus) {
+	public EstatusDto(Integer idEstatus, String descripcion, String estatus) {
 		super();
 		this.idEstatus = idEstatus;
 		this.descripcion = descripcion;

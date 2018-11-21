@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
-import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
+import mx.gob.segob.dgtic.web.mvc.dto.EstatusDto;
 import mx.gob.segob.dgtic.web.mvc.service.AsistenciaService;
 import mx.gob.segob.dgtic.web.mvc.service.CatalogoService;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
@@ -53,10 +53,10 @@ public class ReporteController {
 	@RequestMapping(value={"inicioDireccion"}, method = RequestMethod.GET)
     public String inicioReporteDireccion(Model model, Authentication authentication) {
 		
-		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
-    	List<Estatus> listaEstado = new ArrayList<>();
+		List<EstatusDto> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<EstatusDto> listaEstado = new ArrayList<>();
     	
-    	for (Estatus e : estatus) {
+    	for (EstatusDto e : estatus) {
     		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
     			listaEstado.add(e);
     		}
@@ -75,10 +75,10 @@ public class ReporteController {
 	@RequestMapping(value={"inicioCoordinador"}, method = RequestMethod.GET)
     public String inicioReporteCoordinador(Model model, Authentication authentication) {
 		
-		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
-    	List<Estatus> listaEstado = new ArrayList<>();
+		List<EstatusDto> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<EstatusDto> listaEstado = new ArrayList<>();
     	
-    	for (Estatus e : estatus) {
+    	for (EstatusDto e : estatus) {
     		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
     			listaEstado.add(e);
     		}
@@ -100,10 +100,10 @@ public class ReporteController {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaDireccionReporte(asistenciaBusquedaUtil, authentication);
 		
-		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
-    	List<Estatus> listaEstado = new ArrayList<>();
+		List<EstatusDto> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<EstatusDto> listaEstado = new ArrayList<>();
     	
-    	for (Estatus e : estatus) {
+    	for (EstatusDto e : estatus) {
     		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
     			listaEstado.add(e);
     		}
@@ -224,10 +224,10 @@ public class ReporteController {
 		
 		List<Asistencia> listaAsistencias = asistenciaService.buscaAsistenciaCoordinadorReporte(asistenciaBusquedaUtil, authentication);
 
-		List<Estatus> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
-    	List<Estatus> listaEstado = new ArrayList<>();
+		List<EstatusDto> estatus =  estatusService.obtieneListaCompletaEstatus(authentication);
+    	List<EstatusDto> listaEstado = new ArrayList<>();
     	
-    	for (Estatus e : estatus) {
+    	for (EstatusDto e : estatus) {
     		if (e.getIdEstatus() != 4 && e.getIdEstatus() != 5) {
     			listaEstado.add(e);
     		}

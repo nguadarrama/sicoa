@@ -1,7 +1,5 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +11,7 @@ public class Vacaciones {
 	private VacacionPeriodo idVacacion;
 	private Integer idResponsable;
 	private Archivo idArchivo;
-	private Estatus idEstatus;
+	private EstatusDto idEstatus;
 	private Date fechaInicio;
 	private Date fechaFin;
 	private Integer dias;
@@ -31,6 +29,9 @@ public class Vacaciones {
     private List<MultipartFile> archivo;
 	
 	public Vacaciones(){
+		/**
+		 * 
+		 */
 		
 	}
 
@@ -64,10 +65,10 @@ public class Vacaciones {
 	public void setIdArchivo(Archivo idArchivo) {
 		this.idArchivo = idArchivo;
 	}
-	public Estatus getIdEstatus() {
+	public EstatusDto getIdEstatus() {
 		return idEstatus;
 	}
-	public void setIdEstatus(Estatus idEstatus) {
+	public void setIdEstatus(EstatusDto idEstatus) {
 		this.idEstatus = idEstatus;
 	}
 	public Date getFechaInicio() {

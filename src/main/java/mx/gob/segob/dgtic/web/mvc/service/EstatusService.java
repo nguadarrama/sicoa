@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.security.core.Authentication;
 
-import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
+import mx.gob.segob.dgtic.web.mvc.dto.EstatusDto;
 
 public interface EstatusService {
-	public List<Estatus> obtieneListaEstatus(Authentication authentication);
-	public List<Estatus> obtieneListaCompletaEstatus(Authentication authentication);
+	public List<EstatusDto> obtieneListaEstatus(Authentication authentication);
+	public List<EstatusDto> obtieneListaCompletaEstatus(Authentication authentication);
 }

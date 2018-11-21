@@ -40,7 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.BusquedaDto;
-import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
+import mx.gob.segob.dgtic.web.mvc.dto.EstatusDto;
 import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.PerfilUsuario;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
@@ -372,19 +372,16 @@ public class VacacionesController {
     }
     
     public String retornaPerfil(String idUnidad, List<PerfilUsuario> listaPerfilUsuario, String claveUsuarioLider, Authentication authentication){
-    	Boolean usuario= false;
+    	
     	for(PerfilUsuario perfilUsuario: listaPerfilUsuario){
     		if(idUnidad==null || idUnidad.isEmpty()){
     			logger.info("Entrando al if {} ",perfilUsuario.getClavePerfil().getClavePerfil());
 	    		if(perfilUsuario.getClavePerfil().getClavePerfil().equals("2")){
 	    			logger.info("Entrando al if {} ",perfilUsuario.getClavePerfil().getClavePerfil());
-	    			usuario=true;
+	    			
 	    			Usuario usuarioAux;
-	    	    	if(usuario){
-	    	    		
 	    	    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
 	    	    		idUnidad=""+usuarioAux.getIdUnidad();
-	    	    	}
 	    		}
 	    		if(perfilUsuario.getClavePerfil().getClavePerfil().equals("1")){
 	    			idUnidad="";
@@ -475,7 +472,7 @@ public class VacacionesController {
      	String claveUsuario = parts[1];
      	VacacionPeriodo vacacion=new  VacacionPeriodo();
      	vacacion.setIdVacacion(Integer.parseInt(idVacacion));
-     	Estatus estatus=new Estatus();
+     	EstatusDto estatus=new EstatusDto();
      	estatus.setIdEstatus(1);
      	VacacionPeriodo vacacion1= new VacacionPeriodo();
      	vacacion1.setIdVacacion(Integer.parseInt(idVacacion));
@@ -514,7 +511,7 @@ public class VacacionesController {
 
      	VacacionPeriodo vacacion=new  VacacionPeriodo();
      	vacacion.setIdVacacion(Integer.parseInt(idVacacion));
-     	Estatus estatus=new Estatus();
+     	EstatusDto estatus=new EstatusDto();
      	estatus.setIdEstatus(1);
      	Vacaciones vacaciones= vacacionesService.agregaVacaciones(new VacacionesAux(null,vacacion, responsable, estatus, fechaInicio, fechaFin, diasPorPedir), claveUsuario, authentication);
      	logger.info("Mensaje obtenido {}",vacaciones.getMensaje());
@@ -539,7 +536,7 @@ public class VacacionesController {
     	Date fechaFinal =null;
     	Usuario usuario=new Usuario();
     	usuario.setIdUsuario(id);
-    	Estatus estatus= new Estatus();
+    	EstatusDto estatus= new EstatusDto();
         estatus.setIdEstatus(2);
         fechaInicial = formatter.parse(fechaInicio,pos);
 		fechaFinal=formatter.parse(fechaFin,pos);
@@ -565,7 +562,7 @@ public class VacacionesController {
     	vacacion.setIdVacacion(idVacacion);
     	Usuario usuario=new Usuario();
     	usuario.setIdUsuario(Integer.parseInt(idUsuario));
-    	Estatus estatus= new Estatus();
+    	EstatusDto estatus= new EstatusDto();
         estatus.setIdEstatus(3);
         Vacaciones vac = new Vacaciones();
         vac.setIdUsuario(usuario);
@@ -587,7 +584,7 @@ public class VacacionesController {
     	vacacion.setIdVacacion(idVacacion);
     	Usuario usuario = new Usuario();
     	usuario.setIdUsuario(Integer.parseInt(idUsuario));
-    	Estatus estatus = new Estatus();
+    	EstatusDto estatus = new EstatusDto();
         estatus.setIdEstatus(3);
         Vacaciones vac = new Vacaciones();
         vac.setIdUsuario(usuario);
@@ -660,7 +657,7 @@ public class VacacionesController {
     	vacacion.setIdVacacion(idVacacion);
     	Usuario usuario = new Usuario();
     	usuario.setIdUsuario(Integer.parseInt(idUsuario));
-    	Estatus estatus = new Estatus();
+    	EstatusDto estatus = new EstatusDto();
         estatus.setIdEstatus(3);
         Vacaciones vacaciones;
         Vacaciones vac = new Vacaciones();

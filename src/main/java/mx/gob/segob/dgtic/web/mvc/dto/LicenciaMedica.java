@@ -15,7 +15,7 @@ public class LicenciaMedica {
 	private Usuario idUsuario;
 	private Integer idResponsable;
 	private Archivo idArchivo;
-	private Estatus idEstatus;
+	private EstatusDto idEstatus;
 	private String fechaInicio;
 	private String fechaFin;
 	private Integer dias;
@@ -90,10 +90,10 @@ public class LicenciaMedica {
 	public void setIdArchivo(Archivo idArchivo) {
 		this.idArchivo = idArchivo;
 	}
-	public Estatus getIdEstatus() {
+	public EstatusDto getIdEstatus() {
 		return idEstatus;
 	}
-	public void setIdEstatus(Estatus idEstatus) {
+	public void setIdEstatus(EstatusDto idEstatus) {
 		this.idEstatus = idEstatus;
 	}
 	public String getFechaInicio() {

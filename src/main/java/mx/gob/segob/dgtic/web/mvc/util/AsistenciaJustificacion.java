@@ -3,12 +3,12 @@ package mx.gob.segob.dgtic.web.mvc.util;
 import java.util.List;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
-import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.JustificacionDto;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 
 public class AsistenciaJustificacion {
 	private Asistencia asistencia;
-	private List<Justificacion> listaJustificacion;
+	private List<JustificacionDto> listaJustificacion;
 	private List<Usuario> listaAutorizador;
 	
 	public Asistencia getAsistencia() {
@@ -19,11 +19,11 @@ public class AsistenciaJustificacion {
 		this.asistencia = asistencia;
 	}
 
-	public List<Justificacion> getListaJustificacion() {
+	public List<JustificacionDto> getListaJustificacion() {
 		return listaJustificacion;
 	}
 
-	public void setListaJustificacion(List<Justificacion> listaJustificacion) {
+	public void setListaJustificacion(List<JustificacionDto> listaJustificacion) {
 		this.listaJustificacion = listaJustificacion;
 	}
 

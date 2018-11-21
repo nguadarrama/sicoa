@@ -24,7 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
-import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
+import mx.gob.segob.dgtic.web.mvc.dto.EstatusDto;
 import mx.gob.segob.dgtic.web.mvc.service.EstatusService;
 import mx.gob.segob.dgtic.web.mvc.util.rest.ClienteRestUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
@@ -39,8 +39,8 @@ public class EstatusServiceImpl implements EstatusService{
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Estatus> obtieneListaEstatus(Authentication authentication) {
-		List<Estatus> listaEstatus;
+	public List<EstatusDto> obtieneListaEstatus(Authentication authentication) {
+		List<EstatusDto> listaEstatus;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
@@ -58,7 +58,7 @@ public class EstatusServiceImpl implements EstatusService{
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonArray dataJson = json.getAsJsonArray("data");
-			listaEstatus = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Estatus>>(){}.getType());
+			listaEstatus = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<EstatusDto>>(){}.getType());
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			
@@ -80,8 +80,8 @@ public class EstatusServiceImpl implements EstatusService{
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Estatus> obtieneListaCompletaEstatus(Authentication authentication) {
-		List<Estatus> listaEstatus;
+	public List<EstatusDto> obtieneListaCompletaEstatus(Authentication authentication) {
+		List<EstatusDto> listaEstatus;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
@@ -99,7 +99,7 @@ public class EstatusServiceImpl implements EstatusService{
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonArray dataJson = json.getAsJsonArray("data");
-			listaEstatus = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Estatus>>(){}.getType());
+			listaEstatus = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<EstatusDto>>(){}.getType());
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			

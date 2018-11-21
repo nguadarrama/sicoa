@@ -6,7 +6,7 @@ public class VacacionPeriodo {
 	private Integer idVacacion;
 	private Usuario idUsuario;
 	private Periodo idPeriodo;
-	private Estatus idEstatus;
+	private EstatusDto idEstatus;
 	private Date fechaInicio;
 	private Integer dias;
 	private Boolean activo;
@@ -28,10 +28,10 @@ public class VacacionPeriodo {
 	public void setIdPeriodo(Periodo idPeriodo) {
 		this.idPeriodo = idPeriodo;
 	}
-	public Estatus getIdEstatus() {
+	public EstatusDto getIdEstatus() {
 		return idEstatus;
 	}
-	public void setIdEstatus(Estatus idEstatus) {
+	public void setIdEstatus(EstatusDto idEstatus) {
 		this.idEstatus = idEstatus;
 	}
 	public Date getFechaInicio() {

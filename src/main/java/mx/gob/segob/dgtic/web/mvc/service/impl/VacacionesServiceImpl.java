@@ -36,7 +36,7 @@ import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.BusquedaDto;
-import mx.gob.segob.dgtic.web.mvc.dto.Estatus;
+import mx.gob.segob.dgtic.web.mvc.dto.EstatusDto;
 import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.dto.VacacionPeriodo;
@@ -419,7 +419,7 @@ public class VacacionesServiceImpl implements VacacionesService{
 			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	    	String fechaInicial =null;
 	    	String fechaFinal = null;
-	    	Estatus estatus= new Estatus();
+	    	EstatusDto estatus= new EstatusDto();
 	    	Date nuevaFecha = new Date();
 	    	Date nuevaFecha1 = new Date();
 	        estatus.setIdEstatus(2);

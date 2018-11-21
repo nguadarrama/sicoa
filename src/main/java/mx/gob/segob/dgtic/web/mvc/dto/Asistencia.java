@@ -8,7 +8,7 @@ public class Asistencia {
 	private Timestamp entrada;
 	private Timestamp salida;
 	private TipoDia idTipoDia;
-	private Estatus idEstatus;
+	private EstatusDto idEstatus;
 	private Incidencia incidencia;
 	
 	public Integer getIdAsistencia() {
@@ -51,11 +51,11 @@ public class Asistencia {
 		this.idTipoDia = idTipoDia;
 	}
 
-	public Estatus getIdEstatus() {
+	public EstatusDto getIdEstatus() {
 		return idEstatus;
 	}
 
-	public void setIdEstatus(Estatus idEstatus) {
+	public void setIdEstatus(EstatusDto idEstatus) {
 		this.idEstatus = idEstatus;
 	}
 

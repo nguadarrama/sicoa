@@ -8,7 +8,7 @@ public class Comision {
   private Usuario idUsuario;
   private Integer idResponsable;
   private Archivo idArchivo;
-  private Estatus idEstatus;
+  private EstatusDto idEstatus;
   private String fechaInicio;
   private String fechaFin;
   private Integer dias;
@@ -76,13 +76,13 @@ public class Comision {
   /**
    * @return the idEstatus
    */
-  public Estatus getIdEstatus() {
+  public EstatusDto getIdEstatus() {
     return idEstatus;
   }
   /**
    * @param idEstatus the idEstatus to set
    */
-  public void setIdEstatus(Estatus idEstatus) {
+  public void setIdEstatus(EstatusDto idEstatus) {
     this.idEstatus = idEstatus;
   }
   /**

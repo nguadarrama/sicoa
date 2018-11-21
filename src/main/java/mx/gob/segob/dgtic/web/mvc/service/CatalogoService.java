@@ -8,7 +8,7 @@ import mx.gob.segob.dgtic.web.mvc.dto.Perfil;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
-import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.JustificacionDto;
 import mx.gob.segob.dgtic.web.mvc.dto.NivelOrganizacional;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
@@ -31,11 +31,11 @@ public interface CatalogoService {
 	public TipoDia buscaTipoDia(Integer id, Authentication authentication);
 	
 	//Catálogo justificacion
-	public List<Justificacion> obtieneListaJ(Authentication authentication);
-	public List<Justificacion> obtieneJustificaciones(Authentication authentication);
-	public Justificacion modificaJustificacion(Justificacion justificacion, Authentication authentication);
-	public Justificacion agregaJustificacion(Justificacion justificacion, Authentication authentication);
-	public Justificacion buscaJustificacion(Integer id, Authentication authentication);
+	public List<JustificacionDto> obtieneListaJ(Authentication authentication);
+	public List<JustificacionDto> obtieneJustificaciones(Authentication authentication);
+	public JustificacionDto modificaJustificacion(JustificacionDto justificacion, Authentication authentication);
+	public JustificacionDto agregaJustificacion(JustificacionDto justificacion, Authentication authentication);
+	public JustificacionDto buscaJustificacion(Integer id, Authentication authentication);
 	public void eliminaJustificacion(Integer id, Authentication authentication);
 	//demás catálogos
 	

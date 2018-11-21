@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
-import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.JustificacionDto;
 import mx.gob.segob.dgtic.web.mvc.dto.NivelOrganizacional;
 import mx.gob.segob.dgtic.web.mvc.dto.Periodo;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
@@ -272,13 +272,13 @@ public class CatalogoController {
 	
 	@GetMapping("justificacion/busca")
 	@ResponseBody
-	public Justificacion buscaJustificacion(Integer id, Authentication authentication) {
+	public JustificacionDto buscaJustificacion(Integer id, Authentication authentication) {
 		return catalogoService.buscaJustificacion(id, authentication);
 	}
 
 	@PostMapping("justificacion/modifica")
 	public String modificaJustificacion(Integer id, String clave, String justificacion, Boolean activo, Authentication authentication) {
-		Justificacion  justi  = new Justificacion(id, clave,justificacion, activo, "");
+		JustificacionDto  justi  = new JustificacionDto(id, clave,justificacion, activo, "");
 		justi = catalogoService.modificaJustificacion(justi, authentication);
 		this.mensajes = justi.getMensaje();
 		return REDIRECT_CATALOGOS_JUSTIFICACION;
@@ -286,7 +286,7 @@ public class CatalogoController {
 
 	@PostMapping("justificacion/agrega")
 	public String agregaJustificacion(Integer id, String clave, String justificacion, boolean activo, Authentication authentication) {
-		Justificacion  justi  = new Justificacion(id, clave,justificacion, activo, "");
+		JustificacionDto  justi  = new JustificacionDto(id, clave,justificacion, activo, "");
 		justi = catalogoService.agregaJustificacion(justi, authentication);
 		this.mensajes = justi.getMensaje();
 		return REDIRECT_CATALOGOS_JUSTIFICACION;

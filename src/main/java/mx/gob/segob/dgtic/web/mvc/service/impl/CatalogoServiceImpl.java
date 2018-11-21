@@ -30,7 +30,7 @@ import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.DiaFestivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Horario;
-import mx.gob.segob.dgtic.web.mvc.dto.Justificacion;
+import mx.gob.segob.dgtic.web.mvc.dto.JustificacionDto;
 import mx.gob.segob.dgtic.web.mvc.dto.NivelOrganizacional;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
@@ -388,8 +388,8 @@ public class CatalogoServiceImpl implements CatalogoService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Justificacion> obtieneListaJ(Authentication authentication) {
-		List<Justificacion> listaJustificacion;
+	public List<JustificacionDto> obtieneListaJ(Authentication authentication) {
+		List<JustificacionDto> listaJustificacion;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
@@ -408,7 +408,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonArray dataJson = json.getAsJsonArray("data");
-			listaJustificacion = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Justificacion>>(){}.getType());
+			listaJustificacion = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<JustificacionDto>>(){}.getType());
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {			
 			String mensaje = obtenerMensajeError(response);					 
@@ -422,8 +422,8 @@ public class CatalogoServiceImpl implements CatalogoService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Justificacion> obtieneJustificaciones(Authentication authentication) {
-		List<Justificacion> listaJustificacion;
+	public List<JustificacionDto> obtieneJustificaciones(Authentication authentication) {
+		List<JustificacionDto> listaJustificacion;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
@@ -442,7 +442,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonArray dataJson = json.getAsJsonArray("data");
-			listaJustificacion = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<Justificacion>>(){}.getType());
+			listaJustificacion = new Gson().fromJson(dataJson.toString(), new TypeToken<ArrayList<JustificacionDto>>(){}.getType());
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {			
 			String mensaje = obtenerMensajeError(response);					 
@@ -457,7 +457,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Justificacion modificaJustificacion(Justificacion justificacion, Authentication authentication) {
+	public JustificacionDto modificaJustificacion(JustificacionDto justificacion, Authentication authentication) {
 			HttpResponse response;
 			Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 			HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
@@ -483,7 +483,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 				
 				JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 				JsonElement dataJson = json.get("data").getAsJsonObject();
-				justificacion = gson.fromJson(dataJson, Justificacion.class);		
+				justificacion = gson.fromJson(dataJson, JustificacionDto.class);		
 				
 			} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 				
@@ -497,7 +497,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 		
 	@SuppressWarnings("unchecked")
 	@Override
-	public Justificacion agregaJustificacion(Justificacion justificacion, Authentication authentication) {
+	public JustificacionDto agregaJustificacion(JustificacionDto justificacion, Authentication authentication) {
 		HttpResponse response;
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
@@ -523,7 +523,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
-			justificacion = gson.fromJson(dataJson, Justificacion.class);		
+			justificacion = gson.fromJson(dataJson, JustificacionDto.class);		
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			
@@ -538,8 +538,8 @@ public class CatalogoServiceImpl implements CatalogoService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Justificacion buscaJustificacion(Integer id, Authentication authentication) {
-		Justificacion justificacion;
+	public JustificacionDto buscaJustificacion(Integer id, Authentication authentication) {
+		JustificacionDto justificacion;
 		HttpResponse response;
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
@@ -557,7 +557,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 			
 			JsonObject json = (JsonObject) HttpResponseUtil.getJsonContent(response);
 			JsonElement dataJson = json.get("data").getAsJsonObject();
-			justificacion = gson.fromJson(dataJson, Justificacion.class);		
+			justificacion = gson.fromJson(dataJson, JustificacionDto.class);		
 			
 		} else if(HttpResponseUtil.isContentType(response, ContentType.APPLICATION_JSON)) {
 			String mensaje = obtenerMensajeError(response);					 

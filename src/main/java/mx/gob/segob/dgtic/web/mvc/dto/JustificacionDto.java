@@ -1,7 +1,7 @@
 package mx.gob.segob.dgtic.web.mvc.dto;
 
 
-public class Justificacion {
+public class JustificacionDto {
 
 	private Integer idJustificacion;
 	private String clave;
@@ -9,7 +9,7 @@ public class Justificacion {
 	private Boolean activo;
 	private String mensaje;
 	
-	public Justificacion () {
+	public JustificacionDto () {
 		
 	}
 
@@ -20,7 +20,7 @@ public class Justificacion {
 	 * @param activo
 	 * @param mensaje
 	 */
-	public Justificacion(Integer idJustificacion, String clave, String justificacion, Boolean activo, String mensaje) {
+	public JustificacionDto(Integer idJustificacion, String clave, String justificacion, Boolean activo, String mensaje) {
 		super();
 		this.idJustificacion = idJustificacion;
 		this.clave = clave;
