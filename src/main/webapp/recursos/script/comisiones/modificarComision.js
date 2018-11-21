@@ -7,7 +7,8 @@ $(document)
 					var disableddates=array.split(",");
 					//alert("LLegada "+disableddates);
 					
-					$("#fechaInicio").datepicker({ 
+					$("#fechaInicio").datepicker({
+						dateFormat: 'dd-mm-yy',
 						beforeShowDay: function(date){ 
 							var show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
 						//No Weekends 
@@ -30,6 +31,7 @@ $(document)
 					});
 					
 				$("#fechaFin").datepicker({ 
+					dateFormat: 'dd-mm-yy',
 					beforeShowDay: function(date){ 
 						var show = true; if(date.getDay() == 0 || date.getDay() == 6){show = false;}
 					//No Weekends 

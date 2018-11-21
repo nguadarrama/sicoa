@@ -197,6 +197,7 @@ public class ComisionesController extends BaseService {
    * Busca comision cuando presionan ver detalle
    * 
    * @param idComision
+   * 
    * @return
    */
   @GetMapping("comision/busca")
@@ -231,6 +232,7 @@ public class ComisionesController extends BaseService {
           horario.getHoraEntrada().toString() + " - " + horario.getHoraSalida().toString();
       logger.info("Horario: {}", horarioString);
       hmap.put("horario", horarioString);
+      hmap.put("idHorario", horario.getIdHorario());
     } else {
       hmap.put("horario", null);
     }
@@ -403,7 +405,12 @@ public class ComisionesController extends BaseService {
       HttpSession session, Authentication authentication) {
     logger.info("Id de comision: {} claveUsuario: {}", idComision, claveUsuario);
 
-    model.addAttribute("comision", comisionService.obtieneComision(idComision, authentication));
+    Comision comisiones = comisionService.obtieneComision(idComision, authentication);
+    Horario horario =
+        catalogoService.buscaHorario(comisiones.getIdHorario().getIdHorario(), authentication);
+
+    model.addAttribute("idHorario", horario);
+    model.addAttribute("comision", comisiones);
     model.addAttribute(ETIQUETA_FECHA_REGISTRO, obtenerFechaActual(FORMATO_DD_MM_YYYY));
     model.addAttribute(ETIQUETA_USUARIO, usuarioService.buscaUsuario(claveUsuario, authentication));
     model.addAttribute(ETIQUETA_LISTA_RESPONSABLE,

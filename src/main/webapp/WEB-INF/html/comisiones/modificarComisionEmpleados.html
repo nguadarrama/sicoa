@@ -147,9 +147,9 @@
 											<label>
 										        <label for="horario" class="col-form-label" th:text="Horario"></label>
 									        	<select  class="form-control" 
-											       th:value="horario" name="idHorario" id="idHorario" th:required="required">
-											      <option disabled="disabled" selected="selected" value="">
-																Elige un Horario</option>
+											       th:value="${idHorario}" name="idHorario" id="idHorario" th:required="required">
+											      <option selected="selected" th:value="${idHorario.idHorario}" th:text="${idHorario.horaEntrada} + ' - ' + ${idHorario.horaSalida}">
+																</option>
 											      <option th:each="horario : ${listaHorarios}" th:value="${horario.idHorario}" 
 											       th:text="${horario.horaEntrada} + ' - ' + ${horario.horaSalida}">
 											      </option>
