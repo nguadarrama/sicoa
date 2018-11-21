@@ -167,26 +167,9 @@ public class LicenciasMedicasController {
     	List<PerfilUsuario> listaPerfilUsuario;
     	listaPerfilUsuario=perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider, authentication);
     	Boolean usuario= false;
-    	for(PerfilUsuario perfilUsuario: listaPerfilUsuario){
-    		if(idUnidad==null || idUnidad.isEmpty()){
-    			logger.info("Entrando al if. {} ",perfilUsuario.getClavePerfil().getClavePerfil());
-	    		if(perfilUsuario.getClavePerfil().getClavePerfil().equals("2")){
-	    			logger.info("Entrando al if: {} ",perfilUsuario.getClavePerfil().getClavePerfil());
-	    			usuario=true;
-	    			Usuario usuarioAux;
-	    	    	if(usuario){
-	    	    		
-	    	    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
-	    	    		idUnidad=""+usuarioAux.getIdUnidad();
-	    	    	}
-	    		}
-	    		if(perfilUsuario.getClavePerfil().getClavePerfil().equals("1")){
-	    			idUnidad="";
-	    		}
-    		}
-    		
+    	if(idUnidad==null || idUnidad==""){
+    	validaUnidad(listaPerfilUsuario, claveUsuarioLider, idUnidad, authentication);
     	}
-		
     	logger.info("idUnidad : {}",idUnidad);
 		List<LicenciaMedica> lista;
 		BusquedaDto busquedaDto = new BusquedaDto();
@@ -210,6 +193,30 @@ public class LicenciasMedicasController {
 		this.mensaje = "";
     	return "/licenciasMedicas/licenciasEmpleados"; 
     }
+	
+	private String validaUnidad(List<PerfilUsuario> listaPerfilUsuario, String claveUsuarioLider,String idUnidad, Authentication authentication ){
+		
+		for(PerfilUsuario perfilUsuario: listaPerfilUsuario){
+    		if(idUnidad==null || idUnidad.isEmpty()){
+    			logger.info("Entrando al if. {} ",perfilUsuario.getClavePerfil().getClavePerfil());
+	    		if(perfilUsuario.getClavePerfil().getClavePerfil().equals("2")){
+	    			logger.info("Entrando al if: {} ",perfilUsuario.getClavePerfil().getClavePerfil());
+	    			
+	    			Usuario usuarioAux;
+	    	    	
+	    	    		
+	    	    		usuarioAux=usuarioService.buscaUsuario(claveUsuarioLider, authentication);
+	    	    		idUnidad=""+usuarioAux.getIdUnidad();
+	    	    	
+	    		}
+	    		if(perfilUsuario.getClavePerfil().getClavePerfil().equals("1")){
+	    			idUnidad="";
+	    		}
+    		}
+    		
+    	}
+		return idUnidad;
+	}
 	
 	
 	@GetMapping("/busca")

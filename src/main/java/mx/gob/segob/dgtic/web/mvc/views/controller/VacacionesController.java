@@ -103,13 +103,13 @@ public class VacacionesController {
 	private String global="";
 	
     @RequestMapping(value={"solicitudVacaciones"}, method = RequestMethod.GET)
-    public String obtieneAsistencias(Model model, HttpSession session, Authentication authentication) {
+    public String obtieneAsistencias(Model model, HttpSession session, Authentication authentication){
 	    String string = ""+ session.getAttribute(ConstantsController.USUARIO);
     	String[] parts = string.split(": ");
     	String claveUsuario = parts[1];
     	Periodo periodo;
     	String cadena = catalogoService.obtieneDiaFestivoParaBloquear(authentication);
-	    model.addAttribute("listaDiasFestivos", cadena);
+	    
     	periodo = periodoService.buscaPeriodoPorClaveUsuario(claveUsuario, authentication);
     	String fechas=vacacionesService.recuperaDiasVacacioness(claveUsuario, authentication);
     	if(!fechas.isEmpty()){
@@ -119,26 +119,10 @@ public class VacacionesController {
     			cadena=fechas;
     		}
     	}
+    	validaPeriodo(periodo, claveUsuario, authentication, model);
+    	model.addAttribute("listaDiasFestivos", cadena);
     	periodo.setMensaje(cadena);
 	   
-	    if(periodo.getIdPeriodo()!=null && !periodo.getIdPeriodo().toString().isEmpty()){
-	    	 model.addAttribute(ConstantsController.PERIODO,periodo);
-	    	 VacacionPeriodo vaca; 
-	    	 vaca=vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo(), authentication);
-	    	 try{
-		    	 if(vaca.getDias()>0 && vaca.getDias()!=null){
-		    	 model.addAttribute(ConstantsController.VACACION,vaca);
-		    	 }else{
-		    		 model.addAttribute(ConstantsController.VACACION,null);
-		    	 }
-	    	 }
-	    	 catch(Exception e){
-	    		 logger.warn(WARN,e);
-	    	 }
-	    }else{
-	    	model.addAttribute(ConstantsController.PERIODO,null);
-	    	 model.addAttribute(ConstantsController.VACACION,null);
-	    }
 	    logger.info("idPeriodo {} ",periodo.getIdPeriodo());
 	    
 	    model.addAttribute(ConstantsController.LISTA_RESPONSABLE,unidadAdministrativaService.consultaResponsable(claveUsuario, authentication));
@@ -158,6 +142,26 @@ public class VacacionesController {
 		}
 		this.mensaje = "";
     	return "/vacaciones/solicitudVacaciones";
+    }
+    private void validaPeriodo(Periodo periodo, String claveUsuario, Authentication authentication, Model model){
+    	if(periodo.getIdPeriodo()!=null && !periodo.getIdPeriodo().toString().isEmpty()){
+	    	 model.addAttribute(ConstantsController.PERIODO,periodo);
+	    	 VacacionPeriodo vaca; 
+	    	 vaca=vacacionesService.buscaVacacionPeriodoPorClaveUsuarioYPeriodo(claveUsuario,periodo.getIdPeriodo(), authentication);
+	    	 try{
+		    	 if(vaca.getDias()>0 && vaca.getDias()!=null){
+		    	 model.addAttribute(ConstantsController.VACACION,vaca);
+		    	 }else{
+		    		 model.addAttribute(ConstantsController.VACACION,null);
+		    	 }
+	    	 }
+	    	 catch(Exception e){
+	    		 logger.warn(WARN,e);
+	    	 }
+	    }else{
+	    	model.addAttribute(ConstantsController.PERIODO,null);
+	    	 model.addAttribute(ConstantsController.VACACION,null);
+	    }
     }
     @GetMapping("vacacion/busca")
 	@ResponseBody

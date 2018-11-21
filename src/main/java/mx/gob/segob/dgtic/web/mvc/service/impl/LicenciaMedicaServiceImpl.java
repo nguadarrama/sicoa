@@ -407,6 +407,11 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
 		}
 		
+		String listaFechas=validaFechas(listaLicencias);
+		return listaFechas;
+		
+	}
+	private String validaFechas(List<LicenciaMedica> listaLicencias){
 		String listaFechas="";
 		SimpleDateFormat sdfnuevo = new SimpleDateFormat("dd-MM-yyyy");
 		for(LicenciaMedica licenciaMedica: listaLicencias){

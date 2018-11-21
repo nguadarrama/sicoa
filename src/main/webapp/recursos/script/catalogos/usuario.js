@@ -5,7 +5,6 @@ $(document).ready(function() {
 		    "scrollY": "500px",
 		    "scrollCollapse": true
 		  });
-		  $("#clavePerfil").multiSelect();
 		 $('#clavePerfil').on('change',function() {
 			  //alert($(this).val());
 			});
