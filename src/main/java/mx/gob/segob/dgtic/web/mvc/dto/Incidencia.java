@@ -11,6 +11,7 @@ public class Incidencia {
 	private Boolean descuento;
 	private JustificacionDto justificacion;
 	private String nombreAutorizador;
+	private String dictaminacion;
 	
 	public Incidencia () {
 		/**
@@ -74,6 +75,12 @@ public class Incidencia {
 
 	public void setNombreAutorizador(String nombreAutorizador) {
 		this.nombreAutorizador = nombreAutorizador;
+	}
+	public String getDictaminacion() {
+		return dictaminacion;
+	}
+	public void setDictaminacion(String dictaminacion) {
+		this.dictaminacion = dictaminacion;
 	}
 	
 }

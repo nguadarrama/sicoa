@@ -1240,15 +1240,15 @@ public class AsistenciaController  {
     	if (resultadoProceso != 0) {
     		if (dictaminacion.equals("Autorizar")) {
     			if (resultadoProceso == 1) {
-    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_AUTORIZA_JUSTIFICACION);
+    				model.addAttribute(ConstantsController.MENSAJE, "El descuento ha sido aprobado");
     			} else if (resultadoProceso == 2) {
-    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_RECHAZA_DESCUENTO);
+    				model.addAttribute(ConstantsController.MENSAJE, "La justificación ha sido aprobada");
     			}
     		} else if (dictaminacion.equals("Rechazar")) {
     			if (resultadoProceso == 3) {
-    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_RECHAZA_JUSTIFICACION);
-    			} else if (resultadoProceso == 2) {
-    				model.addAttribute(ConstantsController.MENSAJE, MENSAJE_RECHAZA_DESCUENTO);
+    				model.addAttribute(ConstantsController.MENSAJE, "El descuento ha sido rechazado");
+    			} else if (resultadoProceso == 4) {
+    				model.addAttribute(ConstantsController.MENSAJE, "La justificación ha sido enviada a descuento");
     			}
     		}
     	} else {
