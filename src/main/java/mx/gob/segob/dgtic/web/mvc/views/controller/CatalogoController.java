@@ -184,11 +184,10 @@ public class CatalogoController {
 	@PostMapping("/usuario/modifica")
 	public String modificaUsuario( Horario idHorario, String claveUsuario, String nombre,
 			String apellidoPaterno, String apellidoMaterno, String estatus, String reiniciarPassword, Integer unidadAdministrativa, 
-			String coordinador, String empleado, String director, String administrador, Authentication authentication) {
+			String coordinador, String director, String administrador, Authentication authentication) {
 		logger.info("claveUsuario: {}  ",claveUsuario);
 		logger.info("unidadAdministrativa:. {} ",unidadAdministrativa);
 		logger.info("coordinador. {} ",coordinador);
-		logger.info("empleado : {}",empleado);
 		logger.info("director : {}",director);
 		logger.info("administrador: {} ",administrador);
 		logger.info(" estatus : {}",estatus);
@@ -199,9 +198,8 @@ public class CatalogoController {
 		if(coordinador!=null && !coordinador.trim().isEmpty()){
 			clavePerfil[2]=Integer.parseInt(coordinador);
 		}
-		if(empleado!=null && !empleado.trim().isEmpty()){
-			clavePerfil[3]=Integer.parseInt(empleado);
-		}
+		clavePerfil[3]=3;
+		
 		if(director!=null && !director.trim().isEmpty()){
 			clavePerfil[1]=Integer.parseInt(director);
 		}
