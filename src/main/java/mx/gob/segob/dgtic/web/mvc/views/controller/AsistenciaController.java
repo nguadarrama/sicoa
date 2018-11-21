@@ -169,7 +169,7 @@ public class AsistenciaController  {
     }
     
     @RequestMapping(value="empleado/busca", method=RequestMethod.GET, params="imprime")
-    public ModelAndView imprimeEmpleado(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cve_m_usuario, String fechaInicial, String fechaFinal) {
+    public ModelAndView imprimeEmpleado(HttpServletRequest request, HttpServletResponse response, Authentication authentication, String cveMusuario, String fechaInicial, String fechaFinal) {
         
     	return new ModelAndView();
     	

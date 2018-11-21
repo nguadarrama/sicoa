@@ -34,7 +34,8 @@ public class SesionController {
 	 */
 	@GetMapping(value={"features"}, produces="application/json" )
 	public UsuarioSesion permisos(HttpSession sesion){
-		UsuarioSesion usuarioAutenticado = (UsuarioSesion)sesion.getAttribute(SesionConstants.USUARIO_SESION);
+		UsuarioSesion usuarioAutenticado;
+		usuarioAutenticado = (UsuarioSesion)sesion.getAttribute(SesionConstants.USUARIO_SESION);
 		return usuarioAutenticado;
 	}
 	

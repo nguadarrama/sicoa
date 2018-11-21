@@ -10,20 +10,18 @@ package mx.gob.segob.dgtic.web.mvc.views.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.ui.Model;
 
 import mx.gob.segob.dgtic.web.config.security.service.AutenticacionService;
 import mx.gob.segob.dgtic.web.mvc.dto.Usuario;
 import mx.gob.segob.dgtic.web.mvc.service.DashService;
 import mx.gob.segob.dgtic.web.mvc.service.UsuarioService;
-import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
 import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
 
 
@@ -71,7 +69,7 @@ public class VistasController {
 
 
     @PostMapping(ConstantsController.CAMBIA_CONTRA)
-    public String cambiaContrasenia(HttpSession session,String accesoClave, String aC1, String accesoClave2, Model model, Authentication authentication) throws AuthenticationServiceException, ClienteException{
+    public String cambiaContrasenia(HttpSession session,String accesoClave, String aC1, String accesoClave2, Model model, Authentication authentication) {
     	String string= ConstantsController.VACIO+ session.getAttribute(ConstantsController.USUARIO);
     	String[] parts = string.split(ConstantsController.SPLIT);
     	String claveUsuario = parts[1];
@@ -103,7 +101,7 @@ public class VistasController {
     }
     
     @PostMapping(ConstantsController.CAMBIA_CONTRA1)
-    public String cambiaContrasenia1(HttpSession session, String aC1, String accesoClave2, Model model, Authentication authentication) throws AuthenticationServiceException, ClienteException{
+    public String cambiaContrasenia1(HttpSession session, String aC1, String accesoClave2, Model model, Authentication authentication) {
     	String string= ConstantsController.VACIO+ session.getAttribute(ConstantsController.USUARIO);
     	String[] parts = string.split(ConstantsController.SPLIT);
     	String claveUsuario = parts[1];

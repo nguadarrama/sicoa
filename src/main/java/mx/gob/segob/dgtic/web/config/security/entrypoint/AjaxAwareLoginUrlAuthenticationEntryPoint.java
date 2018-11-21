@@ -73,8 +73,8 @@ public class AjaxAwareLoginUrlAuthenticationEntryPoint extends
         if (ajaxRequest) {
             response.sendError(401, "Sesion de usuario expiro");
         } else {	        	
-        	String logout=(String) request.getParameter(ATTR_LOGOUT_NAME);
-        	String timeout=(String) request.getParameter(ATTR_TIMEOUT_NAME);
+        	String logout = request.getParameter(ATTR_LOGOUT_NAME);
+        	String timeout = request.getParameter(ATTR_TIMEOUT_NAME);
         	if(StringUtils.isNotBlank(logout)){
         		setUseForward(true);
         		request.setAttribute(ATTR_LOGOUT_NAME, ATTR_LOGOUT_NAME);

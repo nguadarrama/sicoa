@@ -12,11 +12,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
-import mx.gob.segob.dgtic.web.config.filter.EncodingFilter;
-import mx.gob.segob.dgtic.web.config.security.listener.SeguridadSessionListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
@@ -26,6 +21,8 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import mx.gob.segob.dgtic.web.config.SpringWebConfig;
+import mx.gob.segob.dgtic.web.config.filter.EncodingFilter;
+import mx.gob.segob.dgtic.web.config.security.listener.SeguridadSessionListener;
 
 /**
  * Clase encargada de inicializar el aplicativo WEB dentro del servidor de aplicaciones.

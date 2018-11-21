@@ -92,8 +92,7 @@ public class HttpResponseUtil {
 	 * @return El JSON del contenido de la respuesta
 	 * @throws ParseException La excepci&oacute;n al convertir el cuerpo en formato JSON 
 	 */
-	public static JsonElement getJsonContent(HttpResponse response) 
-		throws ParseException {
+	public static JsonElement getJsonContent(HttpResponse response) {
 		JsonElement json = null;
 		if(isContentType(response, ContentType.APPLICATION_JSON)){
 			String encoding = getEncoding(response);
