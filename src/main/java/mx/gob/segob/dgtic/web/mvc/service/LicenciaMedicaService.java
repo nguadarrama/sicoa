@@ -12,7 +12,7 @@ public interface LicenciaMedicaService {
 
 	public List<LicenciaMedica> obtenerListaLicenciaMedicaPorFiltros(BusquedaDto busquedaDto, Authentication authentication);
 	public List<LicenciaMedica> obtenerListaLicenciaMedicaEmpleados(BusquedaDto busquedaDto, Authentication authentication);
-	public LicenciaMedica AgregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario, Authentication authentication);
+	public LicenciaMedica agregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario, Authentication authentication);
 	public LicenciaMedica buscaLicenciaMedica(Integer idLicencia, Authentication authentication);
 	public List<LicenciaMedica> obtenerLicenciasPorUnidad(BusquedaDto busquedaDto, Authentication authentication);
 	public LicenciaMedica modificaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario, Authentication authentication);

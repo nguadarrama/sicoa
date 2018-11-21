@@ -154,7 +154,7 @@ $(document).ready(function() {
         }); 
  
         $('a.test').click(function() { 
-            alert('link clicked'); 
+           
             return false; 
         }); 
     }); 

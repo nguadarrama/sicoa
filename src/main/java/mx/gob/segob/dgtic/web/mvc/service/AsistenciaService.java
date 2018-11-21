@@ -2,12 +2,9 @@ package mx.gob.segob.dgtic.web.mvc.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.security.core.Authentication;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
-import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 import mx.gob.segob.dgtic.web.mvc.util.AsistenciaBusquedaUtil;
 import mx.gob.segob.dgtic.web.mvc.util.FormatoIncidencia;

@@ -517,7 +517,8 @@ public class VacacionesServiceImpl implements VacacionesService{
 			} else {
 				throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
 			}
-			String listaFechas=recorreLista(listaVacaciones);
+			String listaFechas;
+			listaFechas = recorreLista(listaVacaciones);
 			
 
 			return listaFechas;

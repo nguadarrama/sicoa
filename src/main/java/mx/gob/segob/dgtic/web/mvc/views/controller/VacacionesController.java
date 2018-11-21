@@ -295,7 +295,7 @@ public class VacacionesController {
     	
     }
     @RequestMapping(value={"solicitudVacacionesEmpleados"}, method = RequestMethod.GET)
-    public String SolitudVacacionesEmpleados(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, Model model,HttpSession session, Authentication authentication) {
+    public String solitudVacacionesEmpleados(String claveUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, Model model,HttpSession session, Authentication authentication) {
     	
     	String string=""+ session.getAttribute(ConstantsController.USUARIO);
     	String[] parts = string.split(": ");

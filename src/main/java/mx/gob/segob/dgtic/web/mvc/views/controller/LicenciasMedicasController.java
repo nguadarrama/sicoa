@@ -166,7 +166,7 @@ public class LicenciasMedicasController {
     	String claveUsuarioLider = parts[1];
     	List<PerfilUsuario> listaPerfilUsuario;
     	listaPerfilUsuario=perfilUsuarioService.recuperaPerfilesUsuario(claveUsuarioLider, authentication);
-    	Boolean usuario= false;
+    	
     	if(idUnidad==null || idUnidad==""){
     	validaUnidad(listaPerfilUsuario, claveUsuarioLider, idUnidad, authentication);
     	}
@@ -292,7 +292,7 @@ public class LicenciasMedicasController {
 	lm.setFechaFin(fechaFin);
 	lm.setDias(dias);
 	lm.setPadecimiento(padecimiento);
-	licencia=licenciaMedicaService.AgregaLicenciaMedica(lm, claveUsuario1, authentication);
+	licencia=licenciaMedicaService.agregaLicenciaMedica(lm, claveUsuario1, authentication);
 	logger.info("mensaje recuperado -.{}",licencia.getMensaje());
 	this.mensaje=licencia.getMensaje();
 	return "redirect:/licenciasMedicas/solicitudLicenciasEmpleados";

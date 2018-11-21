@@ -145,7 +145,7 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 	}
 
 	@Override
-	public LicenciaMedica AgregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario, Authentication authentication) {
+	public LicenciaMedica agregaLicenciaMedica(LicenciaMedicaAux licenciaMedica, String claveUsuario, Authentication authentication) {
 		@SuppressWarnings("unchecked")
 		HashMap<String, Object> detalles = (HashMap<String, Object>) authentication.getDetails();
 
@@ -407,7 +407,8 @@ public class LicenciaMedicaServiceImpl implements LicenciaMedicaService{
 			throw new AuthenticationServiceException("Error al obtener vacaciones por filtros: "+response.getStatusLine().getReasonPhrase());
 		}
 		
-		String listaFechas=validaFechas(listaLicencias);
+		String listaFechas;
+		listaFechas = validaFechas(listaLicencias);
 		return listaFechas;
 		
 	}

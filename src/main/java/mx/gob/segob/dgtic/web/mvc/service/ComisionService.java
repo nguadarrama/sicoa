@@ -6,11 +6,7 @@ import org.springframework.security.core.Authentication;
 
 import mx.gob.segob.dgtic.web.mvc.dto.Comision;
 import mx.gob.segob.dgtic.web.mvc.dto.ComisionAux;
-import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
 import mx.gob.segob.dgtic.web.mvc.dto.GenerarReporteArchivoComision;
-import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedica;
-import mx.gob.segob.dgtic.web.mvc.dto.LicenciaMedicaAux;
-import mx.gob.segob.dgtic.web.mvc.dto.Vacaciones;
 import mx.gob.segob.dgtic.web.mvc.dto.reporte;
 
 public interface ComisionService {

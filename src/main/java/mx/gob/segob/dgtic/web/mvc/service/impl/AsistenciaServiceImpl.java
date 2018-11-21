@@ -29,12 +29,9 @@ import com.google.gson.reflect.TypeToken;
 import mx.gob.segob.dgtic.web.config.security.constants.AutorizacionConstants;
 import mx.gob.segob.dgtic.web.config.security.handler.LogoutCustomHandler;
 import mx.gob.segob.dgtic.web.mvc.constants.AsistenciaEndPointConstants;
-import mx.gob.segob.dgtic.web.mvc.constants.CatalogoEndPointConstants;
 import mx.gob.segob.dgtic.web.mvc.dto.Archivo;
 import mx.gob.segob.dgtic.web.mvc.dto.Asistencia;
 import mx.gob.segob.dgtic.web.mvc.dto.EstatusDto;
-import mx.gob.segob.dgtic.web.mvc.dto.GeneraReporteArchivo;
-import mx.gob.segob.dgtic.web.mvc.dto.Horario;
 import mx.gob.segob.dgtic.web.mvc.dto.Incidencia;
 import mx.gob.segob.dgtic.web.mvc.dto.JustificacionDto;
 import mx.gob.segob.dgtic.web.mvc.dto.TipoDia;
@@ -57,6 +54,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	private static final String AUTHORIZATION = "Authorization";
 	private static final String ASISTENCIA_BUSQUEDA = "asistenciaBusqueda";
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Asistencia> buscaAsistenciaEmpleadoMes(String claveEmpleado, Authentication authentication) {
 		List<Asistencia> listaAsistencia = new ArrayList<>();
@@ -92,6 +90,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return listaAsistencia;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Asistencia> buscaAsistenciaEmpleadoRango(String claveEmpleado, String inicio, String fin, Authentication authentication) {
 		List<Asistencia> listaAsistencia = new ArrayList<>();
@@ -128,6 +127,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return listaAsistencia;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Asistencia> buscaAsistenciaEmpleadoRangoCoordinador(AsistenciaBusquedaUtil asistenciaBusquedaUtil, Authentication authentication) {
 
@@ -174,6 +174,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Asistencia> buscaAsistenciaEmpleadoRangoDireccion(AsistenciaBusquedaUtil asistenciaBusquedaUtil, Authentication authentication) {
 
@@ -220,6 +221,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Asistencia buscaAsistenciaPorId(Integer id, Authentication authentication) {
 		Asistencia asistencia = new Asistencia();
@@ -253,6 +255,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return asistencia;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Integer creaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador, Authentication authentication) {
 		
@@ -326,6 +329,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Integer creaDescuento(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, Integer idArchivo, String nombreAutorizador, Authentication authentication) {
 		
@@ -398,6 +402,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return respuesta;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Integer aplicaDescuento(Integer idAsistencia, Authentication authentication) {
 		
@@ -453,6 +458,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return respuesta;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Integer dictaminaIncidencia(Integer idAsistencia, Integer idTipoDia, Integer idJustificacion, String dictaminacion, Authentication authentication) {
 		//acepta justificación
@@ -538,6 +544,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public reporte formatoJustificacion(FormatoIncidencia generaReporteArchivo, Authentication authentication) {
 		HttpResponse response;
@@ -572,6 +579,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return respuesta;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public reporte formatoDescuento(FormatoIncidencia generaReporteArchivo, Authentication authentication) {
 		HttpResponse response;
@@ -614,6 +622,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return (jsonArray.size() != 0)?jsonArray.get(0).getAsString() : "Error desconocido";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Asistencia> buscaAsistenciaDireccionReporte(AsistenciaBusquedaUtil asistenciaBusquedaUtil, Authentication authentication) {
 
@@ -672,6 +681,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return listaAsistencia;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Asistencia> buscaAsistenciaCoordinadorReporte(AsistenciaBusquedaUtil asistenciaBusquedaUtil, Authentication authentication) {
 
@@ -731,6 +741,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return listaAsistencia;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private boolean esDescuento(Integer idIncidencia, Authentication authentication) {
 		HttpResponse response = null;
 		boolean esDescuento = false;

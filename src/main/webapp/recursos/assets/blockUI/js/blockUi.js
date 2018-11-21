@@ -25,7 +25,7 @@
 		// confusing userAgent strings on Vista)
 		var msie = /MSIE/.test(navigator.userAgent);
 		var ie6  = /MSIE 6.0/.test(navigator.userAgent) && ! /MSIE 8.0/.test(navigator.userAgent);
-		var mode = document.documentMode || 0;
+//		var mode = document.documentMode || 0;
 		var setExpr = $.isFunction( document.createElement('div').style.setExpression );
 
 		// global $ methods for blocking/unblocking the entire page
@@ -56,7 +56,7 @@
 			};
 
 			callBlock();
-			var nonmousedOpacity = $m.css('opacity');
+//			var nonmousedOpacity = $m.css('opacity');
 			$m.mouseover(function() {
 				callBlock({
 					fadeIn: 0,
@@ -129,7 +129,7 @@
 				top:		'40%',
 				left:		'35%',
 				textAlign:	'center',
-				color:		'#000',
+//				color:		'#000',
 				border:		'none',
 				backgroundColor:'#808080',
 				'-webkit-border-radius': '10px', 

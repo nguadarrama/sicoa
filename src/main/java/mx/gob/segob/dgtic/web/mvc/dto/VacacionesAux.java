@@ -5,9 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.log4j.Logger;
+
+import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
+
 public class VacacionesAux {
 
-		
+	private static final Logger logger = Logger.getLogger(VacacionesAux.class);	
 	private Integer idDetalle;
 	private Usuario idUsuario;
 	private  VacacionPeriodo idVacacion;
@@ -92,7 +96,7 @@ public class VacacionesAux {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}else if(fechaInicio.length()>10){
 			Date date = new Date();
@@ -102,7 +106,7 @@ public class VacacionesAux {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}
 		return fechaInicio;
@@ -120,7 +124,7 @@ public class VacacionesAux {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}else if(fechaFin.length()>10){
 			Date date = new Date();
@@ -132,7 +136,7 @@ public class VacacionesAux {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}
 		return fechaFin;
@@ -156,7 +160,7 @@ public class VacacionesAux {
 				date = sdf.parse(fechaRegistro);
 				fechaRegistro = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}else if(fechaRegistro.length()>10){
 			Date date = new Date();
@@ -168,7 +172,7 @@ public class VacacionesAux {
 				date = sdf.parse(fechaRegistro);
 				fechaRegistro = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}
 		return fechaRegistro;

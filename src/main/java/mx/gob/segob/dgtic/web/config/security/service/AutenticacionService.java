@@ -7,7 +7,6 @@
 */
 package mx.gob.segob.dgtic.web.config.security.service;
 
-import org.apache.http.HttpResponse;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 

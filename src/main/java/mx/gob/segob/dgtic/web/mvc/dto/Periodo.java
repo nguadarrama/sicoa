@@ -4,8 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Periodo {
+import org.apache.log4j.Logger;
 
+import mx.gob.segob.dgtic.web.mvc.views.controller.constants.ConstantsController;
+
+public class Periodo {
+	
+	private static final Logger logger = Logger.getLogger(Periodo.class);
 	private Integer idPeriodo;
 	private String fechaInicio;
 	private String fechaFin;
@@ -44,7 +49,7 @@ public class Periodo {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}else if(fechaInicio.length()>10){
 			Date date = new Date();
@@ -54,7 +59,7 @@ public class Periodo {
 				date = sdf.parse(fechaInicio);
 				fechaInicio = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}
 		return fechaInicio;
@@ -73,7 +78,7 @@ public class Periodo {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}else if(fechaFin.length()>10){
 			Date date = new Date();
@@ -83,7 +88,7 @@ public class Periodo {
 				date = sdf.parse(fechaFin);
 				fechaFin = sdf1.format(date);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.warn(ConstantsController.WARN, e);
 			}
 		}
 		return fechaFin;
