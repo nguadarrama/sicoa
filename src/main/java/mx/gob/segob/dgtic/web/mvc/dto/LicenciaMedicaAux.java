@@ -16,20 +16,11 @@ public class LicenciaMedicaAux {
 	private String fechaFinAux;
 	
 	public LicenciaMedicaAux(){
-		
+		/**
+		 * 
+		 */
 	}
-	public LicenciaMedicaAux(Integer idLicencia, Integer idUsuario, Integer idResponsable, Integer idArchivo, Integer idEstatus, String fechaInicioAux, 
-			String fechaFinAux, Integer dias, String padecimiento){
-		this.idLicencia=idLicencia;
-		this.idUsuario=idUsuario;
-		this.idResponsable=idResponsable;
-		this.idArchivo=idArchivo;
-		this.idEstatus=idEstatus;
-		this.fechaInicioAux=fechaInicioAux;
-		this.fechaFinAux=fechaFinAux;
-		this.dias=dias;
-		this.padecimiento=padecimiento;
-	}
+
 	public String getFechaInicioAux() {
 		return fechaInicioAux;
 	}

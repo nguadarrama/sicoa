@@ -280,7 +280,12 @@ public class LicenciasMedicasController {
     public String registraLicencia(String fechaInicio, String fechaFin, Integer dias, String claveUsuario1, String padecimiento, Authentication authentication ) {
 
 	LicenciaMedica licencia;
-	licencia=licenciaMedicaService.AgregaLicenciaMedica(new LicenciaMedicaAux(null,null,null, null, null, fechaInicio, fechaFin, dias, padecimiento), claveUsuario1, authentication);
+	LicenciaMedicaAux lm = new LicenciaMedicaAux();
+	lm.setFechaInicio(fechaInicio);
+	lm.setFechaFin(fechaFin);
+	lm.setDias(dias);
+	lm.setPadecimiento(padecimiento);
+	licencia=licenciaMedicaService.AgregaLicenciaMedica(lm, claveUsuario1, authentication);
 	logger.info("mensaje recuperado -.{}",licencia.getMensaje());
 	this.mensaje=licencia.getMensaje();
 	return "redirect:/licenciasMedicas/solicitudLicenciasEmpleados";
@@ -291,16 +296,23 @@ public class LicenciasMedicasController {
     	
     	Archivo idArchivoAux;
     	LicenciaMedica licencia= new LicenciaMedica();
+    	LicenciaMedicaAux lm = new LicenciaMedicaAux();
     	
     	if(archivo!=null && !archivo.isEmpty()){
 	    	if(idArchivo!=null && !idArchivo.toString().isEmpty()){
+	    		lm.setIdLicencia(idLicencia);
+	    		lm.setIdArchivo(idArchivo);
+	    		lm.setIdEstatus(1);
 	    		archivoService.actualizaArchivo(archivo, claveUsuario, ConstantsController.LICENCIAS_MEDICAS,idArchivo,"licenciaMedica-", authentication);
-	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivo,1,null,null,null,null), claveUsuario, authentication);
+	    		licencia=licenciaMedicaService.modificaLicenciaMedica(lm, claveUsuario, authentication);
 	    	}else{
-
-	    		idArchivoAux=archivoService.guardaArchivo(archivo, claveUsuario, ConstantsController.LICENCIAS_MEDICAS,"licenciaMedica-", authentication);
+	    		lm.setIdLicencia(idLicencia);
+	    		
+	    		lm.setIdEstatus(1);
+	    		idArchivoAux = archivoService.guardaArchivo(archivo, claveUsuario, ConstantsController.LICENCIAS_MEDICAS,"licenciaMedica-", authentication);
+	    		lm.setIdArchivo(idArchivoAux.getIdArchivo());
 	    		logger.info("IDArchivo recuperado.- {} ",idArchivoAux.getIdArchivo());
-	    		licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia,null,null,idArchivoAux.getIdArchivo(),1,null,null,null,null), claveUsuario, authentication);
+	    		licencia=licenciaMedicaService.modificaLicenciaMedica(lm, claveUsuario, authentication);
 
 	    	}
     	}
@@ -335,7 +347,11 @@ public class LicenciasMedicasController {
     public String rechazaVacaciones(Integer idLicencia,String claveUsuario, Integer idArchivo, Authentication authentication) {
     	
     	LicenciaMedica licencia;
-    	licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia, null,null, idArchivo, 3,null,null,null,null), claveUsuario, authentication);
+    	LicenciaMedicaAux lm  = new LicenciaMedicaAux();
+    	lm.setIdLicencia(idLicencia);
+    	lm.setIdArchivo(idArchivo);
+    	lm.setIdEstatus(3);
+    	licencia=licenciaMedicaService.modificaLicenciaMedica(lm, claveUsuario, authentication);
     	this.mensaje=licencia.getMensaje();
     	logger.info("mensaje recuperado: {} ",licencia.getMensaje());
     	return REDIRECT_LICENCIAS_MEDICAS_EMPLEADOS;
@@ -345,7 +361,12 @@ public class LicenciasMedicasController {
     public String aceptaVacaciones(Integer idLicencia,String claveUsuario, Integer idArchivo, Authentication authentication) {
     	
     	LicenciaMedica licencia;
-    	licencia=licenciaMedicaService.modificaLicenciaMedica(new LicenciaMedicaAux(idLicencia, null,null, idArchivo, 2,null,null,null,null), claveUsuario, authentication);
+    	LicenciaMedicaAux lm = new LicenciaMedicaAux();
+    	lm.setIdLicencia(idLicencia);
+    	lm.setIdArchivo(idArchivo);
+    	lm.setIdEstatus(2);
+    	
+    	licencia=licenciaMedicaService.modificaLicenciaMedica(lm, claveUsuario, authentication);
     	this.mensaje=licencia.getMensaje();
     	logger.info("mensaje recuperado: {} ",licencia.getMensaje());
     	return REDIRECT_LICENCIAS_MEDICAS_EMPLEADOS;
