@@ -483,6 +483,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		incidencia.setJustificacion(justificacion);
 		incidencia.setTipoDia((tipoDia));
 		incidencia.setIdAsistencia(asistencia);
+		incidencia.setDictaminacion(dictaminacion);
 		
 		if (dictaminacion.equals("Autorizar")) {
 			if (esDescuento(asistencia.getIdAsistencia(), authentication)) {

@@ -81,8 +81,6 @@ public class AsistenciaController  {
 	private static final Logger logger = LoggerFactory.getLogger(CatalogoController.class);
 	//JUSTIFICACION
 	private static final String MENSAJE_REGISTRO_JUSTIFICACION = "La justificación ha quedado registrada";
-	private static final String MENSAJE_AUTORIZA_JUSTIFICACION = "La justificación ha sido aceptada";
-	private static final String MENSAJE_RECHAZA_JUSTIFICACION = "La justificación ha sido marcada para enviar a descuento";
 	
 	//DESCUENTO
 	private static final String MENSAJE_REGISTRO_DESCUENTO     = "La incidencia ha sido marcada para enviar a descuento";
@@ -622,7 +620,6 @@ public class AsistenciaController  {
     	return ASISTENCIA_COORDINADOR;
     }
     
-    @SuppressWarnings("unused")
 	@RequestMapping(value={"coordinador/buscaAsistenciasPorId"}, method = RequestMethod.POST)
     public String buscaAsistenciasPorId(Model model, Integer[] checkboxes, String[] arregloIdAsistencias, String cveMusuarioHiddenListaMultiple, String fechaInicialHiddenListaMultiple, 
     		String fechaFinalHiddenListaMultiple, Authentication authentication) {
