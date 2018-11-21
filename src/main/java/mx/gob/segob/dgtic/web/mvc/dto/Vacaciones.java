@@ -33,17 +33,7 @@ public class Vacaciones {
 	public Vacaciones(){
 		
 	}
-	public Vacaciones(Usuario idUsuario, VacacionPeriodo idVacacion,  Archivo idArchivo, Integer idResponsable, Estatus idEstatus, Date fechaInicio, Date fechaFin, Integer dias){
-		super();
-		this.idUsuario=idUsuario;
-		this.idVacacion=idVacacion;
-		this.idArchivo=idArchivo;
-		this.idResponsable=idResponsable;
-		this.idEstatus=idEstatus;
-		this.fechaInicio=fechaInicio;
-		this.fechaFin=fechaFin;
-		this.dias=dias;
-	}
+
 	public Integer getIdDetalle() {
 		return idDetalle;
 	}

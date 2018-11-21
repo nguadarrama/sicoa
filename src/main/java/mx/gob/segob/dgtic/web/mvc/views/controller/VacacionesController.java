@@ -544,7 +544,12 @@ public class VacacionesController {
         fechaInicial = formatter.parse(fechaInicio,pos);
 		fechaFinal=formatter.parse(fechaFin,pos);
 		logger.info("fechaInicio {} ",fechaInicial);
-		Vacaciones vacaciones = vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,null,null,null,estatus,fechaInicial,fechaFinal,null), idSolicitud, authentication);
+		Vacaciones vac = new Vacaciones();
+		vac.setIdUsuario(usuario);
+		vac.setIdEstatus(estatus);
+		vac.setFechaInicio(fechaInicial);
+		vac.setFechaFin(fechaFinal);
+		Vacaciones vacaciones = vacacionesService.aceptaORechazaVacaciones(vac, idSolicitud, authentication);
 		this.mensaje=vacaciones.getMensaje();
     	
     	return REDIRECT_VAC_EMPLEADOS;
@@ -562,7 +567,12 @@ public class VacacionesController {
     	usuario.setIdUsuario(Integer.parseInt(idUsuario));
     	Estatus estatus= new Estatus();
         estatus.setIdEstatus(3);
-    	Vacaciones vacaciones=vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), id, authentication);
+        Vacaciones vac = new Vacaciones();
+        vac.setIdUsuario(usuario);
+        vac.setIdVacacion(vacacion);
+        vac.setIdEstatus(estatus);
+        vac.setDias(dias);
+    	Vacaciones vacaciones=vacacionesService.aceptaORechazaVacaciones(vac, id, authentication);
     	this.mensaje=vacaciones.getMensaje();
     	return REDIRECT_VAC_PROPIAS;
     
@@ -579,7 +589,12 @@ public class VacacionesController {
     	usuario.setIdUsuario(Integer.parseInt(idUsuario));
     	Estatus estatus = new Estatus();
         estatus.setIdEstatus(3);
-    	Vacaciones vacaciones = vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), id, authentication);
+        Vacaciones vac = new Vacaciones();
+        vac.setIdUsuario(usuario);
+        vac.setIdVacacion(vacacion);
+        vac.setIdEstatus(estatus);
+        vac.setDias(dias);
+    	Vacaciones vacaciones = vacacionesService.aceptaORechazaVacaciones(vac, id, authentication);
     	this.mensaje = vacaciones.getMensaje();
     	return REDIRECT_VAC_EMPLEADOS;
     
@@ -648,7 +663,12 @@ public class VacacionesController {
     	Estatus estatus = new Estatus();
         estatus.setIdEstatus(3);
         Vacaciones vacaciones;
-        vacaciones = vacacionesService.aceptaORechazaVacaciones(new Vacaciones(usuario,vacacion,null,null,estatus,null,null,dias), idSolicitud, authentication);
+        Vacaciones vac = new Vacaciones();
+        vac.setIdUsuario(usuario);
+        vac.setIdVacacion(vacacion);
+        vac.setIdEstatus(estatus);
+        vac.setDias(dias);
+        vacaciones = vacacionesService.aceptaORechazaVacaciones(vac, idSolicitud, authentication);
     	this.mensaje = vacaciones.getMensaje();
     	return REDIRECT_VAC_EMPLEADOS;
     }
