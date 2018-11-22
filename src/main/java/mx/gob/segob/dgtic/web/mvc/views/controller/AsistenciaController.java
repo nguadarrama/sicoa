@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -474,7 +475,7 @@ public class AsistenciaController  {
     		codigoincidencia = "E";
     	} else if (idTipoDiaModal == 7) {
     		codigoincidencia = "Comisión";
-    	}else if (idTipoDiaModal == 8) {
+    	} else if (idTipoDiaModal == 8) {
     		codigoincidencia = "Inasistencia";
     	}
     	
@@ -778,6 +779,7 @@ public class AsistenciaController  {
     	Integer idTipoDia = 0;
     	String nombre = "";
     	String unidadAdministrativa = "";
+    	StringBuilder fechasIncidencia = new StringBuilder();
     	
     	//obtiene la asistencia del primer checkbox seleccionado
     	if (listaIdAsistencias != null) {
@@ -785,6 +787,19 @@ public class AsistenciaController  {
     		idTipoDia = asistencia.getIdTipoDia().getIdTipoDia();
     		nombre = asistencia.getUsuarioDto().getNombre() + " " + asistencia.getUsuarioDto().getApellidoPaterno() + " " + asistencia.getUsuarioDto().getApellidoPaterno();
     		unidadAdministrativa = asistencia.getUsuarioDto().getNombreUnidad();
+    		
+    		for (int i = 0; i < listaIdAsistencias.length; i++) {
+    			Asistencia asistenciaAJustificar = asistenciaService.buscaAsistenciaPorId(listaIdAsistencias[i], authentication);
+    			
+    		    SimpleDateFormat sm = new SimpleDateFormat(ConstantsController.DD__MM__YYYY);
+    		    String fechaIncidencia = sm.format(asistenciaAJustificar.getEntrada());
+    		    
+    		    if ((i + 1) < listaIdAsistencias.length) {
+    		    	fechasIncidencia.append(fechaIncidencia + ", ");
+    		    } else {
+    		    	fechasIncidencia.append(fechaIncidencia);
+    		    }
+    		}
     	}
     	
     	//se traduce la incidencia
@@ -797,13 +812,11 @@ public class AsistenciaController  {
     	} else if (idTipoDia == 4) {
     		codigoincidencia = "P";
     	} else if (idTipoDia == 6) {
-    		codigoincidencia = "Inasistencia";
+    		codigoincidencia = "E";
     	} else if (idTipoDia == 7) {
     		codigoincidencia = "Comisión";
     	} else if (idTipoDia == 8) {
-    		codigoincidencia = "Licencia Médica";
-    	} else {
-    		codigoincidencia = "Código no registrado";
+    		codigoincidencia = "Inasistencia";
     	}
     	
     	//fecha actual para el reporte
@@ -812,7 +825,7 @@ public class AsistenciaController  {
     	String fechaActual = f.format(fechaHoy);
     	
     	try {
-			reporte formatoJustificacion = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidadAdministrativa, fechaActual, codigoincidencia, "", ""), authentication);
+			reporte formatoJustificacion = asistenciaService.formatoJustificacion(new FormatoIncidencia(nombre, unidadAdministrativa, fechaActual, codigoincidencia, "", fechasIncidencia.toString()), authentication);
 			InputStream targetStream = new ByteArrayInputStream(formatoJustificacion.getNombre());
 			String mimeType = URLConnection.guessContentTypeFromStream(targetStream);
 			

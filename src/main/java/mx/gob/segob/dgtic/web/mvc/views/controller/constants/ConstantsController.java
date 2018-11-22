@@ -41,6 +41,7 @@ public class ConstantsController {
 	public static final String MENSAJE_EXCEPTION = "MENSAJE_EXCEPCION";
 	public static final String MENSAJE_ALERTA = "MENSAJE_ALERTA";
 	public static final String DD_MM_YYYY = "dd/MM/yyyy";
+	public static final String DD__MM__YYYY = "dd-MM-yyyy";
 	public static final String USUARIO = "usuario";
 	public static final String LICENCIAS_MEDICAS = "licenciasMedicas";
 	public static final String LICENCIA = "licencia";
