@@ -791,7 +791,7 @@ public class AsistenciaController  {
     		for (int i = 0; i < listaIdAsistencias.length; i++) {
     			Asistencia asistenciaAJustificar = asistenciaService.buscaAsistenciaPorId(listaIdAsistencias[i], authentication);
     			
-    		    SimpleDateFormat sm = new SimpleDateFormat(ConstantsController.DD__MM__YYYY);
+    		    SimpleDateFormat sm = new SimpleDateFormat(ConstantsController.DD_MM_YYYY2);
     		    String fechaIncidencia = sm.format(asistenciaAJustificar.getEntrada());
     		    
     		    if ((i + 1) < listaIdAsistencias.length) {
