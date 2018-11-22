@@ -136,6 +136,7 @@ $(document).ready(function() {
 						$('.descargaArchivo').css("display","inline");
 						$('.rechazaComision').css("display","none");
 						$('.actualizaArchivo').css("display","none");
+						$('.formCancelar').css("display","none");
 					}
 					$('.descargaArchivo').css("display","inline");
 					$(".aceptaComision #idComision").val(hmap.comision.idComision);
