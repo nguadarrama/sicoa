@@ -189,7 +189,7 @@ public class AsistenciaController  {
     	}
     	
     	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
     	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
@@ -228,7 +228,7 @@ public class AsistenciaController  {
 	    	}
 	    	
 	    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-	    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
 	    	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
 	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
 	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
@@ -359,7 +359,7 @@ public class AsistenciaController  {
     	}
     	
     	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
     	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
@@ -432,7 +432,7 @@ public class AsistenciaController  {
     	}
 		
 		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
 		model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
@@ -529,7 +529,7 @@ public class AsistenciaController  {
     	}
     	
     	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
     	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
@@ -603,7 +603,7 @@ public class AsistenciaController  {
     	}
     	
     	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
     	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
@@ -653,7 +653,7 @@ public class AsistenciaController  {
 	    	}
 	    	
 	    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-	    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
 	    	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
 	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
 	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, listaAsistenciaJustificar);
@@ -682,7 +682,7 @@ public class AsistenciaController  {
     		List<Asistencia> asistencia = asistenciaService.buscaAsistenciaEmpleadoRangoCoordinador(asistenciaBusquedaUtil, authentication);
     		
     		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-    		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
     		model.addAttribute(ConstantsController.LISTA_ESTADO, estatusService.obtieneListaCompletaEstatus(authentication));
     		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
 	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<Asistencia>());
@@ -753,7 +753,7 @@ public class AsistenciaController  {
     	}
     	
     	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
     	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA_JUSTIFICAR, new ArrayList<>());
@@ -884,7 +884,7 @@ public class AsistenciaController  {
     	}
     	
     	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
     	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
     	model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
@@ -923,7 +923,7 @@ public class AsistenciaController  {
 	    	}
 	    	
 	    	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-	    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+	    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
 	    	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
 	    	model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 	    	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
@@ -1064,7 +1064,7 @@ public class AsistenciaController  {
     	}
     	
     	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
     	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, listaAsistencia);
     	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
@@ -1116,7 +1116,7 @@ public class AsistenciaController  {
     	}
     	
     	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
     	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
     	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);
@@ -1167,7 +1167,7 @@ public class AsistenciaController  {
     	}
     	
     	model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+    	model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
     	model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
     	model.addAttribute(ConstantsController.LISTA_ASISTENCIA, asistencia);
     	model.addAttribute(ConstantsController.FECHA_INICIAL, fechaInicial);

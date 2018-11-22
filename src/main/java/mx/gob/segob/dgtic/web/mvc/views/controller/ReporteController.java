@@ -63,7 +63,7 @@ public class ReporteController {
     	}
 
 		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
 		model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
 		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
@@ -85,7 +85,7 @@ public class ReporteController {
     	}
 
 		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
 		model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
 		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, new ArrayList<Asistencia>());
@@ -110,7 +110,7 @@ public class ReporteController {
     	}
 
 		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
 		model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
 		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, listaAsistencias);
@@ -234,7 +234,7 @@ public class ReporteController {
     	}
 		
 		model.addAttribute(ConstantsController.LISTA_TIPO, catalogoService.obtieneTipoDias(authentication));
-		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.obtieneNiveles(authentication));
+		model.addAttribute(ConstantsController.LISTA_NIVEL, catalogoService.nivelesEmpleado(authentication));
 		model.addAttribute(ConstantsController.LISTA_ESTADO, listaEstado);
 		model.addAttribute(ConstantsController.LISTA_UNIDAD_ADMINISTRATIVA, unidadAdministrativaService.obtenerUnidadesAdministrativas(authentication));
 		model.addAttribute(ConstantsController.LISTA_ASISTENCIA, listaAsistencias);
