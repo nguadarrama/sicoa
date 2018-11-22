@@ -147,6 +147,7 @@ $(document).ready(function() {
 //						$('.aceptaVacacion #aceptaVacacion').css("display","none");
 //						$('.actualizaArchivo').css("display","none");
 //					}
+					//<alert(hmap.vacacion.idEstatus.idEstatus)
 					if(hmap.vacacion.idEstatus.idEstatus=='1'){
 						$('#descarga').css("display","inline");
 						$('.actualizaArchivo1 #idDetalle').val(hmap.vacacion.idDetalle);
@@ -181,19 +182,21 @@ $(document).ready(function() {
 					}
 					if(hmap.vacacion.idEstatus.idEstatus=='3'){
 						$('.actualizaArchivo1').css("display","inline");
+						$('.cancelaVacacion').css("display","none");
+						$('#descarga').css("display","none");
+						$('.aceptaVacacion').css("display","none");
+						$('.rechazaVacacion').css("display","none");
 						if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
 							$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
 							$('.descargaArchivo').css("display","inline");
-							$('.cancelaVacacion').css("display","none");
-							$('#descarga').css("display","none");
-							$('.rechazaVacacion').css("display","none");
-							$('.aceptaVacacion').css("display","none");
 						}
 					}
 					if(hmap.vacacion.idEstatus.idEstatus=='6'){
 						$('.actualizaArchivo1').css("display","none");
-						$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
-						$('.descargaArchivo').css("display","inline");
+						if(hmap.vacacion.idArchivo.idArchivo!=null && hmap.vacacion.idArchivo.idArchivo!=""){
+							$('.descargaArchivo #idArchivo').val(hmap.vacacion.idArchivo.idArchivo);
+							$('.descargaArchivo').css("display","inline");
+						}
 						$('.actualizaArchivo').css("display","none");
 						$('#descarga').css("display","none");
 						$('.cancelaVacacion').css("display","none");

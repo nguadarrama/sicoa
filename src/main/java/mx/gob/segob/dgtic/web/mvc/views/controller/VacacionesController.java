@@ -712,8 +712,7 @@ public class VacacionesController {
 	    Vacaciones vacaciones;
 	    vacaciones=vacacionesService.cancelaVacaciones(idVacacionCancelar, authentication);
 	    this.mensaje=vacaciones.getMensaje();
-	    return REDIRECT_VAC_EMPLEADOS;
-	    
+	    return REDIRECT_VAC_EMPLEADOS;  
     }
     
 	public String getMensaje() {
