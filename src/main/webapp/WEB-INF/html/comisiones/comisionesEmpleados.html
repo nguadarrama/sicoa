@@ -342,7 +342,7 @@
 											name="claveUsuario" type="text" class="form-control"
 											required="required" th:readonly="true" style="display: none;" />
 										<a><input type="submit" id="botonEditar"
-											class="btn btn-primary" th:value="Editar" /></a>
+											class="btn btn-primary" th:value="Editar" sec:authorize="hasAuthority('2')" /></a>
 									</form>
 									<form class="formCancelar"
 										th:action="@{/comisiones/cancelarComision}" method="post" sec:authorize="hasAuthority('2')">
@@ -363,7 +363,7 @@
 						</div>
 						<div class="card">
 							<div class="row">
-								<div class="col-md-4" >
+								<div class="col-md-4" sec:authorize="hasAuthority('2')">
 									<form th:action="@{/comisiones/comision/actualizaArchivo}"
 										class="actualizaArchivo" method="post"
 										enctype="multipart/form-data">
