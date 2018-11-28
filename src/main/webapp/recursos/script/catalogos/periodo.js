@@ -173,13 +173,17 @@ $(document).ready(function() {
     
     $(document).ready(function() { 
         $('#blockAlta').click(function() { 
-            $.blockUI();
-            $('#modalAlta').submit();
-            setTimeout(function() { 
-                $.unblockUI({ 
-                    onUnblock: function(){ /**alert('onUnblock');**/ } 
-                }); 
-            }, 60000); 
+        	if( $('#modalAlta').valid()){
+        		$.blockUI();
+                $('#modalAlta').submit();
+                $('.nuevoPeriodoForm #nuevoPeriodoModal').modal('hide');
+                setTimeout(function() { 
+                    $.unblockUI({ 
+                        onUnblock: function(){ /**alert('onUnblock');**/ } 
+                    }); 
+                }, 60000); 
+        	}
+            
         }); 
     });
     
