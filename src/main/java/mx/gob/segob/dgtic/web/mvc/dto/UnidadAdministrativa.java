@@ -21,11 +21,22 @@ public class UnidadAdministrativa {
 	}
 
 	public String getNombre() {
+		String aux = nombre.replaceAll("Ã“", "Ó");
+		aux = aux.replaceAll("Ã©", "É");
+		aux = aux.replaceAll("Ã‰", "Á");
+		aux = aux.replaceAll("Ãš", "Ú");
+		aux = aux.replaceAll("Ã“", "Í");
+		nombre = aux;
 		return nombre;
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		String aux = nombre.replaceAll("Ã“", "Ó");
+		aux = aux.replaceAll("Ã©", "É");
+		aux = aux.replaceAll("Ã‰", "Á");
+		aux = aux.replaceAll("Ãš", "Ú");
+		aux = aux.replaceAll("Ã", "Í");
+		this.nombre = aux;
 	}
 	
 	

@@ -22,7 +22,12 @@ public class TipoDia implements Serializable {
 	public TipoDia(Integer idTipoDia, String nombre, String observacion, boolean incidencia) {
 		super();
 		this.idTipoDia = idTipoDia;
-		this.nombre = nombre;
+		String aux = nombre.replaceAll("Ã³", "ó");
+		aux = aux.replaceAll("Ã©", "é");
+		aux = aux.replaceAll("Ã¡", "á");
+		aux = aux.replaceAll("Ã­", "í");
+		aux = aux.replaceAll("Ã", "í");
+		this.nombre = aux;
 		this.observacion = observacion;
 		this.incidencia = incidencia;
 	}
@@ -48,6 +53,12 @@ public class TipoDia implements Serializable {
 	 * @return the nombre
 	 */
 	public String getNombre() {
+		String aux = nombre.replaceAll("Ã³", "ó");
+		aux = aux.replaceAll("Ã©", "é");
+		aux = aux.replaceAll("Ã¡", "á");
+		aux = aux.replaceAll("Ã­", "í");
+		aux = aux.replaceAll("Ã", "í");
+		nombre = aux;
 		return nombre;
 	}
 
@@ -56,7 +67,12 @@ public class TipoDia implements Serializable {
 	 * @param nombre the nombre to set
 	 */
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		String aux = nombre.replaceAll("Ã³", "ó");
+		aux = aux.replaceAll("Ã©", "é");
+		aux = aux.replaceAll("Ã¡", "á");
+		aux = aux.replaceAll("Ã­", "í");
+		aux = aux.replaceAll("Ã", "í");
+		this.nombre = aux;
 	}
 
 
