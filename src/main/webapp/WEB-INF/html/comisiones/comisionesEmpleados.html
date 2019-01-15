@@ -364,7 +364,7 @@
 						<div class="card">
 							<div class="row">
 								<div class="col-md-4" sec:authorize="hasAuthority('2')">
-									<form th:action="@{/comisiones/comision/actualizaArchivo}"
+									<form id="formActualizaArchivo" th:action="@{/comisiones/comision/actualizaArchivo}"
 										class="actualizaArchivo" method="post"
 										enctype="multipart/form-data">
 										<div class="col-md-4">
@@ -381,7 +381,7 @@
 												th:readonly="true" style="display: none;" /> <input
 												id="idComisionArchivo" name="idComisionArchivo" type="text"
 												class="form-control" required="required" th:readonly="true"
-												style="display: none;" /><input type="submit"
+												style="display: none;" /><input type="submit" id="guardarArchivo"
 												class="btn btn-primary" th:value="#{COMUN.GUARDAR}" />
 										</div>
 									</form>

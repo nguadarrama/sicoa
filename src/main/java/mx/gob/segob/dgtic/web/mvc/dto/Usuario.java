@@ -226,9 +226,21 @@ public class Usuario {
 		this.nivel = nivel;
 	}
 	public String getNombreUnidad() {
+		String aux = nombreUnidad.replaceAll("Ã“", "Ó");
+		aux = aux.replaceAll("Ã‰", "É");
+		aux = aux.replaceAll("Ãš", "Ú");
+		aux = aux.replaceAll("Ã", "Í");
+		aux = aux.replaceAll("Ã", "Í");
+		nombreUnidad = aux;
 		return nombreUnidad;
 	}
 	public void setNombreUnidad (String nombreUnidad) {
+		String aux = nombreUnidad.replaceAll("Ã“", "Ó");
+		aux = aux.replaceAll("Ã‰", "É");
+		aux = aux.replaceAll("Ãš", "Ú");
+		aux = aux.replaceAll("Ã", "Í");
+		aux = aux.replaceAll("Ã", "Í");
+		nombreUnidad = aux;
 		this.nombreUnidad = nombreUnidad;
 	}
 	public Integer getIdUnidad() {

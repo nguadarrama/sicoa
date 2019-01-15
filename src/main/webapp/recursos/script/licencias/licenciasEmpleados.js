@@ -14,6 +14,15 @@ $(document).ready(function() {
 				document.getElementById("guardarArchivo").disabled = true;
 			}
 	}
+	
+	$('#guardarArchivo').on('click', function(event) { 
+		$('#guardarArchivo').val("Guardando...");
+		$('#botonCancelar').prop('disabled', true);
+		$('#formActualizaArchivo').submit();
+		$('#guardarArchivo').prop('disabled', true);
+	});
+	
+	
 	$("#detalleLicencia").css("display","none");
 	$("#fechaInicio").datepicker({ 
 		minDate: 1,

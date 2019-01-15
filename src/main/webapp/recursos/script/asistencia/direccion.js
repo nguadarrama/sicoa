@@ -27,13 +27,23 @@ $(document).ready(function() {
 			var anio = fecha.getFullYear();
 
 			$('.justificaForm #puestoModal').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
-			$('.justificaForm #unidadModal').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
+			var aux1 = asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad;
+			aux1 = aux1.replace("Ã“", "Ó");
+			aux1 = aux1.replace("Ã‰", "É");
+			aux1 = aux1.replace("Ãš", "Ú");
+			aux1 = aux1.replace("Ã", "Í");
+			$('.justificaForm #unidadModal').val(aux1);
 			$('.justificaForm #cve_m_usuarioModal').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
 			$('.justificaForm #nombreModal').val(nombre);
 			$('.justificaForm #fechaIngresoModal').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
 			$('.justificaForm #RFCModal').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
 			$('.justificaForm #fechaModal').val(dia + '-' + mes + '-' + anio);
-			$('.justificaForm #tipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
+			var aux = asistenciaJustificacion.asistencia.idTipoDia.nombre;
+			aux = aux.replace("Ã³", "ó");
+			aux = aux.replace("Ã©", "é");
+			aux = aux.replace("Ã¡", "á");
+			aux = aux.replace("Ã­", "í");
+			$('.justificaForm #tipoDiaModal').val(aux);
 			$('.justificaForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			$('.justificaForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('.justificaForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);

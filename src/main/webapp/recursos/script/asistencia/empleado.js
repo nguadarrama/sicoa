@@ -5,7 +5,6 @@ $(document).ready(function() {
 		event.preventDefault();
 		var href = $(this).attr('href');
 		
-		
 		$('#fechaInicial').val($('#validBeforeDatepicker').val());
 		$('#fechaFinal').val($('#validAfterDatepicker').val());
 		
@@ -21,13 +20,23 @@ $(document).ready(function() {
 			
 			$('.justificaForm #id').val(asistenciaJustificacion.asistencia.idAsistencia);
 			$('.justificaForm #puesto').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
-			$('.justificaForm #unidad').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
+			var aux1 = asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad;
+			aux1 = aux1.replace("Ã“", "Ó");
+			aux1 = aux1.replace("Ã‰", "É");
+			aux1 = aux1.replace("Ãš", "Ú");
+			aux1 = aux1.replace("Ã", "Í");
+			$('.justificaForm #unidad').val(aux1);
 			$('.justificaForm #cve_m_usuario').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
 			$('.justificaForm #nombre').val(nombre);
 			$('.justificaForm #fechaIngreso').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
 			$('.justificaForm #RFC').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
 			$('.justificaForm #fecha').val(dia + '-' + mes + '-' + anio);
-			$('.justificaForm #tipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
+			var aux = asistenciaJustificacion.asistencia.idTipoDia.nombre;
+			aux = aux.replace("Ã³", "ó");
+			aux = aux.replace("Ã©", "é");
+			aux = aux.replace("Ã¡", "á");
+			aux = aux.replace("Ã­", "í");
+			$('.justificaForm #tipoDia').val(aux);
 			$('.justificaForm #idTipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			$('.justificaForm #estado').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('#justificacion').val(asistenciaJustificacion.asistencia.incidencia.justificacion.justificacion);

@@ -42,6 +42,7 @@ import mx.gob.segob.dgtic.web.mvc.util.rest.HttpResponseUtil;
 import mx.gob.segob.dgtic.web.mvc.util.rest.exception.ClienteException;
 
 @Service
+@SuppressWarnings("unchecked")
 public class ComisionServiceImpl implements ComisionService {
 
   private static final Logger logger = LoggerFactory.getLogger(LogoutCustomHandler.class);
@@ -139,7 +140,6 @@ public class ComisionServiceImpl implements ComisionService {
     return comisiones;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<Comision> obtenerListaComisionesPorFiltrosEmpleados(String claveUsuario,
       String nombre, String apellidoPaterno, String apellidoMaterno, String idUnidad,
@@ -227,7 +227,6 @@ public class ComisionServiceImpl implements ComisionService {
     return comision;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Comision modificaComisiones(ComisionAux comisionAux, String claveUsuario,
       Authentication authentication) {
@@ -292,7 +291,7 @@ public class ComisionServiceImpl implements ComisionService {
 
   }
 
-  @SuppressWarnings("unchecked")
+ 
   @Override
   public List<Comision> obtenerComisionesPorUnidad(String idUnidad, String claveUsuario,
       String nombre, String apellidoPaterno, String apellidoMaterno,
@@ -334,7 +333,6 @@ public class ComisionServiceImpl implements ComisionService {
     return listaComisiones;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public reporte generarReporte(GenerarReporteArchivoComision generaReporteArchivo,
       Authentication authentication) {

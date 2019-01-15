@@ -10,6 +10,12 @@ $(document).ready(function() {
 	
 	$('.collapse').collapse();
 	
+	$('#guardarArchivo').on('click', function(event) { 
+		$('#guardarArchivo').val("Guardando...");
+		$('#formActualizaArchivo').submit();
+		$('#guardarArchivo').prop('disabled', true);
+	});
+	
 	var disableddates = ["10-26-2018", "10-30-2018", "10-31-2018"];
 
 	  function DisableSpecificDates(date) {

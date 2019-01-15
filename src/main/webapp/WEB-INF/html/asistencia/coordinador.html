@@ -342,11 +342,11 @@
 									            </select>
 									            <input th:if="${#arrays.length(listaAutorizadores)} == 0" type="text" class="form-control input-flag" name="nombreAutorizador" />
 									        </div>
-						        
+						    
 									        <div class="form-group col-md-4">
 										        <label>
 													<p style="text-align: left">Adjuntar Archivo</p>
-													 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" accept="application/pdf"/>
+													 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" data-max-size="32154" accept="application/pdf"/>
 												</label>
 										    </div>
 										    
@@ -378,7 +378,7 @@
 		
 		<!-- modal para agregar justificación y descuento -->
 		<div class="justificaForm">
-      		<form th:action="@{/asistencia/creaIncidencia}" method="post" enctype="multipart/form-data">
+      		<form th:action="@{/asistencia/creaIncidencia}" method="post" enctype="multipart/form-data" id="modalJustificacion" >
 				<div class="modal fade" id="justificaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document" style="width: 80%">
 						<div class="modal-content">
@@ -442,7 +442,7 @@
 						        <div class="form-group col-md-4">
 							        <label>
 										<p>Adjuntar Archivo</p>
-										 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" accept="application/pdf" />
+										 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" data-max-size="3" accept="application/pdf" />
 									</label>
 							    </div>
 							    
@@ -466,8 +466,8 @@
 			    				<button type="button" class="btn btn-default" data-dismiss="modal" th:text="Regresar"></button>
 			    				<input type="submit" class="btn btn-default" th:value="#{IMPRIMIR_FORMATO_JUSTIFICACION}" name="formatoJustificacion" value="formatoJustificacion" />
 			    				<input type="submit" class="btn btn-default" th:value="#{IMPRIMIR_FORMATO_DESCUENTO}" name="formatoDescuento" value="formatoDescuento" />
-						    	<input type="submit" class="btn btn-danger" th:value="Descontar" name="descuenta" value="descuenta" />
-						    	<input type="submit" class="btn btn-success" th:value="Justificar" name="justifica" value="justifica"/>
+						    	<input type="button" id="blockDescuenta" class="btn btn-danger" th:value="Descontar" name="descuenta" value="descuenta" />
+						    	<input type="button" id="blockJustifica" class="btn btn-success" th:value="Justificar" name="justifica" value="justifica"/>
 						    </div>
 					  	</div>
 					</div>
@@ -532,7 +532,7 @@
 						        <div class="form-group col-md-4">
 							        <label>
 										<p>Adjuntar Archivo</p>
-										 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" accept="application/pdf" />
+										 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" data-max-size="32154" accept="application/pdf" />
 									</label>
 							    </div>
 							    
@@ -606,7 +606,7 @@
 						        <div class="form-group col-md-4">
 							        <label>
 										<p>Adjuntar Archivo</p>
-										 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" th:required="required" accept="application/pdf" />
+										 <input type="file" name="archivoSubido" id="archivo" multiple="multiple" th:required="required" data-max-size="32154" accept="application/pdf" />
 									</label>
 							    </div>
 							    
@@ -631,7 +631,7 @@
 						    <div class="modal-footer">
 			    				<button type="button" class="btn btn-default" data-dismiss="modal" th:text="Regresar"></button>
 			    				<button type="button" class="btn btn-default" data-dismiss="modal">Imprimir Formato</button>
-						    	<input type="submit" class="btn btn-danger" th:value="Descontar" />
+						    	<input type="submit" id="dDescontar" class="btn btn-danger" th:value="Descontar" />
 						    </div>
 					  	</div>
 					</div>
@@ -651,9 +651,10 @@
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery-ui-datepicker.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/assets/date-picker/script/jquery.ui.datepicker.validation.min.js}"></script>
 	        <script charset="utf-8" th:src="@{/recursos/script/comun/moduloDatatable.js}"></script>
-	        <script charset="utf-8" th:src="@{/recursos/script/asistencia/coordinador.js}"></script>	 
+	        <script charset="utf-8" th:src="@{/recursos/script/asistencia/coordinador.js}"></script>	
+	        <script charset="utf-8" th:src="@{/recursos/assets/blockUI/js/blockUi.js}"></script> 
 		</th:block>
-		
+		<iframe src="http://www.tudominio.com/home.html"></iframe>
 	</body>
 
 </html>

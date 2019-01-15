@@ -14,7 +14,12 @@ $(document).ready(function() {
 		$.get(href, function(asistenciaJustificacion, status) {
 			$('.justificaForm #id').val(asistenciaJustificacion.asistencia.idAsistencia);
 			$('.justificaForm #fecha').val(asistenciaJustificacion.asistencia.entrada);
-			$('.justificaForm #tipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
+			var aux = asistenciaJustificacion.asistencia.idTipoDia.nombre;
+			aux = aux.replace("Ã³", "ó");
+			aux = aux.replace("Ã©", "é");
+			aux = aux.replace("Ã¡", "á");
+			aux = aux.replace("Ã­", "í");
+			$('.justificaForm #tipoDia').val(aux);
 			$('.justificaForm #idTipoDia').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			
 			//select justificación

@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -241,6 +240,14 @@ public class AsistenciaController  {
 	    	model.addAttribute(ConstantsController.NIVEL, nivel);
 	    	model.addAttribute(ConstantsController.TIPO, tipo);
 	    	model.addAttribute(ConstantsController.ESTADO, estado);
+	    	if(unidadAdministrativa != null){
+		    	String aux = unidadAdministrativa.replaceAll("Ã“", "Ó");
+				aux = aux.replaceAll("Ã‰", "É");
+				aux = aux.replaceAll("Ãš", "Ú");
+				aux = aux.replaceAll("Ã", "Í");
+				aux = aux.replaceAll("Ã", "Í");
+				unidadAdministrativa = aux;
+			}
 	    	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativa);
 	    	
 	    	//se realizó búsqueda por usuario
@@ -372,6 +379,14 @@ public class AsistenciaController  {
     	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
     	model.addAttribute(ConstantsController.TIPO, tipoHidden);
     	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	if(unidadAdministrativaHidden != null){
+	    	String aux = unidadAdministrativaHidden.replaceAll("Ã“", "Ó");
+			aux = aux.replaceAll("Ã‰", "É");
+			aux = aux.replaceAll("Ãš", "Ú");
+			aux = aux.replaceAll("Ã", "Í");
+			aux = aux.replaceAll("Ã", "Í");
+			unidadAdministrativaHidden = aux;
+    	}
     	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
     	
     	if (resultadoProceso == 1) {
@@ -445,6 +460,14 @@ public class AsistenciaController  {
     	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
     	model.addAttribute(ConstantsController.TIPO, tipoHidden);
     	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	if(unidadAdministrativaHidden != null){
+	    	String aux = unidadAdministrativaHidden.replaceAll("Ã“", "Ó");
+			aux = aux.replaceAll("Ã‰", "É");
+			aux = aux.replaceAll("Ãš", "Ú");
+			aux = aux.replaceAll("Ã", "Í");
+			aux = aux.replaceAll("Ã", "Í");
+			unidadAdministrativaHidden = aux;
+    	}    
     	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
     	
     	if (resultadoProceso == 1) {
@@ -542,6 +565,14 @@ public class AsistenciaController  {
     	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
     	model.addAttribute(ConstantsController.TIPO, tipoHidden);
     	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	if(unidadAdministrativaHidden != null){
+	    	String aux = unidadAdministrativaHidden.replaceAll("Ã“", "Ó");
+			aux = aux.replaceAll("Ã‰", "É");
+			aux = aux.replaceAll("Ãš", "Ú");
+			aux = aux.replaceAll("Ã", "Í");
+			aux = aux.replaceAll("Ã", "Í");
+			unidadAdministrativaHidden = aux;
+    	}
     	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
     	
     	return ASISTENCIA_COORDINADOR;
@@ -616,6 +647,14 @@ public class AsistenciaController  {
     	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
     	model.addAttribute(ConstantsController.TIPO, tipoHidden);
     	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	if(unidadAdministrativaHidden != null){
+	    	String aux = unidadAdministrativaHidden.replaceAll("Ã“", "Ó");
+			aux = aux.replaceAll("Ã‰", "É");
+			aux = aux.replaceAll("Ãš", "Ú");
+			aux = aux.replaceAll("Ã", "Í");
+			aux = aux.replaceAll("Ã", "Í");
+			unidadAdministrativaHidden = aux;
+    	}
     	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
     	
     	return ASISTENCIA_COORDINADOR;
@@ -701,8 +740,10 @@ public class AsistenciaController  {
     
     @RequestMapping(value={"coordinador/justificaMultiple"}, method = RequestMethod.POST, params = "justificacionMultipleGuarda")
     public String creaIncidencias(Model model, Integer[] listaIdAsistencias, MultipartFile archivoSubido, Integer selectJustificacion, String nombreAutorizador,
-    		String cvemUsuarioHiddenGuardaMultiple, String fechaInicialHiddenGuardaMultiple, String fechaFinalHiddenGuardaMultiple, Authentication authentication) {
-    			   
+    	String cvemUsuarioHiddenGuardaMultiple, String fechaInicialHiddenGuardaMultiple, String fechaFinalHiddenGuardaMultiple, Authentication authentication) {
+    	
+    	
+    	logger.info("ENTRO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");	
     	Integer resultadoProceso = 0;
     	Archivo archivo = null;
     	Integer idJustificacion = selectJustificacion;
@@ -774,7 +815,7 @@ public class AsistenciaController  {
     public String descargaFormatoJustificacionMultiple(Model model, Integer[] listaIdAsistencias, MultipartFile archivo, Integer selectJustificacion, 
     		String nombreAutorizador, String cveMUsuarioHiddenGuardaMultiple, String fechaInicialHiddenGuardaMultiple, 
     		String fechaFinalHiddenGuardaMultiple, Authentication authentication, HttpServletResponse response) {
-    	
+    	logger.info("ENTRO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     	Asistencia asistencia;
     	Integer idTipoDia = 0;
     	String nombre = "";
@@ -1076,6 +1117,14 @@ public class AsistenciaController  {
     	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
     	model.addAttribute(ConstantsController.TIPO, tipoHidden);
     	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	if(unidadAdministrativaHidden != null){
+	    	String aux = unidadAdministrativaHidden.replaceAll("Ã“", "Ó");
+			aux = aux.replaceAll("Ã‰", "É");
+			aux = aux.replaceAll("Ãš", "Ú");
+			aux = aux.replaceAll("Ã", "Í");
+			aux = aux.replaceAll("Ã", "Í");
+			unidadAdministrativaHidden = aux;
+    	}
     	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
 
     	//define el mensaje al usuario que se va a mostrar dependiendo de la tarea realizada
@@ -1128,6 +1177,14 @@ public class AsistenciaController  {
     	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
     	model.addAttribute(ConstantsController.TIPO, tipoHidden);
     	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	if(unidadAdministrativaHidden != null){
+	    	String aux = unidadAdministrativaHidden.replaceAll("Ã“", "Ó");
+			aux = aux.replaceAll("Ã‰", "É");
+			aux = aux.replaceAll("Ãš", "Ú");
+			aux = aux.replaceAll("Ã", "Í");
+			aux = aux.replaceAll("Ã", "Í");
+			unidadAdministrativaHidden = aux;
+    	}
     	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
     	
     	return ASISTENCIA_DIRECCION;
@@ -1179,6 +1236,14 @@ public class AsistenciaController  {
     	model.addAttribute(ConstantsController.NIVEL, nivelHidden);
     	model.addAttribute(ConstantsController.TIPO, tipoHidden);
     	model.addAttribute(ConstantsController.ESTADO, estadoHidden);
+    	if(unidadAdministrativaHidden != null){
+	    	String aux = unidadAdministrativaHidden.replaceAll("Ã“", "Ó");
+			aux = aux.replaceAll("Ã‰", "É");
+			aux = aux.replaceAll("Ãš", "Ú");
+			aux = aux.replaceAll("Ã", "Í");
+			aux = aux.replaceAll("Ã", "Í");
+			unidadAdministrativaHidden = aux;
+    	}
     	model.addAttribute(ConstantsController.UNIDAD_ADMINISTRATIVA, unidadAdministrativaHidden);
 
     	if (resultadoProceso == 1) {

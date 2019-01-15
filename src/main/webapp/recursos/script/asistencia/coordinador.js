@@ -24,8 +24,12 @@ $(document).ready(function() {
 		$('#numeroEmpleadoHiddenGuardaMultiple').val($('#numeroEmpleado').val());
 		$('#fechaInicialHidddenGuardaMultiple').val($('#validBeforeDatepicker').val());
 		$('#fechaFinalHiddenGuardaMultiple').val($('#validAfterDatepicker').val());
-		
-		$('#justificacionMultipleGuardaBtn').submit();
+		$('#justificacionMultipleGuardaBtn').val("Enviando...");
+		$('#formatoJustificacionMultipleBtn').prop('disabled', true);
+		$('#justificacionMultipleGuardaBtn').val("justificacionMultipleGuarda");
+		$('#formJustificacionMultiple').append('<input type="hidden" name="justificacionMultipleGuarda" value="justificacionMultipleGuarda" />');
+		$('#formJustificacionMultiple').submit();
+		$('#justificacionMultipleGuardaBtn').prop('disabled', true);
 	});
 	
 	//pasa datos de campos de búsqueda a campos hidden del modal para llevarlos al controller
@@ -33,7 +37,6 @@ $(document).ready(function() {
 		$('#numeroEmpleadoHiddenGuardaMultiple').val($('#numeroEmpleado').val());
 		$('#fechaInicialHidddenGuardaMultiple').val($('#validBeforeDatepicker').val());
 		$('#fechaFinalHiddenGuardaMultiple').val($('#validAfterDatepicker').val());
-		
 		$('#formatoJustificacionMultipleBtn').submit();
 	});
 	
@@ -71,13 +74,23 @@ $(document).ready(function() {
 			var anio = fecha.getFullYear();
 			
 			$('.justificaForm #puestoModal').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
-			$('.justificaForm #unidadModal').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
+			var aux1 = asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad;
+			aux1 = aux1.replace("Ã“", "Ó");
+			aux1 = aux1.replace("Ã‰", "É");
+			aux1 = aux1.replace("Ãš", "Ú");
+			aux1 = aux1.replace("Ã", "Í");
+			$('.justificaForm #unidadModal').val(aux1);
 			$('.justificaForm #cve_m_usuarioModal').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
 			$('.justificaForm #nombreModal').val(nombre);
 			$('.justificaForm #fechaIngresoModal').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
 			$('.justificaForm #RFCModal').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
 			$('.justificaForm #fechaModal').val(dia + '-' + mes + '-' + anio);
-			$('.justificaForm #tipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
+			var aux = asistenciaJustificacion.asistencia.idTipoDia.nombre;
+			aux = aux.replace("Ã³", "ó");
+			aux = aux.replace("Ã©", "é");
+			aux = aux.replace("Ã¡", "á");
+			aux = aux.replace("Ã­", "í");
+			$('.justificaForm #tipoDiaModal').val(aux);
 			$('.justificaForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			$('.justificaForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('.justificaForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
@@ -150,8 +163,7 @@ $(document).ready(function() {
 	$('.descuentoBtn').on('click', function(event) { 					//botón descuento
 		event.preventDefault();
 		var href = $(this).attr('href');
-		
-		
+				
 		$('.descuentoForm #fechaInicial').val($('#validBeforeDatepicker').val());
 		$('.descuentoForm #fechaFinal').val($('#validAfterDatepicker').val());
 		$('.descuentoForm #numeroEmpleadoHidden').val($('#numeroEmpleado').val());
@@ -169,13 +181,23 @@ $(document).ready(function() {
 						asistenciaJustificacion.asistencia.usuarioDto.apellidoMaterno;
 			
 			$('.descuentoForm #puestoModal').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
-			$('.descuentoForm #unidadModal').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
+			var aux1 = asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad;
+			aux1 = aux1.replace("Ã“", "Ó");
+			aux1 = aux1.replace("Ã‰", "É");
+			aux1 = aux1.replace("Ãš", "Ú");
+			aux1 = aux1.replace("Ã", "Í");
+			$('.descuentoForm #unidadModal').val(aux1);
 			$('.descuentoForm #cve_m_usuarioModal').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
 			$('.descuentoForm #nombreModal').val(nombre);
 			$('.descuentoForm #fechaIngresoModal').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
 			$('.descuentoForm #RFCModal').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
 			$('.descuentoForm #fechaModal').val(asistenciaJustificacion.asistencia.entrada);
-			$('.descuentoForm #tipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
+			var aux = asistenciaJustificacion.asistencia.idTipoDia.nombre;
+			aux = aux.replace("Ã³", "ó");
+			aux = aux.replace("Ã©", "é");
+			aux = aux.replace("Ã¡", "á");
+			aux = aux.replace("Ã­", "í");
+			$('.descuentoForm #tipoDiaModal').val(aux);
 			$('.descuentoForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			$('.descuentoForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('.descuentoForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
@@ -191,12 +213,6 @@ $(document).ready(function() {
 	$('.justificaMultipleBtn').on('click', function(event) { 					//botón justifica múltiple
 		event.preventDefault();
 		var href = $(this).attr('href');
-		
-/**		var valu = [];
-       $(':checkbox:checked').each(function(i){
-          valu[i] = $(this).val();
-       });**/ 
-		
 		$('.justificaMultipleForm #fechaInicial').val($('#validBeforeDatepicker').val());
 		$('.descuentoForm #fechaFinal').val($('#validAfterDatepicker').val());
 		$('.descuentoForm #numeroEmpleadoHidden').val($('#numeroEmpleado').val());
@@ -214,13 +230,24 @@ $(document).ready(function() {
 						asistenciaJustificacion.asistencia.usuarioDto.apellidoMaterno;
 			
 			$('.descuentoForm #puestoModal').val(asistenciaJustificacion.asistencia.usuarioDto.idPuesto);
-			$('.descuentoForm #unidadModal').val(asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad);
+			var aux1 = asistenciaJustificacion.asistencia.usuarioDto.nombreUnidad;
+			aux1 = aux1.replace("Ã“", "Ó");
+			aux1 = aux1.replace("Ã‰", "É");
+			aux1 = aux1.replace("Ãš", "Ú");
+			aux1 = aux1.replace("Ã", "Í");
+			$('.descuentoForm #unidadModal').val(aux1);
 			$('.descuentoForm #cve_m_usuarioModal').val(asistenciaJustificacion.asistencia.usuarioDto.claveUsuario);
 			$('.descuentoForm #nombreModal').val(nombre);
 			$('.descuentoForm #fechaIngresoModal').val(asistenciaJustificacion.asistencia.usuarioDto.fechaIngreso);
 			$('.descuentoForm #RFCModal').val(asistenciaJustificacion.asistencia.usuarioDto.rfc);
 			$('.descuentoForm #fechaModal').val(asistenciaJustificacion.asistencia.entrada);
-			$('.descuentoForm #tipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.nombre);
+			var aux = asistenciaJustificacion.asistencia.idTipoDia.nombre;
+			aux = aux.replace("Ã³", "ó");
+			aux = aux.replace("Ã©", "é");
+			aux = aux.replace("Ã¡", "á");
+			aux = aux.replace("Ã­", "í");
+			aux = aux.replace("Ã", "í");
+			$('.descuentoForm #tipoDiaModal').val(aux);
 			$('.descuentoForm #idTipoDiaModal').val(asistenciaJustificacion.asistencia.idTipoDia.idTipoDia);
 			$('.descuentoForm #estadoModal').val(asistenciaJustificacion.asistencia.idEstatus.estatus);
 			$('.descuentoForm #idAsistenciaHidden').val(asistenciaJustificacion.asistencia.idAsistencia);
@@ -314,4 +341,69 @@ $(document).ready(function() {
     		$('#buscaBtn').submit();
     	}
     });
+    
+    $('#blockButton').click(function() { 
+        $('div.test').block({ message: null }); 
+    }); 
+
+    $('#blockButton2').click(function() { 
+        $('div.test').block({ 
+            message: '<h1>Procesando</h1>', 
+            css: { border: '3px solid #a00' } 
+        }); 
+    }); 
+
+    $('#unblockButton').click(function() { 
+        $('div.test').unblock(); 
+    }); 
+
+    $('a.test').click(function() { 
+       
+        return false; 
+    }); 
+    
+    $('#blockJustifica').click(function() { 
+    	if( $('#modalJustificacion').valid()){
+    		$.blockUI();
+    		$('#blockJustifica').val("justifica");
+    		$('#modalJustificacion').append('<input type="hidden" name="justifica " value="justifica" />');
+            $('#modalJustificacion').submit();
+            $('.justificaForm #justificaModal').modal('hide');
+            setTimeout(function() { 
+                $.unblockUI({ 
+                    onUnblock: function(){ /**alert('onUnblock');**/ } 
+                }); 
+            }, 60000); 
+    	}
+    }); 
+    
+    $('#dDescontar').click(function() { 
+    		$.blockUI();
+            $('#dDescontar').submit();
+            $('.justificaMultipleForm #justificaModal').modal('hide');
+            setTimeout(function() { 
+                $.unblockUI({ 
+                    onUnblock: function(){ /**alert('onUnblock');**/ } 
+                }); 
+            }, 60000); 
+    }); 
+    
+    
+    $('#blockDescuenta').click(function() { 
+    	if( $('#modalJustificacion').valid()){
+    		$.blockUI();
+            $('#blockDescuenta').val("justifica");
+    		$('#modalJustificacion').append('<input type="hidden" name="descuenta " value="descuenta" />');
+    		$('#modalJustificacion').submit();
+            $('.justificaForm #justificaModal').modal('hide');
+            setTimeout(function() { 
+                $.unblockUI({ 
+                    onUnblock: function(){ /**alert('onUnblock');**/ } 
+                }); 
+            }, 60000); 
+    	}
+        
+    }); 
+    
+    $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 });

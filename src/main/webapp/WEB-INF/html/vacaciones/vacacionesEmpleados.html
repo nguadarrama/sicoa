@@ -353,7 +353,7 @@
 							<div class="row">
 								<div class="col-md-5"
 									sec:authorize="hasAuthority('2')">
-									<form
+									<form id="formActualizaArchivo"
 										th:action="@{/vacaciones/vacacion/actualizaArchivoEmpleado}"
 										class="actualizaArchivo1" method="post"
 										enctype="multipart/form-data">

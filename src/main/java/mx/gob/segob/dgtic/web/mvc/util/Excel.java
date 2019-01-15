@@ -16,6 +16,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.web.servlet.view.document.AbstractExcelView;
 
+@SuppressWarnings("deprecation")
 public class Excel extends AbstractExcelView {
     @SuppressWarnings("unchecked")
     protected void buildExcelDocument(Map<String, Object> model, HSSFWorkbook workbook, 

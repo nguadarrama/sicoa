@@ -9,6 +9,13 @@ $(document).ready(function() {
 				document.getElementById("guardarArchivo").disabled = true;
 			}
 	}
+	
+	$('#guardarArchivo').on('click', function(event) { 
+		$('#guardarArchivo').val("Guardando...");
+		$('#miBotonCancelar').prop('disabled', true);
+		$('#formActualizaArchivo').submit();
+		$('#guardarArchivo').prop('disabled', true);
+	});
 	$('#vacacionesPropias').DataTable({
 	    "scrollY": "500px",
 	    "scrollCollapse": true
